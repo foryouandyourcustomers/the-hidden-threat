@@ -17,5 +17,10 @@
     display: grid;
     grid-template-columns: repeat(var(--column-count), 1fr);
     grid-template-rows: repeat(var(--row-count), 1fr);
+    gap: var(--size-2);
+    aspect-ratio: var(--column-count) / var(--row-count);
+    max-width: 90vw;
+    max-height: 90vw;
+    margin: 0 auto;
   }
 </style>
