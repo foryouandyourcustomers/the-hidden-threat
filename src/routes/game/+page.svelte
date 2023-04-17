@@ -3,12 +3,12 @@
   import { interpret } from 'xstate'
   import { useSelector } from '@xstate/svelte'
 
-  let state: any = 'initial'
+  let state: unknown = 'initial'
 
   const machine = interpret(configuredMachine()).start()
 
-  machine.onTransition((event, foo) => {
-    state = machine.getSnapshot()
+  machine.subscribe((s) => {
+    state = s
   })
 
   const foo = useSelector(machine, (state) => {
