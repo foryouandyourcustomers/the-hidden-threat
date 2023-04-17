@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "1YiB.svelte-bundle",
+    "statelyai.stately-vscode",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "csstools.postcss",
+    "yzhang.markdown-all-in-one"
+  ]
+}
