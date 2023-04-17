@@ -2,6 +2,7 @@
   import { configuredMachine } from '$lib/logic/configured'
   import { interpret } from 'xstate'
   import { useSelector } from '@xstate/svelte'
+  import Board from '$lib/components/game/Board.svelte'
 
   let state: unknown = 'initial'
 
@@ -20,12 +21,12 @@
   })
 </script>
 
-{#if !userInGame}
+{#if !$userInGame}
   <button on:click={() => machine.send({ type: 'userStartsGame', value: 'click' })}>
     Start Game
   </button>
 {:else}
-  IN GAME LETS GOOOO
+  <Board />
 {/if}
 
 <pre>

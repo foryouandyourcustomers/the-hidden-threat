@@ -1,6 +1,6 @@
 <script>
   import { navigating } from '$app/stores'
-  import Seo from '$lib/Seo.svelte'
+  import Seo from '$lib/components/Seo.svelte'
 </script>
 
 <Seo />

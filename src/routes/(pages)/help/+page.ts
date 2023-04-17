@@ -1,4 +1,4 @@
-import type { Seo } from '$lib/Seo.svelte'
+import type { Seo } from '$lib/components/Seo.svelte'
 
 export const prerender = true
 
