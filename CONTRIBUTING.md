@@ -6,6 +6,7 @@ This project is built with [Svelte Kit](https://kit.svelte.dev).
 - PostCSS (with [nesting](https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-nesting))
 - [XState](https://xstate.js.org) for game logic
 - Vitest for unit tests
+- [Pollen](https://www.pollen.style) (for CSS custom properties)
 
 ## Setup
 
