@@ -29,8 +29,8 @@ jobs:
       - name: Run lints
         run: pnpm run lint
 
-      # - name: Run checks
-      #   run: pnpm run check
+      - name: Run checks
+        run: pnpm run check
 
       - name: Run tests
         run: pnpm run test:unit
