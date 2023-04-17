@@ -34,4 +34,6 @@ game:
 Context value: {$foo}
 
 In game: {$userInGame}
+
+{state}
 </pre>

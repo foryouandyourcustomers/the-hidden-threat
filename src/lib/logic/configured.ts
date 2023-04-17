@@ -11,7 +11,7 @@ export const configuredMachine = () => {
       consoleLogValueAgain: (context) => {
         console.log('context value 2: ', context.value)
       },
-      setValue: assign((context, event) => ({
+      setValue: assign((_, event) => ({
         value: event.value,
       })),
     },
