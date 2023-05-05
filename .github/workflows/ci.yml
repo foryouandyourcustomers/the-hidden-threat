@@ -7,7 +7,11 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  test-webapp:
+    defaults:
+      run:
+        working-directory: webapp
+
     timeout-minutes: 10
     # We're running on ubuntu-latest, nothing special
     runs-on: ubuntu-latest
