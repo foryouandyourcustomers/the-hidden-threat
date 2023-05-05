@@ -3,6 +3,7 @@
   import { interpret } from 'xstate'
   import { useSelector } from '@xstate/svelte'
   import Board from '$lib/components/game/Board.svelte'
+  import { play } from '$lib/sound'
 
   let state: unknown = 'initial'
 
@@ -25,6 +26,8 @@
   <button on:click={() => machine.send({ type: 'userStartsGame', value: 'click' })}>
     Start Game
   </button>
+
+  <button on:click={() => play('capture')}>Test sound</button>
 {:else}
   <Board />
 {/if}

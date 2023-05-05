@@ -36,4 +36,5 @@ export const machine = createMachine({
       initial: 'Initial',
     },
   },
+  predictableActionArguments: true,
 })

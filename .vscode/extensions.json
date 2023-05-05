@@ -6,6 +6,7 @@
     "dbaeumer.vscode-eslint",
     "csstools.postcss",
     "yzhang.markdown-all-in-one",
-    "phoenisx.cssvar"
+    "phoenisx.cssvar",
+    "denoland.vscode-deno"
   ]
 }
