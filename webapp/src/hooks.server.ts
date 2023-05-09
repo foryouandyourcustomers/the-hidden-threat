@@ -7,6 +7,7 @@ export const handle = (async ({ event, resolve }) => {
   // Add the web socket server to the locals object so that all routes can
   // access it without having to use the global object.
   event.locals.webSocketServer = webSocketServer
+
   const response = await resolve(event, {
     filterSerializedResponseHeaders: (name) => name === 'content-type',
   })

@@ -4,6 +4,6 @@ export const prerender = true
 
 export const load = async () => {
   return {
-    seo: { title: 'contact' } satisfies Seo,
+    seo: { title: 'Contact' } satisfies Seo,
   }
 }

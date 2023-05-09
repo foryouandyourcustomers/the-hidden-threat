@@ -1,9 +1,10 @@
-import { dev } from '$app/environment'
+import { building, dev } from '$app/environment'
 import {
   getGlobalWebSocketServer,
   type ExtendedWebSocket,
   type ExtendedWebSocketServer,
 } from './global-server'
+import { FAKE_WEB_SOCKET_SERVER } from './mock-server'
 
 let wssInitialized = false
 
@@ -15,6 +16,8 @@ let wssInitialized = false
  * during hot reloading.
  */
 export const setupWebSocketServerListeners = (): ExtendedWebSocketServer => {
+  if (building) return FAKE_WEB_SOCKET_SERVER
+
   const webSocketServer = getGlobalWebSocketServer()
   if (wssInitialized) return webSocketServer
 

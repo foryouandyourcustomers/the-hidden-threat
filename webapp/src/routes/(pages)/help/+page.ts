@@ -2,10 +2,8 @@ import type { Seo } from '$lib/components/Seo.svelte'
 
 export const prerender = true
 
-export const load = async ({ data }) => {
+export const load = () => {
   return {
-    helpers: ['a', 'b', 'c'],
-    website: data.website,
-    seo: { title: 'help' } satisfies Seo,
+    seo: { title: 'Help' } satisfies Seo,
   }
 }

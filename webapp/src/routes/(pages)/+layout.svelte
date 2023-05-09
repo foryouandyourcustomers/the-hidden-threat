@@ -1,9 +1,6 @@
 <script>
   import { navigating } from '$app/stores'
-  import Seo from '$lib/components/Seo.svelte'
 </script>
-
-<Seo />
 
 <header>
   <nav>
