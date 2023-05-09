@@ -3,8 +3,8 @@ import type { ExtendedWebSocketServer } from './global-server'
 /**
  * This is a fake web socket server that throws an error when you try to use it.
  *
- * It's used during prerendering to prevent so there is a sensible error message
- * when trying to prerender a route that tries to access the web socket server.
+ * It's used during prerendering so there is a sensible error message when
+ * trying to access the web socket server.
  *
  * The other alternative would be to make `event.locals.webSocketServer`
  * optional but this would mean that each route has to add a check or use `!` to
