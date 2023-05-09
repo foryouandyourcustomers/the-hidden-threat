@@ -1,0 +1,6 @@
+{
+  "cssvar.files": ["./src/lib/style/pollen.css", "./src/lib/style/settings.css"],
+  "cssvar.disableSort": true,
+  "cssvar.extensions": ["svelte", "css", "postcss", "scss"],
+  "cssvar.postcssPlugins": ["postcss-nesting"]
+}

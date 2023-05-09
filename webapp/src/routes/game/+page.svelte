@@ -27,7 +27,7 @@
     Start Game
   </button>
 
-  <button on:click={() => play('capture')}>Test sound</button>
+  <button on:click={() => play('select')}>Test sound</button>
 {:else}
   <Board />
 {/if}
