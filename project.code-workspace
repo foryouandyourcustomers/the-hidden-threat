@@ -1,0 +1,32 @@
+{
+  "folders": [
+    {
+      "name": "webapp",
+      "path": "webapp"
+    },
+    {
+      "name": "tools",
+      "path": "tools"
+    },
+    {
+      "name": ".github",
+      "path": ".github"
+    }
+  ],
+  "settings": {
+    "cSpell.words": ["soxi"]
+  },
+  "extensions": {
+    "recommendations": [
+      "1YiB.svelte-bundle",
+      "statelyai.stately-vscode",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "csstools.postcss",
+      "yzhang.markdown-all-in-one",
+      "phoenisx.cssvar",
+      "denoland.vscode-deno",
+      "streetsidesoftware.code-spell-checker"
+    ]
+  }
+}

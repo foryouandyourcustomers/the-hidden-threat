@@ -7,9 +7,9 @@ let howl: Howl | undefined
 
 const sprite: { [key in Sound]: [number, number] } = {
   capture: [0, 204],
-  move: [407, 316],
-  select: [926, 0],
-  silence: [1130, 500],
+  move: [704, 316],
+  select: [1519, 153],
+  silence: [2172, 500],
 }
 
 const getHowl = () => {
@@ -28,7 +28,7 @@ const getHowl = () => {
 /**
  * Invoke this function on a user interaction, to initialize the playback engine.
  */
-export const initialize = () => {
+export const warmup = () => {
   getHowl().play('silence')
 }
 
