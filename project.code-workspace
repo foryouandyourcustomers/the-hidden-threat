@@ -14,7 +14,8 @@
     }
   ],
   "settings": {
-    "cSpell.words": ["soxi", "xstate"]
+    "cSpell.words": ["soxi", "superforms", "xstate"],
+    "cSpell.language": "en,de-de"
   },
   "extensions": {
     "recommendations": [
@@ -26,7 +27,8 @@
       "yzhang.markdown-all-in-one",
       "phoenisx.cssvar",
       "denoland.vscode-deno",
-      "streetsidesoftware.code-spell-checker"
+      "streetsidesoftware.code-spell-checker",
+      "streetsidesoftware.code-spell-checker-german"
     ]
   }
 }
