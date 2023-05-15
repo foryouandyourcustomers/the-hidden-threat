@@ -1,4 +1,4 @@
-import { machine } from '$lib/logic/machine'
+import { machine } from '$lib/logic/machines/machine'
 import { assign } from 'xstate'
 
 export const configuredMachine = ({ gameId }: { gameId: string }) => {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores'
-  import { configuredMachine } from '$lib/logic/configured'
+  import { configuredMachine } from '$lib/logic/machines/configured'
   import { interpret } from 'xstate'
   import { useSelector } from '@xstate/svelte'
   import Board from '$lib/components/game/Board.svelte'
