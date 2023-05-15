@@ -1,2 +1,5 @@
 :root {
+  --size-default-px: var(--size-4);
+  --size-content-px: max(var(--size-default-px), (100vw - var(--width-content-max)) / 2);
+  --size-content-py: var(--size-12-24);
 }

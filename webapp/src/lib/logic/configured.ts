@@ -1,24 +1,25 @@
 import { machine } from '$lib/logic/machine'
 import { assign } from 'xstate'
 
-export const configuredMachine = () => {
-  return machine.withConfig({
-    actions: {
-      consoleLogValue: (context, event) => {
-        console.log('context value 1: ', context.value)
-        console.log(event.value)
+export const configuredMachine = ({ gameId }: { gameId: string }) => {
+  return machine.withConfig(
+    {
+      actions: {
+        consoleLogValue: (context, event) => {
+          console.log(event.value)
+        },
+        consoleLogValueAgain: (context) => {
+          console.log('context value 2: ', context)
+        },
       },
-      consoleLogValueAgain: (context) => {
-        console.log('context value 2: ', context.value)
-      },
-      setValue: assign((_, event) => ({
-        value: event.value,
-      })),
-    },
-    services: {
-      loadParticipants: async () => {
-        return ['a', 'b']
+      services: {
+        loadParticipants: async () => {
+          return ['a', 'b']
+        },
       },
     },
-  })
+    {
+      gameId,
+    },
+  )
 }

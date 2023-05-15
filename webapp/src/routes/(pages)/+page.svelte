@@ -1,10 +1,14 @@
 <script lang="ts">
+  import Button from '$lib/components/ui/Button.svelte'
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<h1>The Hidden Threat</h1>
 
-<a href="/game">Start game</a>
+<p>The Hidden Threat ist ein "serious game" lorum ipsum.</p>
+
+<br />
+<br />
+<Button accent href="/game/new">Neues Spiel starten</Button>
 
 <style lang="postcss">
   h1 {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from '$app/stores'
   import { configuredMachine } from '$lib/logic/configured'
   import { interpret } from 'xstate'
   import { useSelector } from '@xstate/svelte'
@@ -7,14 +8,14 @@
 
   let state: unknown = 'initial'
 
-  const machine = interpret(configuredMachine()).start()
+  const machine = interpret(configuredMachine({ gameId: $page.params.gameId })).start()
 
   machine.subscribe((s) => {
     state = s
   })
 
-  const foo = useSelector(machine, (state) => {
-    return state.context.value
+  const gameId = useSelector(machine, (state) => {
+    return state.context.gameId
   })
 
   const userInGame = useSelector(machine, (state) => {
@@ -22,6 +23,7 @@
   })
 </script>
 
+<small>Game ID: {$gameId}</small><br />
 {#if !$userInGame}
   <button on:click={() => machine.send({ type: 'userStartsGame', value: 'click' })}>
     Start Game
@@ -34,8 +36,6 @@
 
 <pre>
 game:
-
-Context value: {$foo}
 
 In game: {$userInGame}
 

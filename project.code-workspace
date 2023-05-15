@@ -14,7 +14,7 @@
     }
   ],
   "settings": {
-    "cSpell.words": ["soxi"]
+    "cSpell.words": ["soxi", "xstate"]
   },
   "extensions": {
     "recommendations": [

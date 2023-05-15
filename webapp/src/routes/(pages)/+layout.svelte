@@ -1,26 +1,31 @@
 <script>
   import { navigating } from '$app/stores'
+  import Footer from '$lib/components/layout/Footer.svelte'
+  import Header from '$lib/components/layout/Header.svelte'
 </script>
 
-<header>
-  <nav>
-    <a href="/">home</a>
-    <a href="/contact">contact</a>
-    <a href="/help">help</a>
-  </nav>
-</header>
+<div class="layout">
+  <Header />
 
-<main>
-  {#if $navigating}
-    Loading...
-  {:else}
-    <slot />
-  {/if}
-</main>
+  <main>
+    {#if $navigating}
+      Loading...
+    {:else}
+      <slot />
+    {/if}
+  </main>
 
-<footer>
-  <nav>
-    <a href="/">home</a>
-    <a href="/help">help</a>
-  </nav>
-</footer>
+  <Footer />
+</div>
+
+<style lang="postcss">
+  .layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  main {
+    flex: 1;
+    padding: var(--size-4) var(--size-content-px);
+  }
+</style>
