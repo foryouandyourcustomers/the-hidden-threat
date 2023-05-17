@@ -3,7 +3,7 @@ import { machine } from './machine'
 import type { ServerEventOf } from './types'
 import { sendMessageToPlayers } from '$lib/server/web-socket/game-communication'
 
-export const serverMachine = machine.provide({
+export const serverGameMachine = machine.provide({
   actions: {
     consoleLogValue: ({ event }) => {
       console.log(event)

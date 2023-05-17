@@ -1,5 +1,5 @@
-import { serverMachine } from '$lib/logic/machines/server/configured'
-import type { Player, ServerEvent } from '$lib/logic/machines/server/types'
+import { serverGameMachine } from '$lib/server/game-machine/configured'
+import type { Player, ServerEvent } from '$lib/server/game-machine/types'
 import { interpret } from 'xstate'
 import { addGame, getGame } from './global'
 import type { Game } from './types'
@@ -11,7 +11,7 @@ import shortUuid from 'short-uuid'
 export const createGame = ({ name, host }: { name?: string; host: Player }): Game => {
   const id = shortUuid.generate()
 
-  const machine = interpret(serverMachine, {
+  const machine = interpret(serverGameMachine, {
     input: { gameId: id, host },
   }).start()
 
