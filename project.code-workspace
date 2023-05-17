@@ -14,7 +14,7 @@
     }
   ],
   "settings": {
-    "cSpell.words": ["soxi", "superforms", "xstate"],
+    "cSpell.words": ["soxi", "superforms", "typegen", "xstate"],
     "cSpell.language": "en,de-de"
   },
   "extensions": {

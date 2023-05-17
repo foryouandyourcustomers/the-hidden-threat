@@ -11,7 +11,7 @@
 
 <CenteredContent>
   <form method="post" use:enhance>
-    <h1>Neues Spiel</h1>
+    <h1>Spiel beitreten</h1>
 
     <TextInput
       name="playerName"
@@ -20,17 +20,10 @@
       errors={$errors.playerName}
       constraints={$constraints.playerName}
     />
-    <TextInput
-      name="gameName"
-      label="Optionaler Spiel Name"
-      bind:value={$form.gameName}
-      errors={$errors.gameName}
-      constraints={$constraints.gameName}
-    />
 
     <div class="actions">
       <Button href="/">Abbrechen</Button>
-      <Button type="submit" accent>Start</Button>
+      <Button type="submit" accent>Beitreten</Button>
     </div>
   </form>
 </CenteredContent>

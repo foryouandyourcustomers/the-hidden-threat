@@ -1,43 +1,31 @@
 <script lang="ts">
   import { page } from '$app/stores'
-  import { configuredMachine } from '$lib/logic/machines/configured'
-  import { interpret } from 'xstate'
-  import { useSelector } from '@xstate/svelte'
   import Board from '$lib/components/game/Board.svelte'
+  import { clientMachine } from '$lib/logic/machines/client/configured'
   import { play } from '$lib/sound'
+  import { useMachine, useSelector } from '@xstate/svelte'
+  import WebSocket from './WebSocket.svelte'
 
-  let state: unknown = 'initial'
+  export let data
 
-  const machine = interpret(configuredMachine({ gameId: $page.params.gameId })).start()
+  const gameId = data.gameId
 
-  machine.subscribe((s) => {
-    state = s
-  })
+  // const { state, send, service } = useMachine(clientMachine, {
+  //   input: { gameId: $page.params.gameId },
+  // })
 
-  const gameId = useSelector(machine, (state) => {
-    return state.context.gameId
-  })
-
-  const userInGame = useSelector(machine, (state) => {
-    return state.matches('Ingame')
-  })
+  // const gameId = useSelector(service, (state) => {
+  //   return state.context.gameId
+  // })
+  // $: userInGame = $state.matches('Ingame')
 </script>
 
-<small>Game ID: {$gameId}</small><br />
-{#if !$userInGame}
-  <button on:click={() => machine.send({ type: 'userStartsGame', value: 'click' })}>
-    Start Game
-  </button>
+<WebSocket {gameId} playerId={data.playerId} />
 
-  <button on:click={() => play('select')}>Test sound</button>
-{:else}
-  <Board />
-{/if}
-
-<pre>
+<!-- <pre>
 game:
 
-In game: {$userInGame}
+In game: {userInGame}
 
 {state}
-</pre>
+</pre> -->
