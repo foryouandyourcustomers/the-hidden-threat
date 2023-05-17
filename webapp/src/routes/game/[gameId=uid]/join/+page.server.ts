@@ -1,4 +1,4 @@
-import { getGame } from '$lib/logic/game/global'
+import { getGame } from '$lib/server/game/global'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms/server'
 import { z } from 'zod'

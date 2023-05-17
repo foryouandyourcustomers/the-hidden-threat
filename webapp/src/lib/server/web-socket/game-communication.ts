@@ -1,4 +1,4 @@
-import type { ServerMessage } from '$lib/logic/game/types'
+import type { ServerMessage } from '$lib/game/types'
 import { getGlobalWebSocketServer } from './global-server'
 
 /**

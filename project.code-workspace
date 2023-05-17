@@ -14,7 +14,15 @@
     }
   ],
   "settings": {
-    "cSpell.words": ["soxi", "superforms", "typegen", "xstate"],
+    "cSpell.words": [
+      "cssnano",
+      "mdsvex",
+      "soxi",
+      "superforms",
+      "typegen",
+      "usga",
+      "xstate"
+    ],
     "cSpell.language": "en,de-de"
   },
   "extensions": {

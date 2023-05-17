@@ -1,12 +1,3 @@
-import type { InterpreterFrom } from 'xstate'
-import type { serverGameMachine } from '../../server/game-machine/configured'
-
-export type Game = {
-  id: string
-  name?: string | undefined
-  machine: InterpreterFrom<typeof serverGameMachine>
-}
-
 /**
  * All messages that the server might send to the clients via WebSockets.
  */

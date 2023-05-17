@@ -1,5 +1,5 @@
 import { building, dev } from '$app/environment'
-import { sendMessageToMachine } from '$lib/logic/game'
+import { sendMessageToMachine } from '$lib/server/game'
 import { getSocketsForPlayer } from './game-utils'
 import {
   getGlobalWebSocketServer,

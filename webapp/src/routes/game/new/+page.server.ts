@@ -1,4 +1,4 @@
-import { createGame } from '$lib/logic/game'
+import { createGame } from '$lib/server/game'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms/server'
 import { z } from 'zod'

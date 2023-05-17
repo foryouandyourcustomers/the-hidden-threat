@@ -1,4 +1,4 @@
-import { getGame } from '$lib/logic/game/global.js'
+import { getGame } from '$lib/server/game/global.js'
 import { error, redirect } from '@sveltejs/kit'
 
 export const load = async ({ params, parent }) => {
