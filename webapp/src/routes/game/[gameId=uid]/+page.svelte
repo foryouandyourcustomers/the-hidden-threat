@@ -1,14 +1,19 @@
 <script lang="ts">
-  import { page } from '$app/stores'
-  import Board from '$lib/components/game/Board.svelte'
-  import { clientGameMachine } from '$lib/client/game-machine/configured'
-  import { play } from '$lib/sound'
-  import { useMachine, useSelector } from '@xstate/svelte'
-  import WebSocket from './WebSocket.svelte'
+  import { createWebSocketConnection } from '$lib/client/web-socket'
+  import { onMount } from 'svelte'
 
   export let data
 
   const gameId = data.gameId
+  const playerId = data.playerId
+
+  const socketConnection = createWebSocketConnection({
+    gameId,
+    playerId,
+    onMessage: (message) => {
+      console.log('message', message)
+    },
+  })
 
   // const { state, send, service } = useMachine(clientMachine, {
   //   input: { gameId: $page.params.gameId },
@@ -18,14 +23,16 @@
   //   return state.context.gameId
   // })
   // $: userInGame = $state.matches('Ingame')
+
+  onMount(() => {
+    socketConnection.open()
+    return () => {
+      socketConnection.close()
+    }
+  })
 </script>
 
-<WebSocket {gameId} playerId={data.playerId} />
-
-<!-- <pre>
-game:
-
-In game: {userInGame}
-
-{state}
-</pre> -->
+<h1>{$socketConnection.status}</h1>
+<pre>
+{$socketConnection.log.join('\n')}
+</pre>

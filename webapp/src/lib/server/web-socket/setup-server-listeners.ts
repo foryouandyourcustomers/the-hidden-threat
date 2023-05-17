@@ -75,8 +75,7 @@ const connectionCallback: ConnectionCallback = (webSocket) => {
 
   webSocket.on('message', (data) => {
     console.log('[wss:kit] received: %s', data)
-
-    webSocket.send('Thanks for the awesome message!')
+    // TODO: convert message to ClientMessage and send to machine
   })
   webSocket.on('close', () => {
     console.log(`[wss:kit] client disconnected (${webSocket.socketId})`)
@@ -91,8 +90,6 @@ const connectionCallback: ConnectionCallback = (webSocket) => {
       })
     }
   })
-
-  webSocket.send(`Hello from SvelteKit ${new Date().toLocaleString()} (${webSocket.socketId})]`)
 }
 connectionCallback.svelteKitListener = true
 
