@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores'
   import Board from '$lib/components/game/Board.svelte'
-  import { clientMachine } from '$lib/logic/machines/client/configured'
+  import { clientGameMachine } from '$lib/client/game-machine/configured'
   import { play } from '$lib/sound'
   import { useMachine, useSelector } from '@xstate/svelte'
   import WebSocket from './WebSocket.svelte'

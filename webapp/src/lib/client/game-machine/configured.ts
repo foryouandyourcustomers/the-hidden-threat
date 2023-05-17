@@ -1,7 +1,7 @@
 import { machine } from './machine'
 import { fromPromise } from 'xstate'
 
-export const clientMachine = machine.provide({
+export const clientGameMachine = machine.provide({
   actions: {
     consoleLogValue: ({ event }) => {
       console.log(event.value)
