@@ -18,6 +18,7 @@ export const load = async ({ params, parent }) => {
 
   return {
     gameId,
+    hostPlayerId: snapshot.context.hostPlayerId,
     name: game.name,
   }
 }

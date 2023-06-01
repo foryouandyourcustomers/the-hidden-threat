@@ -69,13 +69,19 @@ const connectionCallback: ConnectionCallback = (webSocket) => {
       type: 'player connected',
       playerId: webSocket.playerId,
     })
+  } else {
+    sendMessageToMachine(webSocket.gameId, {
+      type: 'player reconnected',
+      playerId: webSocket.playerId,
+    })
   }
 
   webSocket.on('error', console.error)
 
   webSocket.on('message', (data) => {
     console.log('[wss:kit] received: %s', data)
-    // TODO: convert message to ClientMessage and send to machine
+    const message = JSON.parse(data.toString())
+    sendMessageToMachine(webSocket.gameId, { ...message, playerId: webSocket.playerId })
   })
   webSocket.on('close', () => {
     console.log(`[wss:kit] client disconnected (${webSocket.socketId})`)

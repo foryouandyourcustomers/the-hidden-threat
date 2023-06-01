@@ -95,7 +95,7 @@ devDependencies:
     specifier: ^8.13.0
     version: 8.13.0
   xstate:
-    specifier: ^5.0.0-beta.10
+    specifier: 5.0.0-beta.10
     version: 5.0.0-beta.10
   zod:
     specifier: ^3.21.4

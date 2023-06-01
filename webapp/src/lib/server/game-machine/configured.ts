@@ -13,11 +13,14 @@ export const serverGameMachine = machine.provide({
     },
 
     updatePlayerConnectionState: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'player connected' | 'player disconnected'>
+      const event = e as ServerEventOf<
+        'player connected' | 'player reconnected' | 'player disconnected'
+      >
 
       const existingPlayer = context.players.find((player) => player.id === event.playerId)
       if (existingPlayer) {
-        existingPlayer.isConnected = event.type === 'player connected'
+        existingPlayer.isConnected =
+          event.type === 'player connected' || event.type === 'player reconnected'
         return {
           players: [...context.players],
         }
@@ -49,6 +52,18 @@ export const serverGameMachine = machine.provide({
           type: 'players update',
           players: context.players.map(({ id, name, isConnected }) => ({ id, name, isConnected })),
         },
+      })
+    },
+    sendEmojiToOtherPlayers: ({ context, event: e }) => {
+      const event = e as ServerEventOf<'send emoji'>
+      sendMessageToPlayers({
+        gameId: context.gameId,
+        message: {
+          type: 'show emoji',
+          emoji: event.emoji,
+          playerId: event.playerId,
+        },
+        excludePlayerIds: [event.playerId],
       })
     },
   },

@@ -1,4 +1,4 @@
-import type { ServerMessage } from '$lib/game/types'
+import type { ClientMessage, ServerMessage } from '$lib/game/types'
 import { writable } from 'svelte/store'
 
 type WebSocketConnection = {
@@ -37,7 +37,6 @@ export const createWebSocketConnection = ({
     ws = new WebSocket(
       `${protocol}//${window.location.host}/websocket?gameId=${gameId}&playerId=${playerId}`,
     )
-
     ws.addEventListener('open', () => {
       updateStatus('opened')
       logEvent('connection open')
@@ -55,7 +54,12 @@ export const createWebSocketConnection = ({
         logEvent(`error parsing message`, error)
       }
     })
+    // TODO: add error handling and reconnection here.
   }
 
-  return { subscribe: webSocketConnection.subscribe, open, close: () => ws?.close() }
+  const send = (message: ClientMessage) => {
+    ws?.send(JSON.stringify(message))
+  }
+
+  return { subscribe: webSocketConnection.subscribe, open, close: () => ws?.close(), send }
 }
