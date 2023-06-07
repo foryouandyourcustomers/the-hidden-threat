@@ -34,7 +34,7 @@ export const actions = {
     game.machine.send({
       type: 'player joined',
       playerId: playerId,
-      playerName: form.data.playerName ?? 'Unnamed',
+      playerName: form.data.playerName,
     })
 
     throw redirect(303, `/game/${gameId}`)

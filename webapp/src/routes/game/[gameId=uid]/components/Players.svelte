@@ -4,7 +4,7 @@
 
   const context = getGameContext()
 
-  const players = useSelector(context.machine.service, (state) => state.context.players)
+  const players = useSelector(context.machine.service, ({ context }) => context.players)
 </script>
 
 <div class="players">

@@ -63,7 +63,7 @@
 <pre>
 {$socketConnection.log.join('\n')}
 
-{JSON.stringify($state)}
+{JSON.stringify($state, null, 2)}
 </pre>
 
 <Players />

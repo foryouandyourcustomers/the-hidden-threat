@@ -1,7 +1,7 @@
 {
   "cssvar.files": [
-    "./src/lib/style/pollen.css",
-    "./src/lib/style/settings.css"
+    "./webapp/src/lib/style/pollen.css",
+    "./webapp/src/lib/style/settings.css"
   ],
   "cssvar.disableSort": true,
   "cssvar.enableColors": true,
