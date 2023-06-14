@@ -5,21 +5,21 @@
 
   const context = getGameContext()
 
-  const players = useSelector(context.machine.service, (state) => state.context.players)
+  const users = useSelector(context.machine.service, (state) => state.context.users)
 
   const validEmojis = ['👋', '👍', '👏', '😃', '🧠', '🤔']
 
   const sendEmoji = (emoji: string) => {
-    context.machine.send({ type: 'player sends emoji', emoji })
+    context.machine.send({ type: 'user sends emoji', emoji })
   }
 
-  type DisplayedEmoji = { playerName: string; emoji: string; position: [number, number] }
+  type DisplayedEmoji = { userName: string; emoji: string; position: [number, number] }
   let emojis: { [key: string]: DisplayedEmoji } = {}
 
   let i = 0
-  export const showEmoji = ({ playerId, emoji }: { playerId: string; emoji: string }) => {
-    const name = $players.find((player) => player.id === playerId)?.name ?? 'Unknown'
-    emojis[`${i++}`] = { emoji, playerName: name, position: [Math.random(), Math.random()] }
+  export const showEmoji = ({ userId, emoji }: { userId: string; emoji: string }) => {
+    const name = $users.find((user) => user.id === userId)?.name ?? 'Unknown'
+    emojis[`${i++}`] = { emoji, userName: name, position: [Math.random(), Math.random()] }
     emojis = emojis
     i++
   }
@@ -41,7 +41,7 @@
       }}
     >
       <span class="emjoi">{emoji.emoji}</span>
-      <span class="name">{emoji.playerName}</span>
+      <span class="name">{emoji.userName}</span>
     </div>
   {/each}
   {#each validEmojis as emoji}

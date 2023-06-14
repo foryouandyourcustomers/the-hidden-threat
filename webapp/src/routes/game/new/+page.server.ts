@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 const schema = z.object({
   gameName: z.string().min(3).max(30).optional(),
-  playerName: z.string().min(3).max(30),
+  userName: z.string().min(3).max(30),
 })
 
 export const load = async () => {
@@ -18,10 +18,10 @@ export const actions = {
   default: async ({ request, cookies }) => {
     const form = await superValidate(request, schema)
 
-    const playerId = cookies.get('playerId')
+    const userId = cookies.get('userId')
 
-    if (!playerId) {
-      throw error(500, 'No playerId was found')
+    if (!userId) {
+      throw error(500, 'No userId was found')
     }
 
     if (!form.valid) {
@@ -29,7 +29,7 @@ export const actions = {
     }
 
     const { id } = createGame({
-      host: { id: playerId, name: form.data.playerName, isConnected: false },
+      host: { id: userId, name: form.data.userName, isConnected: false },
       name: form.data.gameName,
     })
 

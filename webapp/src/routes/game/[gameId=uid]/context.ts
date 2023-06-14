@@ -6,8 +6,8 @@ const KEY = {}
 
 export type GameContext = {
   gameId: string
-  playerId: string
-  hostPlayerId: string
+  userId: string
+  hostUserId: string
   machine: UseMachineReturn<ReturnType<typeof getClientGameMachine>>
 }
 

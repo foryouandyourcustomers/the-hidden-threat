@@ -1,6 +1,6 @@
 import { building, dev } from '$app/environment'
 import { sendMessageToMachine } from '$lib/server/game'
-import { getSocketsForPlayer } from './game-utils'
+import { getSocketsForUser } from './game-utils'
 import {
   getGlobalWebSocketServer,
   type ExtendedWebSocket,
@@ -50,11 +50,11 @@ export const setupWebSocketServerListeners = (): ExtendedWebSocketServer => {
 type ConnectionCallback = ((webSocket: ExtendedWebSocket) => void) & { svelteKitListener: true }
 
 /**
- * This function is invoked when a new connection by a player is made. It will
+ * This function is invoked when a new connection by a user is made. It will
  * setup the error, message and close listeners on the web socket and inform the
  * ServerStateMachine of relevant updates.
  *
- * Each connection is directly tied to a player and a game.
+ * Each connection is directly tied to a user and a game.
  *
  * This connection will do nothing, if the user hasn't joined the game
  * beforehand.
@@ -62,17 +62,17 @@ type ConnectionCallback = ((webSocket: ExtendedWebSocket) => void) & { svelteKit
 const connectionCallback: ConnectionCallback = (webSocket) => {
   console.log(`[wss:kit] client connected (${webSocket.socketId})`)
 
-  if (getSocketsForPlayer(webSocket).length === 1) {
-    // Inform the ServerStateMachine that a player has connected, but only if this
+  if (getSocketsForUser(webSocket).length === 1) {
+    // Inform the ServerStateMachine that a user has connected, but only if this
     // was the first connection (otherwise the server already knows).
     sendMessageToMachine(webSocket.gameId, {
-      type: 'player connected',
-      playerId: webSocket.playerId,
+      type: 'user connected',
+      userId: webSocket.userId,
     })
   } else {
     sendMessageToMachine(webSocket.gameId, {
-      type: 'player reconnected',
-      playerId: webSocket.playerId,
+      type: 'user reconnected',
+      userId: webSocket.userId,
     })
   }
 
@@ -81,18 +81,18 @@ const connectionCallback: ConnectionCallback = (webSocket) => {
   webSocket.on('message', (data) => {
     console.log('[wss:kit] received: %s', data)
     const message = JSON.parse(data.toString())
-    sendMessageToMachine(webSocket.gameId, { ...message, playerId: webSocket.playerId })
+    sendMessageToMachine(webSocket.gameId, { ...message, userId: webSocket.userId })
   })
   webSocket.on('close', () => {
     console.log(`[wss:kit] client disconnected (${webSocket.socketId})`)
 
-    if (getSocketsForPlayer(webSocket).length === 0) {
-      // Inform the ServerStateMachine that a player has disconnected, but only if this
+    if (getSocketsForUser(webSocket).length === 0) {
+      // Inform the ServerStateMachine that a user has disconnected, but only if this
       // was the last remaining connection. If the user has multiple tabs open, they are
       // not disconnected.
       sendMessageToMachine(webSocket.gameId, {
-        type: 'player disconnected',
-        playerId: webSocket.playerId,
+        type: 'user disconnected',
+        userId: webSocket.userId,
       })
     }
   })

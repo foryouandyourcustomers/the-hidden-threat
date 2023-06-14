@@ -2,23 +2,23 @@ import type { ServerMessage } from '$lib/game/types'
 import { getGlobalWebSocketServer } from './global-server'
 
 /**
- * Sends `message` to all players in `gameId`, except those in
- * `excludePlayerIds`.
+ * Sends `message` to all users in `gameId`, except those in
+ * `excludeUserIds`.
  *
  * Note that this will send the same message to _all_ connected WebSockets so
- * the same player might receive the message multiple times.
+ * the same user might receive the message multiple times.
  */
-export const sendMessageToPlayers = ({
+export const sendMessageToUsers = ({
   gameId,
   message,
-  excludePlayerIds = [],
+  excludeUserIds = [],
 }: {
   gameId: string
   message: ServerMessage
-  excludePlayerIds?: string[]
+  excludeUserIds?: string[]
 }) => {
   ;[...getGlobalWebSocketServer().clients]
-    .filter((client) => client.gameId === gameId && !excludePlayerIds.includes(client.playerId))
+    .filter((client) => client.gameId === gameId && !excludeUserIds.includes(client.userId))
     .forEach((client) => {
       client.send(JSON.stringify(message))
     })

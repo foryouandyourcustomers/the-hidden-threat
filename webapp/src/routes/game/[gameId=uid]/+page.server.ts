@@ -9,16 +9,16 @@ export const load = async ({ params, parent }) => {
     throw error(404, 'Game not found')
   }
 
-  const { playerId } = await parent()
+  const { userId } = await parent()
   const snapshot = game.machine.getSnapshot()
 
-  if (!snapshot.context.players.find((player) => player.id === playerId)) {
+  if (!snapshot.context.users.find((user) => user.id === userId)) {
     throw redirect(303, `/game/${params.gameId}/join`)
   }
 
   return {
     gameId,
-    hostPlayerId: snapshot.context.hostPlayerId,
+    hostUserId: snapshot.context.hostUserId,
     name: game.name,
   }
 }

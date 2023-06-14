@@ -18,19 +18,19 @@ export const getClientGameMachine = ({
       consoleLogValueAgain: ({ context }) => {
         console.log('context value 2: ', context)
       },
-      updatePlayers: assign(({ event: e }) => {
-        const event = e as ClientEventOf<'players update'>
+      updateUsers: assign(({ event: e }) => {
+        const event = e as ClientEventOf<'users update'>
         return {
-          players: event.players,
+          users: event.users,
         }
       }),
       sendEmoji: ({ event: e }) => {
-        const event = e as ClientEventOf<'player sends emoji'>
+        const event = e as ClientEventOf<'user sends emoji'>
         send({ type: 'send emoji', emoji: event.emoji })
       },
       showEmoji: ({ event: e }) => {
         const event = e as ClientEventOf<'show emoji'>
-        actions.showEmoji({ playerId: event.playerId, emoji: event.emoji })
+        actions.showEmoji({ userId: event.userId, emoji: event.emoji })
       },
     },
     actors: {
@@ -39,8 +39,8 @@ export const getClientGameMachine = ({
       }),
     },
     guards: {
-      isHost: ({ context }) => context.hostPlayerId === context.playerId,
-      isPlayer: ({ context }) => context.hostPlayerId !== context.playerId,
+      isHost: ({ context }) => context.hostUserId === context.userId,
+      isPlayer: ({ context }) => context.hostUserId !== context.userId,
       // TODO
       gameNotStarted: () => true,
       // TODO

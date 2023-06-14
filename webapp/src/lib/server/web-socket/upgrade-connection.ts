@@ -14,17 +14,17 @@ export const upgradeHttpConnection = (req: IncomingMessage, sock: Duplex, head: 
     if (!url || pathname !== '/websocket') return
 
     const gameId = url.searchParams.get('gameId')
-    const playerId = url.searchParams.get('playerId')
+    const userId = url.searchParams.get('userId')
 
     if (!gameId) throw new Error('No gameId provided')
-    if (!playerId) throw new Error('No playerId provided')
+    if (!userId) throw new Error('No userId provided')
 
     const webSocketServer = getGlobalWebSocketServer()
 
     webSocketServer.handleUpgrade(req, sock, head, (webSocket) => {
       webSocket.socketId = crypto.randomUUID()
       webSocket.gameId = gameId
-      webSocket.playerId = playerId
+      webSocket.userId = userId
       webSocketServer.emit('connection', webSocket, req)
     })
   } catch (e) {

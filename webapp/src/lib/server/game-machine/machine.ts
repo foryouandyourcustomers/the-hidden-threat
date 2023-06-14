@@ -1,15 +1,17 @@
 import { createMachine } from 'xstate'
-import type { Context, Player, ServerEvent } from './types'
+import type { Context, ServerEvent, User } from './types'
 
 export const machine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGUwCcBuuAxAA4A2KAnrgAQDGA9gHaNi0AukA2gAwC6ioYvVgBLNiKYCQAD0QAWAOwA2AHQBmJQE4AHGs1qFcowoA0ICogC02ldu3cFAJiUKArHaUfHAX29nUGNj4RGSUNDisTCzsXHxSQqLikkgyiACM3GpytkquSnK6jgqZimYWCJZpqgoGavYOjvZK3Nyuvv7oWLgEOCTkVDjUECKwDMysHBA8-CkJYhKMUrIIbqracq7Ojg6uxetlVjZ2DS7u2p7n7SABXcG9sGCMENRgaPQAViLT8cLzyaDLNJpVwqYGadyaNJZYxKNQHBBKNIqBT6fTrY7cRpyK43II9FQAOXobGomDYKBwkxUAHUUPNGFBqAAzeiDUIDWB9MKDd70EQsKZxWa-JKLFLLNRqbgqTGuNL6BrnTSGeGuTYqFyeVyQzTbAppHGdPG4QnE0nkymQGl08QM5ms6js3Ccp08vkCzhpGaCEULJbpRwyvIabW6opabiaeFKRxqFRyRyubjo+pqIGGwLdE1EklkilUgBKYBQEAo1DY9GosAtbEIAAthCTq-nYNQbt9hYk-eLEMoQY5nK45Gpts17I54QnVNw5OD8q0qtoar4-CBGPQIHApLiszgfl3-qkKroVJph7C5C0FE4pVHzIhHIoVIOXNwIxpNLqM7d8TnzfnIH3P4xQBKw1BBM8NCyK8b0jeENEDTFEUfdZExabRv2NHBTVzGsrVpelGRZNl+mdIDRX9BAoUDeVkyKOVJRDOF7wQIxNBUTZETlRRdihJRMN3HD-0tCAVCLEsywrKsa3I7tQIQXZsjSS8Y24KpEVhNJJ1nDjnGohwrzSDDVx3O4VAAcU6YTJlkw9ARaaUFCMxNHHlR8FF0eCsmRXIXBRNIUUvfQBLMyyMGsq0AElGHmFBSFskCjwyApkWczY3MUTyWLkLRn1yJzMUTZVnAUFdvCAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGUwCcBuuAxAK6y4AEAxgPYB2tYlALpANoAMAuoqAA7WwAlk0F0eIAJ6IAtAEYA7AFYANCAAeiWYsUAmAHTzZADh27ZATh0AWeUYDMAXwerUGbPiKkKORnQbM2LnF+IRExJEkZBRV1TW19QxMzSxt7Jxd0LFwCHBIyHHIIQVgaekYWCA5uCJDhUVpxKQQ5JVUNBC1dA2NTHQtrW0dnEFcsj1yyWghyMDRqACtBKuCBOvDQdtktPS1zRSNzWTsrE-kANjtVJrPZA3M7e6MrIyN2dh0n9JHM9xy9ADlqExyLAmCgcBU8hR5tRBAxKkEaqswg0Iu0dGcrDsHhYrOZXnZ5FZ2FYrohFOYznp2HZ2JYzuY8XstF9Rr9cACgSCwRDIHoAIKwIRQWhwqDkLw4WCEZZI0L1cTtQl2PQ3diKLaU2SYoxnMkIKwa6kYhRGRRWBk2eRDDJubIcwHA0Hgip6ABKYBQEAk5CY1G5LsIAAsBE6eUxYORRrK+MiFWjELYseYU09ZHinmcdPqrBi9ObKXZjFs7HYzmcnMNaNQIHBxGz7TgVvL1rEEGWduZ2CYlEdS2dFJdIggBnoMYpzs9FAPZOPWT9G5ywy7IM21qiNognp3uzpe6Wy4P9WX9O8s+wjrJ1To3lZ53bxkuA7yIAKhYIRWKJfl4HL14rNDsfQLF3fd+yPYcTnMfMTQ1GwJyOCthgbR9HWfV0PS9H0-XQtcUQAhAJyxdN2HPbUbguWQczxGCbiA9h5DeRJ7zGP4AHFMnITBw1XP98ITDo3nYbokj6FJBmPY4DAHIkL1LQtrRY9kcD0DiMC4njXwASVFEQUAAGzw+NN0E54RN6fpUiHJoLWg8dDHeUxzHkDF5ErBwgA */
 
   id: 'gameServer',
 
-  context: ({ input }: { input: { gameId: string; host: Player } }) => ({
+  context: ({ input }: { input: { gameId: string; host: User } }) => ({
     gameId: input.gameId,
-    hostPlayerId: input.host.id,
-    players: [input.host],
+    hostUserId: input.host.id,
+    // TODO: this should get popullated with players
+    players: [],
+    users: [input.host],
   }),
 
   types: {
@@ -19,26 +21,20 @@ export const machine = createMachine({
     actors: {} as { loadParticipants: { output: string[] } },
   },
 
-  initial: 'Not Started',
+  initial: 'Not started',
 
   states: {
-    'Not Started': {
-      initial: 'Waiting for players',
+    'Not started': {
+      initial: 'Assigning users',
 
       states: {
-        'Waiting for players': {
-          on: {
-            'player joined': [
-              {
-                target: 'Ready to start',
-                guard: 'allPlayersJoined',
-                actions: ['storeNewPlayer', 'sendPlayersUpdate'],
-              },
-              {
-                actions: ['storeNewPlayer', 'sendPlayersUpdate'],
-              },
-            ],
-          },
+        'Assigning users': {
+          always: [
+            {
+              target: 'Ready to start',
+              guard: 'gameIsReadyToStart',
+            },
+          ],
         },
         'Ready to start': {
           on: {
@@ -47,6 +43,15 @@ export const machine = createMachine({
               target: '#gameServer.Game Started',
             },
           },
+        },
+      },
+
+      on: {
+        // {
+
+        'user joined': {
+          actions: ['storeNewUser', 'sendUsersUpdate'],
+          target: 'Not started',
         },
       },
     },
@@ -67,24 +72,24 @@ export const machine = createMachine({
   },
 
   on: {
-    'player connected': {
-      actions: ['updatePlayerConnectionState', 'sendPlayersUpdate'],
+    'user connected': {
+      actions: ['updateUserConnectionState', 'sendUsersUpdate'],
       target: '#gameServer',
     },
 
-    'player reconnected': {
-      actions: ['updatePlayerConnectionState', 'sendPlayersUpdate'],
+    'user reconnected': {
+      actions: ['updateUserConnectionState', 'sendUsersUpdate'],
       target: '#gameServer',
     },
 
-    'player disconnected': {
-      actions: ['updatePlayerConnectionState', 'sendPlayersUpdate'],
+    'user disconnected': {
+      actions: ['updateUserConnectionState', 'sendUsersUpdate'],
       target: '#gameServer',
     },
 
     'send emoji': {
       target: '#gameServer',
-      actions: 'sendEmojiToOtherPlayers',
+      actions: 'sendEmojiToOtherUsers',
     },
   },
 })

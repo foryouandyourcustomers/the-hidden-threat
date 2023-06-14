@@ -4,7 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server'
 import { z } from 'zod'
 
 const schema = z.object({
-  playerName: z.string().min(3).max(30),
+  userName: z.string().min(3).max(30),
 })
 
 export const load = async () => {
@@ -17,12 +17,12 @@ export const actions = {
   default: async ({ request, cookies, params }) => {
     const form = await superValidate(request, schema)
 
-    const playerId = cookies.get('playerId')
+    const userId = cookies.get('userId')
     const gameId = params.gameId
     const game = getGame(gameId)
 
-    if (!playerId) {
-      throw error(500, 'No playerId was found')
+    if (!userId) {
+      throw error(500, 'No userId was found')
     }
     if (!game) {
       throw error(500, 'Invalid gameId')
@@ -32,9 +32,9 @@ export const actions = {
     }
 
     game.machine.send({
-      type: 'player joined',
-      playerId: playerId,
-      playerName: form.data.playerName,
+      type: 'user joined',
+      userId: userId,
+      userName: form.data.userName,
     })
 
     throw redirect(303, `/game/${gameId}`)

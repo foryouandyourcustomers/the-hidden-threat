@@ -14,11 +14,11 @@
     <h1>Spiel beitreten</h1>
 
     <TextInput
-      name="playerName"
+      name="userName"
       label="Dein Name"
-      bind:value={$form.playerName}
-      errors={$errors.playerName}
-      constraints={$constraints.playerName}
+      bind:value={$form.userName}
+      errors={$errors.userName}
+      constraints={$constraints.userName}
     />
 
     <div class="actions">

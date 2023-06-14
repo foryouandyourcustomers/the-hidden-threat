@@ -6,7 +6,7 @@ const GLOBAL_WEB_SOCKET_SERVER_KEY = Symbol.for('sveltekit.web-socket-server')
 export type ExtendedWebSocket = WebSocketBase & {
   socketId: string
   gameId: string
-  playerId: string
+  userId: string
 }
 
 export type ExtendedWebSocketServer = Server<ExtendedWebSocket>

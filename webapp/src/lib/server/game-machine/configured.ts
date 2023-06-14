@@ -1,7 +1,7 @@
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
-import { sendMessageToPlayers } from '$lib/server/web-socket/game-communication'
+import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 
 export const serverGameMachine = machine.provide({
   actions: {
@@ -12,64 +12,58 @@ export const serverGameMachine = machine.provide({
       console.log('context value 2: ', context)
     },
 
-    updatePlayerConnectionState: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<
-        'player connected' | 'player reconnected' | 'player disconnected'
-      >
+    updateUserConnectionState: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user connected' | 'user reconnected' | 'user disconnected'>
 
-      const existingPlayer = context.players.find((player) => player.id === event.playerId)
-      if (existingPlayer) {
-        existingPlayer.isConnected =
-          event.type === 'player connected' || event.type === 'player reconnected'
+      const existingUser = context.users.find((user) => user.id === event.userId)
+      if (existingUser) {
+        existingUser.isConnected =
+          event.type === 'user connected' || event.type === 'user reconnected'
         return {
-          players: [...context.players],
+          users: [...context.users],
         }
       } else {
-        console.warn('Got a connection update for a player that has not joined', event.playerId)
+        console.warn('Got a connection update for a user that has not joined', event.userId)
         return {}
       }
     }),
-    storeNewPlayer: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'player joined'>
+    storeNewUser: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user joined'>
 
-      const existingPlayer = context.players.find((player) => player.id === event.playerId)
-      if (!existingPlayer) {
+      const existingUser = context.users.find((user) => user.id === event.userId)
+      if (!existingUser) {
         return {
-          players: [
-            ...context.players,
-            { id: event.playerId, name: event.playerName, isConnected: false },
-          ],
+          users: [...context.users, { id: event.userId, name: event.userName, isConnected: false }],
         }
       } else {
-        console.warn('Player already joined', event.playerId)
+        console.warn('User already joined', event.userId)
         return {}
       }
     }),
-    sendPlayersUpdate: ({ context }) => {
-      sendMessageToPlayers({
+    sendUsersUpdate: ({ context }) => {
+      sendMessageToUsers({
         gameId: context.gameId,
         message: {
-          type: 'players update',
-          players: context.players.map(({ id, name, isConnected }) => ({ id, name, isConnected })),
+          type: 'users update',
+          users: context.users.map(({ id, name, isConnected }) => ({ id, name, isConnected })),
         },
       })
     },
-    sendEmojiToOtherPlayers: ({ context, event: e }) => {
+    sendEmojiToOtherUSers: ({ context, event: e }) => {
       const event = e as ServerEventOf<'send emoji'>
-      sendMessageToPlayers({
+      sendMessageToUsers({
         gameId: context.gameId,
         message: {
           type: 'show emoji',
           emoji: event.emoji,
-          playerId: event.playerId,
+          userId: event.userId,
         },
-        excludePlayerIds: [event.playerId],
+        excludeUserIds: [event.userId],
       })
     },
   },
   guards: {
-    allPlayersJoined: () => false,
-    notAllPlayersJoined: () => false,
+    gameIsReadyToStart: () => false,
   },
   actors: {
     loadParticipants: fromPromise(async () => {

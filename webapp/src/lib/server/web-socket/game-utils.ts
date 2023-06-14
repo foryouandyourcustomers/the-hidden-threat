@@ -1,19 +1,19 @@
 import { getGlobalWebSocketServer, type ExtendedWebSocket } from './global-server'
 
 /**
- * Returns all open web sockets for a given player in a given game.
+ * Returns all open web sockets for a given user in a given game.
  *
  * TODO: this is a pretty expensive operation, because it iterates over all
  * connections. We might need to improve this in the future.
  */
-export const getSocketsForPlayer = ({
+export const getSocketsForUser = ({
   gameId,
-  playerId,
+  userId,
 }: {
   gameId: string
-  playerId: string
+  userId: string
 }): ExtendedWebSocket[] => {
   return [...getGlobalWebSocketServer().clients].filter(
-    (client) => client.playerId === playerId && client.gameId === gameId,
+    (client) => client.userId === userId && client.gameId === gameId,
   )
 }

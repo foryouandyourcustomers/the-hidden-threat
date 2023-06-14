@@ -1,11 +1,11 @@
 import shortUuid from 'short-uuid'
 
 export const load = ({ cookies }) => {
-  let playerId = cookies.get('playerId')
-  if (!playerId) {
-    playerId = shortUuid.generate()
+  let userId = cookies.get('userId')
+  if (!userId) {
+    userId = shortUuid.generate()
   }
-  cookies.set('playerId', playerId, {
+  cookies.set('userId', userId, {
     path: '/',
     httpOnly: false,
     maxAge: 60 * 60 * 24 * 7,
@@ -14,10 +14,10 @@ export const load = ({ cookies }) => {
 
   return {
     /**
-     * Every client (browser) gets assigned a random playerId
-     * that is stored in a cookie. This identifies the player
+     * Every client (browser) gets assigned a random userId
+     * that is stored in a cookie. This identifies the user
      * for each game.
      */
-    playerId,
+    userId,
   }
 }

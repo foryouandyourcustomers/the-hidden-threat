@@ -8,8 +8,9 @@ export const machine = createMachine({
 
   context: ({ input }) => ({
     gameId: input.gameId,
-    playerId: input.playerId,
-    hostPlayerId: input.hostPlayerId,
+    userId: input.userId,
+    hostUserId: input.hostUserId,
+    users: [],
     players: [],
   }),
 
@@ -82,12 +83,12 @@ export const machine = createMachine({
   },
 
   on: {
-    'players update': {
+    'users update': {
       target: '#gameClient',
-      actions: 'updatePlayers',
+      actions: 'updateUsers',
     },
 
-    'player sends emoji': {
+    'user sends emoji': {
       target: '#gameClient',
       actions: 'sendEmoji',
     },

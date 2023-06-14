@@ -8,11 +8,11 @@ type WebSocketConnection = {
 
 export const createWebSocketConnection = ({
   gameId,
-  playerId,
+  userId,
   onMessage,
 }: {
   gameId: string
-  playerId: string
+  userId: string
   onMessage: (message: ServerMessage) => void
 }) => {
   const webSocketConnection = writable<WebSocketConnection>({ status: 'opening', log: [] })
@@ -35,7 +35,7 @@ export const createWebSocketConnection = ({
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
     ws = new WebSocket(
-      `${protocol}//${window.location.host}/websocket?gameId=${gameId}&playerId=${playerId}`,
+      `${protocol}//${window.location.host}/websocket?gameId=${gameId}&userId=${userId}`,
     )
     ws.addEventListener('open', () => {
       updateStatus('opened')

@@ -4,21 +4,21 @@
 
   const context = getGameContext()
 
-  const players = useSelector(context.machine.service, ({ context }) => context.players)
+  const users = useSelector(context.machine.service, ({ context }) => context.users)
 </script>
 
-<div class="players">
-  <h3>Players</h3>
-  {#each $players as player}
+<div class="users">
+  <h3>Users</h3>
+  {#each $users as user}
     <p>
-      {#if player.isConnected}🟢{:else}🟠{/if}
-      {player.name}
+      {#if user.isConnected}🟢{:else}🟠{/if}
+      {user.name}
     </p>
   {/each}
 </div>
 
 <style lang="postcss">
-  .players {
+  .users {
     position: fixed;
     top: var(--size-2);
     right: var(--size-2);

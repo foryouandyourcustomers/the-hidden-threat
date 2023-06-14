@@ -55,6 +55,7 @@ export function useMachine<TMachine extends AnyStateMachine>(
     delays,
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const resolvedMachine = machine.provide(machineConfig as any)
 
   const service = interpret(resolvedMachine, interpreterOptions).start()
@@ -69,5 +70,6 @@ export function useMachine<TMachine extends AnyStateMachine>(
     }).unsubscribe
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return { state, send: service.send, service } as any
 }

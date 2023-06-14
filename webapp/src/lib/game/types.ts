@@ -3,13 +3,13 @@
  */
 export type ServerMessage =
   | {
-      type: 'players update'
-      players: { id: string; name: string; isConnected: boolean }[]
+      type: 'users update'
+      users: { id: string; name: string; isConnected: boolean }[]
     }
   | {
       type: 'show emoji'
       emoji: string
-      playerId: string
+      userId: string
     }
 
 /**
@@ -21,10 +21,20 @@ export type ClientMessage = {
 }
 
 /**
- * The base player type that is used by the server `Player` and client `Player`.
+ * The base user type that is used by the server and client `User`.
  */
-export type BasePlayer = {
+export type BaseUser = {
   id: string
   name: string
   isConnected: boolean
+}
+
+type PlayerRole = 'defender' | 'attacker'
+
+/**
+ * The base player type that is used by the server and client `Player`.
+ */
+export type BasePlayer = {
+  name: string
+  role: PlayerRole
 }

@@ -1,24 +1,26 @@
-import type { BasePlayer, ClientMessage } from '$lib/game/types'
+import type { BasePlayer, BaseUser, ClientMessage } from '$lib/game/types'
 
 export type Context = {
   gameId: string
-  hostPlayerId: string
+  hostUserId: string
   players: Player[]
+  users: User[]
 }
 
 export type Player = BasePlayer
+export type User = BaseUser
 
 export type ServerEvent =
   // All messages that the server sends can be used as client events
-  | (ClientMessage & { playerId: string })
-  | { type: 'player connected'; playerId: string }
+  | (ClientMessage & { userId: string })
+  | { type: 'user connected'; userId: string }
   /**
-   * When the player has an existing connection but reconnects (maybe with
+   * When the user has an existing connection but reconnects (maybe with
    * another client)
    */
-  | { type: 'player reconnected'; playerId: string }
-  | { type: 'player disconnected'; playerId: string }
-  | { type: 'player joined'; playerId: string; playerName: string }
+  | { type: 'user reconnected'; userId: string }
+  | { type: 'user disconnected'; userId: string }
+  | { type: 'user joined'; userId: string; userName: string }
   | { type: 'host starts game'; value: string }
 
 export type ServerEventOf<Type extends ServerEvent['type']> = Extract<ServerEvent, { type: Type }>

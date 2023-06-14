@@ -5,18 +5,18 @@
   import { play } from '$lib/sound/index.js'
   import { onMount } from 'svelte'
   import Emojis from './components/Emojis.svelte'
-  import Players from './components/Players.svelte'
+  import Users from './components/Users.svelte'
   import { setGameContext } from './context.js'
 
   export let data
 
   const gameId = data.gameId
-  const playerId = data.playerId
-  const hostPlayerId = data.hostPlayerId
+  const userId = data.userId
+  const hostUserId = data.hostUserId
 
   const socketConnection = createWebSocketConnection({
     gameId,
-    playerId,
+    userId,
     onMessage: (message) => {
       console.log('message', message)
       machine.send(message)
@@ -28,15 +28,15 @@
       send: socketConnection.send,
       actions: {
         playSound: play,
-        showEmoji: ({ playerId, emoji }) => emojisComponent?.showEmoji({ playerId, emoji }),
+        showEmoji: ({ userId, emoji }) => emojisComponent?.showEmoji({ userId, emoji }),
       },
     }),
     {
-      input: { gameId, playerId, hostPlayerId },
+      input: { gameId, userId, hostUserId },
     },
   )
 
-  setGameContext({ gameId, playerId, hostPlayerId, machine })
+  setGameContext({ gameId, userId, hostUserId, machine })
 
   const state = machine.state
 
@@ -66,5 +66,5 @@
 {JSON.stringify($state, null, 2)}
 </pre>
 
-<Players />
+<Users />
 <Emojis bind:this={emojisComponent} />
