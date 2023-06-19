@@ -1,16 +1,29 @@
 <script lang="ts">
-  import type { InputConstraint } from 'sveltekit-superforms'
+  import type { z, AnyZodObject } from 'zod'
+  import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms'
+  import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client'
 
-  export let value: string | undefined
-  export let errors: string[] | undefined = undefined
-  export let constraints: InputConstraint | undefined = undefined
+  type T = $$Generic<AnyZodObject>
+
+  export let form: SuperForm<ZodValidation<T>, unknown>
+  export let field: FormPathLeaves<z.infer<T>>
+
+  const { value, errors, constraints } = formFieldProxy(form, field)
 </script>
 
 <label>
   <span class="display-name"><slot /></span>
-  <input type="text" bind:value {...constraints} {...$$restProps} />
+  <input
+    name={field}
+    type="text"
+    aria-invalid={$errors ? 'true' : undefined}
+    bind:value={$value}
+    {...$constraints}
+    {...$$restProps}
+  />
 </label>
-{#if errors}<span class="invalid">{errors}</span>{/if}
+
+{#if $errors}<span class="invalid">{$errors}</span>{/if}
 
 <style lang="postcss">
   label {

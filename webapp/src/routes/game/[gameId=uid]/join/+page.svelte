@@ -1,26 +1,26 @@
 <script>
   import CenteredContent from '$lib/components/layout/CenteredContent.svelte'
   import Button from '$lib/components/ui/Button.svelte'
+  import Checkbox from '$lib/components/ui/Checkbox.svelte'
   import TextInput from '$lib/components/ui/TextInput.svelte'
   import { superForm } from 'sveltekit-superforms/client'
 
   export let data
 
-  const { form, enhance, errors, constraints } = superForm(data.form)
+  const form = superForm(data.form)
 </script>
 
 <CenteredContent>
-  <form method="post" use:enhance>
+  <form method="post" use:form.enhance>
     <h1>Spiel beitreten</h1>
 
-    <TextInput
-      name="userName"
-      bind:value={$form.userName}
-      errors={$errors.userName}
-      constraints={$constraints.userName}
-    >
-      Dein Name
-    </TextInput>
+    <TextInput {form} field="userName">Dein Name</TextInput>
+    <Checkbox {form} field="acceptedTos">
+      Ich habe die <a href="/privacy" target="_blank">Datenschutzerklärung</a> &amp;
+      <a href="/tos" target="_blank">Nutzungsbedingungen</a> gelesen und akzeptiere sie.
+    </Checkbox>
+
+    <Checkbox {form} field="over18">Ich bin über 18 Jahre alt.</Checkbox>
 
     <div class="actions">
       <Button href="/">Abbrechen</Button>

@@ -1,15 +1,11 @@
-import { getGame } from '$lib/server/game/global.js'
-import { error, redirect } from '@sveltejs/kit'
+import { getGame } from '$lib/server/game/global'
+import { redirect } from '@sveltejs/kit'
 
 export const load = async ({ params, parent }) => {
-  const gameId = params.gameId
-  const game = getGame(gameId)
+  const { userId, gameId } = await parent()
 
-  if (!game) {
-    throw error(404, 'Game not found')
-  }
+  const game = getGame(gameId)!
 
-  const { userId } = await parent()
   const snapshot = game.machine.getSnapshot()
 
   if (!snapshot.context.users.find((user) => user.id === userId)) {

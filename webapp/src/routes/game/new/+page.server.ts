@@ -1,28 +1,17 @@
+import { createGameSchema } from '$lib/client/forms'
 import { createGame } from '$lib/server/game'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms/server'
-import { z } from 'zod'
-
-const schema = z.object({
-  acceptedTos: z.literal<boolean>(true, {
-    errorMap: () => ({ message: 'Bitte Datenschutzerklärung & Nutzungsbedingungen akzeptieren.' }),
-  }),
-  over18: z.literal<boolean>(true, {
-    errorMap: () => ({ message: 'Bitte das Alter bestätigen.' }),
-  }),
-  gameName: z.string().min(3).max(30).optional(),
-  userName: z.string().min(3).max(10),
-})
 
 export const load = async () => {
-  const form = await superValidate(schema)
+  const form = await superValidate(createGameSchema)
 
   return { form }
 }
 
 export const actions = {
   default: async ({ request, cookies }) => {
-    const form = await superValidate(request, schema)
+    const form = await superValidate(request, createGameSchema)
 
     const userId = cookies.get('userId')
 

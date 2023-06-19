@@ -7,42 +7,22 @@
 
   export let data
 
-  const { form, enhance, errors, constraints } = superForm(data.form)
+  const form = superForm(data.form)
 </script>
 
 <CenteredContent>
-  <form method="post" use:enhance>
+  <form method="post" use:form.enhance>
     <h1>Neues Spiel</h1>
 
-    <TextInput
-      name="userName"
-      bind:value={$form.userName}
-      errors={$errors.userName}
-      constraints={$constraints.userName}
-    >
-      Dein Name
-    </TextInput>
-    <TextInput
-      name="gameName"
-      bind:value={$form.gameName}
-      errors={$errors.gameName}
-      constraints={$constraints.gameName}
-    >
-      Optionaler Spiel Name
-    </TextInput>
+    <TextInput {form} field="userName">Dein Name</TextInput>
+    <TextInput {form} field="gameName">Optionaler Spiel Name</TextInput>
 
-    <Checkbox
-      name="acceptedTos"
-      value="true"
-      bind:checked={$form.acceptedTos}
-      errors={$errors.acceptedTos}
-    >
+    <Checkbox {form} field="acceptedTos">
       Ich habe die <a href="/privacy" target="_blank">Datenschutzerklärung</a> &amp;
       <a href="/tos" target="_blank">Nutzungsbedingungen</a> gelesen und akzeptiere sie.
     </Checkbox>
-    <Checkbox name="over18" value="true" bind:checked={$form.over18} errors={$errors.over18}>
-      Ich bin über 18 Jahre alt.
-    </Checkbox>
+
+    <Checkbox {form} field="over18">Ich bin über 18 Jahre alt.</Checkbox>
 
     <div class="actions">
       <Button href="/">Abbrechen</Button>

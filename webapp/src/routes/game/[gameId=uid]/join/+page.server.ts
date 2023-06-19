@@ -1,21 +1,23 @@
+import { joinGameSchema } from '$lib/client/forms.js'
 import { getGame } from '$lib/server/game/global'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms/server'
-import { z } from 'zod'
 
-const schema = z.object({
-  userName: z.string().min(3).max(10),
-})
+export const load = async ({ parent }) => {
+  const { gameId } = await parent()
 
-export const load = async () => {
-  const form = await superValidate(schema)
+  const game = getGame(gameId)!
 
-  return { form }
+  console.log(game)
+
+  const form = await superValidate(joinGameSchema)
+
+  return { form, foo: null }
 }
 
 export const actions = {
   default: async ({ request, cookies, params }) => {
-    const form = await superValidate(request, schema)
+    const form = await superValidate(request, joinGameSchema)
 
     const userId = cookies.get('userId')
     const gameId = params.gameId
