@@ -5,6 +5,7 @@
     <a href="/contact">Kontakt</a>
     <a href="/imprint">Impressum</a>
     <a href="/privacy">Datenschutzerklärung</a>
+    <a href="/tos">Nutzungsbedingungen</a>
   </nav>
 </footer>
 

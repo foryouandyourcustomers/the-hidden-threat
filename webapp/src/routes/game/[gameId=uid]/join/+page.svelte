@@ -15,11 +15,12 @@
 
     <TextInput
       name="userName"
-      label="Dein Name"
       bind:value={$form.userName}
       errors={$errors.userName}
       constraints={$constraints.userName}
-    />
+    >
+      Dein Name
+    </TextInput>
 
     <div class="actions">
       <Button href="/">Abbrechen</Button>

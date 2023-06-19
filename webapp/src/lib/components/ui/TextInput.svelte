@@ -2,13 +2,12 @@
   import type { InputConstraint } from 'sveltekit-superforms'
 
   export let value: string | undefined
-  export let label: string | undefined = undefined
   export let errors: string[] | undefined = undefined
   export let constraints: InputConstraint | undefined = undefined
 </script>
 
 <label>
-  {#if label}<span class="display-name">{label}</span>{/if}
+  <span class="display-name"><slot /></span>
   <input type="text" bind:value {...constraints} {...$$restProps} />
 </label>
 {#if errors}<span class="invalid">{errors}</span>{/if}
