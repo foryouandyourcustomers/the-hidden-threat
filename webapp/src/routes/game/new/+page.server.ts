@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 const schema = z.object({
   gameName: z.string().min(3).max(30).optional(),
-  userName: z.string().min(3).max(30),
+  userName: z.string().min(3).max(10),
 })
 
 export const load = async () => {

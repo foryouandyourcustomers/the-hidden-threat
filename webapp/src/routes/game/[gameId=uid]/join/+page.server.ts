@@ -4,7 +4,7 @@ import { superValidate } from 'sveltekit-superforms/server'
 import { z } from 'zod'
 
 const schema = z.object({
-  userName: z.string().min(3).max(30),
+  userName: z.string().min(3).max(10),
 })
 
 export const load = async () => {
