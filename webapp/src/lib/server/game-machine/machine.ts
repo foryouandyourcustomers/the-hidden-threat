@@ -1,17 +1,18 @@
 import { createMachine } from 'xstate'
-import type { Context, ServerEvent, User } from './types'
+import type { Context, ServerEvent, ServerUser } from './types'
 
 export const machine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGUwCcBuuAxAK6y4AEAxgPYB2tYlALpANoAMAuoqAA7WwAlk0F0eIAJ6IAtAEYA7AFYANCAAeiWYsUAmAHTzZADh27ZATh0AWeUYDMAXwerUGbPiKkKORnQbM2LnF+IRExJEkZBRV1TW19QxMzSxt7Jxd0LFwCHBIyHHIIQVgaekYWCA5uCJDhUVpxKQQ5JVUNBC1dA2NTHQtrW0dnEFcsj1yyWghyMDRqACtBKuCBOvDQdtktPS1zRSNzWTsrE-kANjtVJrPZA3M7e6MrIyN2dh0n9JHM9xy9ADlqExyLAmCgcBU8hR5tRBAxKkEaqswg0Iu0dGcrDsHhYrOZXnZ5FZ2FYrohFOYznp2HZ2JYzuY8XstF9Rr9cACgSCwRDIHoAIKwIRQWhwqDkLw4WCEZZI0L1cTtQl2PQ3diKLaU2SYoxnMkIKwa6kYhRGRRWBk2eRDDJubIcwHA0Hgip6ABKYBQEAk5CY1G5LsIAAsBE6eUxYORRrK+MiFWjELYseYU09ZHinmcdPqrBi9ObKXZjFs7HYzmcnMNaNQIHBxGz7TgVvL1rEEGWduZ2CYlEdS2dFJdIggBnoMYpzs9FAPZOPWT9G5ywy7IM21qiNognp3uzpe6Wy4P9WX9O8s+wjrJ1To3lZ53bxkuA7yIAKhYIRWKJfl4HL14rNDsfQLF3fd+yPYcTnMfMTQ1GwJyOCthgbR9HWfV0PS9H0-XQtcUQAhAJyxdN2HPbUbguWQczxGCbiA9h5DeRJ7zGP4AHFMnITBw1XP98ITDo3nYbokj6FJBmPY4DAHIkL1LQtrRY9kcD0DiMC4njXwASVFEQUAAGzw+NN0E54RN6fpUiHJoLWg8dDHeUxzHkDF5ErBwgA */
+  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGUwCcBuuAxAK6y4AEAxgPYB2tYlALpANoAMAuoqAA7WwAlk0F0eIAJ6IAtAEYA7AFYANCAAeiWYsUAmAHTzZADh27ZATh0AWeUYDMAXwerUGbPiKkKORnQbM2LnF+IRExJEkZBRV1TW19QxMzSxt7Jxd0LFwCHBIyHHIIQVgaekYWCA5uCJDhUVpxKQQ5JVUNBC1dA2NTHQtrW0dnEFcsj1yyWghyMDRqACtBKuCBOvDQdtktPS1zRSNzWTsrE-kANjtVJrPZA3M7e6MrIyN2dh0n9JHM9xy9ADlqExyLAmCgcBU8hR5tRBAxKkEaqswg0Iu0dGcrDsHhYrOZXnZ5FZ2FYrohFOYznp2HZ2JYzuY8XstF9Rr9cACgSCwRDIIQAKIEWjAnTLJGheriTYnbGHRn4mlEklkhCKM7sakYvrvWQ3bRGVk-bIcwHA0Hgip6ACCsCEUFocKg5C8OFghDFfGRkrRiEJdj0dgU8hJ9neZyMupVVkUt3MdLsOgxdjOSjOZ0NbmNOE5Zp5loASmAUBAJOQmNRuRbCAALAS5i2wcijD0gWooqWIWxY8w9p6yPFPM46KMYvSKPEXYxbOzJ9PDNlZnOV3kQQgAVXy5AA7oIcNMwMKAGa4YUttvejbk9jyHYnC46d7mJR9S6RVWWPSMmfRhnadi6pxhloagIDgcQF3GFYJXWWIEDsRQ9AOV4HzsCM9nVM4VQGPQMUUYNTDw1IjHkDMxj+U1lwqKC1lRS8EHsRCFRQtC1XYTC32TfQ40sc5Q3HElSPZbMKPNFdrVtQR7UdZ18ngcUaI7DpA0Y5CaRYjCo0UDViUsPY1XiUxBMXES80gPRC2LUty0o6j2x9VV5H9J5bCOGlUgxTTtLpHRzl2F5ryM8Y9AAcUychMFMiBbIvWDZDeDVEl6fpUlfJpvwMM48NQ2wPnkONFECv5QowcLIr0ABJB0RBQAAbaKYM2ENuiSPoUkGKMGRwzLDHeUwnwxEjAKAA */
 
   id: 'gameServer',
 
-  context: ({ input }: { input: { gameId: string; host: User } }) => ({
+  context: ({ input }: { input: { gameId: string; host: ServerUser } }) => ({
     gameId: input.gameId,
     hostUserId: input.host.id,
     // TODO: this should get popullated with players
     players: [],
     users: [input.host],
+    actions: [],
   }),
 
   types: {

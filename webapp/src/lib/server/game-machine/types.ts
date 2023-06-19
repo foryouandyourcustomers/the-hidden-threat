@@ -1,14 +1,17 @@
-import type { BasePlayer, BaseUser, ClientMessage } from '$lib/game/types'
+import type { GameAction, Player, User, ClientMessage } from '$lib/game/types'
 
 export type Context = {
   gameId: string
   hostUserId: string
-  players: Player[]
-  users: User[]
+  players: ServerPlayer[]
+  users: ServerUser[]
+  actions: ServerGameAction[]
 }
 
-export type Player = BasePlayer
-export type User = BaseUser
+export type ServerPlayer = Player
+export type ServerUser = User
+
+export type ServerGameAction = GameAction
 
 export type ServerEvent =
   // All messages that the server sends can be used as client events

@@ -21,9 +21,14 @@ export type ClientMessage = {
 }
 
 /**
- * The base user type that is used by the server and client `User`.
+ * The base user type that is used by the server and client.
+ *
+ * A user is an actual person sitting in front of a browser and connecting to
+ * the game.
+ *
+ * They might be an observer, a host/admin or controlling a `Player`.
  */
-export type BaseUser = {
+export type User = {
   id: string
   name: string
   isConnected: boolean
@@ -32,9 +37,27 @@ export type BaseUser = {
 type PlayerRole = 'defender' | 'attacker'
 
 /**
- * The base player type that is used by the server and client `Player`.
+ * The base player type that is used by the server and client.
+ *
+ * A player is an actual "piece" on the board. It can be controlled by 0 or 1
+ * player. If it is not controlled by any player than an "admin" needs to move
+ * it.
+ *
+ * Potentially, in the future, a player might be controlled by multiple users.
  */
-export type BasePlayer = {
+export type Player = {
+  id: number
   name: string
   role: PlayerRole
+  position?: Coordinate | undefined
+}
+
+export type Coordinate = [number, number]
+
+export type GameAction = {
+  type: 'player moves'
+  playerId: number
+  /** Which user actually performed the action. */
+  userId: number
+  to: Coordinate
 }
