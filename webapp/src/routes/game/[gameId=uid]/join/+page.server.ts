@@ -3,31 +3,21 @@ import { getGame } from '$lib/server/game/global'
 import { error, fail, redirect } from '@sveltejs/kit'
 import { superValidate } from 'sveltekit-superforms/server'
 
-export const load = async ({ parent }) => {
-  const { gameId } = await parent()
-
-  const game = getGame(gameId)!
-
-  console.log(game)
-
+export const load = async () => {
   const form = await superValidate(joinGameSchema)
-
-  return { form, foo: null }
+  return { form }
 }
 
 export const actions = {
-  default: async ({ request, cookies, params }) => {
+  default: async ({ request, cookies, params, locals }) => {
     const form = await superValidate(request, joinGameSchema)
 
     const userId = cookies.get('userId')
     const gameId = params.gameId
-    const game = getGame(gameId)
+    const game = getGame(locals)
 
     if (!userId) {
       throw error(500, 'No userId was found')
-    }
-    if (!game) {
-      throw error(500, 'Invalid gameId')
     }
     if (!form.valid) {
       return fail(400, { form })

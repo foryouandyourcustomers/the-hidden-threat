@@ -1,10 +1,10 @@
 import { getGame } from '$lib/server/game/global'
 import { redirect } from '@sveltejs/kit'
 
-export const load = async ({ params, parent }) => {
-  const { userId, gameId } = await parent()
+export const load = async ({ params, parent, locals }) => {
+  const { userId } = await parent()
 
-  const game = getGame(gameId)!
+  const game = getGame(locals)
 
   const snapshot = game.machine.getSnapshot()
 
@@ -13,8 +13,8 @@ export const load = async ({ params, parent }) => {
   }
 
   return {
-    gameId,
-    hostUserId: snapshot.context.hostUserId,
+    gameId: game.id,
     name: game.name,
+    hostUserId: snapshot.context.hostUserId,
   }
 }

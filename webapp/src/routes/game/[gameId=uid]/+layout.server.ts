@@ -1,7 +1,7 @@
 import { getGame } from '$lib/server/game/global.js'
 import { error } from '@sveltejs/kit'
 
-export const load = async ({ params }) => {
+export const load = async ({ params, locals }) => {
   const gameId = params.gameId
   const game = getGame(gameId)
 
@@ -9,8 +9,5 @@ export const load = async ({ params }) => {
     throw error(404, 'Game not found')
   }
 
-  return {
-    gameId,
-    name: game.name,
-  }
+  locals.game = game
 }

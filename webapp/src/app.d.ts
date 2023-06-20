@@ -1,3 +1,4 @@
+import type { Game } from '$lib/server/game/types'
 import type { ExtendedWebSocketServer } from '$lib/server/web-socket/global-server'
 
 // See https://kit.svelte.dev/docs/types#app
@@ -13,6 +14,9 @@ declare global {
        * use it.
        */
       webSocketServer: ExtendedWebSocketServer
+
+      /** This is set in all subpages of /game/{gameId} */
+      game?: Game
     }
     // interface PageData {}
     // interface Platform {}

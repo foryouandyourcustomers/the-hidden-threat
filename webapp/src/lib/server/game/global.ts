@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit'
 import type { Game } from './types'
 
 const GLOBAL_GAMES_KEY = Symbol.for('game.games')
@@ -18,7 +19,18 @@ export const addGame = (game: Game) => {
   games[game.id] = game
 }
 
-export const getGame = (gameId: string): Game | undefined => {
-  const games = getGames()
-  return games[gameId]
+export function getGame(gameId: string): Game | undefined
+export function getGame(locals: App.Locals): Game
+
+export function getGame(gameIdOrLocals: string | App.Locals): Game | undefined {
+  return typeof gameIdOrLocals === 'string'
+    ? findGame(gameIdOrLocals)
+    : getGameFromLocals(gameIdOrLocals)
+}
+
+const findGame = (gameId: string): Game | undefined => getGames()[gameId]
+const getGameFromLocals = (locals: App.Locals): Game => {
+  const game = locals.game
+  if (!game) throw error(500, 'No game found in locals')
+  return game
 }
