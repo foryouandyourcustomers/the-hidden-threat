@@ -1,12 +1,12 @@
 <script lang="ts">
   import { useMachine } from '$lib/@xstate/svelte/useMachine.js'
+  import { setGameContext } from '$lib/client/game-context.js'
   import { getClientGameMachine } from '$lib/client/game-machine/configured.js'
   import { createWebSocketConnection } from '$lib/client/web-socket'
+  import Emojis from '$lib/components/game/Emojis.svelte'
+  import Users from '$lib/components/game/Users.svelte'
   import { play } from '$lib/sound/index.js'
   import { onMount } from 'svelte'
-  import Emojis from './components/Emojis.svelte'
-  import Users from './components/Users.svelte'
-  import { setGameContext } from './context.js'
 
   export let data
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
-  import { getGameContext } from '../context'
+  import { getGameContext } from '$lib/client/game-context'
 
   const context = getGameContext()
 

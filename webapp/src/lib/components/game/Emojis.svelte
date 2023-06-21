@@ -1,7 +1,7 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
+  import { getGameContext } from '$lib/client/game-context'
   import { fade, scale } from 'svelte/transition'
-  import { getGameContext } from '../context'
 
   const context = getGameContext()
 
