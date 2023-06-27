@@ -14,12 +14,12 @@
   <form method="post" use:form.enhance>
     <h1>Neues Spiel</h1>
 
-    <TextInput {form} field="userName">Dein Name</TextInput>
+    <TextInput {form} field="userName">Dein Name *</TextInput>
     <TextInput {form} field="gameName">Optionaler Spiel Name</TextInput>
 
     <Checkbox {form} field="acceptedTos">
       Ich habe die <a href="/privacy" target="_blank">Datenschutzerklärung</a> &amp;
-      <a href="/tos" target="_blank">Nutzungsbedingungen</a> gelesen und akzeptiere sie.
+      <a href="/tos" target="_blank">Nutzungsbedingungen</a> gelesen und akzeptiere sie. *
     </Checkbox>
 
     <Checkbox {form} field="over18">Ich bin über 18 Jahre alt.</Checkbox>

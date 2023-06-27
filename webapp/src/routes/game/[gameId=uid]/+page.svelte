@@ -4,9 +4,12 @@
   import { getClientGameMachine } from '$lib/client/game-machine/configured.js'
   import { createWebSocketConnection } from '$lib/client/web-socket'
   import Emojis from '$lib/components/game/Emojis.svelte'
+  import Game from '$lib/components/game/Game.svelte'
   import Users from '$lib/components/game/Users.svelte'
   import { play } from '$lib/sound/index.js'
   import { onMount } from 'svelte'
+  import throttle from 'lodash/throttle'
+  import CursorOverlays from '$lib/components/game/CursorOverlays.svelte'
 
   export let data
 
@@ -14,12 +17,17 @@
   const userId = data.userId
   const hostUserId = data.hostUserId
 
+  const mousePositions: { [key: string]: [number, number] } = {}
+
   const socketConnection = createWebSocketConnection({
     gameId,
     userId,
     onMessage: (message) => {
-      console.log('message', message)
-      machine.send(message)
+      if (message.type === 'mouse position') {
+        mousePositions[message.userId] = message.position
+      } else {
+        machine.send(message)
+      }
     },
   })
 
@@ -57,14 +65,31 @@
   })
 
   let emojisComponent: Emojis | undefined
+
+  const reportMousePosition = throttle(
+    (position: [number, number]) => {
+      socketConnection.send({
+        type: 'mouse position',
+        position,
+      })
+    },
+    50,
+    { leading: true, trailing: true },
+  )
 </script>
 
-<h1>{$socketConnection.status}</h1>
+<Game {reportMousePosition}>
+  <svelte:fragment slot="players">
+    <h1>{$socketConnection.status}</h1>
+
+    <Users />
+  </svelte:fragment>
+  <Emojis slot="actions" bind:this={emojisComponent} />
+  <CursorOverlays slot="cursor-overlays" {mousePositions} />
+</Game>
+
 <pre>
 {$socketConnection.log.join('\n')}
 
 {JSON.stringify($state, null, 2)}
 </pre>
-
-<Users />
-<Emojis bind:this={emojisComponent} />

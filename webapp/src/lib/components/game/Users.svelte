@@ -19,9 +19,6 @@
 
 <style lang="postcss">
   .users {
-    position: fixed;
-    top: var(--size-2);
-    right: var(--size-2);
     border: 2px solid var(--color-grey-200);
     border-radius: var(--radius-md);
     background: white;

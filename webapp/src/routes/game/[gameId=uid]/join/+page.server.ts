@@ -9,15 +9,18 @@ export const load = async () => {
 }
 
 export const actions = {
-  default: async ({ request, cookies, params, locals }) => {
+  default: async ({ request, cookies, params }) => {
     const form = await superValidate(request, joinGameSchema)
 
     const userId = cookies.get('userId')
     const gameId = params.gameId
-    const game = getGame(locals)
+    const game = getGame(gameId)
 
     if (!userId) {
       throw error(500, 'No userId was found')
+    }
+    if (!game) {
+      throw error(500, 'Game was not found')
     }
     if (!form.valid) {
       return fail(400, { form })

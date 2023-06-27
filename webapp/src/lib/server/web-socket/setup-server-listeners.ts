@@ -1,5 +1,7 @@
 import { building, dev } from '$app/environment'
+import type { ClientMessage } from '$lib/game/types'
 import { sendMessageToMachine } from '$lib/server/game'
+import { sendMessageToUsers } from './game-communication'
 import { getSocketsForUser } from './game-utils'
 import {
   getGlobalWebSocketServer,
@@ -79,10 +81,20 @@ const connectionCallback: ConnectionCallback = (webSocket) => {
   webSocket.on('error', console.error)
 
   webSocket.on('message', (data) => {
-    console.log('[wss:kit] received: %s', data)
-    const message = JSON.parse(data.toString())
-    sendMessageToMachine(webSocket.gameId, { ...message, userId: webSocket.userId })
+    const message = JSON.parse(data.toString()) as ClientMessage
+
+    if (message.type === 'mouse position') {
+      sendMessageToUsers({
+        gameId: webSocket.gameId,
+        message: { type: 'mouse position', userId: webSocket.userId, position: message.position },
+        excludeUserIds: [webSocket.userId],
+      })
+    } else {
+      console.log('[wss:kit] received: %s', data)
+      sendMessageToMachine(webSocket.gameId, { ...message, userId: webSocket.userId })
+    }
   })
+
   webSocket.on('close', () => {
     console.log(`[wss:kit] client disconnected (${webSocket.socketId})`)
 

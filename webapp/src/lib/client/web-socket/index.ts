@@ -18,7 +18,7 @@ export const createWebSocketConnection = ({
   const webSocketConnection = writable<WebSocketConnection>({ status: 'opening', log: [] })
 
   const logEvent = (message: string, consoleData?: unknown) => {
-    console.log('[websocket]', message, consoleData)
+    console.debug('[websocket]', message, consoleData)
     return webSocketConnection.update((connection) => ({
       ...connection,
       log: [...connection.log, `[websocket] ${message}`],
@@ -46,9 +46,9 @@ export const createWebSocketConnection = ({
       logEvent('connection closed')
     })
     ws.addEventListener('message', (event) => {
-      logEvent(`message received: ${event.data}`, event)
       try {
         const message = JSON.parse(event.data) as ServerMessage
+        if (message.type !== 'mouse position') logEvent(`message received: ${event.data}`, event)
         onMessage(message)
       } catch (error) {
         logEvent(`error parsing message`, error)

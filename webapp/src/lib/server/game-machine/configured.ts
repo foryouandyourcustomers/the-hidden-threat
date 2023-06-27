@@ -49,7 +49,7 @@ export const serverGameMachine = machine.provide({
         },
       })
     },
-    sendEmojiToOtherUSers: ({ context, event: e }) => {
+    sendEmojiToOtherUsers: ({ context, event: e }) => {
       const event = e as ServerEventOf<'send emoji'>
       sendMessageToUsers({
         gameId: context.gameId,

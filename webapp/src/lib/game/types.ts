@@ -11,14 +11,26 @@ export type ServerMessage =
       emoji: string
       userId: string
     }
+  | {
+      type: 'mouse position'
+      userId: string
+      position: [number, number]
+    }
 
 /**
  * All messages that the clients might send to the server via WebSockets.
  */
-export type ClientMessage = {
-  type: `send emoji`
-  emoji: string
-}
+export type ClientMessage =
+  | {
+      type: `send emoji`
+      emoji: string
+    }
+  /** This is not forwarded to the machine but redirected directly to the other
+   * users */
+  | {
+      type: `mouse position`
+      position: [number, number]
+    }
 
 /**
  * The base user type that is used by the server and client.

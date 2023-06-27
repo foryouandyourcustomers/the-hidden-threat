@@ -45,19 +45,29 @@
     </div>
   {/each}
   {#each validEmojis as emoji}
-    <button on:click={() => sendEmoji(emoji)}>{emoji}</button>
+    <button class="emoji" on:click={() => sendEmoji(emoji)}>{emoji}</button>
   {/each}
 </div>
 
 <style lang="postcss">
   .emojis {
-    position: fixed;
-    right: var(--size-2);
-    bottom: var(--size-2);
-    border: 2px solid var(--color-grey-200);
-    border-radius: var(--radius-md);
-    background: white;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
+    gap: var(--size-1);
     padding: var(--size-2) var(--size-3);
+  }
+  .emoji {
+    display: grid;
+    place-content: center;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: #fafafa;
+    padding: 0;
+    aspect-ratio: 1;
+    font-size: var(--scale-2);
+    &:hover {
+      background: #f0f0f0;
+    }
   }
   .displayed-emoji {
     --_width: 15vw;
@@ -70,7 +80,7 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0 0 30px #dd7;
-    border: 1px solid #ccc;
+    border: var(--size-px) solid #ccc;
     border-radius: var(--radius-full);
     background: #fafafa;
     width: var(--_width);
