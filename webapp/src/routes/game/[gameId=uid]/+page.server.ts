@@ -14,7 +14,6 @@ export const load = async ({ params, parent, locals }) => {
 
   return {
     gameId: game.id,
-    name: game.name,
     hostUserId: snapshot.context.hostUserId,
   }
 }

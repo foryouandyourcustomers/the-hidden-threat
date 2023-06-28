@@ -8,7 +8,7 @@ import type { Game } from './types'
 /**
  * Returns the uuid of the game
  */
-export const createGame = ({ name, host }: { name?: string; host: ServerUser }): Game => {
+export const createGame = ({ host }: { host: ServerUser }): Game => {
   const id = shortUuid.generate()
 
   const machine = interpret(serverGameMachine, {
@@ -20,7 +20,7 @@ export const createGame = ({ name, host }: { name?: string; host: ServerUser }):
     console.log('context:', state.context)
   })
 
-  const game = { id, name, machine }
+  const game = { id, machine }
   addGame(game)
   return game
 }
