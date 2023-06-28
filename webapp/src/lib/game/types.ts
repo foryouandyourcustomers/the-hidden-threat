@@ -31,6 +31,18 @@ export type ClientMessage =
       type: `mouse position`
       position: [number, number]
     }
+  | {
+      type: 'assign side'
+      side: 'attacker' | 'defender'
+      otherUserId: string
+    }
+  | { type: 'start game' }
+  | { type: 'finish setup' }
+  | { type: 'assign role' }
+  | { type: 'set player order' }
+  | { type: 'start setup' }
+  | { type: 'rollback game action' }
+  | { type: 'execute game action' }
 
 /**
  * The base user type that is used by the server and client.
@@ -46,7 +58,7 @@ export type User = {
   isConnected: boolean
 }
 
-type PlayerRole = 'defender' | 'attacker'
+type PlayerSide = 'defender' | 'attacker'
 
 /**
  * The base player type that is used by the server and client.
@@ -60,7 +72,7 @@ type PlayerRole = 'defender' | 'attacker'
 export type Player = {
   id: number
   name: string
-  role: PlayerRole
+  side: PlayerSide
   position?: Coordinate | undefined
 }
 

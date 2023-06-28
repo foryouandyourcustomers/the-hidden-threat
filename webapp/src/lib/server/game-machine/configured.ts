@@ -61,9 +61,14 @@ export const serverGameMachine = machine.provide({
         excludeUserIds: [event.userId],
       })
     },
+    // TODO
+    assignSide: () => ({}),
   },
   guards: {
+    // TODO
     gameIsReadyToStart: () => false,
+    // TODO
+    isAdmin: () => false,
   },
   actors: {
     loadParticipants: fromPromise(async () => {

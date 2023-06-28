@@ -24,6 +24,5 @@ export type ServerEvent =
   | { type: 'user reconnected'; userId: string }
   | { type: 'user disconnected'; userId: string }
   | { type: 'user joined'; userId: string; userName: string }
-  | { type: 'host starts game'; value: string }
 
 export type ServerEventOf<Type extends ServerEvent['type']> = Extract<ServerEvent, { type: Type }>
