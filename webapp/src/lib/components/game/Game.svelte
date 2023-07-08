@@ -55,15 +55,11 @@
 <style lang="postcss">
   .game-wrapper {
     display: grid;
-    align-content: center;
+    place-content: center;
     background: #666;
     /* padding: var(--size-2); */
     width: 100%;
     height: 100%;
-    @media (min-aspect-ratio: 4/3) {
-      align-content: normal;
-      justify-items: center;
-    }
   }
   .game {
     display: grid;
@@ -73,20 +69,16 @@
     grid-template-areas:
       'name characters items'
       'actions content content';
-    /* container: game / size; */
     background: white;
-    aspect-ratio: 4 / 3;
-    width: 100%;
+    width: 90rem;
+    height: 50.625rem;
     overflow: hidden;
-    @media (min-aspect-ratio: 4/3) {
-      width: auto;
-      height: 100%;
+    @media (width < 1440px) or (height < 810px) {
+      transform-origin: center;
+      scale: 0.8;
     }
-  }
-  :global(html) {
-    font-size: min(16px, 1vw);
-    @media (min-aspect-ratio: 4/3) {
-      font-size: min(16px, 1vh * 4 / 3);
+    @media (width < 1200px) or (height < 675px) {
+      scale: 0.6;
     }
   }
   .name {
