@@ -1,10 +1,12 @@
+export type PlayerSide = 'defender' | 'attacker'
+
 /**
  * All messages that the server might send to the clients via WebSockets.
  */
 export type ServerMessage =
   | {
       type: 'users update'
-      users: { id: string; name: string; isConnected: boolean }[]
+      users: User[]
     }
   | {
       type: 'show emoji'
@@ -33,7 +35,7 @@ export type ClientMessage =
     }
   | {
       type: 'assign side'
-      side: 'attacker' | 'defender'
+      side: PlayerSide
       otherUserId: string
     }
   | { type: 'start game' }
@@ -55,10 +57,15 @@ export type ClientMessage =
 export type User = {
   id: string
   name: string
+  isAdmin: boolean
   isConnected: boolean
+  /**
+   * Also users don't really have a side since they are controlling "Players"
+   * which have a side, they can be assigned to a side, since it defines what
+   * they can see.
+   */
+  side?: PlayerSide | undefined
 }
-
-type PlayerSide = 'defender' | 'attacker'
 
 /**
  * The base player type that is used by the server and client.

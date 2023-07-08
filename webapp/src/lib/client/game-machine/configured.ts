@@ -32,14 +32,16 @@ export const getClientGameMachine = ({
         const event = e as ClientEventOf<'show emoji'>
         actions.showEmoji({ userId: event.userId, emoji: event.emoji })
       },
+      forwardToServer: ({ event: e }) => {
+        const event = e as ClientEventOf<'assign side'>
+        send(event)
+      },
     },
-    actors: {
-      loadParticipants: fromPromise(async () => {
-        return ['a', 'b']
-      }),
-    },
+    actors: {},
     guards: {
       isHost: ({ context }) => context.hostUserId === context.userId,
+      isAdmin: ({ context }) =>
+        !!context.users.find((user) => user.id === context.userId && user.isAdmin),
       isPlayer: ({ context }) => context.hostUserId !== context.userId,
       // TODO
       gameNotStarted: () => true,

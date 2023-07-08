@@ -33,7 +33,10 @@ export const serverGameMachine = machine.provide({
       const existingUser = context.users.find((user) => user.id === event.userId)
       if (!existingUser) {
         return {
-          users: [...context.users, { id: event.userId, name: event.userName, isConnected: false }],
+          users: [
+            ...context.users,
+            { id: event.userId, name: event.userName, isAdmin: false, isConnected: false },
+          ],
         }
       } else {
         console.warn('User already joined', event.userId)
@@ -45,7 +48,7 @@ export const serverGameMachine = machine.provide({
         gameId: context.gameId,
         message: {
           type: 'users update',
-          users: context.users.map(({ id, name, isConnected }) => ({ id, name, isConnected })),
+          users: [...context.users],
         },
       })
     },

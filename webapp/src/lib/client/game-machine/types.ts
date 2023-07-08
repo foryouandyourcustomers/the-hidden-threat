@@ -1,4 +1,4 @@
-import type { Player, User, ServerMessage, GameAction } from '$lib/game/types'
+import type { Player, User, ServerMessage, GameAction, PlayerSide } from '$lib/game/types'
 import type { Sound } from '$lib/sound'
 
 export type Context = {
@@ -16,7 +16,14 @@ export type ClientGameAction = GameAction
 
 export type ClientEvent =
   // All messages that the server sends can be used as client events
-  ServerMessage | { type: 'user starts game' } | { type: 'user sends emoji'; emoji: string }
+  | ServerMessage
+  | {
+      type: 'assign side'
+      side: PlayerSide
+      otherUserId: string
+    }
+  | { type: 'admin starts game' }
+  | { type: 'user sends emoji'; emoji: string }
 
 export type ClientEventOf<Type extends ClientEvent['type']> = Extract<ClientEvent, { type: Type }>
 

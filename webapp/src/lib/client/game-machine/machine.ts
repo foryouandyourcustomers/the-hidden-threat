@@ -2,7 +2,7 @@ import { createMachine } from 'xstate'
 import type { ClientEvent, Context } from './types'
 
 export const machine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGEA2BLMAdgC4DEADtigJ5gBOsABAK5kQpFgDaADALqKgyAe1i4iuIQQEgAHogCsAZgB0AdkXcAjPICcigGwAWQ9x07NAGhBVE+nQA5lAJn33D9+bo2n9AX19WqBg4+MTklDS0DLCEEIxgaEIAVrg8-EggwqLiktJyCE72qso6hqr29qVO7vaKlta2Ds6u7p563D7+gehYeISksAAWQgDuDAnJqXzSWWISUhn58qryyh5ainp6m5qGVjYIdjrKhoWa5qpGqk51XSBBvaFEygCSBHMo2CRpMyJzuYtEPZNMp9Nx5Jp7C5NNcjIp5PtEOduMpFBVNjplvITJV7HcHiF+q93uJPt9NOlBH8cgtQPkXCVFE5tHV5DdDGCOYiEGiQedyqpzvIitx1PieoTiMSPl9OE5KZlqfM8ohTip9IpVHotaprrt9NylE5mupFIZPCtXE5xcE+lKADJCABGTqoJCYMSisCIKFoREYDx+GVmNJVhyUymWrVq12uTlU3M0phK5zMwMM8OjNseRMdLqo0tJsumwaVALpiHh6s2Zt1HkK8cThmOy1KdlOK2FemzkueeddhdwZM4FN+2WVgJ54JOTiUFUKpjZK25mecTlK5nk3Hspg5-gCIAIQggcGkBLtRDH-1pskQAFprmsnIUNduNMDgdy7wZlNvtAudH0MEdR7C9B0+K9Q0nO9qifF933fSFuANBoEEhRwKjcXYBQzDVVFAp5iQeSCJwrBAKhRco2jRZCyk0RRDRBTZLkzXRMWbfCD3PQi3gecDsBI8tbwQHRCjUDwvB3K56MTDw1lOTFuHhS47AI3NnVdQSb3pZDIw1XR3FMbhn0ubkwUjWo6g6NVLlONSHQ0gsAEFGGGb0tLDLcUUsspShMbCEVQ3ZHGQ2dZ2k+MinsvtHOUFyGAoag6A8ycymNCEPFqMoWgqQKDlnY5NBaAxYUqflouUfsCzeGUUrI2dDD0+FSh3HRjPjFD8vKEp9HjQoKi1dd5AqgAxXB3iGSA6uEupUTcDpNEW64iiTTqFCKyNqjwzxer0a19yAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGEA2BLMAdgC4DEArrGAE6wAEZADhCkWANoAMAuoqAwPaxcRXPwK8QAD0QBGAGwyA7ADoOAVgBMchQBYdagMxqANCACeiALQG5ygxpmaD9gJzaORgL6fTqDDnxickoqWkoCCDowNH4AK1xOHiQQASERMQlpBHkZAA5lOUU5XIMXRxdDF1MLBBtbGRdFDmadVzkDGW9fdCw8QlJYAAt+AHdaaLiE7glU4VFxZKzHFRkddqL7DiaNLerERQdlDTW5NTUOfU0OTp8QP17AomUASQI5lGwSRJnBOYzFxC5GQFdR5LRKLStEzmWQuDh2XIlFwVRRqHQcXIuXJdO49AL9F5vEQfL4yJJ8X7pBagLJaZQueyODpONYXOR7WpA5QNRS5RQNNR8rYGHH3fHEQnvT5sDTklKU+aZRA6DQGAoGRQMzWKA6rdkwhCGDRHQrOS6o4oaUV4voSgAy-AARo6zCQUBA0LgCGEiCgqEQ6PdvslZlSlQgXMc7Mi4R1FB0XDoOTIOMaU0DVnC5Km1lbbmLbU8Hc6zJLidLpiGFf8acrmtzGommZpchpFMmdC4jh0gXHUYKGdb-IXlMWXWXcCS2GSfmlFQDampgVjSq2PBwKm3oTUjGrEXkjBpBRu1kOHgSx6WAIJ0d2eghu2BCKDeoQQdiVilzmtSRByHT5AYOg8joOoODIMgGByDhqhosZ5ABrTIiKOIEPw77wMkBaPLOfzUr+CCWAcyithouTtBiBgYnkMgcpYbYmkCajIqBG65FsihnuKTyvFKuFhgu9E6CRGhkRRJTUex+o1Hk+SIrkwGgXyrTrFxI6vPc-HzrW2SOMJOpAdouRqNmfIcq29KKMBZGpsiciqjoamPIS9wTh8Wk-ksOzGgZJzGaZ7YGg4KigcBeQcNmOydpx+Y2s5l4efhtIRcoJlGIm7FwqJRQctm3ZgnIZSiTYBxOReTrjjetB3l6iXhgowJ6BF-4XLGSYGqsKjxjRpRUfymhqGV9oVdedAMNgKBmNQdULk4qgHLy2r8spHJGMC7ThfZ-Lajc3TDvFI1udgM06UewlpcxAEbqmbbSYgbb5G4bZkYimpwYNsX7QSABiXq4EMkAnQRHQIui1wQQcfIpndhryKlxzrGc9kMnm3hAA */
 
   id: 'gameClient',
 
@@ -45,32 +45,28 @@ export const machine = createMachine({
       entry: ['consoleLogValueAgain'],
 
       states: {
-        Initial: {
-          invoke: {
-            src: 'loadParticipants',
-          },
-        },
+        Initial: {},
       },
 
       initial: 'Initial',
     },
 
     Lobby: {
-      on: {
-        'user starts game': {
-          actions: 'consoleLogValue',
-          target: 'Ingame',
-        },
-      },
-
       states: {
-        'As host': {},
+        'As admin': {
+          on: {
+            'assign side': {
+              target: 'As admin',
+              actions: 'forwardToServer',
+            },
+          },
+        },
         'As player': {},
         Initial: {
           always: [
             {
-              target: 'As host',
-              guard: 'isHost',
+              target: 'As admin',
+              guard: 'isAdmin',
             },
             'As player',
           ],
@@ -78,6 +74,13 @@ export const machine = createMachine({
       },
 
       initial: 'Initial',
+
+      on: {
+        'admin starts game': {
+          actions: 'consoleLogValue',
+          target: 'Ingame',
+        },
+      },
     },
 
     Finished: {},
