@@ -15,8 +15,13 @@ export type ClientEvent =
   | ServerMessage
   | {
       type: 'assign side'
-      side: Side
       otherUserId: string
+      side: Side
+    }
+  | {
+      type: 'assign admin'
+      otherUserId: string
+      isAdmin: boolean
     }
   | { type: 'admin starts game' }
   | { type: 'user sends emoji'; emoji: string }

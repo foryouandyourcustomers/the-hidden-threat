@@ -3,13 +3,12 @@
   import { setGameContext } from '$lib/client/game-context.js'
   import { getClientGameMachine } from '$lib/client/game-machine/configured.js'
   import { createWebSocketConnection } from '$lib/client/web-socket'
+  import CursorOverlays from '$lib/components/game/CursorOverlays.svelte'
   import Emojis from '$lib/components/game/Emojis.svelte'
   import Game from '$lib/components/game/Game.svelte'
-  import Users from '$lib/components/game/Users.svelte'
   import { play } from '$lib/sound/index.js'
-  import { onMount } from 'svelte'
   import throttle from 'lodash/throttle'
-  import CursorOverlays from '$lib/components/game/CursorOverlays.svelte'
+  import { onMount } from 'svelte'
 
   export let data
 
@@ -79,11 +78,6 @@
 </script>
 
 <Game {reportMousePosition}>
-  <svelte:fragment slot="players">
-    <h1>{$socketConnection.status}</h1>
-
-    <Users />
-  </svelte:fragment>
   <Emojis slot="actions" bind:this={emojisComponent} />
   <CursorOverlays slot="cursor-overlays" {mousePositions} />
 </Game>

@@ -3,7 +3,7 @@ import type { Context, ServerEvent } from './types'
 import type { User } from '$lib/game/types'
 
 export const machine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGUwCcBuuAdAOLpiEByA9gC4AEsNKONkAxAK6y50BWVASwB2kANoAGALqJQAByqwBNAVSEyQAD0QAWcQHZCATgCMegKxmAHMe17D4gEwBmMwBoQAT0QPxZwmYdbYwdLPXFrcWMAXyj3VAxsfCJSDEpaBiYWdhRYRSghBgEIMAlpJBB5RWVVdS0EY2DCADYHJsNdJuN9Yxa3T0RjSycjH1CnTsMHQya9PRi4skSCHBIyNPpGZlYIQgBBXIF84Sg6LlxYNlL1SqUVNXK6p1NCB0GwmzMnQ0NLX3cvBCfYZmFq2PQNMImeYgeJYXDLVapagbTLbQgAJTAKAgHjoNCoGS2bE2LAYYBoHFkV3KN2q91AdSaTmGX18nWZ5icDn+iE+DkI4lBsyc4m02hBTmhsKWyTWKTAdEwqPYYA0YAAxhxWHRYXQUOq6dS5ApbjUHt4rIRbKLjGZDF8HOYefUzKL-PoWj4mpZbPapYt4bLUvLFcqIGwcFQADZRgBG+oA1jqyHqDXcjRUTXTahbLFawtpbfbJuZxE5ncZmcYjGZtD6HLXDK6zHNYjCA0kVvLEQqlVt2BnaXcc-UGvz7YNLN6fj6fhXbdWfIMmq7bZZLBZ-QlA121tgKbI2Dk8gVI1GSlJrlnh+aEFO-EumXovdpOsZnY7tC8Gt8bE8rOu2hbnCnY9oQ+6UnsBxHEIJxnnAlyXjS15mgyiA-NWTKtCu0xiuM779IChb+EK4KmOIUJttKO5gRBsh7DGdDwbAerQSI4YAGbCAIsAABZkgeg4ofSmgDGyhCWK0XwgiCTLloRYT8m0Qwrp8lj2JJwEyruqQAPI4MUOACZSxLknQshRigHg8FQBm4EJVQ3mhCCBHmQxctY6kti28kAnoTRNBJMy2AB4STFpNHdvphnGYeJL0LCDmmiJdSTs0Yq6IW06FqKFb6H42j2K+hUguCfpUR2CKABTkdAAKqxgIACOHBKFQXCmUIEB0GAaBULwAhJdmt4ALRhOIhB6L8TJFuutp9ACK4GJMFH2qKdbaJKFXbqBNX1U1LX4u1ZxGRAPHqqoIgGmISHGo5qGiQgw2vsMK6OEMegcq0PTOi0eY9IBanraYEU7XVDXNa1R3cEZOAahdGrbINTkPcNThDM0ATtGKIS+FOzpo9WFE+C4xjFq6oog9VYP7ZDFzHXQ51CJdiM3Zmd0pYgw0NOE-hOLM-mCgEz56M6LbjaEkRhFypPPkB0JCFQxTwOU1Gdle7MjlztqBZ8-NNILjqOs6ebLaEDbBIKZYhJTQZgOryUjlMzrTFaowfYLMwbk0Ns6eQyKElkED20NznfPj1gCqCG0Ba94Q+2B-vxZAUEnscpzQ8rt0O7eNgi4RfIkYETTih0H3x92idhhiWI4niBLxcHyN1IW-Iis9FimHYoSi1yhfFbWgrPoY5dyimfaB43911BYBgUeuoQleIZZNHl3yEDYhh2IMZak9bW0gQi3Z0ZPHMIP5ebhFYc3YaKvk6DzILOCYTbMhuNgj6kdEp4cQhp8xJ8jmsIFS+1gLA3w2qLXQfd7CCkktJD+5Av67EYsxViJ5IAAJzh6Cay4l5vWcN6SB41H4bXsJWLoTIEGEGijwbgB5MHOVmMbewElgjig+o6BoXwqEADFuJ8QwchDWOc27r1-CuXeQR5ytBeJEEwjoXDaD3gsbaVM9oQ0OpnNm2dnLDUmIFD6PpFrjCUQ2Z02NCB83UpMT4hUNIxBiEAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGUwCcBuuAdAOLpiEByA9gC4AEsNKONkAxAK6y50BWVASwB2kANoAGALqJQAByqwBNAVSEyQAD0QAmAOzbCAFl0A2Qyd3iArIfEBGbQBoQAT0T6AzIQCchgBx2drYeht7ipgC+Ec6oGNj4RKQYlLQMTCzsKLCKUEIMAhBgEtJIIPKKyqrqWggeHn6Euv4eugF1emZWzm4Idt7ehFZDZpa6YeLmdlExZPEEOCRkKfSMzKwQhACC2QK5wlB0XLiwbMXq5UoqaqU1Hna6hNp2fpZBVh79ftbdiO9eViZtMZdIFLN4ptEQLEsLh5otktQVul1oQAEpgFAQFx0GhUNJrNirFgMMA0DiyM6lC6Va6gGomOqED7WEx2Oq6d5OVy-DwGcSA4EeCaGAEeaZQ2awxJLJJgOiYZHsMAaMAAYw4rDo0LoKFVNMpcgUlyqNx0Vgaxgmdis3g+ei63N6Vgmg3CgO0-L8xlt4uhc2lyVl8sVEDYOCoABsIwAjXUAay1ZB1equBrKRpp1TNFsshmttu89vEHh+vTqdh8Ni92hs3mdVl0vslCQWsvhcoVa3YaepVyzvUCBltzz8Jj83j8XonpcCVgrHueJmd1snQybcSlraW2DJsjYWRyeXDEaKUnOGb7poQo6sj3sDP0-MmdlLekMj0C-SCd3Nk8M65hFt20IHdyS2HY9iEA5jzgU4zypC8TTpRAJwrBltBMJdvDMQwPFZUsbArAEgV0EF7nEcEAP9LdklA2QtijOgYNgHUIJEUMADNhAEWAAAsSV3HtENpTREDsFlCD8DCPgBAEGRLR1LAMEwJzwoZ6jCKSqM3YCAHkcEKHABPJQlSToVVeOYXVWCMqgDNwISKkvZCEEw7wZ20RkzG8MZnmLPptD8bSgLbfTDOMvciXoaFHONESahHQgcNsPMx18cTDBncJb1CCZvIBEEfUhP0dMACnI6AAVWjAQAEcOCUKguFMoQIDoMA0CoXgBFizMrwAWkscRGi+Bl80na0HR6JcHkLCjbWFL0xWK5s4XKqravq3EmqOIyIB41VVBEPUxHgw0nKQ0SED68wvCXcRApadkMLsExS0BBoXr-d4vS9e5gtWyrqrqhrtu4IycDVQ61XWHrnMuvr6luqxtF8QxDEC6xR1LeoKwoj0PDnAtnQmf6iDWoHNsak4dvMqHjogWGLpqPrAnEBp3lI0x+WR-RdAIyxJNeSxeT6fR-2WjcQqWRF8QyUMD12PJMTQYRGfixBR0aJoQhrNHWnE9zHT6AYhgBa0LGwl5G3FIQqEKeBShKltz3O9WrtnExBhaUiTG5vQ9Ffd9TdZQELBkkbSZosAXbi-sUZnBxCGsM3SNHe7Rcj4CZaiyAY96lz+mxgIk4FeS620GtdCWmZJbhNts5DcDD32Q4wYds7Y6vII+cdTlBlLkVbDDzP69SHONnRTFsVxWWaDzuGajzAwhRuoZ7jGF4CN5fugU6If9G8EeZSTTs5fnpnfgbJOJ0nJo63EYtXqNubCCCHzwS+O5CyCiXALr7dSTknPm7UwDQ2bmgmhhX2uFSy2HZgKIeWEfJBCPrRQB9FtjNygkxSMcBgH9gCJ7cBAQhhQImApHoNghrEVyp6TydZUHkDogxCMOCTwsQVrkXOCFXb9nEqYRoi4H73SknhPwBFbA71wmENk4kGSMMIGFHg3Bdz4KvKRUs44hoBCBA2XkZEPgKIAGLcT4twju+dLpshdMbF6hMSIviNg4T2C5wR6AJujH+Nc-5k0BhtEG7d0y8P6oWT2VcvTTTwujGssD0ZMlaP0GsIR+hswUQ3LsGwRAAHd8SajsGolyBMvBBAsGRCubMpIES+EYe6FgVKjknOOKIUQgA */
 
   id: 'gameServer',
 
@@ -38,6 +38,7 @@ export const machine = createMachine({
                 },
               ],
             },
+
             'Ready to start': {
               on: {
                 'start setup': {
@@ -46,6 +47,8 @@ export const machine = createMachine({
                 },
               },
             },
+
+            'new state 1': {},
           },
 
           on: {
@@ -58,6 +61,12 @@ export const machine = createMachine({
               target: 'Not started',
               guard: 'isAdmin',
               actions: ['assignSide', 'sendUsersUpdate'],
+            },
+
+            'assign admin': {
+              target: 'Not started',
+              guard: 'isAdmin',
+              actions: ['assignAdmin', 'sendUsersUpdate'],
             },
           },
 

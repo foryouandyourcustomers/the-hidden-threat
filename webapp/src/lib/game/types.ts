@@ -38,6 +38,11 @@ export type ClientMessage =
       side: Side
       otherUserId: string
     }
+  | {
+      type: 'assign admin'
+      isAdmin: boolean
+      otherUserId: string
+    }
   | { type: 'start game' }
   | { type: 'finish setup' }
   | { type: 'assign role' }

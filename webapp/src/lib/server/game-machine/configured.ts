@@ -2,6 +2,8 @@ import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
+import { produce } from 'immer'
+import { getUserIndex } from './utils'
 
 export const serverGameMachine = machine.provide({
   actions: {
@@ -64,18 +66,42 @@ export const serverGameMachine = machine.provide({
         excludeUserIds: [event.userId],
       })
     },
-    // TODO
-    assignSide: () => ({}),
+    assignSide: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'assign side'>
+
+      const userIndex = getUserIndex(context, event.otherUserId)
+      if (userIndex === undefined) return {}
+
+      return {
+        users: produce(context.users, (users) => {
+          users[userIndex].side = event.side
+        }),
+      }
+    }),
+    assignAdmin: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'assign admin'>
+
+      const userIndex = getUserIndex(context, event.otherUserId)
+      if (userIndex === undefined) return {}
+
+      return {
+        users: produce(context.users, (users) => {
+          users[userIndex].isAdmin = event.isAdmin
+        }),
+      }
+    }),
   },
   guards: {
     // TODO
     gameIsReadyToStart: () => false,
     // TODO
-    isAdmin: () => false,
+    isAdmin: ({ context, event }) =>
+      context.users.find((user) => user.id === event.userId)?.isAdmin ?? false,
   },
   actors: {
     loadParticipants: fromPromise(async () => {
-      console.log('loading')
+      // This is just a placeholder for any actual actors we might need in the
+      // future.
       await new Promise((resolve) => setTimeout(resolve, 1000))
       return ['a', 'b']
     }),

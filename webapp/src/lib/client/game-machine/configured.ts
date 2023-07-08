@@ -1,7 +1,7 @@
-import { machine } from './machine'
-import { assign, fromPromise } from 'xstate'
-import type { Actions, ClientEventOf } from './types'
 import type { ClientMessage } from '$lib/game/types'
+import { assign } from 'xstate'
+import { machine } from './machine'
+import type { Actions, ClientEventOf } from './types'
 
 export const getClientGameMachine = ({
   send,

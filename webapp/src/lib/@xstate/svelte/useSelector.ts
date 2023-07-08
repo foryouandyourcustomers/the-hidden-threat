@@ -1,9 +1,7 @@
 import { readable } from 'svelte/store'
 import type { ActorRef, SnapshotFrom, Subscription } from 'xstate'
 
-function defaultCompare<T>(a: T, b: T) {
-  return a === b
-}
+const defaultCompare = <T>(a: T, b: T) => a === b
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useSelector = <TActor extends ActorRef<any, any>, T>(

@@ -1,4 +1,10 @@
 <script lang="ts">
+  import { useSelector } from '$lib/@xstate/svelte'
+  import { getGameContext } from '$lib/client/game-context'
+  import Lobby from './screens/Lobby.svelte'
+
+  const { machine } = getGameContext()
+
   export let reportMousePosition: (position: [number, number]) => void
 
   let gameContainer: HTMLDivElement
@@ -11,6 +17,16 @@
       (e.clientY - gameContainer.offsetTop) / gameHeight,
     ])
   }
+
+  type Section = 'Lobby' | 'Ingame' | undefined
+
+  const section = useSelector(machine.service, (snapshot) => {
+    let section: Section = undefined
+    if (snapshot.matches('Lobby')) {
+      section = 'Lobby'
+    }
+    return section
+  })
 </script>
 
 <div class="game-wrapper">
@@ -22,10 +38,16 @@
     bind:clientHeight={gameHeight}
   >
     <div class="name">The Hidden Threat</div>
-    <div class="players"><slot name="players" /></div>
+    <div class="characters" />
     <div class="items"><slot name="items" /></div>
     <div class="actions"><slot name="actions" /></div>
-    <div class="board"><slot name="board" /></div>
+    <div class="content">
+      {#if $section === 'Lobby'}
+        <Lobby />
+      {:else}
+        ...
+      {/if}
+    </div>
     <slot name="cursor-overlays" />
   </div>
 </div>
@@ -49,8 +71,8 @@
     grid-template-rows: 10% 1fr;
     grid-template-columns: 10% 1fr 1fr;
     grid-template-areas:
-      'name players items'
-      'actions board board';
+      'name characters items'
+      'actions content content';
     /* container: game / size; */
     background: white;
     aspect-ratio: 4 / 3;
@@ -62,16 +84,16 @@
     }
   }
   :global(html) {
-    font-size: 1vw;
+    font-size: min(16px, 1vw);
     @media (min-aspect-ratio: 4/3) {
-      font-size: calc(1vh * 4 / 3);
+      font-size: min(16px, 1vh * 4 / 3);
     }
   }
   .name {
     grid-area: 'name';
   }
-  .players {
-    grid-area: 'players';
+  .characters {
+    grid-area: 'characters';
   }
   .items {
     grid-area: 'items';
@@ -79,7 +101,7 @@
   .actions {
     grid-area: 'actions';
   }
-  .board {
-    grid-area: 'board';
+  .content {
+    grid-area: 'content';
   }
 </style>
