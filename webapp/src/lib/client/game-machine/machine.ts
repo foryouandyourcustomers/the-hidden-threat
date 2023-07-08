@@ -11,7 +11,7 @@ export const machine = createMachine({
     userId: input.userId,
     hostUserId: input.hostUserId,
     users: [],
-    players: [],
+    characters: [],
     actions: [],
   }),
 

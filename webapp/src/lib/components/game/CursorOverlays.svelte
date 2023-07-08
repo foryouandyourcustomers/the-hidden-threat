@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { getGameContext } from '$lib/client/game-context'
-  import type { ClientUser } from '$lib/client/game-machine/types'
   import { useSelector } from '$lib/@xstate/svelte'
+  import { getGameContext } from '$lib/client/game-context'
+  import type { User } from '$lib/game/types'
   import Cursor from './Cursor.svelte'
 
   export let mousePositions: MousePositions = {}
@@ -14,7 +14,7 @@
   let gameHeight = 1
 
   const users = useSelector(context.machine.service, (state) => state.context.users)
-  const getMousePositions = (users: ClientUser[], mousePositions: MousePositions) => {
+  const getMousePositions = (users: User[], mousePositions: MousePositions) => {
     return users
       .filter((user) => user.isConnected && !!mousePositions[user.id])
       .map((user) => {

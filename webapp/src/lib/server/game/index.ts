@@ -1,5 +1,6 @@
+import type { User } from '$lib/game/types'
 import { serverGameMachine } from '$lib/server/game-machine/configured'
-import type { ServerEvent, ServerUser } from '$lib/server/game-machine/types'
+import type { ServerEvent } from '$lib/server/game-machine/types'
 import shortUuid from 'short-uuid'
 import { interpret } from 'xstate'
 import { addGame, getGame } from './global'
@@ -8,7 +9,7 @@ import type { Game } from './types'
 /**
  * Returns the uuid of the game
  */
-export const createGame = ({ host }: { host: ServerUser }): Game => {
+export const createGame = ({ host }: { host: User }): Game => {
   const id = shortUuid.generate()
 
   const machine = interpret(serverGameMachine, {

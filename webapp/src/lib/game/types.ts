@@ -1,4 +1,4 @@
-export type PlayerSide = 'defender' | 'attacker'
+export type Side = 'defender' | 'attacker'
 
 /**
  * All messages that the server might send to the clients via WebSockets.
@@ -35,13 +35,13 @@ export type ClientMessage =
     }
   | {
       type: 'assign side'
-      side: PlayerSide
+      side: Side
       otherUserId: string
     }
   | { type: 'start game' }
   | { type: 'finish setup' }
   | { type: 'assign role' }
-  | { type: 'set player order' }
+  | { type: 'set character order' }
   | { type: 'start setup' }
   | { type: 'rollback game action' }
   | { type: 'execute game action' }
@@ -52,7 +52,7 @@ export type ClientMessage =
  * A user is an actual person sitting in front of a browser and connecting to
  * the game.
  *
- * They might be an observer, a host/admin or controlling a `Player`.
+ * They might be an observer, a host/admin or controlling a `Character`.
  */
 export type User = {
   id: string
@@ -60,34 +60,37 @@ export type User = {
   isAdmin: boolean
   isConnected: boolean
   /**
-   * Also users don't really have a side since they are controlling "Players"
-   * which have a side, they can be assigned to a side, since it defines what
-   * they can see.
+   * Users don't really have a side since they are controlling "Characters"
+   * which have a side.
+   *
+   * But they can be assigned to a side, since it defines what they can see.
+   *
+   * It doesn't make sense for a user to control a character that is on the
+   * opposite side, but a user that is a spectator is simply assigned at side
+   * at the start of the game.
    */
-  side?: PlayerSide | undefined
+  side?: Side | undefined
 }
 
 /**
- * The base player type that is used by the server and client.
- *
- * A player is an actual "piece" on the board. It can be controlled by 0 or 1
- * player. If it is not controlled by any player than an "admin" needs to move
+ * A character is an actual "piece" on the board. It can be controlled by 0 or 1
+ * users. If it is not controlled by any user than an "admin" needs to move
  * it.
  *
- * Potentially, in the future, a player might be controlled by multiple users.
+ * Potentially, in the future, a character might be controlled by multiple users.
  */
-export type Player = {
+export type Character = {
   id: number
   name: string
-  side: PlayerSide
+  side: Side
   position?: Coordinate | undefined
 }
 
 export type Coordinate = [number, number]
 
 export type GameAction = {
-  type: 'player moves'
-  playerId: number
+  type: 'chracter moves'
+  characterId: number
   /** Which user actually performed the action. */
   userId: number
   to: Coordinate
