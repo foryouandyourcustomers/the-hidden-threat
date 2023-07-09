@@ -39,11 +39,14 @@ jobs:
       - name: Run tests
         run: pnpm run test:unit
       
+      - name: debug
+        run: ls -la
+
       - name: Store artifacts
         uses: actions/upload-artifact@v2
         with:
           name: webapp
-          path: ./build/
+          path: build
 
   deploy-webapp:
     needs: test-webapp
