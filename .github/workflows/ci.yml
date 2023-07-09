@@ -38,3 +38,25 @@ jobs:
 
       - name: Run tests
         run: pnpm run test:unit
+      
+      - name: Build
+        run: pnpm build
+      
+      - name: Store artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: webapp
+          path: build
+
+  deploy-webapp:
+    needs: test-webapp
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: webapp
+      - uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "the-hidden-threat"
+          heroku_email: "mmo@foryouandyourcustomers.com"
