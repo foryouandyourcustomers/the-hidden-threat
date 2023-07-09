@@ -55,16 +55,17 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: webapp
+          path: built-webapp
 
       - name: debug
         run: ls -la
 
       - name: debug
-        run: ls -la webapp
+        run: ls -la built-webapp
 
       - uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "the-hidden-threat"
           heroku_email: "mmo@foryouandyourcustomers.com"
-          appdir: webapp
+          appdir: built-webapp
