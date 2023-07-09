@@ -49,11 +49,22 @@ jobs:
     needs: test-webapp
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - uses: actions/download-artifact@v2
         with:
           name: webapp
+
+      - name: debug
+        run: ls -la
+
+      - name: debug
+        run: ls -la webapp
+
       - uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "the-hidden-threat"
           heroku_email: "mmo@foryouandyourcustomers.com"
+          appdir: webapp
