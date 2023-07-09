@@ -42,11 +42,11 @@ jobs:
       - name: Store artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: webapp
+          name: webapp-build
           path: webapp/build
 
   deploy-webapp:
-    # needs: test-webapp
+    needs: test-webapp
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
@@ -56,20 +56,29 @@ jobs:
       #     repository: foryouandyourcustomers/the-hidden-threat-built
       #     ref: main
 
-      - name: TEST
-        run: |
-          git clone git@github.com:foryouandyourcustomers/the-hidden-threat-built.git
-
       - uses: actions/download-artifact@v2
         with:
-          name: webapp
+          name: webapp-build
+          path: webapp-build
 
-      - name: GIT commit and push all changed files
-        env: 
-          CI_COMMIT_MESSAGE: Continuous Integration Build Artifacts
-          CI_COMMIT_AUTHOR: Continuous Integration
-        run: |
-          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
-          git config --global user.email "username@users.noreply.github.com"
-          git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
-          git push
+      - name: Push to built repo
+        uses: cpina/github-action-push-to-another-repository@v1.7.2
+        # env:
+        #   SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+        #   API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'webapp-build'
+          destination-github-username: 'foryouandyourcustomers'
+          destination-repository-name: 'the-hidden-threat-built'
+          user-email: m@tias.me
+          target-branch: main
+
+      # - name: GIT commit and push all changed files
+      #   env: 
+      #     CI_COMMIT_MESSAGE: Continuous Integration Build Artifacts
+      #     CI_COMMIT_AUTHOR: Continuous Integration
+      #   run: |
+      #     git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+      #     git config --global user.email "username@users.noreply.github.com"
+      #     git commit -a -m "${{ env.CI_COMMIT_MESSAGE }}"
+      #     git push
