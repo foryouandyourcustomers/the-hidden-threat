@@ -30,6 +30,12 @@ jobs:
       - name: Build the project
         run: pnpm run build
 
+      - name: debug
+        run: ls -la
+
+      - name: debug2
+        run: ls -la build/
+
       - name: Run lints
         run: pnpm run lint
 
@@ -39,9 +45,6 @@ jobs:
       - name: Run tests
         run: pnpm run test:unit
       
-      - name: debug
-        run: ls -la
-
       - name: Store artifacts
         uses: actions/upload-artifact@v2
         with:
