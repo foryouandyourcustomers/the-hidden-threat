@@ -16,9 +16,12 @@ export const createGame = ({ host }: { host: User }): Game => {
     input: { gameId: id, host },
   }).start()
 
-  machine.subscribe((state) => {
-    console.log('  state:', state.value)
-    console.log('context:', state.context)
+  machine.subscribe({
+    next: (state) => {
+      console.log('State:', state.value)
+    },
+    complete: () => console.log(`Game machine ${id} completed`),
+    error: (error) => console.error(`\nERROR: `, error, '\n'),
   })
 
   const game = { id, machine }

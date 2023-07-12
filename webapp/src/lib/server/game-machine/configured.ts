@@ -2,18 +2,13 @@ import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
-import { produce } from 'immer'
+import { produce, setAutoFreeze } from 'immer'
 import { getUserIndex } from './utils'
+
+setAutoFreeze(false)
 
 export const serverGameMachine = machine.provide({
   actions: {
-    consoleLogValue: ({ event }) => {
-      console.log(event)
-    },
-    consoleLogValueAgain: ({ context }) => {
-      console.log('context value 2: ', context)
-    },
-
     updateUserConnectionState: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user connected' | 'user reconnected' | 'user disconnected'>
 
