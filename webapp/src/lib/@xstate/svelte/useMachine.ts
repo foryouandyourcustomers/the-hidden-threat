@@ -1,14 +1,14 @@
 import { onDestroy } from 'svelte'
-import { type Readable, readable } from 'svelte/store'
-import {
-  type AnyStateMachine,
-  type AreAllImplementationsAssumedToBeProvided,
-  type InternalMachineImplementations,
-  interpret,
-  type InterpreterFrom,
-  type InterpreterOptions,
-  type StateFrom,
+import { readable, type Readable } from 'svelte/store'
+import type {
+  AnyStateMachine,
+  AreAllImplementationsAssumedToBeProvided,
+  InternalMachineImplementations,
+  InterpreterFrom,
+  InterpreterOptions,
+  StateFrom,
 } from 'xstate'
+import { interpret } from 'xstate'
 
 type Prop<T, K> = K extends keyof T ? T[K] : never
 
@@ -33,7 +33,7 @@ type RestParams<TMachine extends AnyStateMachine> = AreAllImplementationsAssumed
         >,
     ]
 
-export type UseMachineReturn<
+type UseMachineReturn<
   TMachine extends AnyStateMachine,
   TInterpreter = InterpreterFrom<TMachine>,
 > = {
@@ -62,10 +62,13 @@ export function useMachine<TMachine extends AnyStateMachine>(
 
   onDestroy(() => service.stop())
 
-  const state = readable(service.getSnapshot(), (set) => {
-    return service.subscribe((state) => {
-      if (state.changed) {
-        set(state)
+  let snapshot = service.getSnapshot()
+
+  const state = readable(snapshot, (set) => {
+    return service.subscribe((nextSnapshot) => {
+      if (snapshot !== nextSnapshot) {
+        snapshot = nextSnapshot
+        set(snapshot)
       }
     }).unsubscribe
   })

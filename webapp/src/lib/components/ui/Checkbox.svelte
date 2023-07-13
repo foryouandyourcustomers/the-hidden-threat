@@ -4,6 +4,7 @@
   import type { ZodValidation, FormPathLeaves } from 'sveltekit-superforms'
   import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client'
 
+  // eslint-disable-next-line no-undef
   type T = $$Generic<AnyZodObject>
 
   export let form: SuperForm<ZodValidation<T>, unknown>

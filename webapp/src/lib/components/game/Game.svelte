@@ -30,6 +30,7 @@
 </script>
 
 <div class="game-wrapper">
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class="game"
     on:mousemove={onMouseMove}

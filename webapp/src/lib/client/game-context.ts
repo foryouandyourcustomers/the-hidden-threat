@@ -1,4 +1,4 @@
-import type { UseMachineReturn } from '$lib/@xstate/svelte/useMachine'
+import type { useMachine } from '$lib/@xstate/svelte'
 import type { getClientGameMachine } from '$lib/client/game-machine/configured'
 import { getContext, setContext } from 'svelte'
 
@@ -8,7 +8,7 @@ export type GameContext = {
   gameId: string
   userId: string
   hostUserId: string
-  machine: UseMachineReturn<ReturnType<typeof getClientGameMachine>>
+  machine: ReturnType<typeof useMachine<ReturnType<typeof getClientGameMachine>>>
 }
 
 export const setGameContext = (context: GameContext) => {

@@ -1,22 +1,28 @@
-import type { Server, WebSocket as WebSocketBase } from 'ws'
-import { WebSocketServer } from 'ws'
+import { WebSocketServer, WebSocket } from 'ws'
 
 const GLOBAL_WEB_SOCKET_SERVER_KEY = Symbol.for('sveltekit.web-socket-server')
 
-export type ExtendedWebSocket = WebSocketBase & {
-  socketId: string
-  gameId: string
-  userId: string
+/**
+ * A modified version of the WebSocket that contains additional information about
+ * the game and user.
+ *
+ * The `WebSocketServer` uses this class when instantiating a new web socket
+ * connection.
+ */
+export class ExtendedWebSocket extends WebSocket {
+  public socketId = ''
+  public gameId = ''
+  public userId = ''
 }
 
-export type ExtendedWebSocketServer = Server<ExtendedWebSocket>
+export type ExtendedWebSocketServer = InstanceType<typeof WebSocketServer<typeof ExtendedWebSocket>>
 
 /**
  * This gets called exactly once when the server starts (production and dev) and
  * stores the web socket server in the global object.
  */
 export const createGlobalWebSocketServer = () => {
-  const webSocketServer = new WebSocketServer({ noServer: true }) as ExtendedWebSocketServer
+  const webSocketServer = new WebSocketServer({ noServer: true, WebSocket: ExtendedWebSocket })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ;(globalThis as any)[GLOBAL_WEB_SOCKET_SERVER_KEY] = webSocketServer

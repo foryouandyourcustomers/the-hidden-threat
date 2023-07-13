@@ -11,14 +11,16 @@
   export let title: string | undefined = undefined
   export let target: string | undefined = undefined
   export let type: 'button' | 'submit' | 'reset' | undefined = undefined
+  export let tabIndex = 0
 </script>
 
 <!--
   It's fine to ignore this warning, because we render either <a> or <button> tag
 -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <svelte:element
   this={href ? 'a' : 'button'}
+  role="button"
+  tabindex={tabIndex}
   on:click
   class={`button ${size}`}
   class:accent
