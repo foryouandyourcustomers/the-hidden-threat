@@ -1,6 +1,6 @@
-import type { ClientMessage, GameAction, SharedContext } from '$lib/game/types'
+import type { ClientMessage, GameAction, SharedGameContext } from '$lib/game/types'
 
-export type Context = SharedContext
+export type Context = SharedGameContext
 
 export type ServerGameAction = GameAction
 

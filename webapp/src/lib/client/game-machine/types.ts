@@ -1,7 +1,7 @@
-import type { ServerMessage, SharedContext, Side } from '$lib/game/types'
+import type { ServerMessage, SharedGameContext, Side } from '$lib/game/types'
 import type { Sound } from '$lib/sound'
 
-export type Context = SharedContext & {
+export type Context = SharedGameContext & {
   userId: string
 }
 

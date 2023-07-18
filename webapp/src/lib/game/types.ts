@@ -120,7 +120,7 @@ export type GameAction = {
   to: Coordinate
 }
 
-export type SharedContext = {
+export type SharedGameContext = {
   gameId: string
   hostUserId: string
   users: User[]
