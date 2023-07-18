@@ -1,3 +1,5 @@
+import type { DEFAULT_ATTACK_INVENTORY, DEFAULT_DEFENSE_INVENTORY } from './constants'
+
 export type Side = 'defender' | 'attacker'
 
 /**
@@ -77,26 +79,59 @@ export type User = {
   side?: Side | undefined
 }
 
+type DefenderRole = 'it-specialist' | 'quality-manager' | 'dispatch-manager' | 'order-manager'
+
+// TODO: add real faces
+type Face = 'woman' | 'man' | 'other'
+
 /**
- * A character is an actual "piece" on the board. It can be controlled by 0 or 1
- * users. If it is not controlled by any user than an "admin" needs to move
- * it.
- *
- * Potentially, in the future, a character might be controlled by multiple users.
+ * The base class for Defender and Attacker.
  */
-export type Character = {
-  id: number
-  name: string
-  side: Side
-  position?: Coordinate | undefined
+export type Player = {
+  position: Coordinate
+  userId: string
 }
+
+export type Defender = Player & {
+  role: DefenderRole
+  face: Face
+}
+export type Attacker = Player
 
 export type Coordinate = [number, number]
 
+export type DefenseInventory = typeof DEFAULT_DEFENSE_INVENTORY
+export type AttackInventory = typeof DEFAULT_ATTACK_INVENTORY
+export type DefenseItem = keyof DefenseInventory
+export type AttackItem = keyof AttackInventory
+
+export type PlayerId = DefenderId | AttackerId
+export type DefenderId = 0 | 1 | 2 | 3
+export type AttackerId = 'attacker'
+
+export const isDefenderId = (id: PlayerId): id is DefenderId => id !== 'attacker'
+export const isAttackerId = (id: PlayerId): id is AttackerId => id === 'attacker'
+
 export type GameAction = {
   type: 'chracter moves'
-  characterId: number
+  playerId: PlayerId
   /** Which user actually performed the action. */
   userId: number
   to: Coordinate
+}
+
+export type SharedContext = {
+  gameId: string
+  hostUserId: string
+  users: User[]
+  actions: GameAction[]
+  defense: {
+    /** The list of defenders in the correct order. Up to 4 */
+    defenders: Defender[]
+    inventory: DefenseInventory
+  }
+  attack: {
+    attacker?: Attacker
+    inventory: AttackInventory
+  }
 }

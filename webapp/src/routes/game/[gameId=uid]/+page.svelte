@@ -12,9 +12,10 @@
 
   export let data
 
-  const gameId = data.gameId
-  const userId = data.userId
-  const hostUserId = data.hostUserId
+  const machineInput = data.machineInput
+  const gameId = machineInput.gameId
+  const userId = machineInput.userId
+  const hostUserId = machineInput.hostUserId
 
   const mousePositions: { [key: string]: [number, number] } = {}
 
@@ -38,8 +39,9 @@
         showEmoji: ({ userId, emoji }) => emojisComponent?.showEmoji({ userId, emoji }),
       },
     }),
+    // TODO: replace input data with actual
     {
-      input: { gameId, userId, hostUserId },
+      input: machineInput,
     },
   )
 

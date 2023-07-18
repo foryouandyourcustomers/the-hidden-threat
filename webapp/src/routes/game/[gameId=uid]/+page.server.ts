@@ -1,3 +1,4 @@
+import type { ContextInput } from '$lib/client/game-machine/machine'
 import { getGame } from '$lib/server/game/global'
 import { redirect } from '@sveltejs/kit'
 
@@ -13,7 +14,14 @@ export const load = async ({ params, parent, locals }) => {
   }
 
   return {
-    gameId: game.id,
-    hostUserId: snapshot.context.hostUserId,
+    machineInput: {
+      gameId: game.id,
+      userId,
+      hostUserId: snapshot.context.hostUserId,
+      actions: snapshot.context.actions,
+      attack: snapshot.context.attack,
+      defense: snapshot.context.defense,
+      users: snapshot.context.users,
+    } satisfies ContextInput,
   }
 }

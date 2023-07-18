@@ -1,12 +1,6 @@
-import type { GameAction, Character, User, ClientMessage } from '$lib/game/types'
+import type { ClientMessage, GameAction, SharedContext } from '$lib/game/types'
 
-export type Context = {
-  gameId: string
-  hostUserId: string
-  characters: Character[]
-  users: User[]
-  actions: ServerGameAction[]
-}
+export type Context = SharedContext
 
 export type ServerGameAction = GameAction
 
