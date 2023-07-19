@@ -113,6 +113,7 @@ export const isDefenderId = (id: PlayerId): id is DefenderId => id !== 'attacker
 export const isAttackerId = (id: PlayerId): id is AttackerId => id === 'attacker'
 
 export type GameAction = {
+  timestamp: number
   type: 'chracter moves'
   playerId: PlayerId
   /** Which user actually performed the action. */
@@ -125,12 +126,15 @@ export type SharedGameContext = {
   hostUserId: string
   users: User[]
   actions: GameAction[]
+  finishedAssigningSides: boolean
   defense: {
+    finishedConfiguring: boolean
     /** The list of defenders in the correct order. Up to 4 */
     defenders: Defender[]
     inventory: DefenseInventory
   }
   attack: {
+    finishedConfiguring: boolean
     attacker?: Attacker
     inventory: AttackInventory
   }
