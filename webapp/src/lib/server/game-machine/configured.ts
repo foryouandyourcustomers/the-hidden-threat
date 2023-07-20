@@ -1,14 +1,33 @@
+import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
+import { produce, setAutoFreeze } from 'immer'
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
-import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
-import { produce, setAutoFreeze } from 'immer'
 import { getUserIndex } from './utils'
 
 setAutoFreeze(false)
 
 export const serverGameMachine = machine.provide({
   actions: {
+    sendSummary: () => {
+      // todo
+    },
+    setAssigningSidesFinished: () => {
+      // todo
+    },
+    addGameAction: () => {
+      // todo
+    },
+    rollbackGameAction: () => {
+      // todo
+    },
+    updatePlayer: () => {
+      // todo
+    },
+    setEditingPlayer: () => {
+      // todo
+    },
+
     updateUserConnectionState: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user connected' | 'user reconnected' | 'user disconnected'>
 
@@ -40,17 +59,17 @@ export const serverGameMachine = machine.provide({
         return {}
       }
     }),
-    sendUsersUpdate: ({ context }) => {
-      sendMessageToUsers({
-        gameId: context.gameId,
-        message: {
-          type: 'users update',
-          users: [...context.users],
-        },
-      })
-    },
+    // sendUsersUpdate: ({ context }) => {
+    //   sendMessageToUsers({
+    //     gameId: context.gameId,
+    //     message: {
+    //       type: 'shared game context update',
+    //       users: [...context.users],
+    //     },
+    //   })
+    // },
     sendEmojiToOtherUsers: ({ context, event: e }) => {
-      const event = e as ServerEventOf<'send emoji'>
+      const event = e as ServerEventOf<'user: send emoji'>
       sendMessageToUsers({
         gameId: context.gameId,
         message: {
@@ -62,7 +81,7 @@ export const serverGameMachine = machine.provide({
       })
     },
     assignSide: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'assign side'>
+      const event = e as ServerEventOf<'user: assign side'>
 
       const userIndex = getUserIndex(context, event.otherUserId)
       if (userIndex === undefined) return {}
@@ -74,7 +93,7 @@ export const serverGameMachine = machine.provide({
       }
     }),
     assignAdmin: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'assign admin'>
+      const event = e as ServerEventOf<'user: assign admin'>
 
       const userIndex = getUserIndex(context, event.otherUserId)
       if (userIndex === undefined) return {}
@@ -87,11 +106,20 @@ export const serverGameMachine = machine.provide({
     }),
   },
   guards: {
-    // TODO
-    gameIsReadyToStart: () => false,
-    // TODO
     isAdmin: ({ context, event }) =>
       context.users.find((user) => user.id === event.userId)?.isAdmin ?? false,
+
+    allSidesAssigned: ({ context }) =>
+      context.users.find((user) => user.side === undefined) === undefined,
+    // TODO
+    isValidAction: () => {
+      // TODO: this needs to verify that the given game action is valid in the current context.
+      return false
+    },
+    // TODO
+    allRolesAssigned: () => false,
+    // TODO
+    gameIsFinished: () => false,
   },
   actors: {
     loadParticipants: fromPromise(async () => {

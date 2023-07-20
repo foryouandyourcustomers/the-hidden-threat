@@ -42,6 +42,8 @@ export type NativeClientEvent =
   | { type: 'dismiss global attack' }
   | { type: 'new global attack' }
   | { type: 'show global attack' }
+  | { type: 'open player editor' }
+  | { type: 'close player editor' }
 
 export type ClientEvent =
   // All messages that the server sends can be used as client events

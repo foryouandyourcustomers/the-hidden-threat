@@ -37,150 +37,186 @@ export const machine = createMachine({
 
   states: {
     Game: {
+      initial: 'Assigning sides',
       states: {
-        'Not started': {
-          initial: 'Assigning users',
-
+        'Assigning sides': {
+          description:
+            'All users are in the lobby, and the admins can define which side (attacker, defender or admin) a user belongs to.',
+          initial: 'Incomplete',
           states: {
-            'Assigning users': {
-              always: [
-                {
-                  target: 'Ready to start',
-                  guard: 'gameIsReadyToStart',
-                },
-              ],
+            Incomplete: {
+              always: {
+                target: 'Ready',
+                guard: 'allSidesAssigned',
+                reenter: false,
+              },
             },
-
-            'Ready to start': {
+            Ready: {
               on: {
-                'start setup': {
+                'user: next step': {
+                  target: '#gameServer.Game.Assigning roles',
                   guard: 'isAdmin',
-                  target: '#gameServer.Game.Setup',
+                  actions: {
+                    params: {},
+                    type: 'setAssigningSidesFinished',
+                  },
+                  reenter: false,
                 },
               },
             },
           },
-
           on: {
             'user joined': {
-              actions: ['storeNewUser', 'sendUsersUpdate'],
-              target: 'Not started',
+              target: 'Assigning sides',
+              actions: {
+                params: {},
+                type: 'storeNewUser',
+              },
+              reenter: false,
             },
-
-            'assign side': {
-              target: 'Not started',
+            'user: assign side': {
+              target: 'Assigning sides',
               guard: 'isAdmin',
-              actions: ['assignSide', 'sendUsersUpdate'],
+              actions: {
+                params: {},
+                type: 'assignSide',
+              },
+              reenter: false,
             },
-
-            'assign admin': {
-              target: 'Not started',
+            'user: assign admin': {
+              target: 'Assigning sides',
               guard: 'isAdmin',
-              actions: ['assignAdmin', 'sendUsersUpdate'],
+              actions: {
+                params: {},
+                type: 'assignAdmin',
+              },
+              reenter: false,
             },
           },
-
-          description: `All users are in the lobby, and the admins can define which side (attacker, defender or admin) a user belongs to.`,
         },
-
-        'Game Started': {
-          always: { target: 'Finished', guard: 'gameIsFinished' },
-
+        Playing: {
+          description:
+            'The game is active and started. Now the server only waits for the game actions from the users.',
+          always: {
+            target: 'Finished',
+            guard: 'gameIsFinished',
+            reenter: false,
+          },
           on: {
-            'execute game action': {
-              target: 'Game Started',
+            'user: perform action': {
               guard: 'isValidAction',
-              actions: ['addGameAction', 'sendGameActionsUpdate'],
+              actions: {
+                params: {},
+                type: 'addGameAction',
+              },
+              reenter: true,
             },
-
-            'rollback game action': {
-              target: 'Game Started',
-              actions: ['rollbackGameAction', 'sendGameActionsUpdate'],
+            'user: rollback action': {
+              guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'rollbackGameAction',
+              },
+              reenter: true,
             },
           },
-
-          description: `The game is active and started. Now the server only waits for the game actions from the users.
-
-![](https://www.svgrepo.com/show/323133/rolling-dices.svg)`,
         },
-
-        Setup: {
+        'Assigning roles': {
+          description: 'The users have been separated, and the defenders choose their role.',
+          initial: 'Incomplete',
           states: {
-            'Assigning roles': {
-              always: { target: 'All roles assigned', guard: 'allRolesHaveBeenAssigned' },
+            Incomplete: {
+              always: {
+                target: 'Ready',
+                guard: 'allRolesAssigned',
+                reenter: false,
+              },
             },
-
-            'All roles assigned': {
+            Ready: {
               on: {
-                'finish setup': {
-                  target: '#gameServer.Game.Order setup',
-                  actions: 'chooseRandomAttack',
+                'user: next step': {
+                  target: '#gameServer.Game.Playing',
+                  guard: 'isAdmin',
+                  reenter: false,
                 },
               },
             },
           },
-
-          initial: 'Assigning roles',
-
           on: {
-            'assign role': {
-              target: 'Setup',
+            'user: configure player': {
+              target: 'Assigning roles',
               guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'updatePlayer',
+              },
+              description:
+                'Defines which user controls a player, which role they are and how they look.\n\nThis event can update a defender and an attacker.',
+              reenter: false,
+            },
+            'user: open player editor': {
+              target: 'Assigning roles',
+              guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'setEditingPlayer',
+              },
+              reenter: false,
+            },
+            'user: close player editor': {
+              target: 'Assigning roles',
+              guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'setEditingPlayer',
+              },
+              reenter: false,
             },
           },
-
-          description: `The users have been separated, and the defenders choose their role.`,
         },
-
-        'Order setup': {
-          on: {
-            'set character order': {
-              target: 'Order setup',
-              guard: 'isAdmin',
-              actions: 'storeCharacterOrder',
-            },
-
-            'start game': 'Game Started',
-          },
-
-          description: `The random attack has been determined now the defenders can choose the order in which they want to play.`,
-        },
-
         Finished: {
-          entry: 'sendSummary',
+          entry: {
+            params: {},
+            type: 'sendSummary',
+          },
         },
       },
-
-      initial: 'Not started',
     },
-
     Ubiquitous: {
-      type: 'parallel',
-      description: `✨ This state only serves to group events that can happen at any time during the whole game lifecycle.`,
-
+      description:
+        '✨ This state only serves to group events that can happen at any time during the whole game lifecycle.',
       on: {
-        'send emoji': {
-          target: 'Ubiquitous',
-          actions: 'sendEmojiToOtherUsers',
+        'user: send emoji': {
+          actions: {
+            params: {},
+            type: 'sendEmojiToOtherUsers',
+          },
+          reenter: true,
         },
-
         'user disconnected': {
-          actions: ['updateUserConnectionState', 'sendUsersUpdate'],
-          target: 'Ubiquitous',
+          actions: {
+            params: {},
+            type: 'updateUserConnectionState',
+          },
+          reenter: true,
         },
-
         'user reconnected': {
-          actions: ['updateUserConnectionState', 'sendUsersUpdate'],
-          target: 'Ubiquitous',
+          actions: {
+            params: {},
+            type: 'updateUserConnectionState',
+          },
+          reenter: true,
         },
-
         'user connected': {
-          actions: ['updateUserConnectionState', 'sendUsersUpdate'],
-          target: 'Ubiquitous',
+          actions: {
+            params: {},
+            type: 'updateUserConnectionState',
+          },
+          reenter: true,
         },
       },
+      type: 'parallel',
     },
   },
-
   type: 'parallel',
 })
