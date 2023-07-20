@@ -1,31 +1,12 @@
 import { createMachine } from 'xstate'
 import type { ClientEvent, Context } from './types'
 
-export type ContextInput = {
-  gameId: string
-  userId: string
-  hostUserId: string
-  users: Context['users']
-  actions: Context['actions']
-  defense: Context['defense']
-  attack: Context['attack']
-}
-
 export const machine = createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGEA2BLMAdgC4DEArrGAE6wAEZADhCkWANoAMAuoqAwPaxcRXPwK8QAD0QBGAGwyA7ADoOAVgBMchQBYdagMxqANCACeiALQG5ygxpmaD9gJzaORgL6fTqDDnxickoqWkoCCDowNH4AK1xOHiQQASERMQlpBHkZAA5lOUU5XIMXRxdDF1MLBBtbGRdFDmadVzkDGW9fdCw8QlJYAAt+AHdaaLiE7glU4VFxZKzHFRkddqL7DiaNLerERQdlDTW5NTUOfU0OTp8QP17AomUASQI5lGwSRJnBOYzFxC5GQFdR5LRKLStEzmWQuDh2XIlFwVRRqHQcXIuXJdO49AL9F5vEQfL4yJJ8X7pBagLJaZQueyODpONYXOR7WpA5QNRS5RQNNR8rYGHH3fHEQnvT5sDTklKU+aZRA6DQGAoGRQMzWKA6rdkwhCGDRHQrOS6o4oaUV4voSgAy-AARo6zCQUBA0LgCGEiCgqEQ6PdvslZlSlQgXMc7Mi4R1FB0XDoOTIOMaU0DVnC5Km1lbbmLbU8Hc6zMoAIJ0d2eghu2BCKDeoQQdjTEMK-405WNZTnOTowU6OEqpMGjRj7mnBQ2RQ6XL6ZHW-yF5TFl2S4nS1sUtKKgEIdHwnmJpmaXIaRTJwdHDpAuOowUMxcPAmr0uvKWkuWh3ed2pqYFYqUZ4eBwFTntCNRGGqiJ5EYGiCqBaxPuKRZOmuFa0FWXq1vW3pYQQwbbn81JSPs56qEYfaRnIDJnjIHJjmmk4cH2xyRucOjeLcBD8M28DJAWjw-DuHakQglgHMoZ4aLk7QYgYGJ5PRBqWORWhApiKanBqGLIcu74bsJxHhqpOhSWOskKSUim5CxyaIlJiI6KsvIzjYGp6Y8hL3EZYZ7jIjhmTqBgnLkajZnyHJnvSM4BYYHQBXOnkEq89zrrgHy+T+YkyDsxrBaF4UYheo5KMoOixXkLGphcjTJfaaE1ERfm-jstjhUYia2XCY5FBy2bXlVfJ8rlsl5t0S5ea+5aVh6XpZaJWQKMCegsX2tUeCONQuco8ZKaUCn8poaj1ahJYzbQDDYCgZjUAtJFZE4qgHK5jT8nyW2IEYwLtFVcjnkojQ3BNz4NedBkZdg93hvBZkdWoXWgam576jU575G454yYimoaBUp3KAAYl6uBDJA0N7h0CIHgFEIjXZBr-u1xzrGc-0Mnm3hAA */
 
   id: 'gameClient',
 
-  context: ({ input }: { input: ContextInput }) =>
-    ({
-      gameId: input.gameId,
-      userId: input.userId,
-      hostUserId: input.hostUserId,
-      users: input.users,
-      actions: input.actions,
-      defense: input.defense,
-      attack: input.attack,
-    } satisfies Context),
+  context: ({ input }: { input: Context }) => input,
 
   types: {
     // typegen: {} as import('./machine.typegen').Typegen0,

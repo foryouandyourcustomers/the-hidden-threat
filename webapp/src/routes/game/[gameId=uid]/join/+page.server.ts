@@ -26,6 +26,10 @@ export const actions = {
       return fail(400, { form })
     }
 
+    if (!game.machine.getSnapshot().can({ type: 'user joined', userId, userName: '' })) {
+      throw error(403, 'This game already started.')
+    }
+
     game.machine.send({
       type: 'user joined',
       userId: userId,

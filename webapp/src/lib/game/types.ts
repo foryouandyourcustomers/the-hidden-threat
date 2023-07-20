@@ -121,19 +121,24 @@ export type GameAction = {
   to: Coordinate
 }
 
+export type AttackScenario = 'todo'
+
 export type SharedGameContext = {
   gameId: string
   hostUserId: string
   users: User[]
   actions: GameAction[]
   finishedAssigningSides: boolean
+  globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
   defense: {
+    editingPlayer?: undefined | DefenderId
     finishedConfiguring: boolean
     /** The list of defenders in the correct order. Up to 4 */
     defenders: Defender[]
     inventory: DefenseInventory
   }
   attack: {
+    editingPlayer?: undefined | boolean
     finishedConfiguring: boolean
     attacker?: Attacker
     inventory: AttackInventory

@@ -12,12 +12,15 @@ export const machine = createMachine({
     ({
       gameId: input.gameId,
       hostUserId: input.host.id,
-      // TODO: this should get popullated with characters
+      finishedAssigningSides: false,
+      globalAttackScenarios: ['todo', 'todo', 'todo', 'todo'],
       defense: {
+        finishedConfiguring: false,
         defenders: [],
         inventory: { ...DEFAULT_DEFENSE_INVENTORY },
       },
       attack: {
+        finishedConfiguring: false,
         attacker: undefined,
         inventory: { ...DEFAULT_ATTACK_INVENTORY },
       },
