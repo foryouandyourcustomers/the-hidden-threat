@@ -1,3 +1,4 @@
+import type { ClientEvent } from '$lib/client/game-machine/types'
 import type { DEFAULT_ATTACK_INVENTORY, DEFAULT_DEFENSE_INVENTORY } from './constants'
 
 export type Side = 'defender' | 'attacker'
@@ -7,8 +8,8 @@ export type Side = 'defender' | 'attacker'
  */
 export type ServerMessage =
   | {
-      type: 'users update'
-      users: User[]
+      type: 'shared game context update'
+      sharedGameContext: SharedGameContext
     }
   | {
       type: 'show emoji'
@@ -21,37 +22,25 @@ export type ServerMessage =
       position: [number, number]
     }
 
+type MapToUserMessage<T extends ClientEvent> = T extends { type: infer Type extends string }
+  ? Omit<T, 'type'> & { type: `user: ${Type}` }
+  : never
+
+export type ClientEventAsMessage = MapToUserMessage<ClientEvent>
+
+// type ClientEventAsMessage = Foobar<ClientEvent>
+
 /**
  * All messages that the clients might send to the server via WebSockets.
  */
 export type ClientMessage =
-  | {
-      type: `send emoji`
-      emoji: string
-    }
+  | ClientEventAsMessage
   /** This is not forwarded to the machine but redirected directly to the other
    * users */
   | {
       type: `mouse position`
       position: [number, number]
     }
-  | {
-      type: 'assign side'
-      side: Side
-      otherUserId: string
-    }
-  | {
-      type: 'assign admin'
-      isAdmin: boolean
-      otherUserId: string
-    }
-  | { type: 'start game' }
-  | { type: 'finish setup' }
-  | { type: 'assign role' }
-  | { type: 'set character order' }
-  | { type: 'start setup' }
-  | { type: 'rollback game action' }
-  | { type: 'execute game action' }
 
 /**
  * The base user type that is used by the server and client.
@@ -79,10 +68,14 @@ export type User = {
   side?: Side | undefined
 }
 
-type DefenderRole = 'it-specialist' | 'quality-manager' | 'dispatch-manager' | 'order-manager'
+export type DefenderRole =
+  | 'it-specialist'
+  | 'quality-manager'
+  | 'dispatch-manager'
+  | 'order-manager'
 
 // TODO: add real faces
-type Face = 'woman' | 'man' | 'other'
+export type Face = 'woman' | 'man' | 'other'
 
 /**
  * The base class for Defender and Attacker.

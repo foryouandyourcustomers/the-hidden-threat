@@ -2,8 +2,6 @@ import { createMachine } from 'xstate'
 import type { ClientEvent, Context } from './types'
 
 export const machine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5RQIYFswGEA2BLMAdgC4DEArrGAE6wAEZADhCkWANoAMAuoqAwPaxcRXPwK8QAD0QBGAGwyA7ADoOAVgBMchQBYdagMxqANCACeiALQG5ygxpmaD9gJzaORgL6fTqDDnxickoqWkoCCDowNH4AK1xOHiQQASERMQlpBHkZAA5lOUU5XIMXRxdDF1MLBBtbGRdFDmadVzkDGW9fdCw8QlJYAAt+AHdaaLiE7glU4VFxZKzHFRkddqL7DiaNLerERQdlDTW5NTUOfU0OTp8QP17AomUASQI5lGwSRJnBOYzFxC5GQFdR5LRKLStEzmWQuDh2XIlFwVRRqHQcXIuXJdO49AL9F5vEQfL4yJJ8X7pBagLJaZQueyODpONYXOR7WpA5QNRS5RQNNR8rYGHH3fHEQnvT5sDTklKU+aZRA6DQGAoGRQMzWKA6rdkwhCGDRHQrOS6o4oaUV4voSgAy-AARo6zCQUBA0LgCGEiCgqEQ6PdvslZlSlQgXMc7Mi4R1FB0XDoOTIOMaU0DVnC5Km1lbbmLbU8Hc6zMoAIJ0d2eghu2BCKDeoQQdjTEMK-405WNZTnOTowU6OEqpMGjRj7mnBQ2RQ6XL6ZHW-yF5TFl2S4nS1sUtKKgEIdHwnmJpmaXIaRTJwdHDpAuOowUMxcPAmr0uvKWkuWh3ed2pqYFYqUZ4eBwFTntCNRGGqiJ5EYGiCqBaxPuKRZOmuFa0FWXq1vW3pYQQwbbn81JSPs56qEYfaRnIDJnjIHJjmmk4cH2xyRucOjeLcBD8M28DJAWjw-DuHakQglgHMoZ4aLk7QYgYGJ5PRBqWORWhApiKanBqGLIcu74bsJxHhqpOhSWOskKSUim5CxyaIlJiI6KsvIzjYGp6Y8hL3EZYZ7jIjhmTqBgnLkajZnyHJnvSM4BYYHQBXOnkEq89zrrgHy+T+YkyDsxrBaF4UYheo5KMoOixXkLGphcjTJfaaE1ERfm-jstjhUYia2XCY5FBy2bXlVfJ8rlsl5t0S5ea+5aVh6XpZaJWQKMCegsX2tUeCONQuco8ZKaUCn8poaj1ahJYzbQDDYCgZjUAtJFZE4qgHK5jT8nyW2IEYwLtFVcjnkojQ3BNz4NedBkZdg93hvBZkdWoXWgam576jU575G454yYimoaBUp3KAAYl6uBDJA0N7h0CIHgFEIjXZBr-u1xzrGc-0Mnm3hAA */
-
   id: 'gameClient',
 
   context: ({ input }: { input: Context }) => input,
@@ -15,89 +13,322 @@ export const machine = createMachine({
     actors: {} as { loadParticipants: { output: Promise<string[]> } },
   },
 
-  initial: 'Initial',
+  initial: 'Lobby',
 
   states: {
-    Initial: {
-      always: [
-        {
-          target: 'Lobby',
-          guard: 'gameNotStarted',
-        },
-        {
-          target: 'Finished',
-          guard: 'gameFinished',
-        },
-        {
-          target: 'Ingame',
-        },
-      ],
-    },
-
-    Ingame: {
-      entry: ['consoleLogValueAgain'],
-
-      states: {
-        Initial: {},
-      },
-
-      initial: 'Initial',
-    },
-
     Lobby: {
+      initial: 'Assigning sides',
       states: {
-        'As admin': {
+        'Assigning sides': {
+          description:
+            'This is the first step of the game setup, where users can join and are assigned to be either attacker or defender.\n\nUsers can also be made administrators.',
+          initial: 'Incomplete',
+          states: {
+            Incomplete: {
+              always: {
+                target: 'Ready',
+                guard: 'allSidesAssigned',
+                description:
+                  'All users have been assigned a side and there is an admin on both sides',
+                reenter: false,
+              },
+            },
+            Ready: {
+              on: {
+                'next step': {
+                  target: 'Ready',
+                  guard: 'isAdmin',
+                  actions: {
+                    params: {},
+                    type: 'forwardToServer',
+                  },
+                  reenter: false,
+                },
+              },
+            },
+          },
+          always: {
+            target: 'Assigning roles',
+            guard: 'finishedAssigningSides',
+            reenter: false,
+          },
           on: {
             'assign side': {
-              target: 'As admin',
-              actions: 'forwardToServer',
+              target: 'Assigning sides',
+              guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'forwardToServer',
+              },
+              reenter: false,
             },
-
             'assign admin': {
-              target: 'As admin',
-              actions: 'forwardToServer',
+              target: 'Assigning sides',
+              guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'forwardToServer',
+              },
+              reenter: false,
             },
           },
         },
-        'As player': {},
-        Initial: {
-          always: [
-            {
-              target: 'As admin',
-              guard: 'isAdmin',
+        'Assigning roles': {
+          description: 'All users have been assigned a side, and now the roles will be configured.',
+          initial: 'Incomplete',
+          states: {
+            Incomplete: {
+              always: {
+                target: 'Ready',
+                guard: 'allRolesAssigned',
+                description: 'All users have been assigned a role.',
+                reenter: false,
+              },
             },
-            'As player',
-          ],
+            Ready: {
+              on: {
+                'next step': {
+                  target: 'Ready',
+                  guard: 'isAdmin',
+                  actions: {
+                    params: {},
+                    type: 'forwardToServer',
+                  },
+                  reenter: false,
+                },
+              },
+            },
+            'Editing player': {
+              description: 'Shows a modal where the admin can select the user, role and face image',
+              entry: {
+                params: {},
+                type: 'forwardToServer',
+              },
+              exit: {
+                params: {},
+                type: 'forwardToServer',
+              },
+              on: {
+                'configure player': {
+                  target: 'Editing player',
+                  guard: 'isAdmin',
+                  actions: {
+                    params: {},
+                    type: 'forwardToServer',
+                  },
+                  reenter: false,
+                },
+                'stop editing player': {
+                  target: 'Incomplete',
+                  guard: 'isAdmin',
+                  reenter: false,
+                },
+              },
+            },
+          },
+          always: {
+            target: 'Waiting for other side',
+            guard: 'finishedAssigningRoles',
+            reenter: false,
+          },
+          on: {
+            'start editing player': {
+              target: '.Editing player',
+              guard: 'isAdmin',
+              reenter: false,
+            },
+          },
         },
+        'Waiting for other side': {},
       },
-
-      initial: 'Initial',
-
-      on: {
-        'admin starts game': {
-          actions: 'consoleLogValue',
-          target: 'Ingame',
-        },
+      always: {
+        target: 'Ingame',
+        guard: 'gameStarted',
+        reenter: false,
       },
     },
-
-    Finished: {},
+    Ingame: {
+      states: {
+        Gameloop: {
+          initial: 'Waiting',
+          states: {
+            Waiting: {
+              always: {
+                target: 'Playing',
+                guard: 'userOnActiveSide',
+                reenter: false,
+              },
+            },
+            Playing: {
+              initial: 'Ready to move',
+              states: {
+                'Ready to move': {
+                  always: {
+                    target: 'Ready for action',
+                    guard: 'playerMoved',
+                    reenter: false,
+                  },
+                  on: {
+                    move: {
+                      target: 'Ready to move',
+                      guard: 'userControlsPlayer',
+                      actions: {
+                        params: {},
+                        type: 'forwardToServer',
+                      },
+                      reenter: false,
+                    },
+                  },
+                },
+                'Ready for action': {
+                  always: {
+                    target: 'Ready to move',
+                    guard: 'playerPerformedAction',
+                    reenter: false,
+                  },
+                  on: {
+                    'perform action': {
+                      target: 'Ready for action',
+                      guard: 'userControlsPlayer',
+                      actions: {
+                        params: {},
+                        type: 'forwardToServer',
+                      },
+                      reenter: false,
+                    },
+                  },
+                },
+              },
+              always: {
+                target: 'Waiting',
+                guard: 'userNotOnActiveSide',
+                reenter: false,
+              },
+            },
+          },
+        },
+        'Global Attack': {
+          initial: 'Showing current global attack',
+          states: {
+            'Showing current global attack': {
+              on: {
+                'dismiss global attack': {
+                  target: 'Dismissed',
+                  reenter: false,
+                },
+              },
+            },
+            Dismissed: {
+              on: {
+                'new global attack': {
+                  target: 'Showing current global attack',
+                  reenter: false,
+                },
+                'show global attack': {
+                  target: 'Showing current global attack',
+                  reenter: false,
+                },
+              },
+            },
+          },
+        },
+        Sides: {
+          initial: 'Initial',
+          states: {
+            Initial: {
+              always: [
+                {
+                  target: 'Defense',
+                  guard: 'userIsDefender',
+                  reenter: false,
+                },
+                {
+                  target: 'Attack',
+                  reenter: false,
+                },
+              ],
+            },
+            Defense: {
+              states: {
+                'Attacker visibility': {
+                  initial: 'Invisible',
+                  states: {
+                    Invisible: {
+                      always: {
+                        target: 'Visible',
+                        guard: 'attackerShouldBeVisible',
+                        reenter: false,
+                      },
+                    },
+                    Visible: {
+                      always: {
+                        target: 'Invisible',
+                        guard: 'attackerShouldBeInvisible',
+                        reenter: false,
+                      },
+                    },
+                  },
+                },
+              },
+              type: 'parallel',
+            },
+            Attack: {},
+          },
+          on: {
+            'switch sides': {
+              target: 'Sides',
+              guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'forwardToServer',
+              },
+              reenter: false,
+            },
+          },
+        },
+      },
+      always: {
+        target: 'Finished',
+        guard: 'gameFinished',
+        reenter: false,
+      },
+      type: 'parallel',
+    },
+    Finished: {
+      description: 'The game finished, but the users can still communicate by sending emojis.',
+    },
+    'Server stopped': {
+      type: 'final',
+    },
   },
-
+  always: {
+    target: '.Server stopped',
+    guard: 'isServerStopped',
+    reenter: false,
+  },
   on: {
-    'users update': {
+    'shared game context update': {
       target: '#gameClient',
-      actions: 'updateUsers',
+      actions: {
+        params: {},
+        type: 'updateSharedGameContext',
+      },
+      reenter: false,
     },
-
-    'user sends emoji': {
+    'send emoji': {
       target: '#gameClient',
-      actions: 'sendEmoji',
+      actions: {
+        params: {},
+        type: 'forwardToServer',
+      },
+      reenter: false,
     },
-
     'show emoji': {
-      target: '#gameClient',
-      actions: 'showEmoji',
+      actions: {
+        params: {},
+        type: 'showEmoji',
+      },
+      reenter: true,
     },
   },
 })
