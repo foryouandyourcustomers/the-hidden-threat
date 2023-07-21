@@ -22,13 +22,10 @@ export type ServerMessage =
       position: [number, number]
     }
 
-type MapToUserMessage<T extends ClientEvent> = T extends { type: infer Type extends string }
-  ? Omit<T, 'type'> & { type: `user: ${Type}` }
-  : never
-
-export type ClientEventAsMessage = MapToUserMessage<ClientEvent>
-
-// type ClientEventAsMessage = Foobar<ClientEvent>
+type UserPrefixed<T extends ClientEvent> = {
+  [K in keyof T]: K extends 'type' ? `user: ${T[K]}` : T[K]
+}
+export type ClientEventAsMessage = UserPrefixed<ClientEvent>
 
 /**
  * All messages that the clients might send to the server via WebSockets.
