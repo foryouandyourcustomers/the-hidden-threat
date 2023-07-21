@@ -39,7 +39,8 @@ export const getClientGameMachine = ({
       gameFinished: () => false,
       gameStarted: () => false,
       finishedAssigningSides: () => false,
-      allSidesAssigned: () => false,
+      allSidesAssigned: ({ context }) =>
+        context.users.find((user) => user.side === undefined) === undefined,
       allRolesAssigned: () => false,
       finishedAssigningRoles: () => false,
       userControlsPlayer: () => false,

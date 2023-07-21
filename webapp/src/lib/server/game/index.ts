@@ -1,10 +1,13 @@
-import type { User } from '$lib/game/types'
+import type { SharedGameContext, User } from '$lib/game/types'
 import { serverGameMachine } from '$lib/server/game-machine/configured'
 import type { ServerEvent } from '$lib/server/game-machine/types'
 import shortUuid from 'short-uuid'
 import { interpret } from 'xstate'
 import { addGame, getGame } from './global'
 import type { Game } from './types'
+import { getSharedGameContext } from './utils'
+import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
+import isEqual from 'lodash/isEqual'
 
 /**
  * Returns the uuid of the game
@@ -16,8 +19,21 @@ export const createGame = ({ host }: { host: User }): Game => {
     input: { gameId: id, host },
   }).start()
 
+  let prevSharedGameContext: SharedGameContext | undefined = undefined
+
   machine.subscribe({
     next: (state) => {
+      const newSharedGameContext = getSharedGameContext(state.context)
+      if (!isEqual(prevSharedGameContext, newSharedGameContext)) {
+        prevSharedGameContext = newSharedGameContext
+        sendMessageToUsers({
+          gameId: id,
+          message: {
+            type: 'shared game context update',
+            sharedGameContext: newSharedGameContext,
+          },
+        })
+      }
       console.log('State:', state.value)
     },
     complete: () => console.log(`Game machine ${id} completed`),

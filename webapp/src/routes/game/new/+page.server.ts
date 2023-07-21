@@ -24,7 +24,13 @@ export const actions = {
     }
 
     const { id } = createGame({
-      host: { id: userId, name: form.data.userName, isAdmin: true, isConnected: false },
+      host: {
+        id: userId,
+        name: form.data.userName,
+        isAdmin: true,
+        isConnected: false,
+        side: 'defender',
+      },
     })
 
     throw redirect(303, `/game/${id}`)

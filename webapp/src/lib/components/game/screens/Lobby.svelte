@@ -11,6 +11,9 @@
   const canAssignAdmin = useSelector(machine.service, (snapshot) =>
     snapshot.can({ type: 'assign admin', otherUserId: '', isAdmin: true }),
   )
+  const canContinue = useSelector(machine.service, (snapshot) =>
+    snapshot.can({ type: 'next step' }),
+  )
   const users = useSelector(machine.service, (snapshot) =>
     snapshot.context.users.filter((user) => user.id !== snapshot.context.hostUserId),
   )
@@ -59,6 +62,10 @@
     </div>
   {/each}
 </div>
+
+{#if $canContinue}
+  <button on:click={() => machine.send({ type: 'next step' })}>Next</button>
+{/if}
 
 <style lang="postcss">
   .side {
