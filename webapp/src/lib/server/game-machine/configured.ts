@@ -101,7 +101,14 @@ export const serverGameMachine = machine.provide({
         return {
           users: [
             ...context.users,
-            { id: event.userId, name: event.userName, isAdmin: false, isConnected: false },
+            {
+              id: event.userId,
+              name: event.userName,
+              isAdmin: false,
+              isConnected: false,
+              side: 'defender',
+              isSideAssigned: false,
+            },
           ],
         }
       } else {

@@ -21,10 +21,10 @@
 
 {#if $side === 'attacker'}
   <AssigningRolesAttack />
-{:else if $side === 'defender'}
+{:else}
   <AssigningRolesDefense />
 {/if}
 
-{#if $side && $editingPlayerId !== undefined}
+{#if $editingPlayerId !== undefined}
   <PlayerConfigurator side={$side} playerId={$editingPlayerId} />
 {/if}

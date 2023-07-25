@@ -62,7 +62,9 @@ export type User = {
    * opposite side, but a user that is a spectator is simply assigned at side
    * at the start of the game.
    */
-  side?: Side | undefined
+  side: Side
+  /** Wether an admin has explicitly assigned a side.  */
+  isSideAssigned: boolean
 }
 
 export type DefenderRole =

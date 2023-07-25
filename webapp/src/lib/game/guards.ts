@@ -6,7 +6,7 @@ export const sharedGuards: { [key: string]: (details: { context: SharedGameConte
     gameFinished: () => false,
     /** All users have been assigned a side, and there is at least one admin on both sides */
     allSidesAssigned: ({ context }) =>
-      context.users.find((user) => user.side === undefined) === undefined &&
+      context.users.every((user) => user.isSideAssigned) &&
       !!context.users.find((user) => user.side === 'defender' && user.isAdmin) &&
       !!context.users.find((user) => user.side === 'attacker' && user.isAdmin),
     /** The admin said that they finished assigning the sides */

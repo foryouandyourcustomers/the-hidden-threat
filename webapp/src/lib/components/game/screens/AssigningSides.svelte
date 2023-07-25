@@ -42,12 +42,12 @@
         <span class="admin">admin</span>
       {/if}
       <span class="side">
-        {#if user.side === 'attacker'}
-          Angriff
-        {:else if user.side === 'defender'}
-          Verteidigung
-        {:else}
-          ---
+        {#if user.isSideAssigned}
+          {#if user.side === 'attacker'}
+            Angriff
+          {:else}
+            Verteidigung
+          {/if}
         {/if}
       </span>
       {#if $canAssignSides}

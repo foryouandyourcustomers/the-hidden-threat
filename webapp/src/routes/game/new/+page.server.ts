@@ -30,6 +30,7 @@ export const actions = {
         isAdmin: true,
         isConnected: false,
         side: 'defender',
+        isSideAssigned: false,
       },
     })
 
