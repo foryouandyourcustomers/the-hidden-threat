@@ -1,5 +1,5 @@
 import type { ClientEventAsMessage, ClientMessage } from '$lib/game/types'
-import { assign } from 'xstate'
+import { assign, not } from 'xstate'
 import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
 import { sharedGuards } from '$lib/game/guards'
@@ -51,6 +51,13 @@ export const getClientGameMachine = ({
         if (!side) return false
         return (side === 'attacker' ? context.attack : context.defense).finishedAssigning
       },
+      isEditingPlayerOfSide: ({ context }) => {
+        const { side } = getUser(context)
+        if (!side) return false
+        const editingPlayer = (side === 'attacker' ? context.attack : context.defense).editingPlayer
+        return editingPlayer !== undefined
+      },
+      isNotEditingPlayerOfSide: not('isEditingPlayerOfSide'),
       userControlsPlayer: () => false,
       userOnActiveSide: () => false,
       userNotOnActiveSide: () => false,
@@ -58,6 +65,7 @@ export const getClientGameMachine = ({
       userIsDefender: () => false,
       isServerStopped: () => false,
       playerPerformedAction: () => false,
+
       ...sharedGuards,
     },
   })

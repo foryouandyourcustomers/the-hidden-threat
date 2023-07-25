@@ -128,7 +128,7 @@ export type SharedGameContext = {
     inventory: DefenseInventory
   }
   attack: {
-    editingPlayer?: undefined | boolean
+    editingPlayer?: undefined | AttackerId
     finishedAssigning: boolean
     attacker?: Attacker
     inventory: AttackInventory

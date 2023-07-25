@@ -3,10 +3,7 @@ import type { SharedGameContext } from '$lib/game/types'
 export const sharedGuards: { [key: string]: (details: { context: SharedGameContext }) => boolean } =
   {
     // TODO
-    gameNotStarted: () => true,
-    // TODO
     gameFinished: () => false,
-    gameStarted: () => false,
     /** All users have been assigned a side, and there is at least one admin on both sides */
     allSidesAssigned: ({ context }) =>
       context.users.find((user) => user.side === undefined) === undefined &&
@@ -18,7 +15,8 @@ export const sharedGuards: { [key: string]: (details: { context: SharedGameConte
     allRolesAssigned: ({ context }) =>
       !!context.attack.attacker && context.defense.defenders.length === 4,
     // TODO
-    finishedAssigningRoles: () => false,
+    finishedAssigningRoles: ({ context }) =>
+      context.attack.finishedAssigning && context.defense.finishedAssigning,
     attackerShouldBeVisible: () => false,
     attackerShouldBeInvisible: () => false,
   }

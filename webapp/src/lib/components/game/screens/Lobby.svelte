@@ -2,6 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import AssigningSides from '$lib/components/game/screens/AssigningSides.svelte'
+  import AssigningRoles from './AssigningRoles.svelte'
 
   const { machine } = getGameContext()
 
@@ -23,7 +24,7 @@
 {#if $section === 'Assigning sides'}
   <AssigningSides />
 {:else if $section === 'Assigning roles'}
-  Assigning roles
+  <AssigningRoles />
 {:else if $section === 'Waiting for other side'}
   Waiting for other side
 {:else}
