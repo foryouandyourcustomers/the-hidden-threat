@@ -2,8 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import { getUser } from '$lib/client/game-machine/utils'
-  import AssigningRolesAttack from './AssigningRolesAttack.svelte'
-  import AssigningRolesDefense from './AssigningRolesDefense.svelte'
+  import type { DefenderId } from '$lib/game/types'
   import PlayerConfigurator from './PlayerConfigurator.svelte'
 
   const { machine } = getGameContext()
@@ -17,14 +16,47 @@
     machine.service,
     ({ context }) => ($side === 'attacker' ? context.attack : context.defense).editingPlayer,
   )
+
+  const players = useSelector(machine.service, ({ context }) =>
+    $side === 'attacker' ? [context.attack.attacker] : context.defense.defenders,
+  )
+
+  const toDefenderId = (playerId: number) => playerId as DefenderId
 </script>
 
-{#if $side === 'attacker'}
-  <AssigningRolesAttack />
-{:else}
-  <AssigningRolesDefense />
-{/if}
+<div class="players">
+  {#each $players as player, i}
+    <div class="player">
+      {#if player.isConfigured}
+        {player.userId}
+      {:else}
+        Nicht konfiguriert
+      {/if}
+      <button
+        on:click={() =>
+          machine.send({
+            type: 'start editing player',
+            playerId: $side === 'attacker' ? 'attacker' : toDefenderId(i),
+          })}
+      >
+        Rolle bestimmen
+      </button>
+    </div>
+  {/each}
+</div>
 
 {#if $editingPlayerId !== undefined}
-  <PlayerConfigurator side={$side} playerId={$editingPlayerId} />
+  {#key $editingPlayerId}
+    <!-- Using #key here to make sure that the player configurator is not reused
+    when switching the player that is being edited. -->
+    <PlayerConfigurator playerId={$editingPlayerId} />
+  {/key}
 {/if}
+
+<style lang="postcss">
+  .players {
+    grid-gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+</style>

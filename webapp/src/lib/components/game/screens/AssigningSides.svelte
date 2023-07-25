@@ -41,15 +41,15 @@
       {#if user.isAdmin}
         <span class="admin">admin</span>
       {/if}
-      <span class="side">
-        {#if user.isSideAssigned}
+      {#if user.isSideAssigned}
+        <span class="side">
           {#if user.side === 'attacker'}
             Angriff
           {:else}
             Verteidigung
           {/if}
-        {/if}
-      </span>
+        </span>
+      {/if}
       {#if $canAssignSides}
         <button on:click={() => assignSide(user.id, 'attacker')}>Angriff</button>
         <button on:click={() => assignSide(user.id, 'defender')}>Verteidigung</button>

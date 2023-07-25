@@ -5,7 +5,13 @@ import { machine } from './machine'
 import type { ServerEventOf } from './types'
 import { getUserIndex } from './utils'
 import { sharedGuards } from '$lib/game/guards'
-import { isDefenderId, type DefenderId, type SharedGameContext } from '$lib/game/types'
+import {
+  isDefenderId,
+  type DefenderId,
+  type SharedGameContext,
+  type DefenderRole,
+  type AttackerRole,
+} from '$lib/game/types'
 
 setAutoFreeze(false)
 
@@ -74,9 +80,34 @@ export const serverGameMachine = machine.provide({
     rollbackGameAction: () => {
       // todo
     },
-    updatePlayer: () => {
+    updatePlayer: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: assign role'>
+
+      const playerId = event.playerId
+
+      if (isDefenderId(playerId)) {
+        return {
+          defense: produce(context.defense, (defense) => {
+            const player = defense.defenders[playerId]
+            player.face = event.face
+            player.role = event.role as DefenderRole
+            player.userId = event.userId
+            player.isConfigured = true
+          }),
+        }
+      } else {
+        return {
+          attack: produce(context.attack, (attack) => {
+            attack.attacker.face = event.face
+            attack.attacker.role = event.role as AttackerRole
+            attack.attacker.userId = event.userId
+            attack.attacker.isConfigured = true
+          }),
+        }
+      }
+
       // todo
-    },
+    }),
 
     updateUserConnectionState: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user connected' | 'user reconnected' | 'user disconnected'>

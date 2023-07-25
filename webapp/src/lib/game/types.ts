@@ -67,6 +67,10 @@ export type User = {
   isSideAssigned: boolean
 }
 
+export type Role = DefenderRole | AttackerRole
+
+export type AttackerRole = 'disappointment' | 'frustration'
+
 export type DefenderRole =
   | 'it-specialist'
   | 'quality-manager'
@@ -82,6 +86,7 @@ export type Face = 'woman' | 'man' | 'other'
 export type Player = {
   position: Coordinate
   userId: string
+  face: Face
   /**
    * If false the player still has default values.
    * True, after an admin configured the player.
@@ -91,9 +96,10 @@ export type Player = {
 
 export type Defender = Player & {
   role: DefenderRole
-  face: Face
 }
-export type Attacker = Player
+export type Attacker = Player & {
+  role: AttackerRole
+}
 
 export type Coordinate = [number, number]
 

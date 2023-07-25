@@ -1,9 +1,9 @@
 import type {
   Coordinate,
-  DefenderRole,
   Face,
   GameAction,
   PlayerId,
+  Role,
   ServerMessage,
   SharedGameContext,
   Side,
@@ -33,7 +33,13 @@ export type NativeClientEvent =
   | { type: 'next step' }
   | { type: 'start editing player'; playerId: PlayerId }
   | { type: 'stop editing player'; side: Side }
-  | { type: 'assign role'; playerId: PlayerId; face: Face; role?: DefenderRole | undefined }
+  | {
+      type: 'assign role'
+      playerId: PlayerId
+      face: Face
+      role: Role
+      userId: string
+    }
   | { type: 'send emoji'; emoji: string }
   | { type: 'move'; playerId: PlayerId; to: Coordinate }
   | { type: 'perform action'; action: GameAction }

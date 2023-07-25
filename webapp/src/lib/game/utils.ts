@@ -18,6 +18,8 @@ export const createDefaultDefender = (hostUserId: string): Defender => ({
  */
 export const createDefaultAttacker = (hostUserId: string): Attacker => ({
   userId: hostUserId,
+  face: 'other',
   position: [0, 0],
+  role: 'disappointment',
   isConfigured: false,
 })
