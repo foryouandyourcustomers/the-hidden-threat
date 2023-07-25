@@ -2,6 +2,7 @@ import type { ClientEventAsMessage, ClientMessage } from '$lib/game/types'
 import { assign } from 'xstate'
 import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
+import { sharedGuards } from '$lib/game/guards'
 
 export const getClientGameMachine = ({
   send,
@@ -34,23 +35,14 @@ export const getClientGameMachine = ({
         !!context.users.find((user) => user.id === context.userId && user.isAdmin),
       isPlayer: ({ context }) => context.hostUserId !== context.userId,
       // TODO
-      gameNotStarted: () => true,
       // TODO
-      gameFinished: () => false,
-      gameStarted: () => false,
-      finishedAssigningSides: () => false,
-      allSidesAssigned: ({ context }) =>
-        context.users.find((user) => user.side === undefined) === undefined,
-      allRolesAssigned: () => false,
-      finishedAssigningRoles: () => false,
       userControlsPlayer: () => false,
       userOnActiveSide: () => false,
       userNotOnActiveSide: () => false,
       playerMoved: () => false,
       userIsDefender: () => false,
-      attackerShouldBeVisible: () => false,
-      attackerShouldBeInvisible: () => false,
       isServerStopped: () => false,
       playerPerformedAction: () => false,
+      ...sharedGuards,
     },
   })

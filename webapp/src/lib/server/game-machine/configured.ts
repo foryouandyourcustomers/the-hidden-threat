@@ -4,6 +4,7 @@ import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
 import { getUserIndex } from './utils'
+import { sharedGuards } from '$lib/game/guards'
 
 setAutoFreeze(false)
 
@@ -108,18 +109,12 @@ export const serverGameMachine = machine.provide({
   guards: {
     isAdmin: ({ context, event }) =>
       context.users.find((user) => user.id === event.userId)?.isAdmin ?? false,
-
-    allSidesAssigned: ({ context }) =>
-      context.users.find((user) => user.side === undefined) === undefined,
     // TODO
     isValidAction: () => {
       // TODO: this needs to verify that the given game action is valid in the current context.
       return false
     },
-    // TODO
-    allRolesAssigned: () => false,
-    // TODO
-    gameIsFinished: () => false,
+    ...sharedGuards,
   },
   actors: {
     loadParticipants: fromPromise(async () => {
