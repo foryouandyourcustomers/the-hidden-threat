@@ -5,6 +5,7 @@ import { machine } from './machine'
 import type { ServerEventOf } from './types'
 import { getUserIndex } from './utils'
 import { sharedGuards } from '$lib/game/guards'
+import { isDefenderId, type DefenderId, type SharedGameContext } from '$lib/game/types'
 
 setAutoFreeze(false)
 
@@ -14,6 +15,59 @@ export const serverGameMachine = machine.provide({
       // todo
     },
     setAssigningSidesFinished: assign(() => ({ finishedAssigningSides: true })),
+    setAssigningRolesFinished: assign(({ context, event: e }) => {
+      const { userId } = e as ServerEventOf<'user: next step'>
+      const side = context.users.find((user) => user.id === userId)?.side
+
+      if (side === 'attacker') {
+        return {
+          attack: {
+            ...context.attack,
+            finishedAssigning: true,
+          } satisfies SharedGameContext['attack'],
+        }
+      } else if (side === 'defender') {
+        return {
+          defense: {
+            ...context.defense,
+            finishedAssigning: true,
+          } satisfies SharedGameContext['defense'],
+        }
+      } else {
+        return {}
+      }
+    }),
+    setEditingPlayer: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: start editing player' | 'user: stop editing player'>
+
+      const side =
+        event.type === 'user: stop editing player'
+          ? event.side
+          : isDefenderId(event.playerId)
+          ? 'defender'
+          : 'attacker'
+
+      if (side === 'attacker') {
+        return {
+          attack: {
+            ...context.attack,
+            editingPlayer: event.type === 'user: start editing player',
+          } satisfies SharedGameContext['attack'],
+        }
+      } else if (side === 'defender') {
+        return {
+          defense: {
+            ...context.defense,
+            editingPlayer:
+              event.type === 'user: stop editing player'
+                ? undefined
+                : (event.playerId as DefenderId),
+          } satisfies SharedGameContext['defense'],
+        }
+      } else {
+        return {}
+      }
+    }),
     addGameAction: () => {
       // todo
     },
@@ -21,9 +75,6 @@ export const serverGameMachine = machine.provide({
       // todo
     },
     updatePlayer: () => {
-      // todo
-    },
-    setEditingPlayer: () => {
       // todo
     },
 

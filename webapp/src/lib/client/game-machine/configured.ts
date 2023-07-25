@@ -3,6 +3,7 @@ import { assign } from 'xstate'
 import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
 import { sharedGuards } from '$lib/game/guards'
+import { getUser } from './utils'
 
 export const getClientGameMachine = ({
   send,
@@ -34,9 +35,22 @@ export const getClientGameMachine = ({
       isAdmin: ({ context }) =>
         !!context.users.find((user) => user.id === context.userId && user.isAdmin),
       isPlayer: ({ context }) => context.hostUserId !== context.userId,
-      // TODO
-      // TODO
-      finishedAssigningRoles: () => false,
+
+      allRolesAssignedOfSide: ({ context }) => {
+        const { side } = getUser(context)
+        if (!side) return false
+
+        if (side === 'attacker') {
+          return !!context.attack.attacker
+        } else {
+          return context.defense.defenders.length === 4
+        }
+      },
+      finishedAssigningRolesOfSide: ({ context }) => {
+        const { side } = getUser(context)
+        if (!side) return false
+        return (side === 'attacker' ? context.attack : context.defense).finishedAssigning
+      },
       userControlsPlayer: () => false,
       userOnActiveSide: () => false,
       userNotOnActiveSide: () => false,

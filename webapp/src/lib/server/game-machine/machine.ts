@@ -15,12 +15,12 @@ export const machine = createMachine({
       finishedAssigningSides: false,
       globalAttackScenarios: ['todo', 'todo', 'todo', 'todo'],
       defense: {
-        finishedConfiguring: false,
+        finishedAssigning: false,
         defenders: [],
         inventory: { ...DEFAULT_DEFENSE_INVENTORY },
       },
       attack: {
-        finishedConfiguring: false,
+        finishedAssigning: false,
         attacker: undefined,
         inventory: { ...DEFAULT_ATTACK_INVENTORY },
       },
@@ -133,17 +133,15 @@ export const machine = createMachine({
               },
             },
             Ready: {
-              on: {
-                'user: next step': {
-                  target: '#gameServer.Game.Playing',
-                  guard: 'isAdmin',
-                  reenter: false,
-                },
+              always: {
+                target: '#gameServer.Game.Playing',
+                guard: 'finishedAssigningRoles',
+                reenter: false,
               },
             },
           },
           on: {
-            'user: configure player': {
+            'user: assign role': {
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
@@ -154,7 +152,7 @@ export const machine = createMachine({
                 'Defines which user controls a player, which role they are and how they look.\n\nThis event can update a defender and an attacker.',
               reenter: false,
             },
-            'user: open player editor': {
+            'user: start editing player': {
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
@@ -163,7 +161,7 @@ export const machine = createMachine({
               },
               reenter: false,
             },
-            'user: close player editor': {
+            'user: stop editing player': {
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
@@ -171,6 +169,14 @@ export const machine = createMachine({
                 type: 'setEditingPlayer',
               },
               reenter: false,
+            },
+            'user: next step': {
+              guard: 'isAdmin',
+              actions: {
+                params: {},
+                type: 'setAssigningRolesFinished',
+              },
+              reenter: true,
             },
           },
         },

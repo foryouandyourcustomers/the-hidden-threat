@@ -33,7 +33,7 @@ export type NativeClientEvent =
   | { type: 'next step' }
   | { type: 'start editing player'; playerId: PlayerId }
   | { type: 'stop editing player'; side: Side }
-  | { type: 'configure player'; playerId: PlayerId; face: Face; role?: DefenderRole | undefined }
+  | { type: 'assign role'; playerId: PlayerId; face: Face; role?: DefenderRole | undefined }
   | { type: 'send emoji'; emoji: string }
   | { type: 'move'; playerId: PlayerId; to: Coordinate }
   | { type: 'perform action'; action: GameAction }
@@ -42,8 +42,6 @@ export type NativeClientEvent =
   | { type: 'dismiss global attack' }
   | { type: 'new global attack' }
   | { type: 'show global attack' }
-  | { type: 'open player editor' }
-  | { type: 'close player editor' }
 
 export type ClientEvent =
   // All messages that the server sends can be used as client events

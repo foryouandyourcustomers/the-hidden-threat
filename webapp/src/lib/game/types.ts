@@ -122,14 +122,14 @@ export type SharedGameContext = {
   globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
   defense: {
     editingPlayer?: undefined | DefenderId
-    finishedConfiguring: boolean
+    finishedAssigning: boolean
     /** The list of defenders in the correct order. Up to 4 */
     defenders: Defender[]
     inventory: DefenseInventory
   }
   attack: {
     editingPlayer?: undefined | boolean
-    finishedConfiguring: boolean
+    finishedAssigning: boolean
     attacker?: Attacker
     inventory: AttackInventory
   }
