@@ -82,6 +82,11 @@ export type Face = 'woman' | 'man' | 'other'
 export type Player = {
   position: Coordinate
   userId: string
+  /**
+   * If false the player still has default values.
+   * True, after an admin configured the player.
+   */
+  isConfigured: boolean
 }
 
 export type Defender = Player & {
@@ -126,13 +131,13 @@ export type SharedGameContext = {
     editingPlayer?: undefined | DefenderId
     finishedAssigning: boolean
     /** The list of defenders in the correct order. Up to 4 */
-    defenders: Defender[]
+    defenders: [Defender, Defender, Defender, Defender]
     inventory: DefenseInventory
   }
   attack: {
     editingPlayer?: undefined | AttackerId
     finishedAssigning: boolean
-    attacker?: Attacker
+    attacker: Attacker
     inventory: AttackInventory
   }
 }

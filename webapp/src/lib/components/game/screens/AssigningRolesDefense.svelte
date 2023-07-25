@@ -11,7 +11,7 @@
 
 {#each defenderIds as defenderId}
   {@const defender = $defenders[defenderId]}
-  {#if defender}
+  {#if defender.isConfigured}
     {defender.userId}
   {:else}
     Nicht konfiguriert

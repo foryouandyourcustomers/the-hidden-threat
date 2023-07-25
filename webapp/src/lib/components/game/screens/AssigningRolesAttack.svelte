@@ -7,7 +7,7 @@
   const attacker = useSelector(machine.service, ({ context }) => context.attack.attacker)
 </script>
 
-{#if $attacker}
+{#if $attacker.isConfigured}
   {$attacker.userId}
 {:else}
   Nicht konfiguriert

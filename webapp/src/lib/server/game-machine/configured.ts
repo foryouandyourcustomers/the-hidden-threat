@@ -146,6 +146,7 @@ export const serverGameMachine = machine.provide({
       return {
         users: produce(context.users, (users) => {
           users[userIndex].side = event.side
+          users[userIndex].isSideAssigned = true
         }),
       }
     }),
