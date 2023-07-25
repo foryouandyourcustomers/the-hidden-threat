@@ -10,9 +10,9 @@ export const sharedGuards = {
     context.users.find((user) => user.side === undefined) === undefined &&
     !!context.users.find((user) => user.side === 'defender' && user.isAdmin) &&
     !!context.users.find((user) => user.side === 'attacker' && user.isAdmin),
-  finishedAssigningSides: () => false,
+  finishedAssigningSides: ({ context }: { context: SharedGameContext }) =>
+    context.finishedAssigningSides,
   allRolesAssigned: () => false,
-  finishedAssigningRoles: () => false,
   attackerShouldBeVisible: () => false,
   attackerShouldBeInvisible: () => false,
 }

@@ -36,6 +36,7 @@ export const getClientGameMachine = ({
       isPlayer: ({ context }) => context.hostUserId !== context.userId,
       // TODO
       // TODO
+      finishedAssigningRoles: () => false,
       userControlsPlayer: () => false,
       userOnActiveSide: () => false,
       userNotOnActiveSide: () => false,

@@ -13,9 +13,7 @@ export const serverGameMachine = machine.provide({
     sendSummary: () => {
       // todo
     },
-    setAssigningSidesFinished: () => {
-      // todo
-    },
+    setAssigningSidesFinished: assign(() => ({ finishedAssigningSides: true })),
     addGameAction: () => {
       // todo
     },
