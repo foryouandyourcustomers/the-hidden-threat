@@ -7,3 +7,12 @@ export const DEFAULT_ATTACK_INVENTORY = {
   gun: 0,
   virus: 0,
 }
+
+// TODO: add real faces
+export const FACES = {
+  man: 'man',
+  woman: 'woman',
+  other: 'other',
+} as const
+
+export type FaceId = keyof typeof FACES

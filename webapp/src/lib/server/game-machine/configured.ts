@@ -91,7 +91,7 @@ export const serverGameMachine = machine.provide({
             const player = defense.defenders[playerId]
             player.face = event.face
             player.role = event.role as DefenderRole
-            player.userId = event.userId
+            player.userId = event.playingUserId
             player.isConfigured = true
           }),
         }
@@ -100,7 +100,7 @@ export const serverGameMachine = machine.provide({
           attack: produce(context.attack, (attack) => {
             attack.attacker.face = event.face
             attack.attacker.role = event.role as AttackerRole
-            attack.attacker.userId = event.userId
+            attack.attacker.userId = event.playingUserId
             attack.attacker.isConfigured = true
           }),
         }

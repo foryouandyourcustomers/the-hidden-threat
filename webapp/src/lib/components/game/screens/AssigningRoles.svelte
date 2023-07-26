@@ -20,19 +20,25 @@
   const players = useSelector(machine.service, ({ context }) =>
     $side === 'attacker' ? [context.attack.attacker] : context.defense.defenders,
   )
+  const canEdit = useSelector(machine.service, (snapshot) =>
+    snapshot.can({ type: 'start editing player', playerId: 1 }),
+  )
 
   const toDefenderId = (playerId: number) => playerId as DefenderId
+
+  const users = useSelector(machine.service, ({ context }) => context.users)
 </script>
 
 <div class="players">
   {#each $players as player, i}
     <div class="player">
       {#if player.isConfigured}
-        {player.userId}
+        {$users.find((user) => user.id === player.userId)?.name}
       {:else}
         Nicht konfiguriert
       {/if}
       <button
+        disabled={!$canEdit}
         on:click={() =>
           machine.send({
             type: 'start editing player',

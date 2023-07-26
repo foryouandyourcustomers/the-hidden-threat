@@ -1,5 +1,5 @@
 import type { ClientEvent } from '$lib/client/game-machine/types'
-import type { DEFAULT_ATTACK_INVENTORY, DEFAULT_DEFENSE_INVENTORY } from './constants'
+import type { DEFAULT_ATTACK_INVENTORY, DEFAULT_DEFENSE_INVENTORY, FaceId } from './constants'
 
 export type Side = 'defender' | 'attacker'
 
@@ -77,16 +77,13 @@ export type DefenderRole =
   | 'dispatch-manager'
   | 'order-manager'
 
-// TODO: add real faces
-export type Face = 'woman' | 'man' | 'other'
-
 /**
  * The base class for Defender and Attacker.
  */
 export type Player = {
   position: Coordinate
   userId: string
-  face: Face
+  face: FaceId
   /**
    * If false the player still has default values.
    * True, after an admin configured the player.

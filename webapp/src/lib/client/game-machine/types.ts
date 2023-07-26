@@ -1,6 +1,6 @@
+import type { FaceId } from '$lib/game/constants'
 import type {
   Coordinate,
-  Face,
   GameAction,
   PlayerId,
   Role,
@@ -17,6 +17,9 @@ export type Context = SharedGameContext & {
 /**
  * All the events that can be sent to the client machine, excluding the ones
  * that come from the server.
+ *
+ * It's important, that none of these events have a `userId` since this will
+ * be overridden on the server.
  */
 export type NativeClientEvent =
   | {
@@ -36,9 +39,11 @@ export type NativeClientEvent =
   | {
       type: 'assign role'
       playerId: PlayerId
-      face: Face
+      face: FaceId
       role: Role
-      userId: string
+      /** Not using `userId` since client events cannot use userId because it'll
+       * be overwritten by the server */
+      playingUserId: string
     }
   | { type: 'send emoji'; emoji: string }
   | { type: 'move'; playerId: PlayerId; to: Coordinate }

@@ -91,7 +91,14 @@ const connectionCallback: ConnectionCallback = (webSocket) => {
       })
     } else {
       console.log('[wss:kit] received: %s', data)
-      sendMessageToMachine(webSocket.gameId, { ...message, userId: webSocket.userId })
+      if (Object.hasOwn(message, 'userId')) {
+        console.error(
+          'Received a client message that already hat the userId set. This is not allowed. Message: ',
+          message,
+        )
+      } else {
+        sendMessageToMachine(webSocket.gameId, { ...message, userId: webSocket.userId })
+      }
     }
   })
 
