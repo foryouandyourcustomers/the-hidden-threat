@@ -11,6 +11,7 @@
 
   const sendEmoji = (emoji: string) => {
     context.machine.send({ type: 'send emoji', emoji })
+    showEmoji({ userId: context.userId, emoji })
   }
 
   type DisplayedEmoji = { userName: string; emoji: string; position: [number, number] }
@@ -70,8 +71,8 @@
     }
   }
   .displayed-emoji {
-    --_width: 15vw;
-    --_height: 15vw;
+    --_width: 4rem;
+    --_height: 4rem;
     display: flex;
     position: fixed;
     top: calc(var(--_y) * (100% - var(--_height)));
@@ -85,12 +86,12 @@
     background: #fafafa;
     width: var(--_width);
     height: var(--_height);
-    font-size: 8vw;
+    font-size: 3rem;
     line-height: 1.1;
     & .name {
       position: absolute;
       bottom: -1em;
-      background: white;
+      background: black;
       font-size: 0.3em;
     }
   }

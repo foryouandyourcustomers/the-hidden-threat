@@ -81,7 +81,7 @@
     gap: 1rem;
     z-index: 100000;
     inset: 0;
-    background: #fffe;
+    background: #000e;
   }
 
   .faces {
