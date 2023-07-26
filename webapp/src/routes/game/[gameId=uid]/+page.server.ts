@@ -1,6 +1,7 @@
-import type { ContextInput } from '$lib/client/game-machine/machine'
+import type { Context } from '$lib/client/game-machine/types'
 import { getGame } from '$lib/server/game/global'
-import { redirect } from '@sveltejs/kit'
+import { getSharedGameContext } from '$lib/server/game/utils.js'
+import { error, redirect } from '@sveltejs/kit'
 
 export const load = async ({ params, parent, locals }) => {
   const { userId } = await parent()
@@ -10,18 +11,19 @@ export const load = async ({ params, parent, locals }) => {
   const snapshot = game.machine.getSnapshot()
 
   if (!snapshot.context.users.find((user) => user.id === userId)) {
-    throw redirect(303, `/game/${params.gameId}/join`)
+    if (snapshot.can({ type: 'user joined', userId, userName: '' })) {
+      throw redirect(303, `/game/${params.gameId}/join`)
+    } else {
+      throw error(403, 'This game already started.')
+    }
   }
+
+  const sharedGameContext = getSharedGameContext(snapshot.context)
 
   return {
     machineInput: {
-      gameId: game.id,
       userId,
-      hostUserId: snapshot.context.hostUserId,
-      actions: snapshot.context.actions,
-      attack: snapshot.context.attack,
-      defense: snapshot.context.defense,
-      users: snapshot.context.users,
-    } satisfies ContextInput,
+      ...sharedGameContext,
+    } satisfies Context,
   }
 }

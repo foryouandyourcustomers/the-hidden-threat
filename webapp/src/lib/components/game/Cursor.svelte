@@ -61,7 +61,7 @@
       top: 1rem;
       left: 1rem;
       border-radius: var(--radius-sm);
-      background: #ddd;
+      background: black;
       padding: var(--size-1) var(--size-2);
       max-width: var(--size-30);
       overflow: hidden;

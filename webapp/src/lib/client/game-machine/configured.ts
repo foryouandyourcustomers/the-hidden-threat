@@ -1,7 +1,9 @@
-import type { ClientMessage } from '$lib/game/types'
-import { assign } from 'xstate'
+import type { ClientEventAsMessage, ClientMessage } from '$lib/game/types'
+import { assign, not } from 'xstate'
 import { machine } from './machine'
-import type { Actions, ClientEventOf } from './types'
+import type { Actions, ClientEvent, ClientEventOf } from './types'
+import { sharedGuards } from '$lib/game/guards'
+import { getUser } from './utils'
 
 export const getClientGameMachine = ({
   send,
@@ -12,29 +14,19 @@ export const getClientGameMachine = ({
 }) =>
   machine.provide({
     actions: {
-      consoleLogValue: ({ event }) => {
-        console.log(event)
-      },
-      consoleLogValueAgain: ({ context }) => {
-        console.log('context value 2: ', context)
-      },
-      updateUsers: assign(({ event: e }) => {
-        const event = e as ClientEventOf<'users update'>
+      updateSharedGameContext: assign(({ event: e }) => {
+        const event = e as ClientEventOf<'shared game context update'>
         return {
-          users: event.users,
+          ...event.sharedGameContext,
         }
       }),
-      sendEmoji: ({ event: e }) => {
-        const event = e as ClientEventOf<'user sends emoji'>
-        send({ type: 'send emoji', emoji: event.emoji })
-      },
       showEmoji: ({ event: e }) => {
         const event = e as ClientEventOf<'show emoji'>
         actions.showEmoji({ userId: event.userId, emoji: event.emoji })
       },
       forwardToServer: ({ event: e }) => {
-        const event = e as ClientEventOf<'assign side'>
-        send(event)
+        const event = e as ClientEvent
+        send({ ...event, type: `user: ${event.type}` } as ClientEventAsMessage)
       },
     },
     actors: {},
@@ -43,9 +35,37 @@ export const getClientGameMachine = ({
       isAdmin: ({ context }) =>
         !!context.users.find((user) => user.id === context.userId && user.isAdmin),
       isPlayer: ({ context }) => context.hostUserId !== context.userId,
-      // TODO
-      gameNotStarted: () => true,
-      // TODO
-      gameFinished: () => false,
+
+      allRolesAssignedOfSide: ({ context }) => {
+        const { side } = getUser(context)
+        if (!side) return false
+
+        if (side === 'attacker') {
+          return !!context.attack.attacker
+        } else {
+          return context.defense.defenders.length === 4
+        }
+      },
+      finishedAssigningRolesOfSide: ({ context }) => {
+        const { side } = getUser(context)
+        if (!side) return false
+        return (side === 'attacker' ? context.attack : context.defense).finishedAssigning
+      },
+      isEditingPlayerOfSide: ({ context }) => {
+        const { side } = getUser(context)
+        if (!side) return false
+        const editingPlayer = (side === 'attacker' ? context.attack : context.defense).editingPlayer
+        return editingPlayer !== undefined
+      },
+      isNotEditingPlayerOfSide: not('isEditingPlayerOfSide'),
+      userControlsPlayer: () => false,
+      userOnActiveSide: () => false,
+      userNotOnActiveSide: () => false,
+      playerMoved: () => false,
+      userIsDefender: () => false,
+      isServerStopped: () => false,
+      playerPerformedAction: () => false,
+
+      ...sharedGuards,
     },
   })

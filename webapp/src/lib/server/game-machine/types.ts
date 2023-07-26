@@ -5,7 +5,7 @@ export type Context = SharedGameContext
 export type ServerGameAction = GameAction
 
 export type ServerEvent =
-  // All messages that the server sends can be used as client events
+  // All messages that the client sends can be used as server events
   | (ClientMessage & { userId: string })
   | { type: 'user connected'; userId: string }
   /**

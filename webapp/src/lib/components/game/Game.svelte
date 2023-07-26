@@ -12,10 +12,16 @@
   let gameHeight = 1
 
   const onMouseMove = (e: MouseEvent) => {
-    reportMousePosition([
-      (e.clientX - gameContainer.offsetLeft) / gameWidth,
-      (e.clientY - gameContainer.offsetTop) / gameHeight,
-    ])
+    // This is an ugly way to work around the wrong cursor position when the
+    // board is scaled down.
+    const scale = window.matchMedia('(width < 1200px) or (height < 675px)').matches
+      ? 0.6
+      : window.matchMedia('(width < 1200px) or (height < 675px)').matches
+      ? 0.8
+      : 1
+    const x = (e.clientX - gameContainer.offsetLeft) / gameWidth
+    const y = (e.clientY - gameContainer.offsetTop) / gameHeight
+    reportMousePosition([(x - (1 - scale) / 2) / scale, (y - (1 - scale) / 2) / scale])
   }
 
   type Section = 'Lobby' | 'Ingame' | undefined
@@ -57,7 +63,7 @@
   .game-wrapper {
     display: grid;
     place-content: center;
-    background: #666;
+    background: black;
     /* padding: var(--size-2); */
     width: 100%;
     height: 100%;
@@ -70,7 +76,7 @@
     grid-template-areas:
       'name characters items'
       'actions content content';
-    background: white;
+    background: #1b253a;
     width: 90rem;
     height: 50.625rem;
     overflow: hidden;

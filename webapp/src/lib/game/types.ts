@@ -1,4 +1,5 @@
-import type { DEFAULT_ATTACK_INVENTORY, DEFAULT_DEFENSE_INVENTORY } from './constants'
+import type { ClientEvent } from '$lib/client/game-machine/types'
+import type { DEFAULT_ATTACK_INVENTORY, DEFAULT_DEFENSE_INVENTORY, FaceId } from './constants'
 
 export type Side = 'defender' | 'attacker'
 
@@ -7,8 +8,8 @@ export type Side = 'defender' | 'attacker'
  */
 export type ServerMessage =
   | {
-      type: 'users update'
-      users: User[]
+      type: 'shared game context update'
+      sharedGameContext: SharedGameContext
     }
   | {
       type: 'show emoji'
@@ -21,37 +22,22 @@ export type ServerMessage =
       position: [number, number]
     }
 
+type UserPrefixed<T extends ClientEvent> = {
+  [K in keyof T]: K extends 'type' ? `user: ${T[K]}` : T[K]
+}
+export type ClientEventAsMessage = UserPrefixed<ClientEvent>
+
 /**
  * All messages that the clients might send to the server via WebSockets.
  */
 export type ClientMessage =
-  | {
-      type: `send emoji`
-      emoji: string
-    }
+  | ClientEventAsMessage
   /** This is not forwarded to the machine but redirected directly to the other
    * users */
   | {
       type: `mouse position`
       position: [number, number]
     }
-  | {
-      type: 'assign side'
-      side: Side
-      otherUserId: string
-    }
-  | {
-      type: 'assign admin'
-      isAdmin: boolean
-      otherUserId: string
-    }
-  | { type: 'start game' }
-  | { type: 'finish setup' }
-  | { type: 'assign role' }
-  | { type: 'set character order' }
-  | { type: 'start setup' }
-  | { type: 'rollback game action' }
-  | { type: 'execute game action' }
 
 /**
  * The base user type that is used by the server and client.
@@ -76,13 +62,20 @@ export type User = {
    * opposite side, but a user that is a spectator is simply assigned at side
    * at the start of the game.
    */
-  side?: Side | undefined
+  side: Side
+  /** Wether an admin has explicitly assigned a side.  */
+  isSideAssigned: boolean
 }
 
-type DefenderRole = 'it-specialist' | 'quality-manager' | 'dispatch-manager' | 'order-manager'
+export type Role = DefenderRole | AttackerRole
 
-// TODO: add real faces
-type Face = 'woman' | 'man' | 'other'
+export type AttackerRole = 'disappointment' | 'frustration'
+
+export type DefenderRole =
+  | 'it-specialist'
+  | 'quality-manager'
+  | 'dispatch-manager'
+  | 'order-manager'
 
 /**
  * The base class for Defender and Attacker.
@@ -90,13 +83,20 @@ type Face = 'woman' | 'man' | 'other'
 export type Player = {
   position: Coordinate
   userId: string
+  face: FaceId
+  /**
+   * If false the player still has default values.
+   * True, after an admin configured the player.
+   */
+  isConfigured: boolean
 }
 
 export type Defender = Player & {
   role: DefenderRole
-  face: Face
 }
-export type Attacker = Player
+export type Attacker = Player & {
+  role: AttackerRole
+}
 
 export type Coordinate = [number, number]
 
@@ -113,6 +113,7 @@ export const isDefenderId = (id: PlayerId): id is DefenderId => id !== 'attacker
 export const isAttackerId = (id: PlayerId): id is AttackerId => id === 'attacker'
 
 export type GameAction = {
+  timestamp: number
   type: 'chracter moves'
   playerId: PlayerId
   /** Which user actually performed the action. */
@@ -120,18 +121,26 @@ export type GameAction = {
   to: Coordinate
 }
 
+export type AttackScenario = 'todo'
+
 export type SharedGameContext = {
   gameId: string
   hostUserId: string
   users: User[]
   actions: GameAction[]
+  finishedAssigningSides: boolean
+  globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
   defense: {
+    editingPlayer?: undefined | DefenderId
+    finishedAssigning: boolean
     /** The list of defenders in the correct order. Up to 4 */
-    defenders: Defender[]
+    defenders: [Defender, Defender, Defender, Defender]
     inventory: DefenseInventory
   }
   attack: {
-    attacker?: Attacker
+    editingPlayer?: undefined | AttackerId
+    finishedAssigning: boolean
+    attacker: Attacker
     inventory: AttackInventory
   }
 }

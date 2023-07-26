@@ -10,7 +10,7 @@
   const validEmojis = ['👋', '👍', '👏', '😃', '🧠', '🤔']
 
   const sendEmoji = (emoji: string) => {
-    context.machine.send({ type: 'user sends emoji', emoji })
+    context.machine.send({ type: 'send emoji', emoji })
   }
 
   type DisplayedEmoji = { userName: string; emoji: string; position: [number, number] }

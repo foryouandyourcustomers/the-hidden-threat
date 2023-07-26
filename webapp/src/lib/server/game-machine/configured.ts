@@ -1,14 +1,114 @@
+import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
+import { produce, setAutoFreeze } from 'immer'
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
-import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
-import { produce, setAutoFreeze } from 'immer'
 import { getUserIndex } from './utils'
+import { sharedGuards } from '$lib/game/guards'
+import {
+  isDefenderId,
+  type DefenderId,
+  type SharedGameContext,
+  type DefenderRole,
+  type AttackerRole,
+} from '$lib/game/types'
 
 setAutoFreeze(false)
 
 export const serverGameMachine = machine.provide({
   actions: {
+    sendSummary: () => {
+      // todo
+    },
+    setAssigningSidesFinished: assign(() => ({ finishedAssigningSides: true })),
+    setAssigningRolesFinished: assign(({ context, event: e }) => {
+      const { userId } = e as ServerEventOf<'user: next step'>
+      const side = context.users.find((user) => user.id === userId)?.side
+
+      if (side === 'attacker') {
+        return {
+          attack: {
+            ...context.attack,
+            finishedAssigning: true,
+          } satisfies SharedGameContext['attack'],
+        }
+      } else if (side === 'defender') {
+        return {
+          defense: {
+            ...context.defense,
+            finishedAssigning: true,
+          } satisfies SharedGameContext['defense'],
+        }
+      } else {
+        return {}
+      }
+    }),
+    setEditingPlayer: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: start editing player' | 'user: stop editing player'>
+
+      const side =
+        event.type === 'user: stop editing player'
+          ? event.side
+          : isDefenderId(event.playerId)
+          ? 'defender'
+          : 'attacker'
+
+      if (side === 'attacker') {
+        return {
+          attack: {
+            ...context.attack,
+            editingPlayer: event.type === 'user: start editing player' ? 'attacker' : undefined,
+          } satisfies SharedGameContext['attack'],
+        }
+      } else if (side === 'defender') {
+        return {
+          defense: {
+            ...context.defense,
+            editingPlayer:
+              event.type === 'user: stop editing player'
+                ? undefined
+                : (event.playerId as DefenderId),
+          } satisfies SharedGameContext['defense'],
+        }
+      } else {
+        return {}
+      }
+    }),
+    addGameAction: () => {
+      // todo
+    },
+    rollbackGameAction: () => {
+      // todo
+    },
+    updatePlayer: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: assign role'>
+
+      const playerId = event.playerId
+
+      if (isDefenderId(playerId)) {
+        return {
+          defense: produce(context.defense, (defense) => {
+            const player = defense.defenders[playerId]
+            player.face = event.face
+            player.role = event.role as DefenderRole
+            player.userId = event.playingUserId
+            player.isConfigured = true
+          }),
+        }
+      } else {
+        return {
+          attack: produce(context.attack, (attack) => {
+            attack.attacker.face = event.face
+            attack.attacker.role = event.role as AttackerRole
+            attack.attacker.userId = event.playingUserId
+            attack.attacker.isConfigured = true
+          }),
+        }
+      }
+
+      // todo
+    }),
+
     updateUserConnectionState: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user connected' | 'user reconnected' | 'user disconnected'>
 
@@ -32,7 +132,14 @@ export const serverGameMachine = machine.provide({
         return {
           users: [
             ...context.users,
-            { id: event.userId, name: event.userName, isAdmin: false, isConnected: false },
+            {
+              id: event.userId,
+              name: event.userName,
+              isAdmin: false,
+              isConnected: false,
+              side: 'defender',
+              isSideAssigned: false,
+            },
           ],
         }
       } else {
@@ -40,17 +147,17 @@ export const serverGameMachine = machine.provide({
         return {}
       }
     }),
-    sendUsersUpdate: ({ context }) => {
-      sendMessageToUsers({
-        gameId: context.gameId,
-        message: {
-          type: 'users update',
-          users: [...context.users],
-        },
-      })
-    },
+    // sendUsersUpdate: ({ context }) => {
+    //   sendMessageToUsers({
+    //     gameId: context.gameId,
+    //     message: {
+    //       type: 'shared game context update',
+    //       users: [...context.users],
+    //     },
+    //   })
+    // },
     sendEmojiToOtherUsers: ({ context, event: e }) => {
-      const event = e as ServerEventOf<'send emoji'>
+      const event = e as ServerEventOf<'user: send emoji'>
       sendMessageToUsers({
         gameId: context.gameId,
         message: {
@@ -62,7 +169,7 @@ export const serverGameMachine = machine.provide({
       })
     },
     assignSide: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'assign side'>
+      const event = e as ServerEventOf<'user: assign side'>
 
       const userIndex = getUserIndex(context, event.otherUserId)
       if (userIndex === undefined) return {}
@@ -70,11 +177,12 @@ export const serverGameMachine = machine.provide({
       return {
         users: produce(context.users, (users) => {
           users[userIndex].side = event.side
+          users[userIndex].isSideAssigned = true
         }),
       }
     }),
     assignAdmin: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'assign admin'>
+      const event = e as ServerEventOf<'user: assign admin'>
 
       const userIndex = getUserIndex(context, event.otherUserId)
       if (userIndex === undefined) return {}
@@ -87,11 +195,14 @@ export const serverGameMachine = machine.provide({
     }),
   },
   guards: {
-    // TODO
-    gameIsReadyToStart: () => false,
-    // TODO
     isAdmin: ({ context, event }) =>
       context.users.find((user) => user.id === event.userId)?.isAdmin ?? false,
+    // TODO
+    isValidAction: () => {
+      // TODO: this needs to verify that the given game action is valid in the current context.
+      return false
+    },
+    ...sharedGuards,
   },
   actors: {
     loadParticipants: fromPromise(async () => {
