@@ -52,8 +52,8 @@
       top: 0;
       left: 0;
       translate: -10% -10%;
-      width: var(--size-6);
-      height: var(--size-6);
+      width: 1.5rem;
+      height: 1.5rem;
     }
     .name {
       display: inline-block;
@@ -62,8 +62,8 @@
       left: 1rem;
       border-radius: var(--radius-sm);
       background: black;
-      padding: var(--size-1) var(--size-2);
-      max-width: var(--size-30);
+      padding: 0.25rem 0.5rem;
+      max-width: 7rem;
       overflow: hidden;
       font-size: var(--scale-000);
       text-overflow: ellipsis;

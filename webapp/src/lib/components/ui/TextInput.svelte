@@ -29,16 +29,16 @@
 <style lang="postcss">
   label {
     display: block;
-    margin-block: var(--size-2);
+    margin-block: 0.5rem;
   }
   input {
     display: block;
     border: 1px solid var(--color-grey-300);
     border-radius: var(--radius-md);
-    padding-inline: var(--size-3);
+    padding-inline: 0.75rem;
     width: 100%;
-    min-width: var(--size-72);
-    height: var(--size-10);
+    min-width: 18rem;
+    height: 2.5rem;
   }
 
   .invalid {

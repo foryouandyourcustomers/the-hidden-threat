@@ -2,6 +2,9 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import { getUser } from '$lib/client/game-machine/utils'
+  import Button from '$lib/components/ui/Button.svelte'
+  import Heading from '$lib/components/ui/Heading.svelte'
+  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import type { DefenderId } from '$lib/game/types'
   import PlayerConfigurator from './PlayerConfigurator.svelte'
 
@@ -29,27 +32,44 @@
   const users = useSelector(machine.service, ({ context }) => context.users)
 </script>
 
-<div class="players">
-  {#each $players as player, i}
-    <div class="player">
-      {#if player.isConfigured}
-        {$users.find((user) => user.id === player.userId)?.name}
-      {:else}
-        Nicht konfiguriert
-      {/if}
-      <button
-        disabled={!$canEdit}
-        on:click={() =>
-          machine.send({
-            type: 'start editing player',
-            playerId: $side === 'attacker' ? 'attacker' : toDefenderId(i),
-          })}
-      >
-        Rolle bestimmen
-      </button>
-    </div>
-  {/each}
-</div>
+<Heading separator>
+  Rollenverteilung
+
+  <svelte:fragment slot="info">Schritt 3 von 3</svelte:fragment>
+</Heading>
+
+<Paragraph>Die Rollenverteilung wird von der Spielleitung übernommen.</Paragraph>
+
+<section>
+  <Heading centered>{$side === 'attacker' ? 'Angriff' : 'Verteidigung'}</Heading>
+
+  <Paragraph>
+    Es müssen für jede Rolle ein:e Spieler:in bestimmt und bestätigt werden. Die restlichen
+    Teilnehmenden können das Spielgeschehen beobachten und das Team beraten.
+  </Paragraph>
+
+  <div class="players">
+    {#each $players as player, i}
+      <div class="player">
+        {#if player.isConfigured}
+          <Heading centered size="sm">{player.role}</Heading>
+          {$users.find((user) => user.id === player.userId)?.name}
+        {/if}
+        <Button
+          size="small"
+          disabled={!$canEdit}
+          on:click={() =>
+            machine.send({
+              type: 'start editing player',
+              playerId: $side === 'attacker' ? 'attacker' : toDefenderId(i),
+            })}
+        >
+          Rolle {player.isConfigured ? 'wechseln' : `${i + 1} bestimmen`}
+        </Button>
+      </div>
+    {/each}
+  </div>
+</section>
 
 {#if $editingPlayerId !== undefined}
   {#key $editingPlayerId}
@@ -60,9 +80,22 @@
 {/if}
 
 <style lang="postcss">
+  section {
+    margin-top: 3rem;
+    border-radius: var(--radius-md);
+    background: var(--color-bg-secondary);
+    padding: 1rem 1.25rem;
+  }
   .players {
     grid-gap: 1rem;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    margin-top: 1.25rem;
+    .player {
+      display: grid;
+      border-radius: var(--radius-md);
+      background: var(--color-bg);
+      padding: 1.25rem;
+    }
   }
 </style>

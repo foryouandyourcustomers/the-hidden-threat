@@ -22,6 +22,6 @@
     border: 2px solid var(--color-grey-200);
     border-radius: var(--radius-md);
     background: white;
-    padding: var(--size-2) var(--size-3);
+    padding: 0.5rem 0.75rem;
   }
 </style>

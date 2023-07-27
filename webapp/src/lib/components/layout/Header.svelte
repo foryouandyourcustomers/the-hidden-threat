@@ -7,11 +7,11 @@
 
 <style lang="postcss">
   header {
-    padding: var(--size-4) var(--size-content-px);
+    padding: 1rem var(--size-content-px);
   }
   nav {
     display: flex;
-    gap: var(--size-2);
+    gap: 0.5rem;
   }
   a {
     display: flex;
@@ -19,7 +19,7 @@
     text-decoration: none;
     &:not(:first-child)::before {
       display: inline-block;
-      margin-right: var(--size-2);
+      margin-right: 0.5rem;
       content: '/';
       color: var(--color-grey-400);
       font-size: var(--scale-000);

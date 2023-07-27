@@ -1,0 +1,18 @@
+@font-face {
+  font-weight: 500;
+  src: url('/fonts/Barlow-Medium.woff2') format('woff2');
+  font-family: 'Barlow';
+  font-display: swap;
+}
+@font-face {
+  font-weight: 700;
+  src: url('/fonts/Barlow-Bold.woff2') format('woff2');
+  font-family: 'Barlow';
+  font-display: swap;
+}
+@font-face {
+  font-weight: 500;
+  src: url('/fonts/BarlowCondensed-Medium.woff2') format('woff2');
+  font-family: 'BarlowCondensed';
+  font-display: swap;
+}

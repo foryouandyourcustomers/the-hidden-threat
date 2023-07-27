@@ -24,7 +24,7 @@
 <style lang="postcss">
   label {
     display: block;
-    margin-block: var(--size-2);
+    margin-block: 0.5rem;
   }
   .invalid {
     color: indianred;

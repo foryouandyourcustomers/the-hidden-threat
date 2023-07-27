@@ -26,6 +26,6 @@
   }
   main {
     flex: 1;
-    padding: var(--size-4) var(--size-content-px);
+    padding: 1rem var(--size-content-px);
   }
 </style>

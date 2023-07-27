@@ -23,7 +23,7 @@
 
     <div class="actions">
       <Button href="/">Abbrechen</Button>
-      <Button type="submit" accent>Beitreten</Button>
+      <Button type="submit" primary>Beitreten</Button>
     </div>
   </form>
 </CenteredContent>
@@ -31,6 +31,6 @@
 <style lang="postcss">
   .actions {
     display: flex;
-    gap: var(--size-2);
+    gap: 0.5rem;
   }
 </style>

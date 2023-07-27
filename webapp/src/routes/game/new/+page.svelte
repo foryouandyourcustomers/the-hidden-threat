@@ -24,7 +24,7 @@
 
     <div class="actions">
       <Button href="/">Abbrechen</Button>
-      <Button type="submit" accent>Start</Button>
+      <Button type="submit" primary>Start</Button>
     </div>
   </form>
 </CenteredContent>
@@ -32,6 +32,6 @@
 <style lang="postcss">
   .actions {
     display: flex;
-    gap: var(--size-2);
+    gap: 0.5rem;
   }
 </style>

@@ -2,8 +2,13 @@
   color-scheme: dark;
 }
 
+* {
+  line-height: var(--line-md);
+}
 body {
-  font-family: system-ui;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-text);
 }
 
 a {

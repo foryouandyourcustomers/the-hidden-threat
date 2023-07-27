@@ -12,13 +12,13 @@
 <style lang="postcss">
   footer {
     background: #323c3d;
-    padding: var(--size-4) var(--size-content-px);
+    padding: 1rem var(--size-content-px);
     color: white;
   }
 
   nav {
     display: flex;
-    gap: var(--size-4);
+    gap: 1rem;
     font-size: var(--scale-00);
   }
   a {

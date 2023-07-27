@@ -64,7 +64,7 @@
     display: grid;
     place-content: center;
     background: black;
-    /* padding: var(--size-2); */
+    /* padding: 0.5rem; */
     width: 100%;
     height: 100%;
   }
@@ -76,7 +76,8 @@
     grid-template-areas:
       'name characters items'
       'actions content content';
-    background: #1b253a;
+    gap: 1rem;
+    background: var(--color-bg);
     width: 90rem;
     height: 50.625rem;
     overflow: hidden;
@@ -89,18 +90,19 @@
     }
   }
   .name {
-    grid-area: 'name';
+    grid-area: name;
   }
   .characters {
-    grid-area: 'characters';
+    grid-area: characters;
   }
   .items {
-    grid-area: 'items';
+    grid-area: items;
   }
   .actions {
-    grid-area: 'actions';
+    grid-area: actions;
   }
   .content {
-    grid-area: 'content';
+    grid-area: content;
+    padding-right: 3rem;
   }
 </style>

@@ -54,8 +54,8 @@
   .emojis {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
-    gap: var(--size-1);
-    padding: var(--size-2) var(--size-3);
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
   }
   .emoji {
     display: grid;
@@ -81,7 +81,7 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0 0 30px #dd7;
-    border: var(--size-px) solid #ccc;
+    border: var(--px) solid #ccc;
     border-radius: var(--radius-full);
     background: #fafafa;
     width: var(--_width);

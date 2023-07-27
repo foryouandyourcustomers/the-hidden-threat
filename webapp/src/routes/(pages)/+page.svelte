@@ -8,7 +8,7 @@
 
 <br />
 <br />
-<Button accent href="/game/new">Neues Spiel starten</Button>
+<Button primary href="/game/new">Neues Spiel starten</Button>
 
 <style lang="postcss">
   h1 {

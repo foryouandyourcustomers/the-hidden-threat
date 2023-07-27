@@ -6,7 +6,8 @@
 <script lang="ts">
   export let size: ButtonSize = 'default'
   export let disabled = false
-  export let accent = false
+  export let disabledReason: string | undefined = undefined
+  export let primary = false
   export let href: string | undefined = undefined
   export let title: string | undefined = undefined
   export let target: string | undefined = undefined
@@ -23,10 +24,10 @@
   tabindex={tabIndex}
   on:click
   class={`button ${size}`}
-  class:accent
+  class:primary
+  title={disabled && disabledReason ? disabledReason : title}
   {type}
   {target}
-  {title}
   {href}
   disabled={disabled ? true : undefined}><slot>Press me</slot></svelte:element
 >
@@ -34,56 +35,60 @@
 <!-- class={`button ${size} ${accent ? 'accent' : ''}`} -->
 <style lang="postcss">
   .button {
-    --_padding-inline: var(--size-4);
-    --_scale: var(--scale-0);
-    --_color-text: var(--color-grey-900);
-    --_color-background: var(--color-grey-100);
-    --_color-hover-background: var(--color-grey-200);
-    --_radius: var(--radius-sm);
-    --_height: var(--size-10);
+    --_padding-inline: 1.5rem;
+    --_scale: var(--scale-2);
+    --_color-text: var(--color-text);
+    --_color-bg: transparent;
+    --_color-bg-hover: var(--color-bg-hover);
+    --_color-border: var(--color-border);
+    --_radius: var(--radius-full);
+    --_height: 3rem;
 
     display: inline-flex;
     justify-content: center;
     align-items: center;
     gap: 0.5em;
     cursor: pointer;
-    border: none;
+    border: 0.125rem solid var(--_color-border);
     border-radius: var(--_radius);
-    background-color: var(--_color-background);
+    background-color: var(--_color-bg);
     padding-inline: var(--_padding-inline);
     height: var(--_height);
     color: var(--_color-text);
     font-weight: var(--weight-semibold);
     font-size: var(--_scale);
+    font-family: BarlowCondensed, sans-serif;
     text-decoration: none;
+    text-transform: uppercase;
     white-space: nowrap;
 
     &:hover {
-      background-color: var(--_color-hover-background);
+      box-shadow: 0 0 6px var(--color-shadow);
+      background-color: var(--_color-bg-hover);
     }
 
-    &.accent {
-      --_color-background: var(--color-blue-700);
-      --_color-hover-background: var(--color-blue-500);
-      --_color-text: white;
+    &.primary {
+      --_color-bg: var(--color-bg-contrast);
+      --_color-bg-hover: var(--color-bg-contrast);
+      --_color-text: var(--color-text-oncontrast);
     }
 
     &.big {
-      --_height: var(--size-12);
-      --_padding-inline: var(--size-6);
+      --_height: 3rem;
+      --_padding-inline: 1.5rem;
     }
     &.small {
-      --_height: var(--size-8);
-      --_padding-inline: var(--size-3);
+      --_height: 2.5rem;
+      --_padding-inline: 1.5rem;
     }
 
     &[disabled] {
       --_color-text: var(--color-grey-300);
-      --_color-background: var(--color-grey-500);
+      --_color-bg: var(--color-grey-500);
       cursor: not-allowed;
       &.accent {
         --_color-text: var(--color-grey-400);
-        --_color-background: var(--color-grey-600);
+        --_color-bg: var(--color-grey-600);
       }
     }
   }

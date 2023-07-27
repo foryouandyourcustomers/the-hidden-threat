@@ -1,5 +1,20 @@
 :root {
-  --size-default-px: var(--size-4);
+  --size-default-px: 1rem;
   --size-content-px: max(var(--size-default-px), (100vw - var(--width-content-max)) / 2);
-  --size-content-py: var(--size-12-24);
+  --size-content-py: 3.5rem;
+}
+
+:root {
+  /* Colors */
+  --color-bg: var(--color-blue-13);
+  --color-text: white;
+  --color-border: white;
+  --color-shadow: #fffa;
+
+  --color-bg-secondary: var(--color-blue-12);
+
+  --color-bg-hover: var(--color-blue-12);
+
+  --color-bg-contrast: white;
+  --color-text-oncontrast: var(--color-blue-13);
 }

@@ -17,7 +17,7 @@
     display: grid;
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
-    gap: var(--size-2);
+    gap: 0.5rem;
     margin: 0 auto;
     aspect-ratio: var(--column-count) / var(--row-count);
     max-width: 90vw;

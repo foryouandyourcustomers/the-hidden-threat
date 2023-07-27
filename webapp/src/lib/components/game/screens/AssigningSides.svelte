@@ -1,6 +1,8 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import Button from '$lib/components/ui/Button.svelte'
+  import Heading from '$lib/components/ui/Heading.svelte'
   import type { Side } from '$lib/game/types'
 
   const { userId, machine } = getGameContext()
@@ -32,14 +34,23 @@
   }
 </script>
 
-<h1>Einteilung in Teams</h1>
+<Heading separator>
+  Einteilung in Teams
+
+  <svelte:fragment slot="info">Schritt 2 von 3</svelte:fragment>
+</Heading>
+
+<p>
+  Gleich geht’s los. Sobald alle Teilnehmende sich eingeloggt haben, kann die Spielleitung alle in
+  Teams einteilen.
+</p>
 
 <div class="users">
   {#each $users as user}
     <div class="user">
       {user.name}
       {#if user.isAdmin}
-        <span class="admin">admin</span>
+        <span class="admin">(admin)</span>
       {/if}
       {#if user.isSideAssigned}
         <span class="side">
@@ -51,21 +62,24 @@
         </span>
       {/if}
       {#if $canAssignSides}
-        <button on:click={() => assignSide(user.id, 'attacker')}>Angriff</button>
-        <button on:click={() => assignSide(user.id, 'defender')}>Verteidigung</button>
+        <Button on:click={() => assignSide(user.id, 'attacker')}>Angriff</Button>
+        <Button on:click={() => assignSide(user.id, 'defender')}>Verteidigung</Button>
       {/if}
       {#if $canAssignAdmin && user.id !== userId}
-        <button on:click={() => assignAdmin(user.id, !user.isAdmin)}>Toggle Admin</button>
+        <Button on:click={() => assignAdmin(user.id, !user.isAdmin)}>Toggle Admin</Button>
       {/if}
     </div>
   {/each}
 </div>
 
 {#if $canContinue}
-  <button on:click={() => machine.send({ type: 'next step' })}>Next</button>
+  <Button on:click={() => machine.send({ type: 'next step' })}>Next</Button>
 {/if}
 
 <style lang="postcss">
+  .users {
+    margin-block: 3rem;
+  }
   .side {
     display: inline-block;
     border-radius: 0.5em;
