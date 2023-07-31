@@ -2,13 +2,16 @@
   import { useMachine } from '$lib/@xstate/svelte/useMachine.js'
   import { setGameContext } from '$lib/client/game-context.js'
   import { getClientGameMachine } from '$lib/client/game-machine/configured.js'
+  import { getUser } from '$lib/client/game-machine/utils'
   import { createWebSocketConnection } from '$lib/client/web-socket'
   import CursorOverlays from '$lib/components/game/CursorOverlays.svelte'
   import Emojis from '$lib/components/game/Emojis.svelte'
   import Game from '$lib/components/game/Game.svelte'
   import { play } from '$lib/sound/index.js'
+  import { useSelector } from '$lib/@xstate/svelte'
   import throttle from 'lodash/throttle'
   import { onMount } from 'svelte'
+  import isEqual from 'lodash/isEqual'
 
   export let data
 
@@ -45,7 +48,9 @@
     },
   )
 
-  setGameContext({ gameId, userId, hostUserId, machine })
+  const user = useSelector(machine.service, ({ context }) => getUser(context), isEqual)
+
+  setGameContext({ gameId, userId, user, hostUserId, machine })
 
   const state = machine.state
 

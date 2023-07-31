@@ -105,7 +105,7 @@ export const machine = createMachine({
             'The game is active and started. Now the server only waits for the game actions from the users.',
           always: {
             target: 'Finished',
-            guard: 'gameIsFinished',
+            guard: 'gameFinished',
             reenter: false,
           },
           on: {
