@@ -159,12 +159,12 @@ export const machine = createMachine({
         'Waiting for other side': {},
       },
       always: {
-        target: 'Ingame',
+        target: 'Playing',
         guard: 'finishedAssigningRoles',
         reenter: false,
       },
     },
-    Ingame: {
+    Playing: {
       states: {
         Gameloop: {
           initial: 'Waiting',

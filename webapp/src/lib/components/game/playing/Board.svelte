@@ -1,10 +1,12 @@
 <script lang="ts">
-  import Square from '$lib/components/game/Square.svelte'
-  const columnCount = 10
+  import Backdrop from '$lib/components/game/playing/Backdrop.svelte'
+  import Square from './Square.svelte'
+  const columnCount = 9
   const rowCount = 8
 </script>
 
 <div class="board" style:--column-count={columnCount} style:--row-count={rowCount}>
+  <Backdrop />
   {#each [...new Array(rowCount)] as _, rowIndex}
     {#each [...new Array(columnCount)] as _, columnIndex}
       <Square {columnIndex} {rowIndex} />
@@ -20,7 +22,7 @@
     gap: 0.5rem;
     margin: 0 auto;
     aspect-ratio: var(--column-count) / var(--row-count);
-    max-width: 90vw;
-    max-height: 90vw;
+    max-width: 60%;
+    max-height: 100%;
   }
 </style>

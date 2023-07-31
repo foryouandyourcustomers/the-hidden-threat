@@ -54,15 +54,6 @@
 
   const state = machine.state
 
-  // const { state, send, service } = useMachine(clientMachine, {
-  //   input: { gameId: $page.params.gameId },
-  // })
-
-  // const gameId = useSelector(service, (state) => {
-  //   return state.context.gameId
-  // })
-  // $: userInGame = $state.matches('Ingame')
-
   onMount(() => {
     socketConnection.open()
     return () => {

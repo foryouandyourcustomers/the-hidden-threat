@@ -1,7 +1,9 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import Lobby from './screens/Lobby.svelte'
+  import Lobby from './lobby/Lobby.svelte'
+  import Playing from './playing/Playing.svelte'
+  import Finished from './finished/Finished.svelte'
 
   const { machine } = getGameContext()
 
@@ -24,12 +26,16 @@
     reportMousePosition([(x - (1 - scale) / 2) / scale, (y - (1 - scale) / 2) / scale])
   }
 
-  type Section = 'Lobby' | 'Ingame' | undefined
+  type Section = 'Lobby' | 'Playing' | 'Finished' | undefined
 
   const section = useSelector(machine.service, (snapshot) => {
     let section: Section = undefined
     if (snapshot.matches('Lobby')) {
       section = 'Lobby'
+    } else if (snapshot.matches('Playing')) {
+      section = 'Playing'
+    } else if (snapshot.matches('Finished')) {
+      section = 'Finished'
     }
     return section
   })
@@ -51,8 +57,12 @@
     <div class="content">
       {#if $section === 'Lobby'}
         <Lobby />
+      {:else if $section === 'Playing'}
+        <Playing />
+      {:else if $section === 'Finished'}
+        <Finished />
       {:else}
-        ...
+        Unkown state
       {/if}
     </div>
     <slot name="cursor-overlays" />
