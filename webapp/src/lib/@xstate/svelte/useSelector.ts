@@ -16,13 +16,17 @@ export const useSelector = <TActor extends ActorRef<any, any>, T>(
   let prevSelected = selector(actor.getSnapshot())
 
   const selected = readable(prevSelected, (set) => {
-    sub = actor.subscribe((state) => {
+    const onNext = (state: SnapshotFrom<TActor>) => {
       const nextSelected = selector(state)
       if (!compare(prevSelected, nextSelected)) {
         prevSelected = nextSelected
         set(nextSelected)
       }
-    })
+    }
+
+    onNext(actor.getSnapshot())
+
+    sub = actor.subscribe(onNext)
 
     return () => {
       sub.unsubscribe()
