@@ -1,19 +1,10 @@
 import Tooltip from '$lib/components/ui/TooltipFromAction.svelte'
-export function tooltip(element: HTMLElement) {
-  const title = element.getAttribute('title')
-  if (!title)
-    return {
-      destroy() {
-        // Nothing todo without a title
-      },
-    }
+import type { Action } from 'svelte/action'
+
+export const tooltip: Action<HTMLElement, string> = (element, title) => {
   let tooltipComponent: Tooltip | undefined
 
   function mouseOver(event: MouseEvent) {
-    // NOTE: remove the `title` attribute, to prevent showing the default browser tooltip
-    // remember to set it back on `mouseleave`
-    element.removeAttribute('title')
-
     tooltipComponent =
       tooltipComponent ??
       new Tooltip({
@@ -34,20 +25,37 @@ export function tooltip(element: HTMLElement) {
   function mouseLeave() {
     tooltipComponent?.$destroy()
     tooltipComponent = undefined
-    // NOTE: restore the `title` attribute
-    element.setAttribute('title', title ?? '')
   }
 
-  element.addEventListener('mouseover', mouseOver)
-  element.addEventListener('mouseleave', mouseLeave)
-  element.addEventListener('mousemove', mouseMove)
+  let didSetup = false
+  const setup = () => {
+    if (didSetup) return
+    didSetup = true
+    element.addEventListener('mouseover', mouseOver)
+    element.addEventListener('mouseleave', mouseLeave)
+    element.addEventListener('mousemove', mouseMove)
+  }
+  const tearDown = () => {
+    didSetup = false
+    tooltipComponent?.$destroy()
+    element.removeEventListener('mouseover', mouseOver)
+    element.removeEventListener('mouseleave', mouseLeave)
+    element.removeEventListener('mousemove', mouseMove)
+  }
+
+  if (title) setup()
 
   return {
     destroy() {
-      tooltipComponent?.$destroy()
-      element.removeEventListener('mouseover', mouseOver)
-      element.removeEventListener('mouseleave', mouseLeave)
-      element.removeEventListener('mousemove', mouseMove)
+      tearDown()
+    },
+    update(newTitle) {
+      title = newTitle
+      if (title) {
+        setup()
+      } else {
+        tearDown()
+      }
     },
   }
 }

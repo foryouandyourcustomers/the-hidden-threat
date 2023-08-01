@@ -5,7 +5,7 @@
 </script>
 
 {#if title}
-  <div {title} use:tooltip>
+  <div use:tooltip={title}>
     <slot />
   </div>
 {:else}
