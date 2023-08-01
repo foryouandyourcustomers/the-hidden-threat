@@ -3,6 +3,7 @@
   import { getGameContext } from '$lib/client/game-context'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
+  import Dialog from '$lib/components/ui/Dialog.svelte'
   import { FACES, type FaceId } from '$lib/game/constants'
   import { isDefenderId, type DefenderId, type PlayerId, type Side } from '$lib/game/types'
   import Face from '../Face.svelte'
@@ -51,57 +52,57 @@
   }
 </script>
 
-<div class="configurator">
-  <select disabled={!$canUpdate} on:input={(e) => setUser(e.currentTarget.value)} value={userId}>
-    <option value="">--PLEASE SELECT--</option>
-    {#each $usersOnThisSide as user}
-      <option value={user.id}>{user.name}</option>
-    {/each}
-  </select>
+<Dialog
+  title="Rolle bestimmen"
+  open
+  on:close={() => machine.send({ type: 'stop editing player', side })}
+>
+  <div class="configurator">
+    <select disabled={!$canUpdate} on:input={(e) => setUser(e.currentTarget.value)} value={userId}>
+      <option value="">--PLEASE SELECT--</option>
+      {#each $usersOnThisSide as user}
+        <option value={user.id}>{user.name}</option>
+      {/each}
+    </select>
 
-  <div class="faces">
-    {#each FACES as face}
-      <button
+    <div class="faces">
+      {#each FACES as face}
+        <button
+          disabled={!$canUpdate}
+          class:active={face.id === faceId}
+          class="unstyled face"
+          on:click={() => setFace(face.id)}
+        >
+          <Face faceId={face.id} />
+        </button>
+      {/each}
+    </div>
+
+    <Actions>
+      <Button
+        primary
         disabled={!$canUpdate}
-        class:active={face.id === faceId}
-        class="face"
-        on:click={() => setFace(face.id)}
+        on:click={() => machine.send({ type: 'stop editing player', side })}
       >
-        <Face faceId={face.id} />
-      </button>
-    {/each}
+        Bestätigen und weiter
+      </Button>
+    </Actions>
   </div>
-
-  <Actions>
-    <Button
-      primary
-      disabled={!$canUpdate}
-      on:click={() => machine.send({ type: 'stop editing player', side })}
-    >
-      Bestätigen und weiter
-    </Button>
-  </Actions>
-</div>
+</Dialog>
 
 <style lang="postcss">
   .configurator {
     display: grid;
-    position: fixed;
     place-content: center;
     gap: 1rem;
-    z-index: 100000;
-    inset: 0;
-    background: #000e;
   }
 
   .faces {
     display: flex;
     gap: 1rem;
-    button {
-      cursor: pointer;
-      border: 1px solid black;
-      background: black;
-      color: white;
+    .face {
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
 
       &.active {
         border-color: orange;

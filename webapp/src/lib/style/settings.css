@@ -4,7 +4,8 @@
   --size-content-py: 3.5rem;
 }
 
-:root {
+:root,
+::backdrop {
   /* Colors */
   --color-bg: #1b253a;
   --color-text: white;
@@ -14,7 +15,8 @@
   --color-border-disabled: #b7b2af;
   --color-text-disabled: #b7b2af;
 
-  --color-bg-secondary: var(--color-blue-12);
+  --color-bg-secondary: #29344e;
+  --color-shadow-secondary: #1c2526;
 
   --color-bg-hover: var(--color-blue-12);
 
