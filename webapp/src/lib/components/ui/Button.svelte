@@ -4,6 +4,7 @@
 </script>
 
 <script lang="ts">
+  import Tooltip from '$lib/components/ui/Tooltip.svelte'
   export let size: ButtonSize = 'default'
   export let disabled = false
   export let disabledReason: string | undefined = undefined
@@ -18,19 +19,20 @@
 <!--
   It's fine to ignore this warning, because we render either <a> or <button> tag
 -->
-<svelte:element
-  this={href ? 'a' : 'button'}
-  role="button"
-  tabindex={tabIndex}
-  on:click
-  class={`button ${size}`}
-  class:primary
-  title={disabled && disabledReason ? disabledReason : title}
-  {type}
-  {target}
-  {href}
-  disabled={disabled ? true : undefined}><slot>Press me</slot></svelte:element
->
+<Tooltip title={disabled && disabledReason ? disabledReason : title}>
+  <svelte:element
+    this={href ? 'a' : 'button'}
+    role="button"
+    tabindex={tabIndex}
+    on:click
+    class={`button ${size}`}
+    class:primary
+    {type}
+    {target}
+    {href}
+    disabled={disabled ? true : undefined}><slot>Press me</slot></svelte:element
+  >
+</Tooltip>
 
 <!-- class={`button ${size} ${accent ? 'accent' : ''}`} -->
 <style lang="postcss">
@@ -88,6 +90,7 @@
       --_color-border: var(--color-border-disabled);
       opacity: 0.6;
       cursor: not-allowed;
+      pointer-events: none;
       &.primary {
         --_color-text: var(--color-text-disabled-onstrong);
         --_color-bg: var(--color-bg-disabled-strong);
