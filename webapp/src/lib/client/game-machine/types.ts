@@ -39,7 +39,7 @@ export type NativeClientEvent =
   | {
       type: 'assign role'
       playerId: PlayerId
-      face: FaceId
+      faceId: FaceId
       role: Role
       /** Not using `userId` since client events cannot use userId because it'll
        * be overwritten by the server */

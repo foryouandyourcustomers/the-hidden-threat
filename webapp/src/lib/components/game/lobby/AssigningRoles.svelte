@@ -1,12 +1,12 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import { getUser } from '$lib/client/game-machine/utils'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import type { DefenderId } from '$lib/game/types'
+  import Face from '../Face.svelte'
   import PlayerConfigurator from './PlayerConfigurator.svelte'
 
   const { machine, user } = getGameContext()
@@ -53,6 +53,7 @@
         {#if player.isConfigured}
           <Heading centered size="sm">{player.role}</Heading>
           {$users.find((user) => user.id === player.userId)?.name}
+          <Face faceId={player.faceId} />
         {/if}
         <Button
           size="small"
@@ -102,9 +103,12 @@
     grid-gap: 1rem;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    align-items: start;
     margin-top: 1.25rem;
     .player {
       display: grid;
+      justify-items: center;
+      gap: 1rem;
       border-radius: var(--radius-md);
       background: var(--color-bg);
       padding: 1.25rem;

@@ -7,7 +7,7 @@ import type { Attacker, Defender } from '$lib/game/types'
 export const createDefaultDefender = (hostUserId: string): Defender => ({
   userId: hostUserId,
   position: [0, 0],
-  face: 'other',
+  faceId: 0,
   role: 'dispatch-manager',
   isConfigured: false,
 })
@@ -18,7 +18,7 @@ export const createDefaultDefender = (hostUserId: string): Defender => ({
  */
 export const createDefaultAttacker = (hostUserId: string): Attacker => ({
   userId: hostUserId,
-  face: 'other',
+  faceId: 0,
   position: [0, 0],
   role: 'disappointment',
   isConfigured: false,

@@ -3,6 +3,7 @@
   import { getGameContext } from '$lib/client/game-context'
   import { FACES, type FaceId } from '$lib/game/constants'
   import { isDefenderId, type DefenderId, type PlayerId, type Side } from '$lib/game/types'
+  import Face from '../Face.svelte'
 
   export let playerId: PlayerId
 
@@ -20,11 +21,11 @@
     context.users.filter((user) => user.side === side),
   )
   const canUpdate = useSelector(machine.service, (snapshot) =>
-    snapshot.can({ type: 'assign role', role, playerId, playingUserId: userId, face }),
+    snapshot.can({ type: 'assign role', role, playerId, playingUserId: userId, faceId: faceId }),
   )
 
   $: userId = $player.userId
-  $: face = $player.face
+  $: faceId = $player.faceId
   $: role = $player.role
 
   const sendUpdate = () => {
@@ -33,12 +34,12 @@
       role,
       playerId,
       playingUserId: userId,
-      face,
+      faceId,
     })
   }
 
-  const setFace = (newFace: string) => {
-    face = newFace as FaceId
+  const setFace = (newFace: number) => {
+    faceId = newFace as FaceId
     sendUpdate()
   }
   const setUser = (newUserId: string) => {
@@ -57,13 +58,15 @@
   </select>
 
   <div class="faces">
-    {#each Object.entries(FACES) as [thisFaceId, thisFace]}
+    {#each FACES as face}
       <button
         disabled={!$canUpdate}
-        class:active={thisFaceId === face}
+        class:active={face.id === faceId}
         class="face"
-        on:click={() => setFace(thisFaceId)}>{thisFace}</button
+        on:click={() => setFace(face.id)}
       >
+        <Face faceId={face.id} />
+      </button>
     {/each}
   </div>
 

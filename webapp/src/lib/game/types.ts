@@ -83,7 +83,7 @@ export type DefenderRole =
 export type Player = {
   position: Coordinate
   userId: string
-  face: FaceId
+  faceId: FaceId
   /**
    * If false the player still has default values.
    * True, after an admin configured the player.
