@@ -8,12 +8,18 @@
 
   type MousePositions = { [key: string]: [number, number] }
 
-  const context = getGameContext()
+  const { user, machine } = getGameContext()
 
   let gameWidth = 1
   let gameHeight = 1
 
-  const users = useSelector(context.machine.service, (state) => state.context.users)
+  const users = useSelector(machine.service, (state) => {
+    const showAllUsers = state.matches('Lobby.Assigning sides') || state.matches('Finished')
+
+    return showAllUsers
+      ? state.context.users
+      : state.context.users.filter((otherUser) => otherUser.side === $user.side)
+  })
   const getMousePositions = (users: User[], mousePositions: MousePositions) => {
     return users
       .filter((user) => user.isConnected && !!mousePositions[user.id])
