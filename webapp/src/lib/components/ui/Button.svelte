@@ -62,15 +62,16 @@
     text-transform: uppercase;
     white-space: nowrap;
 
-    &:hover {
+    &:hover:not([disabled]) {
       box-shadow: 0 0 6px var(--color-shadow);
       background-color: var(--_color-bg-hover);
     }
 
     &.primary {
-      --_color-bg: var(--color-bg-contrast);
-      --_color-bg-hover: var(--color-bg-contrast);
-      --_color-text: var(--color-text-oncontrast);
+      --_color-bg: var(--color-bg-strong);
+      --_color-bg-hover: var(--color-bg-strong);
+      --_color-text: var(--color-text-onstrong);
+      --_color-border: transparent;
     }
 
     &.big {
@@ -83,12 +84,14 @@
     }
 
     &[disabled] {
-      --_color-text: var(--color-grey-300);
-      --_color-bg: var(--color-grey-500);
+      --_color-text: var(--color-text-disabled);
+      --_color-border: var(--color-border-disabled);
+      opacity: 0.6;
       cursor: not-allowed;
-      &.accent {
-        --_color-text: var(--color-grey-400);
-        --_color-bg: var(--color-grey-600);
+      &.primary {
+        --_color-text: var(--color-text-disabled-onstrong);
+        --_color-bg: var(--color-bg-disabled-strong);
+        --_color-border: transparent;
       }
     }
   }

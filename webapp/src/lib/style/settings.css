@@ -6,15 +6,21 @@
 
 :root {
   /* Colors */
-  --color-bg: var(--color-blue-13);
+  --color-bg: #1b253a;
   --color-text: white;
   --color-border: white;
   --color-shadow: #fffa;
+
+  --color-border-disabled: #b7b2af;
+  --color-text-disabled: #b7b2af;
 
   --color-bg-secondary: var(--color-blue-12);
 
   --color-bg-hover: var(--color-blue-12);
 
-  --color-bg-contrast: white;
-  --color-text-oncontrast: var(--color-blue-13);
+  --color-bg-strong: white;
+  --color-text-onstrong: var(--color-blue-13);
+
+  --color-bg-disabled-strong: #dedddd;
+  --color-text-disabled-onstrong: #85817e;
 }

@@ -2,6 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import { getUser } from '$lib/client/game-machine/utils'
+  import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
@@ -68,16 +69,19 @@
     {/each}
   </div>
 </section>
-<Button
-  primary
-  disabled={!$canContinue}
-  disabledReason={$user.isAdmin
-    ? 'Alle Rollen müssen zugewiesen sein'
-    : 'Nur Administrator:innen dürfen bestätigen'}
-  on:click={() => machine.send({ type: 'next step' })}
->
-  Bestätigen und weiter
-</Button>
+
+<Actions>
+  <Button
+    primary
+    disabled={!$canContinue}
+    disabledReason={$user.isAdmin
+      ? 'Alle Rollen müssen zugewiesen sein'
+      : 'Nur Administrator:innen dürfen bestätigen'}
+    on:click={() => machine.send({ type: 'next step' })}
+  >
+    Bestätigen und weiter
+  </Button>
+</Actions>
 
 {#if $editingPlayerId !== undefined}
   {#key $editingPlayerId}

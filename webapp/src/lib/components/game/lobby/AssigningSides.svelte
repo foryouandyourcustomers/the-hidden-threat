@@ -1,11 +1,12 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import type { Side } from '$lib/game/types'
 
-  const { userId, machine } = getGameContext()
+  const { userId, user, machine } = getGameContext()
 
   const canAssignSides = useSelector(machine.service, (snapshot) =>
     snapshot.can({ type: 'assign side', otherUserId: '', side: 'attacker' }),
@@ -72,9 +73,16 @@
   {/each}
 </div>
 
-{#if $canContinue}
-  <Button on:click={() => machine.send({ type: 'next step' })}>Next</Button>
-{/if}
+<Actions>
+  <Button
+    primary
+    disabled={!$canContinue}
+    disabledReason={$user.isAdmin
+      ? 'Alle Spieler:innen müssen einer Seite zugewiesen sein'
+      : 'Nur Administrator:innen dürfen bestätigen'}
+    on:click={() => machine.send({ type: 'next step' })}>Next</Button
+  >
+</Actions>
 
 <style lang="postcss">
   .users {
