@@ -16,9 +16,8 @@
   const users = useSelector(machine.service, (state) => {
     const showAllUsers = state.matches('Lobby.Assigning sides') || state.matches('Finished')
 
-    return showAllUsers
-      ? state.context.users
-      : state.context.users.filter((otherUser) => otherUser.side === $user.side)
+    const allUsers = state.context.users.filter((user) => user.isConnected)
+    return showAllUsers ? allUsers : allUsers.filter((otherUser) => otherUser.side === $user.side)
   })
   const getMousePositions = (users: User[], mousePositions: MousePositions) => {
     return users

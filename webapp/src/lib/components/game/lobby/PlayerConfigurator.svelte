@@ -1,6 +1,8 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import Actions from '$lib/components/ui/Actions.svelte'
+  import Button from '$lib/components/ui/Button.svelte'
   import { FACES, type FaceId } from '$lib/game/constants'
   import { isDefenderId, type DefenderId, type PlayerId, type Side } from '$lib/game/types'
   import Face from '../Face.svelte'
@@ -70,10 +72,15 @@
     {/each}
   </div>
 
-  <button
-    disabled={!$canUpdate}
-    on:click={() => machine.send({ type: 'stop editing player', side })}>Close</button
-  >
+  <Actions>
+    <Button
+      primary
+      disabled={!$canUpdate}
+      on:click={() => machine.send({ type: 'stop editing player', side })}
+    >
+      Bestätigen und weiter
+    </Button>
+  </Actions>
 </div>
 
 <style lang="postcss">
@@ -91,7 +98,10 @@
     display: flex;
     gap: 1rem;
     button {
+      cursor: pointer;
       border: 1px solid black;
+      background: black;
+      color: white;
 
       &.active {
         border-color: orange;
