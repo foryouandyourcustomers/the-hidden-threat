@@ -41,7 +41,7 @@
     --_scale: var(--scale-2);
     --_color-text: var(--color-text);
     --_color-bg: transparent;
-    --_color-bg-hover: var(--color-bg-hover);
+    --_color-bg-hover: var(--color-blue-transparent);
     --_color-border: var(--color-border);
     --_radius: var(--radius-full);
     --_height: 3rem;

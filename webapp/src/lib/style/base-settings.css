@@ -1,42 +1,12 @@
 :root,
 ::backdrop {
   /* Colors */
+  --color-blue-spielbrett: #1b253a;
+  --color-blue-transparent: rgba(81, 80, 168, 0.1);
 
-  /** Import string:
- * [{"name":"blue","lightness":{"name":"sine","start":0,"end":0.45,"min":0.15,"max":0.99},"chroma":{"name":"sine","start":0.05,"end":0.9,"min":0.006,"max":0.07},"hue":{"name":"linear","start":0,"end":1,"min":266,"max":266},"count":15},{"name":"red","lightness":{"name":"sine","start":0,"end":0.45,"min":0.15,"max":0.99},"chroma":{"name":"sine","start":0.05,"end":0.9,"min":0.025,"max":0.21},"hue":{"name":"linear","start":0,"end":1,"min":21.6,"max":21.6}}]
- */
-
-  --color-blue-1: oklch(99% 0.006 266);
-  --color-blue-2: oklch(98.125% 0.0121 266);
-  --color-blue-3: oklch(95.5354% 0.0218 266);
-  --color-blue-4: oklch(91.3365% 0.0337 266);
-  --color-blue-5: oklch(85.6991% 0.0462 266);
-  --color-blue-6: oklch(78.8523% 0.0574 266);
-  --color-blue-7: oklch(71.0744% 0.0657 266);
-  --color-blue-8: oklch(62.6815% 0.07 266);
-  --color-blue-9: oklch(54.0148% 0.0696 266);
-  --color-blue-10: oklch(45.4267% 0.0645 266);
-  --color-blue-11: oklch(37.2661% 0.0556 266);
-  --color-blue-12: oklch(29.865% 0.044 266);
-  --color-blue-13: oklch(23.524% 0.0315 266);
-  --color-blue-14: oklch(18.5009% 0.0198 266);
-  --color-blue-15: oklch(15% 0.0107 266);
-
-  --color-red-1: oklch(99% 0.025 21.6);
-  --color-red-2: oklch(98.125% 0.0425 21.6);
-  --color-red-3: oklch(95.5354% 0.0705 21.6);
-  --color-red-4: oklch(91.3365% 0.1051 21.6);
-  --color-red-5: oklch(85.6991% 0.1411 21.6);
-  --color-red-6: oklch(78.8523% 0.1736 21.6);
-  --color-red-7: oklch(71.0744% 0.1977 21.6);
-  --color-red-8: oklch(62.6815% 0.21 21.6);
-  --color-red-9: oklch(54.0148% 0.2088 21.6);
-  --color-red-10: oklch(45.4267% 0.1942 21.6);
-  --color-red-11: oklch(37.2661% 0.1683 21.6);
-  --color-red-12: oklch(29.865% 0.1349 21.6);
-  --color-red-13: oklch(23.524% 0.0987 21.6);
-  --color-red-14: oklch(18.5009% 0.065 21.6);
-  --color-red-15: oklch(15% 0.0386 21.6);
+  --color-grey-light: #dedddd;
+  --color-grey-medium: #b7b2af;
+  --color-grey-dark: #85817e;
 
   /* Font sizes */
   --scale-0: 1rem;
