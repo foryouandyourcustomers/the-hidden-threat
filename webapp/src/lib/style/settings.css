@@ -1,11 +1,19 @@
-:root {
+:root,
+::backdrop {
   --size-default-px: 1rem;
   --size-content-px: max(var(--size-default-px), (100vw - var(--width-content-max)) / 2);
   --size-content-py: 3.5rem;
-}
 
-:root,
-::backdrop {
+  /* Fonts */
+  --display-h1: var(--weight-medium) var(--scale-6) / 1.5 var(--font-display);
+  --display-h2: var(--weight-medium) var(--scale-5) / 1.5 var(--font-display);
+  --display-h3: var(--weight-medium) var(--scale-3) / 1.5 var(--font-display);
+  --display-h4: var(--weight-bold) var(--scale-1) / 1.5 var(--font-text);
+
+  --text-big: var(--weight-regular) var(--scale-2) / 1.5 var(--font-text);
+  --text-regular: var(--weight-regular) var(--scale-1) / 1.5 var(--font-text);
+  --text-small: var(--weight-regular) var(--scale-00) / 1.5 var(--font-text);
+
   /* Colors */
   --color-bg: var(--color-blue-spielbrett);
   --color-text: white;

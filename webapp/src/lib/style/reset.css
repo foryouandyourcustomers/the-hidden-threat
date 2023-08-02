@@ -26,6 +26,14 @@ canvas {
   display: block;
 }
 
+img,
+svg,
+picture,
+video,
+canvas {
+  max-width: 100%;
+}
+
 input,
 button,
 textarea,

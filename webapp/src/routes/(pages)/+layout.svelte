@@ -2,6 +2,7 @@
   import { navigating } from '$app/stores'
   import Footer from '$lib/components/layout/Footer.svelte'
   import Header from '$lib/components/layout/Header.svelte'
+  import Partner from './Partner.svelte'
 </script>
 
 <div class="layout">
@@ -15,6 +16,7 @@
     {/if}
   </main>
 
+  <Partner />
   <Footer />
 </div>
 
@@ -26,6 +28,6 @@
   }
   main {
     flex: 1;
-    padding: 1rem var(--size-content-px);
+    padding: 0 0 6rem 0;
   }
 </style>

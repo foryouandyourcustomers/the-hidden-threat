@@ -1,6 +1,7 @@
 :root,
 ::backdrop {
   /* Colors */
+  /* These have the same name as in Figma */
   --color-blue-spielbrett: #1b253a;
   --color-blue-transparent: rgba(81, 80, 168, 0.1);
 

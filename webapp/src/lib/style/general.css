@@ -24,3 +24,18 @@ body {
   padding: 0;
   color: inherit;
 }
+
+:where(.richtext) {
+  h1 {
+    font: var(--display-h1);
+  }
+  h2 {
+    font: var(--display-h2);
+  }
+  h3 {
+    font: var(--display-h3);
+  }
+  h4 {
+    font: var(--display-h4);
+  }
+}

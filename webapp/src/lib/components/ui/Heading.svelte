@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let size: 'sm' | 'md' | 'lg' | 'xl' = 'md'
+  export let size: 'sm' | 'md' | 'lg' | 'xl' = 'lg'
   export let id: string | undefined = undefined
   export let separator = false
   export let centered = false
@@ -46,14 +46,24 @@
       font-family: var(--font-display);
       text-transform: uppercase;
     }
+    &.size-xl {
+      .h {
+        font: var(--display-h1);
+      }
+    }
+    &.size-lg {
+      .h {
+        font: var(--display-h2);
+      }
+    }
     &.size-md {
       .h {
-        font-size: 2.25rem;
+        font: var(--display-h3);
       }
     }
     &.size-sm {
       .h {
-        font-size: 1.5rem;
+        font: var(--display-h4);
       }
     }
     .info {
