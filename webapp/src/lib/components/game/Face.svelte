@@ -5,7 +5,7 @@
 </script>
 
 {#if faceId === 0}
-  <svg width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -14,7 +14,7 @@
     />
   </svg>
 {:else if faceId === 1}
-  <svg width="56" height="57" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -23,7 +23,7 @@
     />
   </svg>
 {:else if faceId === 2}
-  <svg width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -32,7 +32,7 @@
     />
   </svg>
 {:else if faceId === 3}
-  <svg width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -41,7 +41,7 @@
     />
   </svg>
 {:else if faceId === 4}
-  <svg width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -50,7 +50,7 @@
     />
   </svg>
 {:else if faceId === 5}
-  <svg width="56" height="57" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -59,7 +59,7 @@
     />
   </svg>
 {:else if faceId === 6}
-  <svg width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"
@@ -68,7 +68,7 @@
     />
   </svg>
 {:else if faceId === 7}
-  <svg width="56" height="57" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M24.34 44.25a1.62 1.62 0 0 1-1.39-.83c-.37.22-.86.37-1.36.14-.62-.3-.8-1.02-.64-1.59.1-.4.34-.73.54-1.02l.14-.2c1.26-1.9 1.23-4.3 1.06-7a.44.44 0 0 1 .42-.45c.25-.02.47.16.48.4.17 2.85.2 5.39-1.2 7.51-.06.07-.1.15-.15.22-.18.26-.35.5-.42.75-.06.23 0 .52.17.6.19.1.52-.06.95-.43a.47.47 0 0 1 .5-.06c.17.08.27.25.25.43-.02.15.04.3.17.44a.7.7 0 0 0 .52.22c.37-.02.72-.4.72-.78 0-.23.19-.42.42-.43.24-.01.45.15.48.37 0 .1.11.16.17.19.16.07.36.07.48-.01.33-.2.41-.68.35-1.04a4.13 4.13 0 0 0-.45-1.16l-.13-.24c-.99-2-1.38-4.3-1.09-6.5.03-.24.25-.4.5-.38.25.03.42.24.39.48a10.8 10.8 0 0 0 1 6.02l.13.24c.22.44.45.89.54 1.4.13.8-.17 1.53-.75 1.9a1.48 1.48 0 0 1-1.41.03 1.7 1.7 0 0 1-1.31.77h-.07v.01Zm6.73-10.12c-.56 0-1.14-.01-1.7-.05-1.17-.07-1.34-.67-1.36-.85-.07-.51.39-1 1.14-1.23a5.76 5.76 0 0 1 1.69-.23c1.05 0 2.08.2 2.76.37.18.05.36.1.51.24a.7.7 0 0 1 .26.6 1 1 0 0 1-.39.76c-.35.27-.8.32-1.2.34-.57.04-1.14.06-1.7.06h-.01Zm-.24-1.78c-.57 0-1.08.06-1.5.2-.54.16-.75.45-.73.61.02.15.28.31.8.35 1.1.07 2.23.07 3.33 0 .34-.02.65-.05.87-.22.1-.08.17-.2.17-.33 0-.06-.01-.12-.06-.15a.74.74 0 0 0-.26-.1c-.65-.17-1.62-.36-2.61-.36ZM17.97 34.2h-.3l-2.15-.06c-.68-.02-1.73-.4-1.93-1.05-.07-.22-.09-.65.55-1.07.32-.22.84-.32 1.64-.32.56 0 1.17.05 1.7.1.41.03.77.06 1.01.06h.11c.37 0 .75.04 1.04.29.22.19.33.47.3.77-.03.38-.26.76-.58.97-.44.27-.94.31-1.38.31Zm-2.2-1.92c-.8 0-1.15.12-1.3.21-.17.11-.36.28-.31.44.09.3.8.62 1.37.63l2.15.06h.3c.34 0 .74-.02 1.04-.21.18-.11.3-.33.32-.53.01-.1 0-.22-.1-.3-.14-.13-.4-.14-.64-.14h-.11c-.27 0-.64-.03-1.07-.07-.52-.04-1.11-.09-1.65-.09Zm4.34-1.86c-.41.2-.9.11-1.36.02l-2.62-.5c-1.23-.24-2.69-.42-3.57.44.84-.75 2.03-1 3.16-1.2 1.15-.18 2.32-.35 3.48-.48a3 3 0 0 1 1.21.07c.12.53.39 1.33-.3 1.65Z"
       fill="currentColor"
@@ -131,7 +131,7 @@
     />
   </svg>
 {:else if faceId === 8}
-  <svg width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 56 56" width="56" height="56" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M28.61 56c-.2 0-.4 0-.59-.02-4.06-.26-7.4-3.06-9.57-5.15a23.93 23.93 0 0 1-3.06-3.48 22.67 22.67 0 0 1-2.16-4.1A42.4 42.4 0 0 1 9.94 26c0-.26.23-.46.5-.46.26 0 .46.22.46.48a41.41 41.41 0 0 0 3.2 16.86 21.38 21.38 0 0 0 2.08 3.93 22.73 22.73 0 0 0 2.94 3.34c2.05 1.98 5.21 4.64 8.96 4.88 3.17.2 6.56-1.42 9.08-4.34 2.17-2.52 3.52-5.58 4.87-9.4 1.68-4.73 3.31-10.31 2.69-15.83a.48.48 0 0 1 .95-.1c.64 5.7-1.02 11.41-2.74 16.25-1.39 3.91-2.78 7.06-5.04 9.7C35.33 54.26 31.9 56 28.6 56Z"
       fill="currentColor"
