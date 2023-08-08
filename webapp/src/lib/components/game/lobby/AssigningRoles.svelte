@@ -13,11 +13,11 @@
 
   const editingPlayerId = useSelector(
     machine.service,
-    ({ context }) => ($user.side === 'attacker' ? context.attack : context.defense).editingPlayer,
+    ({ context }) => ($user.side === 'attack' ? context.attack : context.defense).editingPlayer,
   )
 
   const players = useSelector(machine.service, ({ context }) =>
-    $user.side === 'attacker' ? [context.attack.attacker] : context.defense.defenders,
+    $user.side === 'attack' ? [context.attack.attacker] : context.defense.defenders,
   )
   const canEdit = useSelector(machine.service, (snapshot) =>
     snapshot.can({ type: 'start editing player', playerId: 1 }),
@@ -40,7 +40,7 @@
 <Paragraph>Die Rollenverteilung wird von der Spielleitung übernommen.</Paragraph>
 
 <section>
-  <Heading centered>{$user.side === 'attacker' ? 'Angriff' : 'Verteidigung'}</Heading>
+  <Heading centered>{$user.side === 'attack' ? 'Angriff' : 'Verteidigung'}</Heading>
 
   <Paragraph>
     Es müssen für jede Rolle ein:e Spieler:in bestimmt und bestätigt werden. Die restlichen
@@ -61,7 +61,7 @@
           on:click={() =>
             machine.send({
               type: 'start editing player',
-              playerId: $user.side === 'attacker' ? 'attacker' : toDefenderId(i),
+              playerId: $user.side === 'attack' ? 'attacker' : toDefenderId(i),
             })}
         >
           Rolle {player.isConfigured ? 'wechseln' : `${i + 1} bestimmen`}

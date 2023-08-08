@@ -25,14 +25,14 @@ export const serverGameMachine = machine.provide({
       const { userId } = e as ServerEventOf<'user: next step'>
       const side = context.users.find((user) => user.id === userId)?.side
 
-      if (side === 'attacker') {
+      if (side === 'attack') {
         return {
           attack: {
             ...context.attack,
             finishedAssigning: true,
           } satisfies SharedGameContext['attack'],
         }
-      } else if (side === 'defender') {
+      } else if (side === 'defense') {
         return {
           defense: {
             ...context.defense,
@@ -50,17 +50,17 @@ export const serverGameMachine = machine.provide({
         event.type === 'user: stop editing player'
           ? event.side
           : isDefenderId(event.playerId)
-          ? 'defender'
-          : 'attacker'
+          ? 'defense'
+          : 'attack'
 
-      if (side === 'attacker') {
+      if (side === 'attack') {
         return {
           attack: {
             ...context.attack,
             editingPlayer: event.type === 'user: start editing player' ? 'attacker' : undefined,
           } satisfies SharedGameContext['attack'],
         }
-      } else if (side === 'defender') {
+      } else if (side === 'defense') {
         return {
           defense: {
             ...context.defense,
@@ -137,7 +137,7 @@ export const serverGameMachine = machine.provide({
               name: event.userName,
               isAdmin: false,
               isConnected: false,
-              side: 'defender',
+              side: 'defense',
               isSideAssigned: false,
             },
           ],

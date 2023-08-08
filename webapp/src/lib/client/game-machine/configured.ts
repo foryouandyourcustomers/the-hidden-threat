@@ -40,7 +40,7 @@ export const getClientGameMachine = ({
         const { side } = getUser(context)
         if (!side) return false
 
-        if (side === 'attacker') {
+        if (side === 'attack') {
           return !!context.attack.attacker
         } else {
           return context.defense.defenders.length === 4
@@ -49,12 +49,12 @@ export const getClientGameMachine = ({
       finishedAssigningRolesOfSide: ({ context }) => {
         const { side } = getUser(context)
         if (!side) return false
-        return (side === 'attacker' ? context.attack : context.defense).finishedAssigning
+        return (side === 'attack' ? context.attack : context.defense).finishedAssigning
       },
       isEditingPlayerOfSide: ({ context }) => {
         const { side } = getUser(context)
         if (!side) return false
-        const editingPlayer = (side === 'attacker' ? context.attack : context.defense).editingPlayer
+        const editingPlayer = (side === 'attack' ? context.attack : context.defense).editingPlayer
         return editingPlayer !== undefined
       },
       isNotEditingPlayerOfSide: not('isEditingPlayerOfSide'),

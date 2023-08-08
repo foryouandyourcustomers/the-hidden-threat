@@ -9,7 +9,7 @@
   const { userId, user, machine } = getGameContext()
 
   const canAssignSides = useSelector(machine.service, (snapshot) =>
-    snapshot.can({ type: 'assign side', otherUserId: '', side: 'attacker' }),
+    snapshot.can({ type: 'assign side', otherUserId: '', side: 'attack' }),
   )
   const canAssignAdmin = useSelector(machine.service, (snapshot) =>
     snapshot.can({ type: 'assign admin', otherUserId: '', isAdmin: true }),
@@ -55,7 +55,7 @@
       {/if}
       {#if user.isSideAssigned}
         <span class="side">
-          {#if user.side === 'attacker'}
+          {#if user.side === 'attack'}
             Angriff
           {:else}
             Verteidigung
@@ -63,8 +63,8 @@
         </span>
       {/if}
       {#if $canAssignSides}
-        <Button on:click={() => assignSide(user.id, 'attacker')}>Angriff</Button>
-        <Button on:click={() => assignSide(user.id, 'defender')}>Verteidigung</Button>
+        <Button on:click={() => assignSide(user.id, 'attack')}>Angriff</Button>
+        <Button on:click={() => assignSide(user.id, 'defense')}>Verteidigung</Button>
       {/if}
       {#if $canAssignAdmin && user.id !== userId}
         <Button on:click={() => assignAdmin(user.id, !user.isAdmin)}>Toggle Admin</Button>

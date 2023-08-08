@@ -10,12 +10,12 @@
 
   export let playerId: PlayerId
 
-  const side = (isDefenderId(playerId) ? 'defender' : 'attacker') as Side
+  const side = (isDefenderId(playerId) ? 'defense' : 'attack') as Side
 
   const { machine } = getGameContext()
 
   const player = useSelector(machine.service, ({ context }) => {
-    return side === 'attacker'
+    return side === 'attack'
       ? context.attack.attacker
       : context.defense.defenders[playerId as DefenderId]
   })

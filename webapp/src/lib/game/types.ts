@@ -1,7 +1,13 @@
 import type { ClientEvent } from '$lib/client/game-machine/types'
-import type { DEFAULT_ATTACK_INVENTORY, DEFAULT_DEFENSE_INVENTORY, FaceId } from './constants'
+import type {
+  AttackItemId,
+  DEFAULT_ATTACK_INVENTORY,
+  DEFAULT_DEFENSE_INVENTORY,
+  DefenseItemId,
+  FaceId,
+} from './constants'
 
-export type Side = 'defender' | 'attacker'
+export type Side = 'defense' | 'attack'
 
 /**
  * All messages that the server might send to the clients via WebSockets.
@@ -104,8 +110,6 @@ export type Coordinate = [number, number]
 
 export type DefenseInventory = typeof DEFAULT_DEFENSE_INVENTORY
 export type AttackInventory = typeof DEFAULT_ATTACK_INVENTORY
-export type DefenseItem = keyof DefenseInventory
-export type AttackItem = keyof AttackInventory
 
 export type PlayerId = DefenderId | AttackerId
 export type DefenderId = 0 | 1 | 2 | 3
@@ -129,16 +133,23 @@ export type GameEvent =
     })
   | (BaseGameEvent & {
       type: 'collect'
-      item: AttackItem | DefenseItem
+      item: AttackItemId | DefenseItemId
     })
 
 export type AttackScenario = 'todo'
+
+export type BoardItem = {
+  item: DefenseItemId | AttackItemId
+  coordinate: Coordinate
+  collectedCount: number
+}
 
 export type SharedGameContext = {
   gameId: string
   hostUserId: string
   users: User[]
   events: GameEvent[]
+  items: BoardItem[]
   finishedAssigningSides: boolean
   globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
   defense: {

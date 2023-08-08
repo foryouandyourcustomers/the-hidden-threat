@@ -29,7 +29,7 @@ export const actions = {
         name: form.data.userName,
         isAdmin: true,
         isConnected: false,
-        side: 'defender',
+        side: 'defense',
         isSideAssigned: false,
       },
     })
