@@ -112,14 +112,23 @@ export type AttackerId = 'attacker'
 export const isDefenderId = (id: PlayerId): id is DefenderId => id !== 'attacker'
 export const isAttackerId = (id: PlayerId): id is AttackerId => id === 'attacker'
 
-export type GameAction = {
+type BaseGameEvent = {
   timestamp: number
-  type: 'chracter moves'
   playerId: PlayerId
-  /** Which user actually performed the action. */
+  /** Which user actually triggered the event. */
   userId: number
-  to: Coordinate
+  finalized: boolean
 }
+
+export type GameEvent =
+  | (BaseGameEvent & {
+      type: 'move'
+      to: Coordinate
+    })
+  | (BaseGameEvent & {
+      type: 'collect'
+      item: AttackItem | DefenseItem
+    })
 
 export type AttackScenario = 'todo'
 
@@ -127,7 +136,7 @@ export type SharedGameContext = {
   gameId: string
   hostUserId: string
   users: User[]
-  actions: GameAction[]
+  events: GameEvent[]
   finishedAssigningSides: boolean
   globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
   defense: {

@@ -31,7 +31,7 @@ export const machine = createMachine({
         inventory: { ...DEFAULT_ATTACK_INVENTORY },
       },
       users: [input.host],
-      actions: [],
+      events: [],
     } satisfies Context),
 
   types: {

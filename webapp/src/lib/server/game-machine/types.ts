@@ -1,8 +1,8 @@
-import type { ClientMessage, GameAction, SharedGameContext } from '$lib/game/types'
+import type { ClientMessage, GameEvent, SharedGameContext } from '$lib/game/types'
 
 export type Context = SharedGameContext
 
-export type ServerGameAction = GameAction
+export type ServerGameAction = GameEvent
 
 export type ServerEvent =
   // All messages that the client sends can be used as server events

@@ -1,7 +1,7 @@
 import type { FaceId } from '$lib/game/constants'
 import type {
   Coordinate,
-  GameAction,
+  GameEvent,
   PlayerId,
   Role,
   ServerMessage,
@@ -47,7 +47,7 @@ export type NativeClientEvent =
     }
   | { type: 'send emoji'; emoji: string }
   | { type: 'move'; playerId: PlayerId; to: Coordinate }
-  | { type: 'perform action'; action: GameAction }
+  | { type: 'perform action'; action: GameEvent }
   | { type: 'rollback action' }
   | { type: 'switch sides' }
   | { type: 'dismiss global attack' }
