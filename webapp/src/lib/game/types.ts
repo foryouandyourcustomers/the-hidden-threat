@@ -32,6 +32,8 @@ export type ClientEventAsMessage = UserPrefixed<ClientEvent>
  */
 export type ClientMessage =
   | ClientEventAsMessage
+  | { type: `deploy game event`; event: GameEvent }
+  | { type: `rollback game event`; eventType: GameEvent['type'] }
   /** This is not forwarded to the machine but redirected directly to the other
    * users */
   | {

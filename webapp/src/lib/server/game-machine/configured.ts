@@ -74,10 +74,10 @@ export const serverGameMachine = machine.provide({
         return {}
       }
     }),
-    addGameAction: () => {
+    addOrUpdateGameEvent: () => {
       // todo
     },
-    rollbackGameAction: () => {
+    rollbackGameEvent: () => {
       // todo
     },
     updatePlayer: assign(({ context, event: e }) => {
@@ -198,8 +198,8 @@ export const serverGameMachine = machine.provide({
     isAdmin: ({ context, event }) =>
       context.users.find((user) => user.id === event.userId)?.isAdmin ?? false,
     // TODO
-    isValidAction: () => {
-      // TODO: this needs to verify that the given game action is valid in the current context.
+    isValidGameEvent: () => {
+      // TODO: this needs to verify that the given game event is valid in the current context.
       return false
     },
     ...sharedGuards,

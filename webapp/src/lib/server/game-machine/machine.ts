@@ -63,8 +63,8 @@ export const machine = createMachine({
                   target: '#gameServer.Game.Assigning roles',
                   guard: 'isAdmin',
                   actions: {
-                    params: {},
                     type: 'setAssigningSidesFinished',
+                    params: {},
                   },
                   reenter: false,
                 },
@@ -75,8 +75,8 @@ export const machine = createMachine({
             'user joined': {
               target: 'Assigning sides',
               actions: {
-                params: {},
                 type: 'storeNewUser',
+                params: {},
               },
               reenter: false,
             },
@@ -84,8 +84,8 @@ export const machine = createMachine({
               target: 'Assigning sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'assignSide',
+                params: {},
               },
               reenter: false,
             },
@@ -93,8 +93,8 @@ export const machine = createMachine({
               target: 'Assigning sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'assignAdmin',
+                params: {},
               },
               reenter: false,
             },
@@ -102,26 +102,26 @@ export const machine = createMachine({
         },
         Playing: {
           description:
-            'The game is active and started. Now the server only waits for the game actions from the users.',
+            'The game is active and started. Now the server only waits for the game events from the users.',
           always: {
             target: 'Finished',
             guard: 'gameFinished',
             reenter: false,
           },
           on: {
-            'user: perform action': {
-              guard: 'isValidAction',
+            'deploy game event': {
+              guard: 'isValidGameEvent',
               actions: {
+                type: 'addOrUpdateGameEvent',
                 params: {},
-                type: 'addGameAction',
               },
               reenter: true,
             },
-            'user: rollback action': {
+            'rollback game event': {
               guard: 'isAdmin',
               actions: {
+                type: 'rollbackGameEvent',
                 params: {},
-                type: 'rollbackGameAction',
               },
               reenter: true,
             },
@@ -151,8 +151,8 @@ export const machine = createMachine({
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'updatePlayer',
+                params: {},
               },
               description:
                 'Defines which user controls a player, which role they are and how they look.\n\nThis event can update a defender and an attacker.',
@@ -162,8 +162,8 @@ export const machine = createMachine({
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'setEditingPlayer',
+                params: {},
               },
               reenter: false,
             },
@@ -171,16 +171,16 @@ export const machine = createMachine({
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'setEditingPlayer',
+                params: {},
               },
               reenter: false,
             },
             'user: next step': {
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'setAssigningRolesFinished',
+                params: {},
               },
               reenter: true,
             },
@@ -188,8 +188,8 @@ export const machine = createMachine({
         },
         Finished: {
           entry: {
-            params: {},
             type: 'sendSummary',
+            params: {},
           },
         },
       },
@@ -200,29 +200,29 @@ export const machine = createMachine({
       on: {
         'user: send emoji': {
           actions: {
-            params: {},
             type: 'sendEmojiToOtherUsers',
+            params: {},
           },
           reenter: true,
         },
         'user disconnected': {
           actions: {
-            params: {},
             type: 'updateUserConnectionState',
+            params: {},
           },
           reenter: true,
         },
         'user reconnected': {
           actions: {
-            params: {},
             type: 'updateUserConnectionState',
+            params: {},
           },
           reenter: true,
         },
         'user connected': {
           actions: {
-            params: {},
             type: 'updateUserConnectionState',
+            params: {},
           },
           reenter: true,
         },
