@@ -1,12 +1,12 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import Face from '$lib/components/icons/Face.svelte'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import type { DefenderId } from '$lib/game/types'
-  import Face from '../Face.svelte'
   import PlayerConfigurator from './PlayerConfigurator.svelte'
 
   const { machine, user } = getGameContext()

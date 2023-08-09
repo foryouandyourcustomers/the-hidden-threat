@@ -140,7 +140,7 @@ export type AttackScenario = 'todo'
 
 export type BoardItem = {
   item: DefenseItemId | AttackItemId
-  coordinate: Coordinate
+  position: Coordinate
   collectedCount: number
 }
 

@@ -1,6 +1,6 @@
 <script>
-  import Face from '../game/Face.svelte'
-  import Lyons from '../icons/Lyons.svelte'
+  import Face from '$lib/components/icons/Face.svelte'
+  import Lyons from '$lib/components/icons/Lyons.svelte'
 </script>
 
 <header>

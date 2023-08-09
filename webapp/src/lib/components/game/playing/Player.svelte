@@ -1,6 +1,6 @@
 <script lang="ts">
+  import Face from '$lib/components/icons/Face.svelte'
   import type { FaceId } from '$lib/game/constants'
-  import Face from '../Face.svelte'
 
   export let name: string
   export let faceId: FaceId | undefined = undefined

@@ -1,12 +1,12 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import Face from '$lib/components/icons/Face.svelte'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Dialog from '$lib/components/ui/Dialog.svelte'
   import { FACES, type FaceId } from '$lib/game/constants'
   import { isDefenderId, type DefenderId, type PlayerId, type Side } from '$lib/game/types'
-  import Face from '../Face.svelte'
 
   export let playerId: PlayerId
 

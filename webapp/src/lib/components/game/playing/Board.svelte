@@ -19,7 +19,7 @@
     display: grid;
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
-    gap: 0.5rem;
+    gap: 0;
     margin: 0 auto;
     aspect-ratio: var(--column-count) / var(--row-count);
     max-width: 80%;
