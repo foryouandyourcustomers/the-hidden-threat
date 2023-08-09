@@ -48,20 +48,22 @@
     width: 1px;
     height: 1px;
     & svg {
+      display: block;
       position: absolute;
       top: 0;
       left: 0;
-      translate: -10% -10%;
-      width: 1.5rem;
-      height: 1.5rem;
+      translate: -15% -20%;
+      width: 1.5rem !important;
+      max-width: none;
+      height: 1.5rem !important;
     }
     .name {
       display: inline-block;
       position: absolute;
-      top: 1rem;
-      left: 1rem;
+      top: 0.5rem;
+      left: 1.5rem;
       border-radius: var(--radius-sm);
-      background: black;
+      background: #000a;
       padding: 0.25rem 0.5rem;
       max-width: 7rem;
       overflow: hidden;
