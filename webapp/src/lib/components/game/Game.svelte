@@ -4,6 +4,7 @@
   import Lobby from './lobby/Lobby.svelte'
   import Playing from './playing/Playing.svelte'
   import Finished from './finished/Finished.svelte'
+  import Players from './playing/Players.svelte'
 
   const { machine } = getGameContext()
 
@@ -53,7 +54,12 @@
     <div class="name">The Hidden Threat</div>
     <div class="characters" />
     <div class="items"><slot name="items" /></div>
-    <div class="actions"><slot name="actions" /></div>
+    <div class="actions">
+      <slot name="actions" />
+      {#if $section === 'Playing'}
+        <Players />
+      {/if}
+    </div>
     <div class="content">
       {#if $section === 'Lobby'}
         <Lobby />
@@ -82,7 +88,7 @@
     display: grid;
     position: relative;
     grid-template-rows: 10% 1fr;
-    grid-template-columns: 10% 1fr 1fr;
+    grid-template-columns: 30rem 1fr 1fr;
     grid-template-areas:
       'name characters items'
       'actions content content';

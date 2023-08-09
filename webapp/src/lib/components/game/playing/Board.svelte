@@ -22,7 +22,7 @@
     gap: 0.5rem;
     margin: 0 auto;
     aspect-ratio: var(--column-count) / var(--row-count);
-    max-width: 60%;
+    max-width: 80%;
     max-height: 100%;
   }
 </style>
