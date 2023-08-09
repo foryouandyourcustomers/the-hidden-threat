@@ -112,12 +112,13 @@ export const serverGameMachine = machine.provide({
     updateUserConnectionState: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user connected' | 'user reconnected' | 'user disconnected'>
 
-      const existingUser = context.users.find((user) => user.id === event.userId)
-      if (existingUser) {
-        existingUser.isConnected =
-          event.type === 'user connected' || event.type === 'user reconnected'
+      const existingUserIndex = context.users.findIndex((user) => user.id === event.userId)
+      if (existingUserIndex !== -1) {
         return {
-          users: [...context.users],
+          users: produce(context.users, (users) => {
+            users[existingUserIndex].isConnected =
+              event.type === 'user connected' || event.type === 'user reconnected'
+          }),
         }
       } else {
         console.warn('Got a connection update for a user that has not joined', event.userId)

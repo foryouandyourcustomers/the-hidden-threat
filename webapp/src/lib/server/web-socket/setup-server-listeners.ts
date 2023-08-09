@@ -62,7 +62,7 @@ type ConnectionCallback = ((webSocket: ExtendedWebSocket) => void) & { svelteKit
  * beforehand.
  */
 const connectionCallback: ConnectionCallback = (webSocket) => {
-  console.log(`[wss:kit] client connected (${webSocket.socketId})`)
+  console.log(`[wss:kit] client connected (${webSocket.socketId}, user ${webSocket.userId})`)
 
   if (getSocketsForUser(webSocket).length === 1) {
     // Inform the ServerStateMachine that a user has connected, but only if this
