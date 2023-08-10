@@ -7,6 +7,11 @@
 
   const { machine } = getGameContext()
 
+  const currentRound = useSelector(
+    machine.service,
+    ({ context }) => getCurrentGameState(context).currentRound,
+  )
+
   const getActionEvent = (context: SharedGameContext): ClientEventOf<'apply game event'> => {
     return {
       type: 'apply game event',
@@ -27,6 +32,8 @@
     machine.send(getActionEvent(machine.service.getSnapshot().context))
   }
 </script>
+
+Round: {$currentRound + 1}
 
 {#if $canPerformAction}
   <button on:click={performAction}>Perform Action</button>

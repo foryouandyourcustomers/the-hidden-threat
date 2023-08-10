@@ -4,6 +4,7 @@
   import type { Attacker, Defender, User } from '$lib/game/types'
   import isEqual from 'lodash/isEqual'
   import Player from './Player.svelte'
+  import { getCurrentGameState } from '$lib/game/game-state'
 
   const { machine } = getGameContext()
 
@@ -35,6 +36,11 @@
     const user = users.find((user) => user.id === player.userId)
     return user ?? { name: 'Unbekannt', isConnected: false }
   }
+
+  const activePlayerId = useSelector(
+    machine.service,
+    ({ context }) => getCurrentGameState(context).activePlayerId,
+  )
 </script>
 
 <h3>Verteidiger:innen</h3>
@@ -42,7 +48,12 @@
 <div class="players">
   {#each $defensePlayers as player}
     {@const user = getUserForPlayer(player, $users)}
-    <Player faceId={player.faceId} name={user.name} isConnected={user.isConnected} />
+    <Player
+      faceId={player.faceId}
+      name={user.name}
+      isConnected={user.isConnected}
+      isPlaying={$activePlayerId === player.id}
+    />
   {/each}
 
   {#each $defenseAdmins as admin}
@@ -55,7 +66,12 @@
 <div class="players">
   {#each $attackPlayers as player}
     {@const user = getUserForPlayer(player, $users)}
-    <Player faceId={player.faceId} name={user.name} isConnected={user.isConnected} />
+    <Player
+      faceId={player.faceId}
+      name={user.name}
+      isConnected={user.isConnected}
+      isPlaying={$activePlayerId === player.id}
+    />
   {/each}
 
   {#each $attackAdmins as admin}

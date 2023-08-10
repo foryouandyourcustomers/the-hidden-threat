@@ -5,9 +5,10 @@
   export let name: string
   export let faceId: FaceId | undefined = undefined
   export let isConnected = false
+  export let isPlaying = false
 </script>
 
-<div class="player">
+<div class="player" class:playing={isPlaying}>
   <Face faceId={faceId ?? 0} />
   {name}
   <div class="online-status" class:connected={isConnected} />
@@ -20,6 +21,9 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    &.playing {
+      border: 2px solid green;
+    }
   }
   .online-status {
     position: absolute;
