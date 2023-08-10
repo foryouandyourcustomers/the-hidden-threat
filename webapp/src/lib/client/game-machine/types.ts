@@ -1,6 +1,5 @@
 import type { FaceId } from '$lib/game/constants'
 import type {
-  Coordinate,
   GameEvent,
   PlayerId,
   Role,
@@ -13,6 +12,10 @@ import type { Sound } from '$lib/sound'
 export type Context = SharedGameContext & {
   userId: string
 }
+
+/** A utility type that allows us to Omit keys of a union type */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never
 
 /**
  * All the events that can be sent to the client machine, excluding the ones
@@ -46,9 +49,8 @@ export type NativeClientEvent =
       playingUserId: string
     }
   | { type: 'send emoji'; emoji: string }
-  | { type: 'move'; playerId: PlayerId; to: Coordinate }
-  | { type: 'perform action'; action: GameEvent }
-  | { type: 'rollback action' }
+  | { type: 'apply game event'; gameEvent: DistributiveOmit<GameEvent, 'userId' | 'timestamp'> }
+  | { type: 'rollback game event'; gameEventType: GameEvent['type'] }
   | { type: 'switch sides' }
   | { type: 'dismiss global attack' }
   | { type: 'new global attack' }

@@ -115,7 +115,7 @@ export const machine = createMachine({
             reenter: false,
           },
           on: {
-            'user: move': {
+            'user: apply game event': {
               guard: 'isValidGameEvent',
               actions: {
                 type: 'addOrUpdateGameEvent',
@@ -123,22 +123,13 @@ export const machine = createMachine({
               },
               reenter: true,
             },
-            'rollback game event': {
+            'user: rollback game event': {
               guard: 'isAdmin',
               actions: {
                 type: 'rollbackGameEvent',
                 params: {},
               },
               reenter: true,
-            },
-            'user: perform action': {
-              target: 'Playing',
-              guard: 'isValidGameEvent',
-              actions: {
-                type: 'addOrUpdateGameEvent',
-                params: {},
-              },
-              reenter: false,
             },
           },
         },

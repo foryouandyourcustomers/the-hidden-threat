@@ -1,10 +1,11 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import type { ClientEventOf } from '$lib/client/game-machine/types'
   import Face from '$lib/components/icons/Face.svelte'
   import Item from '$lib/components/icons/Item.svelte'
   import { getCurrentGameState } from '$lib/game/game-state'
-  import type { PlayerId } from '$lib/game/types'
+  import type { Coordinate, PlayerId, SharedGameContext } from '$lib/game/types'
   import { getPlayer } from '$lib/game/utils'
   import isEqual from 'lodash/isEqual'
 
@@ -44,20 +45,28 @@
     const yDiff = Math.abs(currentPosition[1] - rowIndex)
     return xDiff + yDiff <= 2 && xDiff + yDiff != 0
   })
+
+  const getMoveEvent = (
+    to: Coordinate,
+    context: SharedGameContext,
+  ): ClientEventOf<'apply game event'> => {
+    return {
+      type: 'apply game event',
+      gameEvent: {
+        type: 'move',
+        finalized: true,
+        playerId: getCurrentGameState(context).activePlayerId,
+        to,
+      },
+    }
+  }
+
   const canMove = useSelector(machine.service, (state) =>
-    state.can({
-      type: 'move',
-      to: [0, 1],
-      playerId: getCurrentGameState(state.context).activePlayerId,
-    }),
+    state.can(getMoveEvent(coordinate, machine.service.getSnapshot().context)),
   )
 
   const move = () => {
-    machine.send({
-      type: 'move',
-      to: coordinate,
-      playerId: getCurrentGameState(machine.service.getSnapshot().context).activePlayerId,
-    })
+    machine.send(getMoveEvent(coordinate, machine.service.getSnapshot().context))
   }
 </script>
 

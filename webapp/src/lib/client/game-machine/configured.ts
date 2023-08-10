@@ -1,5 +1,5 @@
 import type { ClientEventAsMessage, ClientMessage } from '$lib/game/types'
-import { assign, not } from 'xstate'
+import { and, assign, not } from 'xstate'
 import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
 import { sharedGuards } from '$lib/game/guards'
@@ -67,6 +67,16 @@ export const getClientGameMachine = ({
           user.id === getPlayer(getCurrentGameState(context).activePlayerId, context).userId
         )
       },
+      isMoveEvent: ({ event: e }) => {
+        const event = e as ClientEventOf<'apply game event'>
+        return event.gameEvent.type === 'move'
+      },
+      isActionEvent: ({ event: e }) => {
+        const event = e as ClientEventOf<'apply game event'>
+        return event.gameEvent.type !== 'move'
+      },
+      userControlsPlayerAndIsMoveEvent: and(['userControlsPlayer', 'isMoveEvent']),
+      userControlsPlayerAndIsActionEvent: and(['userControlsPlayer', 'isActionEvent']),
       userOnActiveSide: ({ context }) =>
         getCurrentUser(context).side === getCurrentGameState(context).activeSide,
       userNotOnActiveSide: not('userOnActiveSide'),

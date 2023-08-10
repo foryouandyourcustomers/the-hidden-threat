@@ -76,28 +76,37 @@ export const serverGameMachine = machine.provide({
       }
     }),
     addOrUpdateGameEvent: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'user: move' | 'user: perform action'>
-      // TODO
-      if (event.type === 'user: move') {
-        const gameEvent: GameEvent = {
-          type: 'move',
-          finalized: true,
-          playerId: event.playerId,
-          timestamp: Date.now(),
-          to: event.to,
-          userId: event.userId,
-        }
+      const event = e as ServerEventOf<'user: apply game event'>
 
-        return {
-          events: [...context.events, gameEvent],
-        }
-      } else {
-        return {}
+      // The validity of the event has already been checked by a guard
+
+      const gameEvent: GameEvent = {
+        ...event.gameEvent,
+        timestamp: Date.now(),
+        userId: event.userId,
+      }
+
+      return {
+        events: produce(context.events, (events) => {
+          const lastEvent = events[events.length - 1]
+          if (lastEvent && !lastEvent.finalized) {
+            events[events.length - 1] = gameEvent
+          } else {
+            events.push(gameEvent)
+          }
+        }),
       }
     }),
-    rollbackGameEvent: () => {
-      // todo
-    },
+    rollbackGameEvent: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: rollback game event'>
+      return {
+        events: produce(context.events, (events) => {
+          if (events[events.length - 1].type === event.gameEventType) {
+            events.pop()
+          }
+        }),
+      }
+    }),
     updatePlayer: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user: assign role'>
 
@@ -217,9 +226,16 @@ export const serverGameMachine = machine.provide({
   guards: {
     isAdmin: ({ context, event }) =>
       context.users.find((user) => user.id === event.userId)?.isAdmin ?? false,
-    // TODO
     isValidGameEvent: () => {
       // TODO: this needs to verify that the given game event is valid in the current context.
+
+      // This means that this guard needs to check:
+      // - that the user has the right to perform the event
+      // - the event happens at the right time
+      // - if the previous event is not finalized, that this is a change to the
+      //   the previous event
+      // ...?
+
       return true
     },
     ...sharedGuards,

@@ -1,10 +1,11 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import Lobby from './lobby/Lobby.svelte'
-  import Playing from './playing/Playing.svelte'
+  import TempActionButton from './TempActionButton.svelte'
   import Finished from './finished/Finished.svelte'
+  import Lobby from './lobby/Lobby.svelte'
   import Players from './playing/Players.svelte'
+  import Playing from './playing/Playing.svelte'
 
   const { machine } = getGameContext()
 
@@ -59,6 +60,7 @@
       {#if $section === 'Playing'}
         <Players />
       {/if}
+      <TempActionButton />
     </div>
     <div class="content">
       {#if $section === 'Lobby'}

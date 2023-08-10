@@ -39,8 +39,8 @@ export const machine = createMachine({
                   target: 'Ready',
                   guard: 'isAdmin',
                   actions: {
-                    params: {},
                     type: 'forwardToServer',
+                    params: {},
                   },
                   reenter: false,
                 },
@@ -57,8 +57,8 @@ export const machine = createMachine({
               target: 'Assigning sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -66,8 +66,8 @@ export const machine = createMachine({
               target: 'Assigning sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -78,33 +78,21 @@ export const machine = createMachine({
           initial: 'Incomplete',
           states: {
             Incomplete: {
-              always: [
-                {
-                  target: 'Ready',
-                  guard: 'allRolesAssignedOfSide',
-                  description: 'All users have been assigned a role.',
-                  reenter: false,
-                },
-                {
-                  target: 'Editing player',
-                  guard: 'isEditingPlayerOfSide',
-                  reenter: false,
-                },
-              ],
-            },
-            Ready: {
               always: {
-                target: 'Editing player',
-                guard: 'isEditingPlayerOfSide',
+                target: 'Ready',
+                guard: 'allRolesAssigned',
+                description: 'All users have been assigned a role.',
                 reenter: false,
               },
+            },
+            Ready: {
               on: {
                 'next step': {
                   target: 'Ready',
                   guard: 'isAdmin',
                   actions: {
-                    params: {},
                     type: 'forwardToServer',
+                    params: {},
                   },
                   reenter: false,
                 },
@@ -112,19 +100,27 @@ export const machine = createMachine({
             },
             'Editing player': {
               description: 'Shows a modal where the admin can select the user, role and face image',
-              always: {
-                target: 'Incomplete',
-                guard: 'isNotEditingPlayerOfSide',
-                reenter: false,
+              entry: {
+                type: 'forwardToServer',
+                params: {},
+              },
+              exit: {
+                type: 'forwardToServer',
+                params: {},
               },
               on: {
                 'assign role': {
                   target: 'Editing player',
                   guard: 'isAdmin',
                   actions: {
-                    params: {},
                     type: 'forwardToServer',
+                    params: {},
                   },
+                  reenter: false,
+                },
+                'stop editing player': {
+                  target: 'Incomplete',
+                  guard: 'isAdmin',
                   reenter: false,
                 },
               },
@@ -132,26 +128,13 @@ export const machine = createMachine({
           },
           always: {
             target: 'Waiting for other side',
-            guard: 'finishedAssigningRolesOfSide',
+            guard: 'finishedAssigningRoles',
             reenter: false,
           },
           on: {
             'start editing player': {
-              target: 'Assigning roles',
+              target: '.Editing player',
               guard: 'isAdmin',
-              actions: {
-                params: {},
-                type: 'forwardToServer',
-              },
-              reenter: false,
-            },
-            'stop editing player': {
-              target: 'Assigning roles',
-              guard: 'isAdmin',
-              actions: {
-                params: {},
-                type: 'forwardToServer',
-              },
               reenter: false,
             },
           },
@@ -160,7 +143,7 @@ export const machine = createMachine({
       },
       always: {
         target: 'Playing',
-        guard: 'finishedAssigningRoles',
+        guard: 'gameStarted',
         reenter: false,
       },
     },
@@ -190,8 +173,8 @@ export const machine = createMachine({
                       target: 'Ready to move',
                       guard: 'userControlsPlayerAndIsMoveEvent',
                       actions: {
-                        params: {},
                         type: 'forwardToServer',
+                        params: {},
                       },
                       reenter: false,
                     },
@@ -208,8 +191,8 @@ export const machine = createMachine({
                       target: 'Ready for action',
                       guard: 'userControlsPlayerAndIsActionEvent',
                       actions: {
-                        params: {},
                         type: 'forwardToServer',
+                        params: {},
                       },
                       reenter: false,
                     },
@@ -296,8 +279,8 @@ export const machine = createMachine({
               target: 'Sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -327,23 +310,23 @@ export const machine = createMachine({
     'shared game context update': {
       target: '#gameClient',
       actions: {
-        params: {},
         type: 'updateSharedGameContext',
+        params: {},
       },
       reenter: false,
     },
     'send emoji': {
       target: '#gameClient',
       actions: {
-        params: {},
         type: 'forwardToServer',
+        params: {},
       },
       reenter: false,
     },
     'show emoji': {
       actions: {
-        params: {},
         type: 'showEmoji',
+        params: {},
       },
       reenter: true,
     },
