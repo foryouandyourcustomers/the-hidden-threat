@@ -20,13 +20,13 @@
     $user.side === 'attack' ? [context.attack.attacker] : context.defense.defenders,
   )
   const canEdit = useSelector(machine.service, (snapshot) =>
-    snapshot.can({ type: 'start editing player', playerId: 1 }),
+    snapshot.can({ type: 'start editing player', playerId: 'attacker' }),
   )
   const canContinue = useSelector(machine.service, (snapshot) =>
     snapshot.can({ type: 'next step' }),
   )
 
-  const toDefenderId = (playerId: number) => playerId as DefenderId
+  const toDefenderId = (playerId: number) => `defender${playerId}` as DefenderId
 
   const users = useSelector(machine.service, ({ context }) => context.users)
 </script>

@@ -2,7 +2,7 @@
   import { useMachine } from '$lib/@xstate/svelte/useMachine.js'
   import { setGameContext } from '$lib/client/game-context.js'
   import { getClientGameMachine } from '$lib/client/game-machine/configured.js'
-  import { getUser } from '$lib/client/game-machine/utils'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { createWebSocketConnection } from '$lib/client/web-socket'
   import CursorOverlays from '$lib/components/game/CursorOverlays.svelte'
   import Emojis from '$lib/components/game/Emojis.svelte'
@@ -48,7 +48,7 @@
     },
   )
 
-  const user = useSelector(machine.service, ({ context }) => getUser(context), isEqual)
+  const user = useSelector(machine.service, ({ context }) => getCurrentUser(context), isEqual)
 
   setGameContext({ gameId, userId, user, hostUserId, machine })
 

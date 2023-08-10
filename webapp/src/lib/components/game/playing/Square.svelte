@@ -3,12 +3,15 @@
   import { getGameContext } from '$lib/client/game-context'
   import Face from '$lib/components/icons/Face.svelte'
   import Item from '$lib/components/icons/Item.svelte'
+  import { getCurrentGameState } from '$lib/game/game-state'
+  import type { PlayerId } from '$lib/game/types'
+  import { getPlayer } from '$lib/game/utils'
   import isEqual from 'lodash/isEqual'
 
   export let columnIndex: number
   export let rowIndex: number
 
-  const coordinate = [columnIndex, rowIndex]
+  const coordinate: [number, number] = [columnIndex, rowIndex]
 
   const { machine } = getGameContext()
 
@@ -20,18 +23,50 @@
 
   const players = useSelector(
     machine.service,
-    ({ context }) =>
-      [...context.defense.defenders, context.attack.attacker].filter((player) =>
-        isEqual(player.position, coordinate),
-      ),
+    ({ context }) => {
+      const { playerPositions } = getCurrentGameState(context)
 
+      return Object.entries(playerPositions)
+        .filter(([_, position]) => isEqual(position, coordinate))
+        .map(([playerId]) => getPlayer(playerId as PlayerId, context))
+    },
     isEqual,
   )
 
-  // const canMove = useSelector(machine.service, ({context}) => )
+  const isPossibleMove = useSelector(machine.service, (state) => {
+    const readyToMove = state.matches('Playing.Gameloop.Playing.Ready to move')
+    if (!readyToMove) return false
+    const { context } = state
+    // Ok, this player is ready to move. But is this square a valid move?
+    const gameState = getCurrentGameState(context)
+    const currentPosition = gameState.playerPositions[gameState.activePlayerId]
+    const xDiff = Math.abs(currentPosition[0] - columnIndex)
+    const yDiff = Math.abs(currentPosition[1] - rowIndex)
+    return xDiff + yDiff <= 2 && xDiff + yDiff != 0
+  })
+  const canMove = useSelector(machine.service, (state) =>
+    state.can({
+      type: 'move',
+      to: [0, 1],
+      playerId: getCurrentGameState(state.context).activePlayerId,
+    }),
+  )
+
+  const move = () => {
+    machine.send({
+      type: 'move',
+      to: coordinate,
+      playerId: getCurrentGameState(machine.service.getSnapshot().context).activePlayerId,
+    })
+  }
 </script>
 
-<div class="square" style:--_row={rowIndex + 1} style:--_column={columnIndex + 1}>
+<div
+  class="square"
+  style:--_row={rowIndex + 1}
+  style:--_column={columnIndex + 1}
+  class:possible-move={$isPossibleMove}
+>
   {#each $items as item}
     <div class="item">
       <Item itemId={item.item} />
@@ -42,6 +77,9 @@
       <Face faceId={player.faceId} />
     </div>
   {/each}
+  {#if $canMove && $isPossibleMove}
+    <button on:click={move}>MOVE</button>
+  {/if}
 </div>
 
 <style lang="postcss">
@@ -57,6 +95,9 @@
     > * {
       min-width: 0;
       min-height: 0;
+    }
+    &.possible-move {
+      border: 2px solid red;
     }
     &::after {
       position: absolute;

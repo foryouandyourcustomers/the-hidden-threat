@@ -6,7 +6,8 @@
   import Button from '$lib/components/ui/Button.svelte'
   import Dialog from '$lib/components/ui/Dialog.svelte'
   import { FACES, type FaceId } from '$lib/game/constants'
-  import { isDefenderId, type DefenderId, type PlayerId, type Side } from '$lib/game/types'
+  import { isDefenderId, type PlayerId, type Side } from '$lib/game/types'
+  import { getPlayer } from '$lib/game/utils'
 
   export let playerId: PlayerId
 
@@ -14,11 +15,7 @@
 
   const { machine } = getGameContext()
 
-  const player = useSelector(machine.service, ({ context }) => {
-    return side === 'attack'
-      ? context.attack.attacker
-      : context.defense.defenders[playerId as DefenderId]
-  })
+  const player = useSelector(machine.service, ({ context }) => getPlayer(playerId, context))
 
   const usersOnThisSide = useSelector(machine.service, ({ context }) =>
     context.users.filter((user) => user.side === side),

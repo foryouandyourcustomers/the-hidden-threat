@@ -88,8 +88,11 @@ export type DefenderRole =
 /**
  * The base class for Defender and Attacker.
  */
-export type Player = {
-  position: Coordinate
+type BasePlayer = {
+  /** The position this player starts at. The current position can be accessed
+   * via `getCurrentGameState`.
+   */
+  originalPosition: Coordinate
   userId: string
   faceId: FaceId
   /**
@@ -99,12 +102,16 @@ export type Player = {
   isConfigured: boolean
 }
 
-export type Defender = Player & {
+export type Defender = BasePlayer & {
+  id: DefenderId
   role: DefenderRole
 }
-export type Attacker = Player & {
+export type Attacker = BasePlayer & {
+  id: AttackerId
   role: AttackerRole
 }
+
+export type Player = Defender | Attacker
 
 export type Coordinate = [number, number]
 
@@ -112,7 +119,7 @@ export type DefenseInventory = typeof DEFAULT_DEFENSE_INVENTORY
 export type AttackInventory = typeof DEFAULT_ATTACK_INVENTORY
 
 export type PlayerId = DefenderId | AttackerId
-export type DefenderId = 0 | 1 | 2 | 3
+export type DefenderId = 'defender0' | 'defender1' | 'defender2' | 'defender3'
 export type AttackerId = 'attacker'
 
 export const isDefenderId = (id: PlayerId): id is DefenderId => id !== 'attacker'
@@ -122,7 +129,7 @@ type BaseGameEvent = {
   timestamp: number
   playerId: PlayerId
   /** Which user actually triggered the event. */
-  userId: number
+  userId: string
   finalized: boolean
 }
 
@@ -136,12 +143,34 @@ export type GameEvent =
       item: AttackItemId | DefenseItemId
     })
 
+export type GameEventOf<Type extends GameEvent['type']> = Extract<GameEvent, { type: Type }>
+
+/** Type guard to check whether the provided event is of type `type` */
+export const isGameEventOf = <Type extends GameEvent['type']>(
+  event: GameEvent,
+  type: Type,
+): event is GameEventOf<Type> => event.type === type
+
+/**
+ * A helper function to create a type guard for a specific `GameEvent` type.
+ *
+ * Typical usage:
+ *
+ *     const isMoveEvent = guardForGameEventType('move')
+ *     const moveEvents = events.filter(isMoveEvent)
+ *
+ * The advantage of this, is that TypeScript can infer the type of moveEvents
+ */
+export const guardForGameEventType =
+  <Type extends GameEvent['type']>(type: Type) =>
+  (event: GameEvent): event is GameEventOf<Type> =>
+    event.type === type
+
 export type AttackScenario = 'todo'
 
 export type BoardItem = {
   item: DefenseItemId | AttackItemId
   position: Coordinate
-  collectedCount: number
 }
 
 export type SharedGameContext = {

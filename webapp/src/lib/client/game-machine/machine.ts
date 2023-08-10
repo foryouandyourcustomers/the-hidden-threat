@@ -191,7 +191,7 @@ export const machine = createMachine({
                       guard: 'userControlsPlayer',
                       actions: {
                         params: {},
-                        type: 'sendGameEvent',
+                        type: 'forwardToServer',
                       },
                       reenter: false,
                     },
@@ -209,7 +209,7 @@ export const machine = createMachine({
                       guard: 'userControlsPlayer',
                       actions: {
                         params: {},
-                        type: 'sendGameEvent',
+                        type: 'forwardToServer',
                       },
                       reenter: false,
                     },

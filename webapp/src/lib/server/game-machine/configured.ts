@@ -1,17 +1,18 @@
+import { sharedGuards } from '$lib/game/guards'
+import {
+  isDefenderId,
+  type AttackerRole,
+  type DefenderId,
+  type DefenderRole,
+  type GameEvent,
+  type SharedGameContext,
+} from '$lib/game/types'
+import { findUserIndex } from '$lib/game/utils'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 import { produce, setAutoFreeze } from 'immer'
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
-import { getUserIndex } from './utils'
-import { sharedGuards } from '$lib/game/guards'
-import {
-  isDefenderId,
-  type DefenderId,
-  type SharedGameContext,
-  type DefenderRole,
-  type AttackerRole,
-} from '$lib/game/types'
 
 setAutoFreeze(false)
 
@@ -74,9 +75,26 @@ export const serverGameMachine = machine.provide({
         return {}
       }
     }),
-    addOrUpdateGameEvent: () => {
-      // todo
-    },
+    addOrUpdateGameEvent: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: move' | 'user: perform action'>
+      // TODO
+      if (event.type === 'user: move') {
+        const gameEvent: GameEvent = {
+          type: 'move',
+          finalized: true,
+          playerId: event.playerId,
+          timestamp: Date.now(),
+          to: event.to,
+          userId: event.userId,
+        }
+
+        return {
+          events: [...context.events, gameEvent],
+        }
+      } else {
+        return {}
+      }
+    }),
     rollbackGameEvent: () => {
       // todo
     },
@@ -88,7 +106,8 @@ export const serverGameMachine = machine.provide({
       if (isDefenderId(playerId)) {
         return {
           defense: produce(context.defense, (defense) => {
-            const player = defense.defenders[playerId]
+            const player = defense.defenders.find((player) => player.id === playerId)
+            if (!player) throw new Error(`Player ${playerId} not found in context`)
             player.faceId = event.faceId
             player.role = event.role as DefenderRole
             player.userId = event.playingUserId
@@ -172,7 +191,7 @@ export const serverGameMachine = machine.provide({
     assignSide: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user: assign side'>
 
-      const userIndex = getUserIndex(context, event.otherUserId)
+      const userIndex = findUserIndex(event.otherUserId, context)
       if (userIndex === undefined) return {}
 
       return {
@@ -185,7 +204,7 @@ export const serverGameMachine = machine.provide({
     assignAdmin: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user: assign admin'>
 
-      const userIndex = getUserIndex(context, event.otherUserId)
+      const userIndex = findUserIndex(event.otherUserId, context)
       if (userIndex === undefined) return {}
 
       return {
@@ -201,7 +220,7 @@ export const serverGameMachine = machine.provide({
     // TODO
     isValidGameEvent: () => {
       // TODO: this needs to verify that the given game event is valid in the current context.
-      return false
+      return true
     },
     ...sharedGuards,
   },

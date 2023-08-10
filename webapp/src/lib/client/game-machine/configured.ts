@@ -3,7 +3,9 @@ import { assign, not } from 'xstate'
 import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
 import { sharedGuards } from '$lib/game/guards'
-import { getUser } from './utils'
+import { getCurrentUser } from './utils'
+import { getCurrentGameState } from '$lib/game/game-state'
+import { getPlayer } from '$lib/game/utils'
 
 export const getClientGameMachine = ({
   send,
@@ -37,7 +39,7 @@ export const getClientGameMachine = ({
       isPlayer: ({ context }) => context.hostUserId !== context.userId,
 
       allRolesAssignedOfSide: ({ context }) => {
-        const { side } = getUser(context)
+        const { side } = getCurrentUser(context)
         if (!side) return false
 
         if (side === 'attack') {
@@ -47,24 +49,31 @@ export const getClientGameMachine = ({
         }
       },
       finishedAssigningRolesOfSide: ({ context }) => {
-        const { side } = getUser(context)
+        const { side } = getCurrentUser(context)
         if (!side) return false
         return (side === 'attack' ? context.attack : context.defense).finishedAssigning
       },
       isEditingPlayerOfSide: ({ context }) => {
-        const { side } = getUser(context)
+        const { side } = getCurrentUser(context)
         if (!side) return false
         const editingPlayer = (side === 'attack' ? context.attack : context.defense).editingPlayer
         return editingPlayer !== undefined
       },
       isNotEditingPlayerOfSide: not('isEditingPlayerOfSide'),
-      userControlsPlayer: () => false,
-      userOnActiveSide: () => false,
-      userNotOnActiveSide: () => false,
-      playerMoved: () => false,
+      userControlsPlayer: ({ context }) => {
+        const user = getCurrentUser(context)
+        return (
+          user.isAdmin ||
+          user.id === getPlayer(getCurrentGameState(context).activePlayerId, context).userId
+        )
+      },
+      userOnActiveSide: ({ context }) =>
+        getCurrentUser(context).side === getCurrentGameState(context).activeSide,
+      userNotOnActiveSide: not('userOnActiveSide'),
+      playerMoved: ({ context }) => getCurrentGameState(context).playerMoved,
+      playerPerformedAction: ({ context }) => !getCurrentGameState(context).playerMoved,
       userIsDefender: () => false,
       isServerStopped: () => false,
-      playerPerformedAction: () => false,
 
       ...sharedGuards,
     },

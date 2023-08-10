@@ -8,6 +8,7 @@ import type { Game } from './types'
 import { getSharedGameContext } from './utils'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 import isEqual from 'lodash/isEqual'
+import cloneDeep from 'lodash/cloneDeep'
 
 /**
  * Returns the uuid of the game
@@ -25,7 +26,9 @@ export const createGame = ({ host }: { host: User }): Game => {
     next: (state) => {
       const newSharedGameContext = getSharedGameContext(state.context)
       if (!isEqual(prevSharedGameContext, newSharedGameContext)) {
-        prevSharedGameContext = newSharedGameContext
+        // Cloning the shared context, since otherwise we'll be comparing the
+        // same objects.
+        prevSharedGameContext = cloneDeep(newSharedGameContext)
         sendMessageToUsers({
           gameId: id,
           message: {
