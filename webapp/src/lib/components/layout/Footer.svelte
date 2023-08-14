@@ -1,6 +1,6 @@
 <footer>
   <nav>
-    <div class="copyright">The Hidden Threat ©️ 2023</div>
+    <div class="copyright">The Hidden Threat &copy;️ 2023</div>
     <a href="/">Home</a>
     <a href="/privacy">Datenschutzerklärung</a>
     <a href="/imprint">Impressum</a>
