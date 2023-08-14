@@ -39,8 +39,8 @@ export const machine = createMachine({
                   target: 'Ready',
                   guard: 'isAdmin',
                   actions: {
-                    params: {},
                     type: 'forwardToServer',
+                    params: {},
                   },
                   reenter: false,
                 },
@@ -57,8 +57,8 @@ export const machine = createMachine({
               target: 'Assigning sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -66,8 +66,8 @@ export const machine = createMachine({
               target: 'Assigning sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -103,8 +103,8 @@ export const machine = createMachine({
                   target: 'Ready',
                   guard: 'isAdmin',
                   actions: {
-                    params: {},
                     type: 'forwardToServer',
+                    params: {},
                   },
                   reenter: false,
                 },
@@ -122,8 +122,8 @@ export const machine = createMachine({
                   target: 'Editing player',
                   guard: 'isAdmin',
                   actions: {
-                    params: {},
                     type: 'forwardToServer',
+                    params: {},
                   },
                   reenter: false,
                 },
@@ -140,8 +140,8 @@ export const machine = createMachine({
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -149,8 +149,8 @@ export const machine = createMachine({
               target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -190,8 +190,8 @@ export const machine = createMachine({
                       target: 'Ready to move',
                       guard: 'userControlsPlayerAndIsMoveEvent',
                       actions: {
-                        params: {},
                         type: 'forwardToServer',
+                        params: {},
                       },
                       reenter: false,
                     },
@@ -208,8 +208,8 @@ export const machine = createMachine({
                       target: 'Ready for action',
                       guard: 'userControlsPlayerAndIsActionEvent',
                       actions: {
-                        params: {},
                         type: 'forwardToServer',
+                        params: {},
                       },
                       reenter: false,
                     },
@@ -296,8 +296,8 @@ export const machine = createMachine({
               target: 'Sides',
               guard: 'isAdmin',
               actions: {
-                params: {},
                 type: 'forwardToServer',
+                params: {},
               },
               reenter: false,
             },
@@ -327,23 +327,23 @@ export const machine = createMachine({
     'shared game context update': {
       target: '#gameClient',
       actions: {
-        params: {},
         type: 'updateSharedGameContext',
+        params: {},
       },
       reenter: false,
     },
     'send emoji': {
       target: '#gameClient',
       actions: {
-        params: {},
         type: 'forwardToServer',
+        params: {},
       },
       reenter: false,
     },
     'show emoji': {
       actions: {
-        params: {},
         type: 'showEmoji',
+        params: {},
       },
       reenter: true,
     },
