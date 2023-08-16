@@ -72,6 +72,11 @@ jobs:
           user-email: m@tias.me
           target-branch: main
 
+      - name: Trigger redeploy on render.com
+        env:
+          RENDER_DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_URL }}
+        run: curl "$RENDER_DEPLOY_URL"
+      
       # - name: GIT commit and push all changed files
       #   env: 
       #     CI_COMMIT_MESSAGE: Continuous Integration Build Artifacts
