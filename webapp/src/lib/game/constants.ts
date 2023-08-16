@@ -160,34 +160,11 @@ export const ITEMS = [
 type ItemOfSide<T extends Item, S extends Side> = T extends { side: S } ? T : never
 
 export type DefenseItemId = ItemOfSide<(typeof ITEMS)[number], 'defense'>['id']
-
 export type AttackItemId = ItemOfSide<(typeof ITEMS)[number], 'attack'>['id']
 
-export const DEFAULT_DEFENSE_INVENTORY: { [key in DefenseItemId]: number } = {
-  certificate: 0,
-  insurance: 0,
-  'security-camera': 0,
-  'alarm-system': 0,
-  lock: 0,
-  'gps-tracker': 0,
-  license: 0,
-  'encrypted-data': 0,
-  extinguisher: 0,
-  firewall: 0,
-  'digital-footprint': 0,
-}
-export const DEFAULT_ATTACK_INVENTORY: { [key in AttackItemId]: number } = {
-  gun: 0,
-  virus: 0,
-  'fake-identity-card': 0,
-  'usb-stick': 0,
-  blueprint: 0,
-  cloud: 0,
-  tools: 0,
-  binoculars: 0,
-  dynamite: 0,
-  'data-exchange': 0,
-}
+export const isDefenseItemId = (itemId: string): itemId is DefenseItemId =>
+  ITEMS.find((item) => item.id === itemId)?.side === 'defense'
+export const isAttackItemId = (itemId: string): itemId is AttackItemId => !isDefenseItemId(itemId)
 
 export const ABILITIES = ['collect', 'ask', 'teleport']
 

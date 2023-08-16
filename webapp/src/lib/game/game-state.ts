@@ -7,6 +7,17 @@ import {
   type SharedGameContext,
   type Side,
 } from '$lib/game/types'
+import {
+  isDefenseItemId,
+  type AttackItemId,
+  type DefenseItemId,
+  ITEMS,
+  isAttackItemId,
+} from './constants'
+
+type ItemInventory<T extends Side> = {
+  [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
+}
 
 /**
  * The state of the current game after applying all GameEvents to it.
@@ -17,6 +28,12 @@ type GameState = {
   activePlayerId: PlayerId
   playerMoved: boolean
   playerPositions: { [key in DefenderId | AttackerId]: Coordinate }
+  defense: {
+    inventory: ItemInventory<'defense'>
+  }
+  attack: {
+    inventory: ItemInventory<'attack'>
+  }
 }
 
 /**
@@ -62,16 +79,24 @@ export const getCurrentGameState = (context: SharedGameContext): GameState => {
 
   const playerPositions = getPlayerPositions(context)
 
+  const inventories = getInventories(context)
+
   return {
     currentRound,
     activeSide,
     activePlayerId,
     playerMoved,
     playerPositions,
+    defense: {
+      inventory: inventories.defense,
+    },
+    attack: {
+      inventory: inventories.attack,
+    },
   }
 }
 
-export const getPlayerPositions = (context: SharedGameContext): GameState['playerPositions'] => {
+const getPlayerPositions = (context: SharedGameContext): GameState['playerPositions'] => {
   const playerPositions: GameState['playerPositions'] = {
     attacker: context.attack.attacker.originalPosition,
     defender0: context.defense.defenders[0].originalPosition,
@@ -85,4 +110,30 @@ export const getPlayerPositions = (context: SharedGameContext): GameState['playe
     .forEach((event) => (playerPositions[event.playerId] = event.to))
 
   return playerPositions
+}
+
+const getInventories = (context: SharedGameContext) => {
+  const defenseInventoryIds = Object.values(ITEMS)
+    .map((item) => item.id)
+    .filter(isDefenseItemId)
+  const attackInventoryIds = Object.values(ITEMS)
+    .map((item) => item.id)
+    .filter(isAttackItemId)
+
+  const inventories: { attack: ItemInventory<'attack'>; defense: ItemInventory<'defense'> } = {
+    defense: Object.fromEntries(
+      defenseInventoryIds.map((id) => [id, 0]),
+    ) as ItemInventory<'defense'>,
+    attack: Object.fromEntries(attackInventoryIds.map((id) => [id, 0])) as ItemInventory<'attack'>,
+  }
+
+  context.events.filter(guardForGameEventType('collect')).forEach((event) => {
+    if (isDefenseItemId(event.item)) {
+      inventories.defense[event.item] += 1
+    } else {
+      inventories.attack[event.item] += 1
+    }
+  })
+
+  return inventories
 }

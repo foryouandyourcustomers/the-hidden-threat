@@ -1,8 +1,4 @@
-import {
-  DEFAULT_ATTACK_INVENTORY,
-  DEFAULT_DEFENSE_INVENTORY,
-  INITIAL_BOARD_ITEMS,
-} from '$lib/game/constants'
+import { INITIAL_BOARD_ITEMS } from '$lib/game/constants'
 import type { User } from '$lib/game/types'
 import { createDefaultAttacker, createDefaultDefender } from '$lib/server/game/utils'
 import cloneDeep from 'lodash/cloneDeep'
@@ -29,12 +25,10 @@ export const machine = createMachine({
           createDefaultDefender(input.host.id, 'defender2'),
           createDefaultDefender(input.host.id, 'defender3'),
         ],
-        inventory: { ...DEFAULT_DEFENSE_INVENTORY },
       },
       attack: {
         finishedAssigning: false,
         attacker: createDefaultAttacker(input.host.id),
-        inventory: { ...DEFAULT_ATTACK_INVENTORY },
       },
       users: [input.host],
       events: [],

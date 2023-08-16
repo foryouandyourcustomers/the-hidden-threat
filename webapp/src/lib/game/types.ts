@@ -1,11 +1,5 @@
 import type { ClientEvent } from '$lib/client/game-machine/types'
-import type {
-  AttackItemId,
-  DEFAULT_ATTACK_INVENTORY,
-  DEFAULT_DEFENSE_INVENTORY,
-  DefenseItemId,
-  FaceId,
-} from './constants'
+import type { AttackItemId, DefenseItemId, FaceId } from './constants'
 
 export type Side = 'defense' | 'attack'
 
@@ -113,9 +107,6 @@ export type Player = Defender | Attacker
 
 export type Coordinate = [number, number]
 
-export type DefenseInventory = typeof DEFAULT_DEFENSE_INVENTORY
-export type AttackInventory = typeof DEFAULT_ATTACK_INVENTORY
-
 export type PlayerId = DefenderId | AttackerId
 export type DefenderId = 'defender0' | 'defender1' | 'defender2' | 'defender3'
 export type AttackerId = 'attacker'
@@ -184,12 +175,10 @@ export type SharedGameContext = {
     finishedAssigning: boolean
     /** The list of defenders in the correct order. Up to 4 */
     defenders: [Defender, Defender, Defender, Defender]
-    inventory: DefenseInventory
   }
   attack: {
     editingPlayer?: undefined | AttackerId
     finishedAssigning: boolean
     attacker: Attacker
-    inventory: AttackInventory
   }
 }
