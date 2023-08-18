@@ -1,9 +1,8 @@
+import type { AttackCharacterId, DefenseCharacterId } from '$lib/game/constants'
 import { sharedGuards } from '$lib/game/guards'
 import {
   isDefenderId,
-  type AttackerRole,
   type DefenderId,
-  type DefenderRole,
   type GameEvent,
   type SharedGameContext,
 } from '$lib/game/types'
@@ -118,7 +117,7 @@ export const serverGameMachine = machine.provide({
             const player = defense.defenders.find((player) => player.id === playerId)
             if (!player) throw new Error(`Player ${playerId} not found in context`)
             player.faceId = event.faceId
-            player.role = event.role as DefenderRole
+            player.character = event.character as DefenseCharacterId
             player.userId = event.playingUserId
             player.isConfigured = true
           }),
@@ -127,7 +126,7 @@ export const serverGameMachine = machine.provide({
         return {
           attack: produce(context.attack, (attack) => {
             attack.attacker.faceId = event.faceId
-            attack.attacker.role = event.role as AttackerRole
+            attack.attacker.character = event.character as AttackCharacterId
             attack.attacker.userId = event.playingUserId
             attack.attacker.isConfigured = true
           }),

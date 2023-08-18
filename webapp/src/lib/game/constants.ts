@@ -157,27 +157,83 @@ export const ITEMS = [
   },
 ] as const satisfies readonly Item[]
 
-type ItemOfSide<T extends Item, S extends Side> = T extends { side: S } ? T : never
-
-export type DefenseItemId = ItemOfSide<(typeof ITEMS)[number], 'defense'>['id']
-export type AttackItemId = ItemOfSide<(typeof ITEMS)[number], 'attack'>['id']
+export type DefenseItemId = Extract<(typeof ITEMS)[number], { side: 'defense' }>['id']
+export type AttackItemId = Extract<(typeof ITEMS)[number], { side: 'attack' }>['id']
 
 export const isDefenseItemId = (itemId: string): itemId is DefenseItemId =>
   ITEMS.find((item) => item.id === itemId)?.side === 'defense'
 export const isAttackItemId = (itemId: string): itemId is AttackItemId => !isDefenseItemId(itemId)
 
-export const ABILITIES = ['collect', 'ask', 'teleport']
+// export const ABILITIES = ['collect', 'ask', 'teleport']
 
-export const DEFENDER_ROLES = [
+export type Character = {
+  id: string
+  name: string
+  description: string
+  ability: string
+  side: Side
+}
+
+export const CHARACTERS = [
   {
+    id: 'order-manager',
     name: 'Auftragsmanagement',
     description:
       'Die Auftragsmanagerin ist für die Koordination und Überwachung des Bestell- und Lieferprozesses des Unternehmens zuständig und kümmern sich auch um die Beauftragung vonGroßhandel und Lieferanten.',
     ability:
       'Darf den gesamten Spielzugablauf mit einer Verteidiger:in-Figur ihrer Wahl ausführen.',
-    actions: ['collect', 'ask', 'teleport'],
+    side: 'defense',
   },
-]
+  {
+    id: 'it-specialist',
+    name: 'IT Fachkraft',
+    description:
+      'Die Auftragsmanagerin ist für die Koordination und Überwachung des Bestell- und Lieferprozesses des Unternehmens zuständig und kümmern sich auch um die Beauftragung vonGroßhandel und Lieferanten.',
+    ability:
+      'Darf den gesamten Spielzugablauf mit einer Verteidiger:in-Figur ihrer Wahl ausführen.',
+    side: 'defense',
+  },
+  {
+    id: 'dispatch-manager',
+    name: 'Speditionsleitung',
+    description:
+      'Die Auftragsmanagerin ist für die Koordination und Überwachung des Bestell- und Lieferprozesses des Unternehmens zuständig und kümmern sich auch um die Beauftragung vonGroßhandel und Lieferanten.',
+    ability:
+      'Darf den gesamten Spielzugablauf mit einer Verteidiger:in-Figur ihrer Wahl ausführen.',
+    side: 'defense',
+  },
+  {
+    id: 'quality-manager',
+    name: 'Qualitätsmanagement',
+    description:
+      'Die Auftragsmanagerin ist für die Koordination und Überwachung des Bestell- und Lieferprozesses des Unternehmens zuständig und kümmern sich auch um die Beauftragung vonGroßhandel und Lieferanten.',
+    ability:
+      'Darf den gesamten Spielzugablauf mit einer Verteidiger:in-Figur ihrer Wahl ausführen.',
+    side: 'defense',
+  },
+  {
+    id: 'frustrated',
+    name: 'Frustriert',
+    description:
+      'Die Auftragsmanagerin ist für die Koordination und Überwachung des Bestell- und Lieferprozesses des Unternehmens zuständig und kümmern sich auch um die Beauftragung vonGroßhandel und Lieferanten.',
+    ability:
+      'Darf den gesamten Spielzugablauf mit einer Verteidiger:in-Figur ihrer Wahl ausführen.',
+    side: 'attack',
+  },
+  {
+    id: 'disappointed',
+    name: 'Enttäuscht',
+    description:
+      'Die Auftragsmanagerin ist für die Koordination und Überwachung des Bestell- und Lieferprozesses des Unternehmens zuständig und kümmern sich auch um die Beauftragung vonGroßhandel und Lieferanten.',
+    ability:
+      'Darf den gesamten Spielzugablauf mit einer Verteidiger:in-Figur ihrer Wahl ausführen.',
+    side: 'attack',
+  },
+] as const satisfies readonly Character[]
+
+export type DefenseCharacterId = Extract<(typeof CHARACTERS)[number], { side: 'defense' }>['id']
+export type AttackCharacterId = Extract<(typeof CHARACTERS)[number], { side: 'attack' }>['id']
+export type CharacterId = DefenseCharacterId | AttackCharacterId
 
 type Face = {
   id: number

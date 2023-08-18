@@ -5,9 +5,12 @@
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Dialog from '$lib/components/ui/Dialog.svelte'
+  import Heading from '$lib/components/ui/Heading.svelte'
   import { FACES, type FaceId } from '$lib/game/constants'
   import { isDefenderId, type PlayerId, type Side } from '$lib/game/types'
   import { getPlayer } from '$lib/game/utils'
+  import Select from 'svelte-select'
+  import PlayerConfiguratorCharacter from './PlayerConfiguratorCharacter.svelte'
 
   export let playerId: PlayerId
 
@@ -21,17 +24,23 @@
     context.users.filter((user) => user.side === side),
   )
   const canUpdate = useSelector(machine.service, (snapshot) =>
-    snapshot.can({ type: 'assign role', role, playerId, playingUserId: userId, faceId: faceId }),
+    snapshot.can({
+      type: 'assign role',
+      character,
+      playerId,
+      playingUserId: userId,
+      faceId: faceId,
+    }),
   )
 
   $: userId = $player.userId
   $: faceId = $player.faceId
-  $: role = $player.role
+  $: character = $player.character
 
   const sendUpdate = () => {
     machine.send({
       type: 'assign role',
-      role,
+      character,
       playerId,
       playingUserId: userId,
       faceId,
@@ -47,6 +56,8 @@
     userId = newUserId
     sendUpdate()
   }
+
+  $: userItems = $usersOnThisSide.map((user) => ({ value: user.id, label: user.name }))
 </script>
 
 <Dialog
@@ -55,15 +66,28 @@
   on:close={() => machine.send({ type: 'stop editing player', side })}
 >
   <div class="configurator">
-    <select disabled={!$canUpdate} on:input={(e) => setUser(e.currentTarget.value)} value={userId}>
-      <option value="">--PLEASE SELECT--</option>
-      {#each $usersOnThisSide as user}
-        <option value={user.id}>{user.name}</option>
-      {/each}
-    </select>
+    <Heading size="md" spacing="none">1. Bestimme eine:n Spieler:in</Heading>
+    <div class="user-select">
+      <Select
+        items={userItems}
+        value={userId}
+        on:input={(e) => setUser(e.detail?.value)}
+        required
+      />
+    </div>
+
+    <div class="spacer" />
+
+    <Heading size="md" spacing="none">2. Wähle einen Charakter aus</Heading>
+
+    <PlayerConfiguratorCharacter player={$player} />
+
+    <div class="spacer" />
+
+    <Heading size="md" spacing="none">3. Wähle einen Avatar für deinen Charakter</Heading>
 
     <div class="faces">
-      {#each FACES as face}
+      {#each FACES.slice(0, 3) as face}
         <button
           disabled={!$canUpdate}
           class:active={face.id === faceId}
@@ -94,15 +118,27 @@
     gap: 1rem;
   }
 
+  .user-select {
+    width: 36rem;
+  }
   .faces {
     display: flex;
     gap: 1rem;
     .face {
       border: 1px solid transparent;
       border-radius: var(--radius-md);
+      background: var(--color-blue-spielbrett);
+      padding: 0.25rem;
+      width: 5rem;
+      height: 5rem;
+      :global(svg) {
+        width: 100%;
+        height: 100%;
+      }
 
       &.active {
-        border-color: orange;
+        background: var(--color-bg-strong);
+        color: var(--color-text-onstrong);
       }
     }
   }

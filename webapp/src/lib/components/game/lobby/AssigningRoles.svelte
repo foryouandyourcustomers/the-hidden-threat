@@ -37,21 +37,20 @@
   <svelte:fragment slot="info">Schritt 3 von 3</svelte:fragment>
 </Heading>
 
-<Paragraph>Die Rollenverteilung wird von der Spielleitung übernommen.</Paragraph>
-
 <section>
   <Heading centered>{$user.side === 'attack' ? 'Angriff' : 'Verteidigung'}</Heading>
 
-  <Paragraph>
-    Es müssen für jede Rolle ein:e Spieler:in bestimmt und bestätigt werden. Die restlichen
-    Teilnehmenden können das Spielgeschehen beobachten und das Team beraten.
+  <Paragraph width="full">
+    Die Rollenverteilung wird von der Spielleitung übernommen. Es müssen für jede Rolle ein:e
+    Spieler:in bestimmt und bestätigt werden. Die restlichen Teilnehmenden können das Spielgeschehen
+    beobachten und das Team beraten.
   </Paragraph>
 
   <div class="players">
     {#each $players as player, i}
       <div class="player">
         {#if player.isConfigured}
-          <Heading centered size="sm">{player.role}</Heading>
+          <Heading centered size="sm">{player.character}</Heading>
           {$users.find((user) => user.id === player.userId)?.name}
           <Face faceId={player.faceId} />
         {/if}
@@ -94,7 +93,7 @@
 
 <style lang="postcss">
   section {
-    margin-top: 3rem;
+    margin-top: 1.5rem;
     border-radius: var(--radius-md);
     background: var(--color-bg-secondary);
     padding: 1rem 1.25rem;

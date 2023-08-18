@@ -1,12 +1,5 @@
-import type { FaceId } from '$lib/game/constants'
-import type {
-  GameEvent,
-  PlayerId,
-  Role,
-  ServerMessage,
-  SharedGameContext,
-  Side,
-} from '$lib/game/types'
+import type { CharacterId, FaceId } from '$lib/game/constants'
+import type { GameEvent, PlayerId, ServerMessage, SharedGameContext, Side } from '$lib/game/types'
 import type { Sound } from '$lib/sound'
 
 export type Context = SharedGameContext & {
@@ -43,7 +36,7 @@ export type NativeClientEvent =
       type: 'assign role'
       playerId: PlayerId
       faceId: FaceId
-      role: Role
+      character: CharacterId
       /** Not using `userId` since client events cannot use userId because it'll
        * be overwritten by the server */
       playingUserId: string

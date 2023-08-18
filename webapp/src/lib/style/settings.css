@@ -31,6 +31,9 @@
   --color-bg-strong: white;
   --color-text-onstrong: var(--color-blue-spielbrett);
 
+  --color-bg-strong-secondary: #d5d9e3;
+  --color-text-onstrong-secondary: var(--color-text-onstrong);
+
   --color-bg-disabled-strong: var(--color-grey-light);
   --color-text-disabled-onstrong: var(--color-grey-dark);
 }

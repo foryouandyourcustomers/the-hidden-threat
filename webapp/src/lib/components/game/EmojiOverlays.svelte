@@ -7,13 +7,6 @@
 
   const users = useSelector(context.machine.service, (state) => state.context.users)
 
-  const validEmojis = ['👋', '👍', '👏', '😃', '🧠', '🤔']
-
-  const sendEmoji = (emoji: string) => {
-    context.machine.send({ type: 'send emoji', emoji })
-    showEmoji({ userId: context.userId, emoji })
-  }
-
   type DisplayedEmoji = { userName: string; emoji: string; position: [number, number] }
   let emojis: { [key: string]: DisplayedEmoji } = {}
 
@@ -26,50 +19,26 @@
   }
 </script>
 
-<div class="emojis">
-  {#each Object.entries(emojis) as [i, emoji] (i)}
-    <div
-      class="displayed-emoji"
-      style:--_x={emoji.position[0]}
-      style:--_y={emoji.position[1]}
-      in:scale={{ duration: 200, start: 0.4 }}
-      out:fade
-      on:introend={() => {
-        setTimeout(() => {
-          delete emojis[i]
-          emojis = emojis
-        }, 2000)
-      }}
-    >
-      <span class="emjoi">{emoji.emoji}</span>
-      <span class="name">{emoji.userName}</span>
-    </div>
-  {/each}
-  {#each validEmojis as emoji}
-    <button class="emoji" on:click={() => sendEmoji(emoji)}>{emoji}</button>
-  {/each}
-</div>
+{#each Object.entries(emojis) as [i, emoji] (i)}
+  <div
+    class="displayed-emoji"
+    style:--_x={emoji.position[0]}
+    style:--_y={emoji.position[1]}
+    in:scale={{ duration: 200, start: 0.4 }}
+    out:fade
+    on:introend={() => {
+      setTimeout(() => {
+        delete emojis[i]
+        emojis = emojis
+      }, 2000)
+    }}
+  >
+    <span class="emjoi">{emoji.emoji}</span>
+    <span class="name">{emoji.userName}</span>
+  </div>
+{/each}
 
 <style lang="postcss">
-  .emojis {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
-    gap: 0.25rem;
-    padding: 0.5rem 0.75rem;
-  }
-  .emoji {
-    display: grid;
-    place-content: center;
-    border: none;
-    border-radius: var(--radius-sm);
-    background: #fafafa;
-    padding: 0;
-    aspect-ratio: 1;
-    font-size: var(--scale-2);
-    &:hover {
-      background: #f0f0f0;
-    }
-  }
   .displayed-emoji {
     --_width: 4rem;
     --_height: 4rem;
@@ -80,8 +49,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 30px #dd7;
-    border: var(--px) solid #ccc;
+    box-shadow: 0 0 30px #fff5;
     border-radius: var(--radius-full);
     background: #fafafa;
     width: var(--_width);
@@ -90,8 +58,10 @@
     line-height: 1.1;
     & .name {
       position: absolute;
-      bottom: -1em;
+      bottom: -1.75em;
+      border-radius: var(--radius-sm);
       background: black;
+      padding: 0 0.5rem;
       font-size: 0.3em;
     }
   }

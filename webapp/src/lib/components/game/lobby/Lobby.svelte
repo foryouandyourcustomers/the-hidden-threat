@@ -21,12 +21,20 @@
   })
 </script>
 
-{#if $section === 'Assigning sides'}
-  <AssigningSides />
-{:else if $section === 'Assigning roles'}
-  <AssigningRoles />
-{:else if $section === 'Waiting for other side'}
-  Waiting for other side
-{:else}
-  Unknown state
-{/if}
+<div class="lobby">
+  {#if $section === 'Assigning sides'}
+    <AssigningSides />
+  {:else if $section === 'Assigning roles'}
+    <AssigningRoles />
+  {:else if $section === 'Waiting for other side'}
+    Waiting for other side
+  {:else}
+    Unknown lobby state
+  {/if}
+</div>
+
+<style lang="postcss">
+  .lobby {
+    padding: 4rem 7rem;
+  }
+</style>

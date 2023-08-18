@@ -7,7 +7,7 @@
   import type { SharedGameContext } from '$lib/game/types'
   import { objectEntries } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
-  import Item from '../icons/Item.svelte'
+  import Item from '$lib/components/icons/Item.svelte'
 
   const { machine } = getGameContext()
 

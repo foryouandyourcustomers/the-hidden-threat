@@ -39,3 +39,12 @@ body {
     font: var(--display-h4);
   }
 }
+
+.svelte-select {
+  --background: var(--color-blue-spielbrett);
+  --border: 1px solid transparent;
+  --border-focused: 1px solid var(--color-border);
+  --item-is-active-bg: var(--color-bg-strong);
+  --item-is-active-color: var(--color-text-onstrong);
+  --item-hover-bg: var(--color-blue-spielbrett);
+}

@@ -1,5 +1,11 @@
 import type { ClientEvent } from '$lib/client/game-machine/types'
-import type { AttackItemId, DefenseItemId, FaceId } from './constants'
+import type {
+  AttackCharacterId,
+  AttackItemId,
+  DefenseCharacterId,
+  DefenseItemId,
+  FaceId,
+} from './constants'
 
 export type Side = 'defense' | 'attack'
 
@@ -67,16 +73,6 @@ export type User = {
   isSideAssigned: boolean
 }
 
-export type Role = DefenderRole | AttackerRole
-
-export type AttackerRole = 'disappointment' | 'frustration'
-
-export type DefenderRole =
-  | 'it-specialist'
-  | 'quality-manager'
-  | 'dispatch-manager'
-  | 'order-manager'
-
 /**
  * The base class for Defender and Attacker.
  */
@@ -96,11 +92,11 @@ type BasePlayer = {
 
 export type Defender = BasePlayer & {
   id: DefenderId
-  role: DefenderRole
+  character: DefenseCharacterId
 }
 export type Attacker = BasePlayer & {
   id: AttackerId
-  role: AttackerRole
+  character: AttackCharacterId
 }
 
 export type Player = Defender | Attacker

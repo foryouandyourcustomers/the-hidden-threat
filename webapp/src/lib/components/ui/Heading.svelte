@@ -4,6 +4,7 @@
   export let separator = false
   export let centered = false
   export let tag: 'h1' | 'h2' | 'h3' | 'h4' | undefined = undefined
+  export let spacing: 'default' | 'none' = 'default'
 
   const defaultSizeTags: { [key in typeof size]: typeof tag } = {
     xl: 'h1',
@@ -15,7 +16,7 @@
   if (!tag) tag = defaultSizeTags[size]
 </script>
 
-<div class="heading size-{size}" class:separator class:centered>
+<div class="heading size-{size} spacing-{spacing}" class:separator class:centered>
   <svelte:element this={tag} {id} class="h">
     <slot />
   </svelte:element>
@@ -33,7 +34,9 @@
     justify-content: space-between;
     align-items: flex-end;
     margin: 0;
-    margin-bottom: 1.25rem;
+    &.spacing-default {
+      margin-bottom: 1.25rem;
+    }
     &.separator {
       border-bottom: var(--px) solid var(--color-border);
       padding-bottom: 0.75rem;

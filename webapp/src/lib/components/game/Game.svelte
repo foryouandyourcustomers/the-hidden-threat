@@ -1,10 +1,9 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import TempActionButton from './TempActionButton.svelte'
   import Finished from './finished/Finished.svelte'
+  import Header from './header/Header.svelte'
   import Lobby from './lobby/Lobby.svelte'
-  import Players from './playing/Players.svelte'
   import Playing from './playing/Playing.svelte'
 
   const { machine } = getGameContext()
@@ -52,16 +51,7 @@
     bind:clientWidth={gameWidth}
     bind:clientHeight={gameHeight}
   >
-    <div class="name">The Hidden Threat</div>
-    <div class="characters" />
-    <div class="items"><slot name="items" /></div>
-    <div class="actions">
-      <slot name="actions" />
-      {#if $section === 'Playing'}
-        <Players />
-      {/if}
-      <TempActionButton />
-    </div>
+    <Header />
     <div class="content">
       {#if $section === 'Lobby'}
         <Lobby />
@@ -73,7 +63,7 @@
         Unkown state
       {/if}
     </div>
-    <slot name="cursor-overlays" />
+    <slot name="overlays" />
   </div>
 </div>
 
@@ -89,12 +79,9 @@
   .game {
     display: grid;
     position: relative;
-    grid-template-rows: 10% 1fr;
-    grid-template-columns: 30rem 1fr 1fr;
-    grid-template-areas:
-      'name characters items'
-      'actions content content';
+    grid-template-rows: 3.5rem 1fr;
     gap: 1rem;
+    border-radius: var(--radius-sm);
     background: var(--color-bg);
     width: 90rem;
     height: 50.625rem;
@@ -107,20 +94,7 @@
       scale: 0.6;
     }
   }
-  .name {
-    grid-area: name;
-  }
-  .characters {
-    grid-area: characters;
-  }
-  .items {
-    grid-area: items;
-  }
-  .actions {
-    grid-area: actions;
-  }
   .content {
-    grid-area: content;
     padding-right: 3rem;
   }
 </style>

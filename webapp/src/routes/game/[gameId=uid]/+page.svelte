@@ -1,17 +1,17 @@
 <script lang="ts">
+  import { useSelector } from '$lib/@xstate/svelte'
   import { useMachine } from '$lib/@xstate/svelte/useMachine.js'
   import { setGameContext } from '$lib/client/game-context.js'
   import { getClientGameMachine } from '$lib/client/game-machine/configured.js'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { createWebSocketConnection } from '$lib/client/web-socket'
   import CursorOverlays from '$lib/components/game/CursorOverlays.svelte'
-  import Emojis from '$lib/components/game/Emojis.svelte'
+  import EmojiOverlays from '$lib/components/game/EmojiOverlays.svelte'
   import Game from '$lib/components/game/Game.svelte'
   import { play } from '$lib/sound/index.js'
-  import { useSelector } from '$lib/@xstate/svelte'
+  import isEqual from 'lodash/isEqual'
   import throttle from 'lodash/throttle'
   import { onMount } from 'svelte'
-  import isEqual from 'lodash/isEqual'
 
   export let data
 
@@ -39,13 +39,10 @@
       send: socketConnection.send,
       actions: {
         playSound: play,
-        showEmoji: ({ userId, emoji }) => emojisComponent?.showEmoji({ userId, emoji }),
+        showEmoji: ({ userId, emoji }) => showEmoji?.({ userId, emoji }),
       },
     }),
-    // TODO: replace input data with actual
-    {
-      input: machineInput,
-    },
+    { input: machineInput },
   )
 
   const user = useSelector(machine.service, ({ context }) => getCurrentUser(context), isEqual)
@@ -61,8 +58,6 @@
     }
   })
 
-  let emojisComponent: Emojis | undefined
-
   const reportMousePosition = throttle(
     (position: [number, number]) => {
       socketConnection.send({
@@ -73,11 +68,15 @@
     50,
     { leading: true, trailing: true },
   )
+
+  let showEmoji: (props: { userId: string; emoji: string }) => void
 </script>
 
 <Game {reportMousePosition}>
-  <Emojis slot="actions" bind:this={emojisComponent} />
-  <CursorOverlays slot="cursor-overlays" {mousePositions} />
+  <svelte:fragment slot="overlays">
+    <CursorOverlays {mousePositions} />
+    <EmojiOverlays bind:showEmoji />
+  </svelte:fragment>
 </Game>
 
 <pre>
