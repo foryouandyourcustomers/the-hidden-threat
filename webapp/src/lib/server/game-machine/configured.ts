@@ -57,14 +57,14 @@ export const serverGameMachine = machine.provide({
         return {
           attack: {
             ...context.attack,
-            editingPlayer: event.type === 'user: start editing player' ? 'attacker' : undefined,
+            editingPlayerId: event.type === 'user: start editing player' ? 'attacker' : undefined,
           } satisfies SharedGameContext['attack'],
         }
       } else if (side === 'defense') {
         return {
           defense: {
             ...context.defense,
-            editingPlayer:
+            editingPlayerId:
               event.type === 'user: stop editing player'
                 ? undefined
                 : (event.playerId as DefenderId),

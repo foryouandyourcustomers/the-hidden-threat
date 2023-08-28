@@ -20,7 +20,7 @@
         type: 'collect',
         finalized,
         playerId: gameState.activePlayer.id,
-        item: itemId,
+        itemId: itemId,
         position: gameState.activePlayerPosition,
       },
     }
@@ -32,7 +32,7 @@
     const playerPosition = gameState.activePlayerPosition
     const item = context.items.find((item) => isEqual(item.position, playerPosition))
     if (item) {
-      machine.send(getCollectActionEvent(item.item, context, finalized))
+      machine.send(getCollectActionEvent(item.id, context, finalized))
     }
   }
 

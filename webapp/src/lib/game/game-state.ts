@@ -7,6 +7,8 @@ import {
   type Player,
   type SharedGameContext,
   type Side,
+  isDefenderId,
+  type PlayerId,
 } from '$lib/game/types'
 import isEqual from 'lodash/isEqual'
 import {
@@ -110,8 +112,8 @@ export class GameState {
     ) as ItemInventory<'defense'>
 
     this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
-      if (isDefenseItemId(event.item)) {
-        inventory[event.item] += 1
+      if (isDefenseItemId(event.itemId)) {
+        inventory[event.itemId] += 1
       }
     })
 
@@ -127,8 +129,8 @@ export class GameState {
     ) as ItemInventory<'attack'>
 
     this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
-      if (isAttackItemId(event.item)) {
-        inventory[event.item] += 1
+      if (isAttackItemId(event.itemId)) {
+        inventory[event.itemId] += 1
       }
     })
 
@@ -142,12 +144,22 @@ export class GameState {
       const collectedCount = this.context.events
         .filter(guardForGameEventType('collect'))
         .filter((event) => isEqual(event.position, coordinate))
-        .filter((event) => event.item === item.item).length
+        .filter((event) => event.itemId === item.id).length
 
       return {
         item,
         collectedCount,
       }
     })
+  }
+
+  getPlayer(playerId: PlayerId): Player {
+    if (isDefenderId(playerId)) {
+      const player = this.context.defense.defenders.find((player) => player.id === playerId)
+      if (!player) throw new Error(`Player ${playerId} not found in context`)
+      return player
+    } else {
+      return this.context.attack.attacker
+    }
   }
 }

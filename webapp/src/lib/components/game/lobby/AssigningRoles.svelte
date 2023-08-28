@@ -13,7 +13,7 @@
 
   const editingPlayerId = useSelector(
     machine.service,
-    ({ context }) => ($user.side === 'attack' ? context.attack : context.defense).editingPlayer,
+    ({ context }) => ($user.side === 'attack' ? context.attack : context.defense).editingPlayerId,
   )
 
   const players = useSelector(machine.service, ({ context }) =>

@@ -55,7 +55,7 @@ export const getClientGameMachine = ({
       isEditingPlayerOfSide: ({ context }) => {
         const { side } = getCurrentUser(context)
         if (!side) return false
-        const editingPlayer = (side === 'attack' ? context.attack : context.defense).editingPlayer
+        const editingPlayer = (side === 'attack' ? context.attack : context.defense).editingPlayerId
         return editingPlayer !== undefined
       },
       isNotEditingPlayerOfSide: not('isEditingPlayerOfSide'),

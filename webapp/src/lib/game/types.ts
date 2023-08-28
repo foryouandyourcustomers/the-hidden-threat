@@ -125,7 +125,7 @@ export type GameEvent =
     })
   | (BaseGameEvent & {
       type: 'collect'
-      item: AttackItemId | DefenseItemId
+      itemId: AttackItemId | DefenseItemId
       position: Coordinate
     })
 
@@ -155,7 +155,7 @@ export const guardForGameEventType =
 export type AttackScenario = 'todo'
 
 export type BoardItem = {
-  item: DefenseItemId | AttackItemId
+  id: DefenseItemId | AttackItemId
   position: Coordinate
 }
 
@@ -168,13 +168,13 @@ export type SharedGameContext = {
   finishedAssigningSides: boolean
   globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
   defense: {
-    editingPlayer?: undefined | DefenderId
+    editingPlayerId?: undefined | DefenderId
     finishedAssigning: boolean
     /** The list of defenders in the correct order. Up to 4 */
     defenders: [Defender, Defender, Defender, Defender]
   }
   attack: {
-    editingPlayer?: undefined | AttackerId
+    editingPlayerId?: undefined | AttackerId
     finishedAssigning: boolean
     attacker: Attacker
   }

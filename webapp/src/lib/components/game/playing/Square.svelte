@@ -5,8 +5,8 @@
   import Face from '$lib/components/icons/Face.svelte'
   import Item from '$lib/components/icons/Item.svelte'
   import { GameState } from '$lib/game/game-state'
-  import type { Coordinate, PlayerId, SharedGameContext } from '$lib/game/types'
-  import { getPlayer } from '$lib/game/utils'
+  import type { Coordinate, SharedGameContext } from '$lib/game/types'
+  import { objectEntries } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
 
   export let columnIndex: number
@@ -25,11 +25,12 @@
   const players = useSelector(
     machine.service,
     ({ context }) => {
-      const { playerPositions } = GameState.fromContext(context)
+      const gameState = GameState.fromContext(context)
+      const { playerPositions } = gameState
 
-      return Object.entries(playerPositions)
+      return objectEntries(playerPositions)
         .filter(([_, position]) => isEqual(position, coordinate))
-        .map(([playerId]) => getPlayer(playerId as PlayerId, context))
+        .map(([playerId]) => gameState.getPlayer(playerId))
     },
     isEqual,
   )
@@ -78,7 +79,7 @@
 >
   {#each $items as item}
     <div class="item">
-      <Item itemId={item.item} />
+      <Item itemId={item.id} />
     </div>
   {/each}
   {#each $players as player}
