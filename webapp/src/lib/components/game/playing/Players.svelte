@@ -1,10 +1,10 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import { GameState } from '$lib/game/game-state'
   import type { Attacker, Defender, User } from '$lib/game/types'
   import isEqual from 'lodash/isEqual'
   import Player from './Player.svelte'
-  import { getCurrentGameState } from '$lib/game/game-state'
 
   const { machine } = getGameContext()
 
@@ -39,7 +39,7 @@
 
   const activePlayerId = useSelector(
     machine.service,
-    ({ context }) => getCurrentGameState(context).activePlayerId,
+    ({ context }) => GameState.fromContext(context).activePlayer.id,
   )
 </script>
 

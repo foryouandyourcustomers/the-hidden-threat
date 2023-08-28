@@ -188,7 +188,7 @@ export const machine = createMachine({
                   on: {
                     'apply game event': {
                       target: 'Ready to move',
-                      guard: 'userControlsPlayerAndIsMoveEvent',
+                      guard: 'userControlsPlayer isMoveEvent',
                       actions: {
                         type: 'forwardToServer',
                         params: {},
@@ -206,7 +206,16 @@ export const machine = createMachine({
                   on: {
                     'apply game event': {
                       target: 'Ready for action',
-                      guard: 'userControlsPlayerAndIsActionEvent',
+                      guard: 'userControlsPlayer isActionEvent',
+                      actions: {
+                        type: 'forwardToServer',
+                        params: {},
+                      },
+                      reenter: false,
+                    },
+                    'cancel game event': {
+                      target: 'Ready for action',
+                      guard: 'userControlsPlayer lastEventIsAction lastEventNotFinalized',
                       actions: {
                         type: 'forwardToServer',
                         params: {},

@@ -126,6 +126,7 @@ export type GameEvent =
   | (BaseGameEvent & {
       type: 'collect'
       item: AttackItemId | DefenseItemId
+      position: Coordinate
     })
 
 export type GameEventOf<Type extends GameEvent['type']> = Extract<GameEvent, { type: Type }>

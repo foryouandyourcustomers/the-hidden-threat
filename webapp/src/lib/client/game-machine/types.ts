@@ -44,6 +44,7 @@ export type NativeClientEvent =
   | { type: 'send emoji'; emoji: string }
   | { type: 'apply game event'; gameEvent: DistributiveOmit<GameEvent, 'userId' | 'timestamp'> }
   | { type: 'rollback game event'; gameEventType: GameEvent['type'] }
+  | { type: 'cancel game event' }
   | { type: 'switch sides' }
   | { type: 'dismiss global attack' }
   | { type: 'new global attack' }

@@ -4,7 +4,7 @@
   import type { ClientEventOf } from '$lib/client/game-machine/types'
   import Face from '$lib/components/icons/Face.svelte'
   import Item from '$lib/components/icons/Item.svelte'
-  import { getCurrentGameState } from '$lib/game/game-state'
+  import { GameState } from '$lib/game/game-state'
   import type { Coordinate, PlayerId, SharedGameContext } from '$lib/game/types'
   import { getPlayer } from '$lib/game/utils'
   import isEqual from 'lodash/isEqual'
@@ -25,7 +25,7 @@
   const players = useSelector(
     machine.service,
     ({ context }) => {
-      const { playerPositions } = getCurrentGameState(context)
+      const { playerPositions } = GameState.fromContext(context)
 
       return Object.entries(playerPositions)
         .filter(([_, position]) => isEqual(position, coordinate))
@@ -39,8 +39,8 @@
     if (!readyToMove) return false
     const { context } = state
     // Ok, this player is ready to move. But is this square a valid move?
-    const gameState = getCurrentGameState(context)
-    const currentPosition = gameState.playerPositions[gameState.activePlayerId]
+    const gameState = GameState.fromContext(context)
+    const currentPosition = gameState.activePlayerPosition
     const xDiff = Math.abs(currentPosition[0] - columnIndex)
     const yDiff = Math.abs(currentPosition[1] - rowIndex)
     return xDiff + yDiff <= 2 && xDiff + yDiff != 0
@@ -55,7 +55,7 @@
       gameEvent: {
         type: 'move',
         finalized: true,
-        playerId: getCurrentGameState(context).activePlayerId,
+        playerId: GameState.fromContext(context).activePlayer.id,
         to,
       },
     }

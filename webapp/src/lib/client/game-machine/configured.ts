@@ -1,11 +1,10 @@
+import { GameState } from '$lib/game/game-state'
+import { sharedGuards } from '$lib/game/guards'
 import type { ClientEventAsMessage, ClientMessage } from '$lib/game/types'
 import { and, assign, not } from 'xstate'
 import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
-import { sharedGuards } from '$lib/game/guards'
 import { getCurrentUser } from './utils'
-import { getCurrentGameState } from '$lib/game/game-state'
-import { getPlayer } from '$lib/game/utils'
 
 export const getClientGameMachine = ({
   send,
@@ -62,10 +61,7 @@ export const getClientGameMachine = ({
       isNotEditingPlayerOfSide: not('isEditingPlayerOfSide'),
       userControlsPlayer: ({ context }) => {
         const user = getCurrentUser(context)
-        return (
-          user.isAdmin ||
-          user.id === getPlayer(getCurrentGameState(context).activePlayerId, context).userId
-        )
+        return user.isAdmin || user.id === GameState.fromContext(context).activePlayer.userId
       },
       isMoveEvent: ({ event: e }) => {
         const event = e as ClientEventOf<'apply game event'>
@@ -75,13 +71,15 @@ export const getClientGameMachine = ({
         const event = e as ClientEventOf<'apply game event'>
         return event.gameEvent.type !== 'move'
       },
-      userControlsPlayerAndIsMoveEvent: and(['userControlsPlayer', 'isMoveEvent']),
-      userControlsPlayerAndIsActionEvent: and(['userControlsPlayer', 'isActionEvent']),
+      'userControlsPlayer isMoveEvent': and(['userControlsPlayer', 'isMoveEvent']),
+      'userControlsPlayer isActionEvent': and(['userControlsPlayer', 'isActionEvent']),
+      // TODO
+      'userControlsPlayer lastEventIsAction lastEventNotFinalized': () => false,
       userOnActiveSide: ({ context }) =>
-        getCurrentUser(context).side === getCurrentGameState(context).activeSide,
+        getCurrentUser(context).side === GameState.fromContext(context).activeSide,
       userNotOnActiveSide: not('userOnActiveSide'),
-      playerMoved: ({ context }) => getCurrentGameState(context).playerMoved,
-      playerPerformedAction: ({ context }) => !getCurrentGameState(context).playerMoved,
+      playerMoved: ({ context }) => GameState.fromContext(context).playerMoved,
+      playerPerformedAction: ({ context }) => !GameState.fromContext(context).playerMoved,
       userIsDefender: () => false,
       isServerStopped: () => false,
 

@@ -3,16 +3,18 @@ import {
   type AttackerId,
   type Coordinate,
   type DefenderId,
-  type PlayerId,
+  type GameEvent,
+  type Player,
   type SharedGameContext,
   type Side,
 } from '$lib/game/types'
+import isEqual from 'lodash/isEqual'
 import {
+  ITEMS,
+  isAttackItemId,
   isDefenseItemId,
   type AttackItemId,
   type DefenseItemId,
-  ITEMS,
-  isAttackItemId,
 } from './constants'
 
 type ItemInventory<T extends Side> = {
@@ -20,120 +22,132 @@ type ItemInventory<T extends Side> = {
 }
 
 /**
- * The state of the current game after applying all GameEvents to it.
- */
-type GameState = {
-  currentRound: number
-  activeSide: Side
-  activePlayerId: PlayerId
-  playerMoved: boolean
-  playerPositions: { [key in DefenderId | AttackerId]: Coordinate }
-  defense: {
-    inventory: ItemInventory<'defense'>
-  }
-  attack: {
-    inventory: ItemInventory<'attack'>
-  }
-}
-
-/**
- * This returns a `GameState` that reflects the current state by applying all
+ * The current game state that reflects the current state by applying all
  * `GameEvent`s to the initial state.
  *
  * The reason things like player position and items collected, etc... are not
  * stored in the players directly, is because we want the `GameEvent`s to be
  * the only source of truth of the current state, so we can rewind any event.
  */
-export const getCurrentGameState = (context: SharedGameContext): GameState => {
-  const events = context.events
-  // The rules are:
-  // - the attacker moves + performs an action
-  // - defender 1 moves + performs an action
-  // - defender 2 moves + performs an action
-  // - the attacker moves + performs an action
-  // - defender 3 moves + performs an action
-  // - defender 4 moves + performs an action
+export class GameState {
+  private playersInOrder: Player[]
+  private eventsPerRound: number
+  private finalizedEvents: GameEvent[]
 
-  const playersInOrder = [
-    context.attack.attacker,
-    context.defense.defenders[0],
-    context.defense.defenders[1],
-    context.attack.attacker,
-    context.defense.defenders[2],
-    context.defense.defenders[3],
-  ]
+  public currentRound: number
+  public activePlayer: Player
+  public activeSide: Side
+  public activePlayerPosition: Coordinate
 
-  const eventsPerRound = playersInOrder.length * 2 // 6 players * 2 events per player
+  public lastEvent: GameEvent | undefined
+  public playerMoved: boolean
 
-  const finalizedEvents = events.filter((event) => event.finalized)
+  private static previousState: { state: GameState; context: SharedGameContext } | undefined
 
-  const currentRound = Math.floor(finalizedEvents.length / eventsPerRound)
-
-  const activePlayerId =
-    playersInOrder[Math.floor(finalizedEvents.length / 2) % playersInOrder.length].id
-
-  const activeSide: Side = Math.floor(finalizedEvents.length / 2) % 3 === 0 ? 'attack' : 'defense'
-
-  const lastEvent = events[events.length - 1]
-  const playerMoved = lastEvent && lastEvent.type === 'move' && lastEvent.finalized
-
-  const playerPositions = getPlayerPositions(context)
-
-  const inventories = getInventories(context)
-
-  return {
-    currentRound,
-    activeSide,
-    activePlayerId,
-    playerMoved,
-    playerPositions,
-    defense: {
-      inventory: inventories.defense,
-    },
-    attack: {
-      inventory: inventories.attack,
-    },
-  }
-}
-
-const getPlayerPositions = (context: SharedGameContext): GameState['playerPositions'] => {
-  const playerPositions: GameState['playerPositions'] = {
-    attacker: context.attack.attacker.originalPosition,
-    defender0: context.defense.defenders[0].originalPosition,
-    defender1: context.defense.defenders[1].originalPosition,
-    defender2: context.defense.defenders[2].originalPosition,
-    defender3: context.defense.defenders[3].originalPosition,
-  }
-
-  context.events
-    .filter(guardForGameEventType('move'))
-    .forEach((event) => (playerPositions[event.playerId] = event.to))
-
-  return playerPositions
-}
-
-const getInventories = (context: SharedGameContext) => {
-  const defenseInventoryIds = Object.values(ITEMS)
-    .map((item) => item.id)
-    .filter(isDefenseItemId)
-  const attackInventoryIds = Object.values(ITEMS)
-    .map((item) => item.id)
-    .filter(isAttackItemId)
-
-  const inventories: { attack: ItemInventory<'attack'>; defense: ItemInventory<'defense'> } = {
-    defense: Object.fromEntries(
-      defenseInventoryIds.map((id) => [id, 0]),
-    ) as ItemInventory<'defense'>,
-    attack: Object.fromEntries(attackInventoryIds.map((id) => [id, 0])) as ItemInventory<'attack'>,
-  }
-
-  context.events.filter(guardForGameEventType('collect')).forEach((event) => {
-    if (isDefenseItemId(event.item)) {
-      inventories.defense[event.item] += 1
-    } else {
-      inventories.attack[event.item] += 1
+  public static fromContext(context: SharedGameContext) {
+    if (this.previousState && isEqual(this.previousState.context, context)) {
+      return this.previousState.state
     }
-  })
+    const state = new GameState(context)
+    this.previousState = { state, context }
+    return state
+  }
 
-  return inventories
+  /** Use GameState.fromContext() to create a GameState */
+  private constructor(private context: SharedGameContext) {
+    // The rules are:
+    // - the attacker moves + performs an action
+    // - defender 1 moves + performs an action
+    // - defender 2 moves + performs an action
+    // - the attacker moves + performs an action
+    // - defender 3 moves + performs an action
+    // - defender 4 moves + performs an action
+    this.playersInOrder = [
+      context.attack.attacker,
+      context.defense.defenders[0],
+      context.defense.defenders[1],
+      context.attack.attacker,
+      context.defense.defenders[2],
+      context.defense.defenders[3],
+    ]
+    this.eventsPerRound = this.playersInOrder.length * 2 // 6 players * 2 events per player
+    this.finalizedEvents = this.context.events.filter((event) => event.finalized)
+    this.currentRound = Math.floor(this.finalizedEvents.length / this.eventsPerRound)
+    this.activePlayer =
+      this.playersInOrder[Math.floor(this.finalizedEvents.length / 2) % this.playersInOrder.length]
+
+    this.activeSide = Math.floor(this.finalizedEvents.length / 2) % 3 === 0 ? 'attack' : 'defense'
+
+    this.lastEvent = context.events[context.events.length - 1]
+    this.playerMoved = this.lastEvent && this.lastEvent.type === 'move' && this.lastEvent.finalized
+
+    this.activePlayerPosition = this.playerPositions[this.activePlayer.id]
+  }
+
+  get playerPositions() {
+    const playerPositions: { [key in DefenderId | AttackerId]: Coordinate } = {
+      attacker: this.context.attack.attacker.originalPosition,
+      defender0: this.context.defense.defenders[0].originalPosition,
+      defender1: this.context.defense.defenders[1].originalPosition,
+      defender2: this.context.defense.defenders[2].originalPosition,
+      defender3: this.context.defense.defenders[3].originalPosition,
+    }
+
+    this.context.events
+      .filter(guardForGameEventType('move'))
+      .forEach((event) => (playerPositions[event.playerId] = event.to))
+
+    return playerPositions
+  }
+
+  get defenseInventory() {
+    const defenseInventoryIds = Object.values(ITEMS)
+      .map((item) => item.id)
+      .filter(isDefenseItemId)
+
+    const inventory = Object.fromEntries(
+      defenseInventoryIds.map((id) => [id, 0]),
+    ) as ItemInventory<'defense'>
+
+    this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
+      if (isDefenseItemId(event.item)) {
+        inventory[event.item] += 1
+      }
+    })
+
+    return inventory
+  }
+  get attackInventory() {
+    const attackInventoryIds = Object.values(ITEMS)
+      .map((item) => item.id)
+      .filter(isAttackItemId)
+
+    const inventory = Object.fromEntries(
+      attackInventoryIds.map((id) => [id, 0]),
+    ) as ItemInventory<'attack'>
+
+    this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
+      if (isAttackItemId(event.item)) {
+        inventory[event.item] += 1
+      }
+    })
+
+    return inventory
+  }
+
+  getItemsForCoordinate(coordinate: Coordinate) {
+    const items = this.context.items.filter((item) => isEqual(item.position, coordinate))
+
+    return items.map((item) => {
+      const collectedCount = this.context.events
+        .filter(guardForGameEventType('collect'))
+        .filter((event) => isEqual(event.position, coordinate))
+        .filter((event) => event.item === item.item).length
+
+      return {
+        item,
+        collectedCount,
+      }
+    })
+  }
 }
