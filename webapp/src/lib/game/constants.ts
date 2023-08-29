@@ -159,10 +159,17 @@ export const ITEMS = [
 
 export type DefenseItemId = Extract<(typeof ITEMS)[number], { side: 'defense' }>['id']
 export type AttackItemId = Extract<(typeof ITEMS)[number], { side: 'attack' }>['id']
+export type ItemId = DefenseItemId | AttackItemId
 
 export const isDefenseItemId = (itemId: string): itemId is DefenseItemId =>
   ITEMS.find((item) => item.id === itemId)?.side === 'defense'
 export const isAttackItemId = (itemId: string): itemId is AttackItemId => !isDefenseItemId(itemId)
+
+export const isItemIdOfSide = <T extends Side>(
+  itemId: string,
+  side: T,
+): itemId is T extends 'attack' ? AttackItemId : DefenseItemId =>
+  side === 'attack' ? isAttackItemId(itemId) : isDefenseItemId(itemId)
 
 // export const ABILITIES = ['collect', 'ask', 'teleport']
 

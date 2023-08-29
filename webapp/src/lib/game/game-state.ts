@@ -41,7 +41,8 @@ export class GameState {
   public activeSide: Side
   public activePlayerPosition: Coordinate
 
-  public lastEvent: GameEvent | undefined
+  public lastEvent?: GameEvent
+  public lastFinalizedEvent?: GameEvent
   public playerMoved: boolean
 
   private static previousState: { state: GameState; context: SharedGameContext } | undefined
@@ -81,7 +82,8 @@ export class GameState {
     this.activeSide = Math.floor(this.finalizedEvents.length / 2) % 3 === 0 ? 'attack' : 'defense'
 
     this.lastEvent = context.events[context.events.length - 1]
-    this.playerMoved = this.lastEvent && this.lastEvent.type === 'move' && this.lastEvent.finalized
+    this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]
+    this.playerMoved = this.lastFinalizedEvent && this.lastFinalizedEvent.type === 'move'
 
     this.activePlayerPosition = this.playerPositions[this.activePlayer.id]
   }

@@ -6,7 +6,7 @@
   const { machine } = getGameContext()
 
   const canPerformAction = useSelector(machine.service, (state) =>
-    state.matches('Playing.Ready for action'),
+    state.matches('Playing.Gameloop.Playing.Ready for action'),
   )
 </script>
 
