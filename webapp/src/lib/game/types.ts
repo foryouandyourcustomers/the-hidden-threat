@@ -125,7 +125,8 @@ export type GameEvent =
     })
   | (BaseGameEvent & {
       type: 'collect'
-      itemId: AttackItemId | DefenseItemId
+      /** Can be undefined if the event is not finalized. */
+      itemId?: AttackItemId | DefenseItemId | undefined
       position: Coordinate
     })
 

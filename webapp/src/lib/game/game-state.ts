@@ -112,7 +112,7 @@ export class GameState {
     ) as ItemInventory<'defense'>
 
     this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
-      if (isDefenseItemId(event.itemId)) {
+      if (event.itemId && isDefenseItemId(event.itemId)) {
         inventory[event.itemId] += 1
       }
     })
@@ -129,7 +129,7 @@ export class GameState {
     ) as ItemInventory<'attack'>
 
     this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
-      if (isAttackItemId(event.itemId)) {
+      if (event.itemId && isAttackItemId(event.itemId)) {
         inventory[event.itemId] += 1
       }
     })
