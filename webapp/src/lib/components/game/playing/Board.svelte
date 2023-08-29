@@ -7,9 +7,9 @@
 
 <div class="board" style:--column-count={columnCount} style:--row-count={rowCount}>
   <Backdrop />
-  {#each [...new Array(rowCount)] as _, rowIndex}
-    {#each [...new Array(columnCount)] as _, columnIndex}
-      <Square {columnIndex} {rowIndex} />
+  {#each [...new Array(rowCount)] as _, x}
+    {#each [...new Array(columnCount)] as _, y}
+      <Square coordinate={[x, y]} />
     {/each}
   {/each}
 </div>

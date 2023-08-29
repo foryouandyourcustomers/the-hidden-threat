@@ -7,8 +7,8 @@
   import Dialog from '$lib/components/ui/Dialog.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import { FACES, type FaceId } from '$lib/game/constants'
-  import { GameState } from '$lib/game/game-state'
   import { isDefenderId, type PlayerId, type Side } from '$lib/game/types'
+  import { getPlayer } from '$lib/game/utils'
   import Select from 'svelte-select'
   import PlayerConfiguratorCharacter from './PlayerConfiguratorCharacter.svelte'
 
@@ -18,9 +18,7 @@
 
   const { machine } = getGameContext()
 
-  const player = useSelector(machine.service, ({ context }) =>
-    GameState.fromContext(context).getPlayer(playerId),
-  )
+  const player = useSelector(machine.service, ({ context }) => getPlayer(playerId, context))
 
   const usersOnThisSide = useSelector(machine.service, ({ context }) =>
     context.users.filter((user) => user.side === side),

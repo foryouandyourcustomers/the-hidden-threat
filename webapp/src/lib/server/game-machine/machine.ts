@@ -125,6 +125,15 @@ export const machine = createMachine({
               },
               reenter: true,
             },
+            'user: cancel game event': {
+              target: 'Playing',
+              guard: 'isAllowedToCancel',
+              actions: {
+                type: 'cancelGameEvent',
+                params: {},
+              },
+              reenter: false,
+            },
           },
         },
         'Assigning roles': {

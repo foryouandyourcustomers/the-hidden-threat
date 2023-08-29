@@ -9,6 +9,7 @@ import {
   type Side,
   isDefenderId,
   type PlayerId,
+  isPlayerIdOfSide,
 } from '$lib/game/types'
 import isEqual from 'lodash/isEqual'
 import {
@@ -43,7 +44,8 @@ export class GameState {
 
   public lastEvent?: GameEvent
   public lastFinalizedEvent?: GameEvent
-  public playerMoved: boolean
+
+  public nextEventType: 'move' | 'action'
 
   private static previousState: { state: GameState; context: SharedGameContext } | undefined
 
@@ -83,7 +85,9 @@ export class GameState {
 
     this.lastEvent = context.events[context.events.length - 1]
     this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]
-    this.playerMoved = this.lastFinalizedEvent && this.lastFinalizedEvent.type === 'move'
+
+    this.nextEventType =
+      this.lastFinalizedEvent && this.lastFinalizedEvent.type === 'move' ? 'action' : 'move'
 
     this.activePlayerPosition = this.playerPositions[this.activePlayer.id]
   }
@@ -155,13 +159,23 @@ export class GameState {
     })
   }
 
-  getPlayer(playerId: PlayerId): Player {
-    if (isDefenderId(playerId)) {
-      const player = this.context.defense.defenders.find((player) => player.id === playerId)
-      if (!player) throw new Error(`Player ${playerId} not found in context`)
-      return player
-    } else {
-      return this.context.attack.attacker
+  /** Check if this is a valid target destination for the active player */
+  isValidMove(to: Coordinate) {
+    if (to[0] < 0 || to[0] > 8 || to[1] < 0 || to[1] > 7) return false
+
+    isDefenderId
+
+    for (const playerPosition of Object.keys(this.playerPositions)
+      .filter((playerId) => isPlayerIdOfSide(playerId as PlayerId, this.activeSide))
+      .map((playerId) => this.playerPositions[playerId as PlayerId])) {
+      // Make sure no other player (including the player itself, since the player
+      // must move) is on the target position.
+      if (isEqual(playerPosition, to)) return false
     }
+
+    const currentPosition = this.activePlayerPosition
+    const xDiff = Math.abs(currentPosition[0] - to[0])
+    const yDiff = Math.abs(currentPosition[1] - to[1])
+    return xDiff + yDiff <= 2 && xDiff + yDiff != 0
   }
 }

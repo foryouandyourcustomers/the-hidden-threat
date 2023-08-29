@@ -232,6 +232,17 @@ export const machine = createMachine({
               },
             },
           },
+          on: {
+            'rollback game event': {
+              target: 'Gameloop',
+              guard: 'isAdmin',
+              actions: {
+                type: 'forwardToServer',
+                params: {},
+              },
+              reenter: false,
+            },
+          },
         },
         'Global Attack': {
           initial: 'Showing current global attack',

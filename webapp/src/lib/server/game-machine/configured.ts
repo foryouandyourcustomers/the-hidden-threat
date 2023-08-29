@@ -1,4 +1,9 @@
-import type { AttackCharacterId, DefenseCharacterId } from '$lib/game/constants'
+import {
+  isItemIdOfSide,
+  type AttackCharacterId,
+  type DefenseCharacterId,
+} from '$lib/game/constants'
+import { GameState } from '$lib/game/game-state'
 import { sharedGuards } from '$lib/game/guards'
 import {
   isDefenderId,
@@ -6,7 +11,7 @@ import {
   type GameEvent,
   type SharedGameContext,
 } from '$lib/game/types'
-import { findUserIndex } from '$lib/game/utils'
+import { findUserIndex, userControlsPlayer, userControlsPlayerId } from '$lib/game/utils'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 import { produce, setAutoFreeze } from 'immer'
 import { assign, fromPromise } from 'xstate'
@@ -92,6 +97,16 @@ export const serverGameMachine = machine.provide({
             events[events.length - 1] = gameEvent
           } else {
             events.push(gameEvent)
+          }
+        }),
+      }
+    }),
+    cancelGameEvent: assign(({ context }) => {
+      return {
+        events: produce(context.events, (events) => {
+          const lastEvent = events[events.length - 1]
+          if (lastEvent && !lastEvent.finalized) {
+            events.pop()
           }
         }),
       }
@@ -225,8 +240,62 @@ export const serverGameMachine = machine.provide({
   guards: {
     isAdmin: ({ context, event }) =>
       context.users.find((user) => user.id === event.userId)?.isAdmin ?? false,
-    isValidGameEvent: () => {
+    isAllowedToCancel: ({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: cancel game event'>
+
+      const gameState = GameState.fromContext(context)
+
+      return (
+        !!gameState.lastEvent &&
+        !gameState.lastEvent.finalized &&
+        userControlsPlayerId(event.userId, gameState.lastEvent.playerId, context)
+      )
+    },
+    isValidGameEvent: ({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: apply game event'>
+      const gameState = GameState.fromContext(context)
+
       // TODO: this needs to verify that the given game event is valid in the current context.
+
+      const activePlayer = gameState.activePlayer
+
+      if (!userControlsPlayer(event.userId, activePlayer, context)) return false
+
+      // Make sure it's this player's turn
+      if (activePlayer.id !== event.gameEvent.playerId) return false
+
+      // Make sure the player moves or performs an action at the right time
+      if (gameState.nextEventType === 'action' && event.gameEvent.type === 'move') return false
+      if (gameState.nextEventType === 'move' && event.gameEvent.type !== 'move') return false
+
+      switch (event.gameEvent.type) {
+        case 'move':
+          if (!gameState.isValidMove(event.gameEvent.to)) return false
+          break
+        case 'collect':
+          if (event.gameEvent.itemId === undefined && event.gameEvent.finalized) {
+            console.error('Finalized collect item must have an itemId')
+            return false
+          }
+
+          if (event.gameEvent.itemId) {
+            const collectableItemIds = gameState
+              .getItemsForCoordinate(gameState.activePlayerPosition)
+              .filter((item) => isItemIdOfSide(item.item.id, gameState.activeSide))
+              .map((item) => item.item.id)
+
+            if (!collectableItemIds.includes(event.gameEvent.itemId)) {
+              console.error('Tried to collect an item that is not collectable')
+              return false
+            }
+          }
+          break
+      }
+
+      return true
+
+      // gameState.playerMoved -> 'collect'
+      // collect.finalized = false
 
       // This means that this guard needs to check:
       // - that the user has the right to perform the event

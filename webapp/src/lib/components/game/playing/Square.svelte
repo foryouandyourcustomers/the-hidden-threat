@@ -6,13 +6,11 @@
   import Item from '$lib/components/icons/Item.svelte'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
+  import { getPlayer } from '$lib/game/utils'
   import { objectEntries } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
 
-  export let columnIndex: number
-  export let rowIndex: number
-
-  const coordinate: [number, number] = [columnIndex, rowIndex]
+  export let coordinate: [number, number]
 
   const { machine } = getGameContext()
 
@@ -30,7 +28,7 @@
 
       return objectEntries(playerPositions)
         .filter(([_, position]) => isEqual(position, coordinate))
-        .map(([playerId]) => gameState.getPlayer(playerId))
+        .map(([playerId]) => getPlayer(playerId, context))
     },
     isEqual,
   )
@@ -41,10 +39,7 @@
     const { context } = state
     // Ok, this player is ready to move. But is this square a valid move?
     const gameState = GameState.fromContext(context)
-    const currentPosition = gameState.activePlayerPosition
-    const xDiff = Math.abs(currentPosition[0] - columnIndex)
-    const yDiff = Math.abs(currentPosition[1] - rowIndex)
-    return xDiff + yDiff <= 2 && xDiff + yDiff != 0
+    return gameState.isValidMove(coordinate)
   })
 
   const getMoveEvent = (
@@ -73,8 +68,8 @@
 
 <div
   class="square"
-  style:--_row={rowIndex + 1}
-  style:--_column={columnIndex + 1}
+  style:--_row={coordinate[0] + 1}
+  style:--_column={coordinate[1] + 1}
   class:possible-move={$isPossibleMove}
 >
   {#each $items as item}

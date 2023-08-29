@@ -110,6 +110,12 @@ export type AttackerId = 'attacker'
 export const isDefenderId = (id: PlayerId): id is DefenderId => id !== 'attacker'
 export const isAttackerId = (id: PlayerId): id is AttackerId => id === 'attacker'
 
+export const isPlayerIdOfSide = <T extends Side>(
+  playerId: PlayerId,
+  side: T,
+): playerId is T extends 'attack' ? AttackerId : DefenderId =>
+  side === 'attack' ? isAttackerId(playerId) : isDefenderId(playerId)
+
 type BaseGameEvent = {
   timestamp: number
   playerId: PlayerId
@@ -134,7 +140,7 @@ export type GameEventOf<Type extends GameEvent['type']> = Extract<GameEvent, { t
 
 /** Type guard to check whether the provided event is of type `type` */
 export const isGameEventOf = <Type extends GameEvent['type']>(
-  event: GameEvent,
+  event: Pick<GameEvent, 'type'>,
   type: Type,
 ): event is GameEventOf<Type> => event.type === type
 

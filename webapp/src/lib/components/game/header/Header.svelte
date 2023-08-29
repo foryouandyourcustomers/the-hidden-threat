@@ -1,9 +1,12 @@
 <script>
   import EmojiPicker from './EmojiPicker.svelte'
+  import RollbackButton from './RollbackButton.svelte'
 </script>
 
 <div class="header">
   <div class="title">The hidden threat</div>
+
+  <RollbackButton />
 
   <EmojiPicker />
 </div>

@@ -78,8 +78,9 @@ export const getClientGameMachine = ({
       userOnActiveSide: ({ context }) =>
         getCurrentUser(context).side === GameState.fromContext(context).activeSide,
       userNotOnActiveSide: not('userOnActiveSide'),
-      playerMoved: ({ context }) => GameState.fromContext(context).playerMoved,
-      playerPerformedAction: ({ context }) => !GameState.fromContext(context).playerMoved,
+      playerMoved: ({ context }) => GameState.fromContext(context).nextEventType === 'action',
+      playerPerformedAction: ({ context }) =>
+        GameState.fromContext(context).nextEventType === 'move',
       userIsDefender: () => false,
       isServerStopped: () => false,
 

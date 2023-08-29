@@ -3,13 +3,7 @@
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
   import Button from '$lib/components/ui/Button.svelte'
-  import {
-    isDefenseItemId,
-    type AttackItemId,
-    type DefenseItemId,
-    isItemIdOfSide,
-    type ItemId,
-  } from '$lib/game/constants'
+  import { isItemIdOfSide, type ItemId } from '$lib/game/constants'
   import { GameState } from '$lib/game/game-state'
   import type { SharedGameContext } from '$lib/game/types'
 
