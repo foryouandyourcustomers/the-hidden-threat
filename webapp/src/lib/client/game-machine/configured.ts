@@ -71,10 +71,21 @@ export const getClientGameMachine = ({
         const event = e as ClientEventOf<'apply game event'>
         return event.gameEvent.type !== 'move'
       },
+      lastEventIsAction: ({ context }) => {
+        const gameState = GameState.fromContext(context)
+        return !!gameState.lastEvent && gameState.lastEvent.type !== 'move'
+      },
+      lastEventNotFinalized: ({ context }) => {
+        const gameState = GameState.fromContext(context)
+        return !!gameState.lastEvent && !gameState.lastEvent.finalized
+      },
       'userControlsPlayer isMoveEvent': and(['userControlsPlayer', 'isMoveEvent']),
       'userControlsPlayer isActionEvent': and(['userControlsPlayer', 'isActionEvent']),
-      // TODO
-      'userControlsPlayer lastEventIsAction lastEventNotFinalized': () => false,
+      'userControlsPlayer lastEventIsAction lastEventNotFinalized': and([
+        'userControlsPlayer',
+        'lastEventIsAction',
+        'lastEventNotFinalized',
+      ]),
       userOnActiveSide: ({ context }) =>
         getCurrentUser(context).side === GameState.fromContext(context).activeSide,
       userNotOnActiveSide: not('userOnActiveSide'),

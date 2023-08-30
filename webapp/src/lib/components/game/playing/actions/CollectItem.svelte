@@ -45,22 +45,15 @@
     return gameState.lastEvent?.type === 'collect'
   })
 
-  // const cancel = () => {
-  // TODO
-  // const context = machine.service.getSnapshot().context
-  // const gameState = getCurrentGameState(context)
-  // const playerPosition = gameState.playerPositions[gameState.activePlayerId]
-  // const item = context.items.find((item) => isEqual(item.position, playerPosition))
-  // if (item) {
-  //   machine.send(getCollectActionEvent(item.item, context))
-  // }
-  // }
+  const cancel = () => machine.send({ type: 'cancel game event' })
 </script>
 
-<Button disabled={$collectableItems.length === 0} on:click={() => applyAction(false)}
-  >Collect item</Button
->
-{#if $startedCollecting}
+{#if !$startedCollecting}
+  <Button disabled={$collectableItems.length === 0} on:click={() => applyAction(false)}>
+    Gegenstand einsammeln
+  </Button>
+{:else}
+  <Button on:click={cancel}>Abbrechen</Button>
   {#each $collectableItems as collectableItem}
     <Button on:click={() => applyAction(true, collectableItem.item.id)}
       >{collectableItem.item.id}</Button

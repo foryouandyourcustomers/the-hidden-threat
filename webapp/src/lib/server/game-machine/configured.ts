@@ -11,7 +11,12 @@ import {
   type GameEvent,
   type SharedGameContext,
 } from '$lib/game/types'
-import { findUserIndex, userControlsPlayer, userControlsPlayerId } from '$lib/game/utils'
+import {
+  findUserIndex,
+  getPlayerSide,
+  userControlsPlayer,
+  userControlsPlayerId,
+} from '$lib/game/utils'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 import { produce, setAutoFreeze } from 'immer'
 import { assign, fromPromise } from 'xstate'
@@ -52,11 +57,7 @@ export const serverGameMachine = machine.provide({
       const event = e as ServerEventOf<'user: start editing player' | 'user: stop editing player'>
 
       const side =
-        event.type === 'user: stop editing player'
-          ? event.side
-          : isDefenderId(event.playerId)
-          ? 'defense'
-          : 'attack'
+        event.type === 'user: stop editing player' ? event.side : getPlayerSide(event.playerId)
 
       if (side === 'attack') {
         return {

@@ -158,3 +158,11 @@
     />
   {/if}
 </svg>
+
+<style lang="postcss">
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

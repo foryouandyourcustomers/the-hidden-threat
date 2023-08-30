@@ -1,4 +1,10 @@
-import { isDefenderId, type Player, type PlayerId, type SharedGameContext } from '../types'
+import {
+  isDefenderId,
+  type Player,
+  type PlayerId,
+  type SharedGameContext,
+  type Side,
+} from '../types'
 
 export const getPlayer = (playerId: PlayerId, context: SharedGameContext): Player => {
   if (isDefenderId(playerId)) {
@@ -9,3 +15,6 @@ export const getPlayer = (playerId: PlayerId, context: SharedGameContext): Playe
     return context.attack.attacker
   }
 }
+
+export const getPlayerSide = (playerId: PlayerId): Side =>
+  isDefenderId(playerId) ? 'defense' : 'attack'

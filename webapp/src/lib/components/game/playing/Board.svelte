@@ -1,14 +1,13 @@
 <script lang="ts">
   import Backdrop from '$lib/components/game/playing/Backdrop.svelte'
+  import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants'
   import Square from './Square.svelte'
-  const columnCount = 9
-  const rowCount = 8
 </script>
 
-<div class="board" style:--column-count={columnCount} style:--row-count={rowCount}>
+<div class="board">
   <Backdrop />
-  {#each [...new Array(rowCount)] as _, x}
-    {#each [...new Array(columnCount)] as _, y}
+  {#each [...new Array(ROW_COUNT)] as _, y}
+    {#each [...new Array(COLUMN_COUNT)] as _, x}
       <Square coordinate={[x, y]} />
     {/each}
   {/each}
@@ -16,13 +15,12 @@
 
 <style lang="postcss">
   .board {
-    --_height: 45rem;
     display: grid;
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
     gap: 0;
     margin: 0 auto;
-    width: calc(var(--_height) * var(--column-count) / var(--row-count));
-    height: var(--_height);
+    width: var(--board-width);
+    height: var(--board-height);
   }
 </style>

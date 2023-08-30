@@ -1,5 +1,8 @@
 import type { BoardItem, Side } from './types'
 
+export const COLUMN_COUNT = 9
+export const ROW_COUNT = 8
+
 export type Item = {
   id: string
   name: string

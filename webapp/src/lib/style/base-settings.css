@@ -4,10 +4,14 @@
   /* These have the same name as in Figma */
   --color-blue-spielbrett: #1b253a;
   --color-blue-transparent: rgba(81, 80, 168, 0.1);
+  --color-blue-medium: #3b3a8e;
+  --color-blue-transp-12: #34446a;
 
   --color-grey-light: #dedddd;
   --color-grey-medium: #b7b2af;
   --color-grey-dark: #85817e;
+
+  --color-red-medium: #971f38;
 
   /* Font sizes */
   --scale-0: 1rem;

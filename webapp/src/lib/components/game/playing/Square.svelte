@@ -2,13 +2,15 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
-  import Face from '$lib/components/icons/Face.svelte'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
   import Item from '$lib/components/icons/Item.svelte'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
-  import { getPlayer } from '$lib/game/utils'
+  import { getPlayer, getPlayerSide, getUser } from '$lib/game/utils'
   import { objectEntries } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
+  import Player from './Player.svelte'
+  import { receive, send } from './transition'
 
   export let coordinate: [number, number]
 
@@ -24,11 +26,22 @@
     machine.service,
     ({ context }) => {
       const gameState = GameState.fromContext(context)
+      const currentUser = getCurrentUser(context)
       const { playerPositions } = gameState
 
       return objectEntries(playerPositions)
         .filter(([_, position]) => isEqual(position, coordinate))
         .map(([playerId]) => getPlayer(playerId, context))
+        .filter((player) => getPlayerSide(player.id) === currentUser.side)
+        .map((player) => {
+          const user = getUser(player.userId, context)
+          return {
+            ...player,
+            user,
+            side: getPlayerSide(player.id),
+            isPlaying: gameState.activePlayer.id === player.id,
+          }
+        })
     },
     isEqual,
   )
@@ -77,8 +90,8 @@
 
 <div
   class="square"
-  style:--_row={coordinate[0] + 1}
-  style:--_column={coordinate[1] + 1}
+  style:--_row={coordinate[1] + 1}
+  style:--_column={coordinate[0] + 1}
   class:possible-move={$isMoving && $isPossibleMove}
   class:impossible-move={$isMoving && !$isPossibleMove}
   class:current-position={$isMoving && $isCurrentPosition}
@@ -88,9 +101,18 @@
       <Item itemId={item.id} />
     </div>
   {/each}
-  {#each $players as player}
-    <div class="player">
-      <Face faceId={player.faceId} />
+  {#each $players as player (`board-player-${player.id}`)}
+    <div
+      class="player"
+      in:receive={{ key: `board-player-${player.id}` }}
+      out:send={{ key: `board-player-${player.id}` }}
+    >
+      <Player
+        name={player.user.name}
+        side={player.side}
+        faceId={player.faceId}
+        isPlaying={player.isPlaying}
+      />
     </div>
   {/each}
   {#if $canMove && $isPossibleMove}
@@ -100,16 +122,16 @@
 
 <style lang="postcss">
   .square {
-    display: grid;
+    display: block;
     position: relative;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(3, 1fr);
     grid-row: var(--_row);
     grid-column: var(--_column);
     margin: calc(var(--px) / 2);
     outline: 1px #fff dashed;
+    isolation: isolate;
     min-width: 0;
     min-height: 0;
+
     > * {
       min-width: 0;
       min-height: 0;
@@ -125,26 +147,24 @@
         content: '';
       }
     }
-    &::after {
-      position: absolute;
-      inset: calc((0px - var(--px)) / 2);
-      /* border: 1px solid #fff2; */
-      pointer-events: none;
-      content: '';
-    }
   }
   .player {
-    grid-row: 2;
-    grid-column: 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
   }
   .item {
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
     &:nth-child(1) {
-      grid-row: 1;
-      grid-column: 1;
+      top: 0.25rem;
+      left: 0.25rem;
     }
     &:nth-child(2) {
-      grid-row: 3;
-      grid-column: 3;
+      right: 0.25rem;
+      bottom: 0.25rem;
     }
   }
   .item,

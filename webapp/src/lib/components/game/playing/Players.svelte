@@ -43,45 +43,52 @@
   )
 </script>
 
-<h3>Verteidiger:innen</h3>
+<div class="players-container">
+  <h3>Verteidiger:innen</h3>
 
-<div class="players">
-  {#each $defensePlayers as player}
-    {@const user = getUserForPlayer(player, $users)}
-    <Player
-      faceId={player.faceId}
-      name={user.name}
-      isConnected={user.isConnected}
-      isPlaying={$activePlayerId === player.id}
-    />
-  {/each}
+  <div class="players">
+    {#each $defensePlayers as player}
+      {@const user = getUserForPlayer(player, $users)}
+      <Player
+        faceId={player.faceId}
+        name={user.name}
+        isConnected={user.isConnected}
+        isPlaying={$activePlayerId === player.id}
+        side="defense"
+      />
+    {/each}
 
-  {#each $defenseAdmins as admin}
-    <Player name="{admin.name} (admin)" isConnected={admin.isConnected} />
-  {/each}
-</div>
+    {#each $defenseAdmins as admin}
+      <Player name={admin.name} side="admin" isConnected={admin.isConnected} />
+    {/each}
+  </div>
 
-<h3>Angreifer:innen</h3>
+  <h3>Angreifer:innen</h3>
 
-<div class="players">
-  {#each $attackPlayers as player}
-    {@const user = getUserForPlayer(player, $users)}
-    <Player
-      faceId={player.faceId}
-      name={user.name}
-      isConnected={user.isConnected}
-      isPlaying={$activePlayerId === player.id}
-    />
-  {/each}
+  <div class="players">
+    {#each $attackPlayers as player}
+      {@const user = getUserForPlayer(player, $users)}
+      <Player
+        faceId={player.faceId}
+        name={user.name}
+        isConnected={user.isConnected}
+        isPlaying={$activePlayerId === player.id}
+        side="attack"
+      />
+    {/each}
 
-  {#each $attackAdmins as admin}
-    <Player name="{admin.name} (admin)" isConnected={admin.isConnected} />
-  {/each}
+    {#each $attackAdmins as admin}
+      <Player name={admin.name} side="admin" isConnected={admin.isConnected} />
+    {/each}
+  </div>
 </div>
 
 <style lang="postcss">
+  .players-container {
+    margin-inline: 1rem;
+  }
   h3 {
-    margin-block: 2rem 1rem;
+    margin-block: 0 1rem;
   }
   .players {
     display: flex;

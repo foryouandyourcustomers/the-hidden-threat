@@ -21,11 +21,14 @@
   .playing {
     display: grid;
     position: relative;
-    grid-template-columns: 1fr auto 20%;
+    grid-template-columns: 27.75rem auto 1fr;
     gap: 1rem;
   }
 
   .board {
+    --board-height: 45rem;
+    --board-width: calc(var(--board-height) * var(--column-count) / var(--row-count));
+    --board-square-size: calc(var(--board-height) / var(--row-count));
     position: relative;
   }
 </style>
