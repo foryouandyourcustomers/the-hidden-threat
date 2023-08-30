@@ -16,13 +16,13 @@
 
 <style lang="postcss">
   .board {
+    --_height: 45rem;
     display: grid;
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
     gap: 0;
     margin: 0 auto;
-    aspect-ratio: var(--column-count) / var(--row-count);
-    max-width: 80%;
-    max-height: 100%;
+    width: calc(var(--_height) * var(--column-count) / var(--row-count));
+    height: var(--_height);
   }
 </style>

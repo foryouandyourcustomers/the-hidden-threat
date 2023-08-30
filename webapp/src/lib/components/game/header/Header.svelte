@@ -18,7 +18,7 @@
     align-items: center;
     background: linear-gradient(to bottom, #2b344800, #2b3448a9);
     padding-inline: 3rem;
-    height: 3.5rem;
+    height: 3rem;
     overflow: hidden;
   }
   .title {

@@ -45,7 +45,7 @@
 <div class="game-wrapper">
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
-    class="game"
+    class="game section-{$section?.toLowerCase()}"
     on:mousemove={onMouseMove}
     bind:this={gameContainer}
     bind:clientWidth={gameWidth}
@@ -79,13 +79,18 @@
   .game {
     display: grid;
     position: relative;
-    grid-template-rows: 3.5rem 1fr;
+    grid-template-rows: auto 1fr;
     gap: 1rem;
     border-radius: var(--radius-sm);
-    background: var(--color-bg);
+    background-color: var(--color-bg);
     width: 90rem;
-    height: 50.625rem;
+    height: 50rem;
     overflow: hidden;
+    &.section-playing {
+      background-image: url('/images/board-backdrop.svg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
     @media (width < 1440px) or (height < 810px) {
       transform-origin: center;
       scale: 0.8;

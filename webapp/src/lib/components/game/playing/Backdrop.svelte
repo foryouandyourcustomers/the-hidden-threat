@@ -1,4 +1,4 @@
-<svg width="804" height="715" fill="none" xmlns="http://www.w3.org/2000/svg"
+<svg viewBox="0 0 804 715" fill="none" xmlns="http://www.w3.org/2000/svg"
   ><g clip-path="url(#a)"
     ><path d="M804 0H0v715h804V0Z" fill="#1B253A" /><mask
       id="b"

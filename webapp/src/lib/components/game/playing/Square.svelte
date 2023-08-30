@@ -33,12 +33,21 @@
     isEqual,
   )
 
+  const isMoving = useSelector(machine.service, (state) =>
+    state.matches('Playing.Gameloop.Playing.Ready to move'),
+  )
+  const isCurrentPosition = useSelector(machine.service, (state) => {
+    const readyToMove = state.matches('Playing.Gameloop.Playing.Ready to move')
+    if (!readyToMove) return false
+    // Ok, this player is ready to move. But is this square a valid move?
+    return isEqual(GameState.fromContext(state.context).activePlayerPosition, coordinate)
+  })
+
   const isPossibleMove = useSelector(machine.service, (state) => {
     const readyToMove = state.matches('Playing.Gameloop.Playing.Ready to move')
     if (!readyToMove) return false
-    const { context } = state
     // Ok, this player is ready to move. But is this square a valid move?
-    const gameState = GameState.fromContext(context)
+    const gameState = GameState.fromContext(state.context)
     return gameState.isValidMove(coordinate)
   })
 
@@ -70,7 +79,9 @@
   class="square"
   style:--_row={coordinate[0] + 1}
   style:--_column={coordinate[1] + 1}
-  class:possible-move={$isPossibleMove}
+  class:possible-move={$isMoving && $isPossibleMove}
+  class:impossible-move={$isMoving && !$isPossibleMove}
+  class:current-position={$isMoving && $isCurrentPosition}
 >
   {#each $items as item}
     <div class="item">
@@ -83,7 +94,7 @@
     </div>
   {/each}
   {#if $canMove && $isPossibleMove}
-    <button on:click={move}>MOVE</button>
+    <button class="move-button unstyled" on:click={move}><span>Move</span></button>
   {/if}
 </div>
 
@@ -95,19 +106,29 @@
     grid-template-columns: repeat(3, 1fr);
     grid-row: var(--_row);
     grid-column: var(--_column);
+    margin: calc(var(--px) / 2);
+    outline: 1px #fff dashed;
     min-width: 0;
     min-height: 0;
     > * {
       min-width: 0;
       min-height: 0;
     }
-    &.possible-move {
-      border: 2px solid red;
+    &.impossible-move:not(.current-position) {
+      &::after {
+        position: absolute;
+        opacity: 0.8;
+        z-index: var(--layer-5);
+        mix-blend-mode: hard-light;
+        inset: 0;
+        background: var(--color-bg);
+        content: '';
+      }
     }
     &::after {
       position: absolute;
       inset: calc((0px - var(--px)) / 2);
-      border: 1px solid #fff2;
+      /* border: 1px solid #fff2; */
       pointer-events: none;
       content: '';
     }
@@ -131,6 +152,22 @@
     :global(svg) {
       width: 100%;
       height: 100%;
+    }
+  }
+
+  .move-button {
+    display: block;
+    position: absolute;
+    transition: background 0.3s ease-out;
+    cursor: pointer;
+    inset: 0;
+    background: transparent;
+    & span {
+      display: none;
+    }
+    &:hover {
+      transition-duration: 0ms;
+      background: #fff2;
     }
   }
 </style>
