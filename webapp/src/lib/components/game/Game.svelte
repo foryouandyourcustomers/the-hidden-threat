@@ -60,7 +60,7 @@
       {:else if $section === 'Finished'}
         <Finished />
       {:else}
-        Unkown state
+        Unknown state
       {/if}
     </div>
     <slot name="overlays" />

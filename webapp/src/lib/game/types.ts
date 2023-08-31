@@ -1,4 +1,5 @@
 import type { ClientEvent } from '$lib/client/game-machine/types'
+import type { DistributiveOmit } from '$lib/utils'
 import type {
   AttackCharacterId,
   AttackItemId,
@@ -130,19 +131,40 @@ export type GameEvent =
       to: Coordinate
     })
   | (BaseGameEvent & {
-      type: 'collect'
+      type: 'action'
+      action: 'collect'
       /** Can be undefined if the event is not finalized. */
       itemId?: AttackItemId | DefenseItemId | undefined
       position: Coordinate
     })
 
+/**
+ * The same as `GameEvent` but without the information that the server will set
+ * instead.
+ *
+ * The client should not be allowed to send a userId or timestamp since these
+ * are values that the server completes and the client cannot change.
+ */
+export type FromClientGameEvent = DistributiveOmit<GameEvent, 'userId' | 'timestamp'>
+
 export type GameEventOf<Type extends GameEvent['type']> = Extract<GameEvent, { type: Type }>
+export type ActionEvent = GameEventOf<'action'>
+type GameEventAction = GameEventOf<'action'>['action']
+export type ActionEventOf<Action extends GameEventAction> = Extract<
+  GameEvent,
+  { type: 'action'; action: Action }
+>
 
 /** Type guard to check whether the provided event is of type `type` */
 export const isGameEventOf = <Type extends GameEvent['type']>(
-  event: Pick<GameEvent, 'type'>,
+  event: GameEvent | undefined,
   type: Type,
-): event is GameEventOf<Type> => event.type === type
+): event is GameEventOf<Type> => event?.type === type
+
+export const isActionEventOf = <Action extends GameEventAction>(
+  event: GameEvent | undefined,
+  action: Action,
+): event is ActionEventOf<Action> => event?.type === 'action' && event.action === action
 
 /**
  * A helper function to create a type guard for a specific `GameEvent` type.
@@ -157,7 +179,23 @@ export const isGameEventOf = <Type extends GameEvent['type']>(
 export const guardForGameEventType =
   <Type extends GameEvent['type']>(type: Type) =>
   (event: GameEvent): event is GameEventOf<Type> =>
-    event.type === type
+    isGameEventOf(event, type)
+
+/**
+ * A helper function to create a type guard for a specific `GameEvent` for
+ * a specific action.
+ *
+ * Typical usage:
+ *
+ *     const isCollectAction = guardForGameEventAction('collect')
+ *     const collectEvents = events.filter(isCollectAction)
+ *
+ * The advantage of this, is that TypeScript can infer the type of moveEvents
+ */
+export const guardForGameEventAction =
+  <Action extends GameEventAction>(action: Action) =>
+  (event: GameEvent): event is ActionEventOf<Action> =>
+    isActionEventOf(event, action)
 
 export type AttackScenario = 'todo'
 

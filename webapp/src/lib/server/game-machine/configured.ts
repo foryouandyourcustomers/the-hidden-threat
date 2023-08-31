@@ -273,22 +273,26 @@ export const serverGameMachine = machine.provide({
         case 'move':
           if (!gameState.isValidMove(event.gameEvent.to)) return false
           break
-        case 'collect':
-          if (event.gameEvent.itemId === undefined && event.gameEvent.finalized) {
-            console.error('Finalized collect item must have an itemId')
-            return false
-          }
+        case 'action':
+          switch (event.gameEvent.action) {
+            case 'collect':
+              if (event.gameEvent.itemId === undefined && event.gameEvent.finalized) {
+                console.error('Finalized collect item must have an itemId')
+                return false
+              }
 
-          if (event.gameEvent.itemId) {
-            const collectableItemIds = gameState
-              .getItemsForCoordinate(gameState.activePlayerPosition)
-              .filter((item) => isItemIdOfSide(item.item.id, gameState.activeSide))
-              .map((item) => item.item.id)
+              if (event.gameEvent.itemId) {
+                const collectableItemIds = gameState
+                  .getItemsForCoordinate(gameState.activePlayerPosition)
+                  .filter((item) => isItemIdOfSide(item.item.id, gameState.activeSide))
+                  .map((item) => item.item.id)
 
-            if (!collectableItemIds.includes(event.gameEvent.itemId)) {
-              console.error('Tried to collect an item that is not collectable')
-              return false
-            }
+                if (!collectableItemIds.includes(event.gameEvent.itemId)) {
+                  console.error('Tried to collect an item that is not collectable')
+                  return false
+                }
+              }
+              break
           }
           break
       }

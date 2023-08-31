@@ -10,6 +10,7 @@ import {
   isDefenderId,
   type PlayerId,
   isPlayerIdOfSide,
+  guardForGameEventAction,
 } from '$lib/game/types'
 import isEqual from 'lodash/isEqual'
 import {
@@ -117,7 +118,7 @@ export class GameState {
       defenseInventoryIds.map((id) => [id, 0]),
     ) as ItemInventory<'defense'>
 
-    this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
+    this.context.events.filter(guardForGameEventAction('collect')).forEach((event) => {
       if (event.itemId && isDefenseItemId(event.itemId)) {
         inventory[event.itemId] += 1
       }
@@ -134,7 +135,7 @@ export class GameState {
       attackInventoryIds.map((id) => [id, 0]),
     ) as ItemInventory<'attack'>
 
-    this.context.events.filter(guardForGameEventType('collect')).forEach((event) => {
+    this.context.events.filter(guardForGameEventAction('collect')).forEach((event) => {
       if (event.itemId && isAttackItemId(event.itemId)) {
         inventory[event.itemId] += 1
       }
@@ -148,7 +149,7 @@ export class GameState {
 
     return items.map((item) => {
       const collectedCount = this.context.events
-        .filter(guardForGameEventType('collect'))
+        .filter(guardForGameEventAction('collect'))
         .filter((event) => isEqual(event.position, coordinate))
         .filter((event) => event.itemId === item.id).length
 

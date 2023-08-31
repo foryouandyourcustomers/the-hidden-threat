@@ -5,7 +5,7 @@
   import Button from '$lib/components/ui/Button.svelte'
   import { isItemIdOfSide, type ItemId } from '$lib/game/constants'
   import { GameState } from '$lib/game/game-state'
-  import type { SharedGameContext } from '$lib/game/types'
+  import { isActionEventOf, type SharedGameContext } from '$lib/game/types'
 
   const { machine } = getGameContext()
 
@@ -18,7 +18,8 @@
     return {
       type: 'apply game event',
       gameEvent: {
-        type: 'collect',
+        type: 'action',
+        action: 'collect',
         finalized,
         playerId: gameState.activePlayer.id,
         itemId: itemId,
@@ -42,7 +43,7 @@
 
   const startedCollecting = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
-    return gameState.lastEvent?.type === 'collect'
+    return isActionEventOf(gameState.lastEvent, 'collect')
   })
 
   const cancel = () => machine.send({ type: 'cancel game event' })

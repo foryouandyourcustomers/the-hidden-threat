@@ -1,14 +1,17 @@
 import type { CharacterId, FaceId } from '$lib/game/constants'
-import type { GameEvent, PlayerId, ServerMessage, SharedGameContext, Side } from '$lib/game/types'
+import type {
+  FromClientGameEvent,
+  GameEvent,
+  PlayerId,
+  ServerMessage,
+  SharedGameContext,
+  Side,
+} from '$lib/game/types'
 import type { Sound } from '$lib/sound'
 
 export type Context = SharedGameContext & {
   userId: string
 }
-
-/** A utility type that allows us to Omit keys of a union type */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never
 
 /**
  * All the events that can be sent to the client machine, excluding the ones
@@ -42,7 +45,7 @@ export type NativeClientEvent =
       playingUserId: string
     }
   | { type: 'send emoji'; emoji: string }
-  | { type: 'apply game event'; gameEvent: DistributiveOmit<GameEvent, 'userId' | 'timestamp'> }
+  | { type: 'apply game event'; gameEvent: FromClientGameEvent }
   | { type: 'rollback game event'; gameEventType: GameEvent['type'] }
   | { type: 'cancel game event' }
   | { type: 'switch sides' }
