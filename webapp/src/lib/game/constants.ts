@@ -1,5 +1,7 @@
 import type { BoardItem, Side } from './types'
 
+export const TOTAL_ROUNDS = 12
+
 export const COLUMN_COUNT = 9
 export const ROW_COUNT = 8
 

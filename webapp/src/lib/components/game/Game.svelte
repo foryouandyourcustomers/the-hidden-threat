@@ -99,7 +99,4 @@
       scale: 0.6;
     }
   }
-  .content {
-    padding-right: 3rem;
-  }
 </style>
