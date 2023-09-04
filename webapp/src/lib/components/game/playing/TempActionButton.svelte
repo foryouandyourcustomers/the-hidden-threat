@@ -8,11 +8,6 @@
 
   const { machine } = getGameContext()
 
-  const currentRound = useSelector(
-    machine.service,
-    ({ context }) => GameState.fromContext(context).currentRound,
-  )
-
   const itemInventories = useSelector(
     machine.service,
     (state) => {
@@ -22,8 +17,6 @@
     isEqual,
   )
 </script>
-
-Round: {$currentRound + 1}
 
 Defense:
 {#each objectEntries($itemInventories.defense) as [itemId, count]}
