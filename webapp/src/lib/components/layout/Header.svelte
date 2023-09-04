@@ -83,6 +83,7 @@
         text-transform: uppercase;
       }
       .faces {
+        display: flex;
         margin-top: 1.5rem;
       }
     }

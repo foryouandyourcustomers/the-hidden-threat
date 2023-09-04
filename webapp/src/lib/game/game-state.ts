@@ -7,7 +7,6 @@ import {
   type Player,
   type SharedGameContext,
   type Side,
-  isDefenderId,
   type PlayerId,
   isPlayerIdOfSide,
   guardForGameEventAction,
@@ -163,8 +162,6 @@ export class GameState {
   /** Check if this is a valid target destination for the active player */
   isValidMove(to: Coordinate) {
     if (to[0] < 0 || to[0] > 8 || to[1] < 0 || to[1] > 7) return false
-
-    isDefenderId
 
     for (const playerPosition of Object.keys(this.playerPositions)
       .filter((playerId) => isPlayerIdOfSide(playerId as PlayerId, this.activeSide))

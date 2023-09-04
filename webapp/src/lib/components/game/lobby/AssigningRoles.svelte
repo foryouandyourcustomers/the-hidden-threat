@@ -50,9 +50,11 @@
     {#each $players as player, i}
       <div class="player">
         {#if player.isConfigured}
-          <Heading centered size="sm">{player.character}</Heading>
+          <Heading centered spacing="none" size="sm">{player.character}</Heading>
           {$users.find((user) => user.id === player.userId)?.name}
-          <Face faceId={player.faceId} />
+          <div class="face">
+            <Face faceId={player.faceId} />
+          </div>
         {/if}
         <Button
           size="small"
@@ -111,6 +113,11 @@
       border-radius: var(--radius-md);
       background: var(--color-bg);
       padding: 1.25rem;
+
+      .face {
+        width: 6rem;
+        height: 6rem;
+      }
     }
   }
 </style>
