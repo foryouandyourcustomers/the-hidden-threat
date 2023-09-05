@@ -6,7 +6,7 @@
   import Button from '$lib/components/ui/Button.svelte'
   import Dialog from '$lib/components/ui/Dialog.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
-  import { FACES, type FaceId } from '$lib/game/constants'
+  import { FACES, type FaceId } from '$lib/game/constants/faces'
   import { isDefenderId, type PlayerId, type Side } from '$lib/game/types'
   import { getPlayer } from '$lib/game/utils'
   import Select from 'svelte-select'

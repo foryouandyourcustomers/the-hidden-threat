@@ -1,12 +1,8 @@
 import type { ClientEvent } from '$lib/client/game-machine/types'
 import type { DistributiveOmit } from '$lib/utils'
-import type {
-  AttackCharacterId,
-  AttackItemId,
-  DefenseCharacterId,
-  DefenseItemId,
-  FaceId,
-} from './constants'
+import type { AttackCharacterId, DefenseCharacterId } from './constants/characters'
+import type { FaceId } from './constants/faces'
+import type { AttackItemId, DefenseItemId } from './constants/items'
 
 export type Side = 'defense' | 'attack'
 

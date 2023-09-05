@@ -8,7 +8,7 @@
   import CursorOverlays from '$lib/components/game/CursorOverlays.svelte'
   import EmojiOverlays from '$lib/components/game/EmojiOverlays.svelte'
   import Game from '$lib/components/game/Game.svelte'
-  import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants.js'
+  import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants/general.js'
   import { play } from '$lib/sound/index.js'
   import isEqual from 'lodash/isEqual'
   import throttle from 'lodash/throttle'

@@ -1,6 +1,7 @@
 <script lang="ts">
   import Item from '$lib/components/icons/Item.svelte'
-  import { BOARD_ITEMS, isAttackItemId } from '$lib/game/constants'
+  import { BOARD_ITEMS } from '$lib/game/constants/board-items'
+  import { isAttackItemId } from '$lib/game/constants/items'
   import isEqual from 'lodash/isEqual'
 
   export let coordinate: [number, number]

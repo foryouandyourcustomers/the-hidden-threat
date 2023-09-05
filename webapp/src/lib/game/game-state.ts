@@ -1,26 +1,26 @@
 import {
+  guardForGameEventAction,
   guardForGameEventType,
+  isGameEventOf,
+  isPlayerIdOfSide,
   type AttackerId,
   type Coordinate,
   type DefenderId,
   type GameEvent,
   type Player,
+  type PlayerId,
   type SharedGameContext,
   type Side,
-  type PlayerId,
-  isPlayerIdOfSide,
-  guardForGameEventAction,
-  isGameEventOf,
 } from '$lib/game/types'
 import isEqual from 'lodash/isEqual'
+import { BOARD_ITEMS } from './constants/board-items'
 import {
   ITEMS,
   isAttackItemId,
   isDefenseItemId,
   type AttackItemId,
   type DefenseItemId,
-  BOARD_ITEMS,
-} from './constants'
+} from './constants/items'
 import { getPlayerSide } from './utils'
 
 type ItemInventory<T extends Side> = {

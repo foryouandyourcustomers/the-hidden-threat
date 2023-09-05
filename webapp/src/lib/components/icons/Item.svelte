@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AttackItemId, DefenseItemId } from '$lib/game/constants'
+  import type { AttackItemId, DefenseItemId } from '$lib/game/constants/items'
 
   export let itemId: AttackItemId | DefenseItemId
 </script>

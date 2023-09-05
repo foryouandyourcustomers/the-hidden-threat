@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { FaceId } from '$lib/game/constants'
+  import type { FaceId } from '$lib/game/constants/faces'
 
   export let faceId: FaceId
 </script>
