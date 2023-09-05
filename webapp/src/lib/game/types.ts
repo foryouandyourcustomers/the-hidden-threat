@@ -209,7 +209,6 @@ export type SharedGameContext = {
   hostUserId: string
   users: User[]
   events: GameEvent[]
-  items: BoardItem[]
   finishedAssigningSides: boolean
   globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
   defense: {

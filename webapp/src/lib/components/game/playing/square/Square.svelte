@@ -2,50 +2,16 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
-  import { getCurrentUser } from '$lib/client/game-machine/utils'
-  import Item from '$lib/components/icons/Item.svelte'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
-  import { getPlayer, getPlayerSide, getUser } from '$lib/game/utils'
-  import { objectEntries } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
-  import Player from './Player.svelte'
-  import { receive, send } from './transition'
+  import Items from './Items.svelte'
+  import Players from './Players.svelte'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
 
   export let coordinate: [number, number]
 
   const { machine } = getGameContext()
-
-  const items = useSelector(
-    machine.service,
-    ({ context }) => context.items.filter((item) => isEqual(item.position, coordinate)),
-    isEqual,
-  )
-
-  const players = useSelector(
-    machine.service,
-    ({ context }) => {
-      const gameState = GameState.fromContext(context)
-      const currentUser = getCurrentUser(context)
-      const { playerPositions } = gameState
-
-      return objectEntries(playerPositions)
-        .filter(([_, position]) => isEqual(position, coordinate))
-        .map(([playerId]) => getPlayer(playerId, context))
-        .filter((player) => getPlayerSide(player.id) === currentUser.side)
-        .filter((player) => gameState.isPlaced(player.id))
-        .map((player) => {
-          const user = getUser(player.userId, context)
-          return {
-            ...player,
-            user,
-            side: getPlayerSide(player.id),
-            isPlaying: gameState.activePlayer.id === player.id,
-          }
-        })
-    },
-    isEqual,
-  )
 
   const isMoving = useSelector(machine.service, (state) =>
     state.matches('Playing.Gameloop.Playing.Moving'),
@@ -53,6 +19,10 @@
   const isPlacing = useSelector(machine.service, (state) =>
     state.matches('Playing.Gameloop.Playing.Placing'),
   )
+  const isActiveSide = useSelector(machine.service, ({ context }) => {
+    const gameState = GameState.fromContext(context)
+    return gameState.activeSide === getCurrentUser(context).side
+  })
   const isCurrentPosition = useSelector(machine.service, (state) => {
     const moving = state.matches('Playing.Gameloop.Playing.Moving')
     if (!moving) return false
@@ -127,26 +97,10 @@
   class:possible-move={($isMoving && $isPossibleMove) || ($isPlacing && $isPossiblePlacement)}
   class:impossible-move={($isMoving && !$isPossibleMove) || ($isPlacing && !$isPossiblePlacement)}
   class:current-position={$isMoving && $isCurrentPosition}
+  class:is-active-side={$isActiveSide}
 >
-  {#each $items as item}
-    <div class="item">
-      <Item itemId={item.id} />
-    </div>
-  {/each}
-  {#each $players as player (`board-player-${player.id}`)}
-    <div
-      class="player"
-      in:receive={{ key: `board-player-${player.id}` }}
-      out:send={{ key: `board-player-${player.id}` }}
-    >
-      <Player
-        name={player.user.name}
-        side={player.side}
-        faceId={player.faceId}
-        isPlaying={player.isPlaying}
-      />
-    </div>
-  {/each}
+  <Items {coordinate} />
+  <Players {coordinate} />
   {#if $canMove && $isPossibleMove}
     <button class="move-button unstyled" on:click={move}><span>Move</span></button>
   {/if}
@@ -171,7 +125,8 @@
       min-width: 0;
       min-height: 0;
     }
-    &.impossible-move:not(.current-position) {
+    &.impossible-move:not(.current-position),
+    &:not(.is-active-side) {
       &::after {
         position: absolute;
         opacity: 0.8;
@@ -182,31 +137,10 @@
         content: '';
       }
     }
-  }
-  .player {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-  }
-  .item {
-    position: absolute;
-    width: 1.5rem;
-    height: 1.5rem;
-    &:nth-child(1) {
-      top: 0.25rem;
-      left: 0.25rem;
-    }
-    &:nth-child(2) {
-      right: 0.25rem;
-      bottom: 0.25rem;
-    }
-  }
-  .item,
-  .player {
-    :global(svg) {
-      width: 100%;
-      height: 100%;
+    &:not(.is-active-side) {
+      &::after {
+        opacity: 0.4;
+      }
     }
   }
 

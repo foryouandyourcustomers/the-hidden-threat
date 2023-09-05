@@ -1,7 +1,7 @@
 <script lang="ts">
   import Backdrop from '$lib/components/game/playing/Backdrop.svelte'
   import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants'
-  import Square from './Square.svelte'
+  import Square from './square/Square.svelte'
 </script>
 
 <div class="board">
