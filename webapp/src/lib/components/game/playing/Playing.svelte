@@ -2,7 +2,7 @@
   import Actions from '$lib/components/game/playing/actions/Actions.svelte'
   import Board from './Board.svelte'
   import Players from './Players.svelte'
-  import Status from './Status.svelte'
+  import Status from './status/Status.svelte'
   import TempActionButton from './TempActionButton.svelte'
 </script>
 

@@ -2,7 +2,12 @@
 ::backdrop {
   /* Colors */
   /* These have the same name as in Figma */
+
+  /* This is the *style* Blue/Spielbrett in Figma */
   --color-blue-spielbrett: #1b253a;
+
+  /* This is the *variable* Blue/Spielbrett in Figma */
+  --color-blue-spielbrett2: #19184d;
   --color-blue-transparent: rgba(81, 80, 168, 0.1);
   --color-blue-medium: #3b3a8e;
   --color-blue-transp-10: #1b253a;

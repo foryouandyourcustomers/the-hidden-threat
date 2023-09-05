@@ -2,7 +2,7 @@
   export let color: 'orange' | 'red' | 'green' | 'blue' | 'black' | 'red-angriff' = 'orange'
 </script>
 
-<svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
   {#if color === 'orange'}
     <path d="M140 81.6038L139.321 136.333L72.1412 74.4597L140 81.6038Z" fill="#FCB337" />
     <path d="M72.1412 74.4597L139.321 136.333L43.4262 112.105L72.1412 74.4597Z" fill="#F49C07" />
