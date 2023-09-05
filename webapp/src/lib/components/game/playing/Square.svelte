@@ -47,21 +47,31 @@
   )
 
   const isMoving = useSelector(machine.service, (state) =>
-    state.matches('Playing.Gameloop.Playing.Ready to move'),
+    state.matches('Playing.Gameloop.Playing.Moving'),
+  )
+  const isPlacing = useSelector(machine.service, (state) =>
+    state.matches('Playing.Gameloop.Playing.Placing'),
   )
   const isCurrentPosition = useSelector(machine.service, (state) => {
-    const readyToMove = state.matches('Playing.Gameloop.Playing.Ready to move')
+    const readyToMove = state.matches('Playing.Gameloop.Playing.Moving')
     if (!readyToMove) return false
     // Ok, this player is ready to move. But is this square a valid move?
     return isEqual(GameState.fromContext(state.context).activePlayerPosition, coordinate)
   })
 
   const isPossibleMove = useSelector(machine.service, (state) => {
-    const readyToMove = state.matches('Playing.Gameloop.Playing.Ready to move')
+    const readyToMove = state.matches('Playing.Gameloop.Playing.Moving')
     if (!readyToMove) return false
     // Ok, this player is ready to move. But is this square a valid move?
     const gameState = GameState.fromContext(state.context)
     return gameState.isValidMove(coordinate)
+  })
+
+  const isPossiblePlacement = useSelector(machine.service, (state) => {
+    const placing = state.matches('Playing.Gameloop.Playing.Placing')
+    if (!placing) return false
+    // FIXME
+    return (coordinate[0] + (coordinate[1] % 2)) % 2 == 0
   })
 
   const getMoveEvent = (
@@ -79,12 +89,33 @@
     }
   }
 
+  const getPlacementEvent = (
+    to: Coordinate,
+    context: SharedGameContext,
+  ): ClientEventOf<'apply game event'> => {
+    return {
+      type: 'apply game event',
+      gameEvent: {
+        type: 'placement',
+        finalized: true,
+        playerId: GameState.fromContext(context).activePlayer.id,
+        coordinate: to,
+      },
+    }
+  }
+
   const canMove = useSelector(machine.service, (state) =>
     state.can(getMoveEvent(coordinate, machine.service.getSnapshot().context)),
+  )
+  const canPlace = useSelector(machine.service, (state) =>
+    state.can(getPlacementEvent(coordinate, machine.service.getSnapshot().context)),
   )
 
   const move = () => {
     machine.send(getMoveEvent(coordinate, machine.service.getSnapshot().context))
+  }
+  const place = () => {
+    machine.send(getPlacementEvent(coordinate, machine.service.getSnapshot().context))
   }
 </script>
 
@@ -92,8 +123,8 @@
   class="square"
   style:--_row={coordinate[1] + 1}
   style:--_column={coordinate[0] + 1}
-  class:possible-move={$isMoving && $isPossibleMove}
-  class:impossible-move={$isMoving && !$isPossibleMove}
+  class:possible-move={($isMoving && $isPossibleMove) || ($isPlacing && $isPossiblePlacement)}
+  class:impossible-move={($isMoving && !$isPossibleMove) || ($isPlacing && !$isPossiblePlacement)}
   class:current-position={$isMoving && $isCurrentPosition}
 >
   {#each $items as item}
@@ -117,6 +148,11 @@
   {/each}
   {#if $canMove && $isPossibleMove}
     <button class="move-button unstyled" on:click={move}><span>Move</span></button>
+  {/if}
+  {$canPlace}
+  {$isPossiblePlacement}
+  {#if $canPlace && $isPossiblePlacement}
+    <button class="move-button unstyled" on:click={place}><span>Place</span></button>
   {/if}
 </div>
 

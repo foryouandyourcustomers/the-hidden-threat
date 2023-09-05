@@ -78,10 +78,6 @@ export type User = {
  * The base class for Defender and Attacker.
  */
 type BasePlayer = {
-  /** The position this player starts at. The current position can be accessed
-   * via `getCurrentGameState`.
-   */
-  originalPosition: Coordinate
   userId: string
   faceId: FaceId
   /**
@@ -129,6 +125,10 @@ export type GameEvent =
   | (BaseGameEvent & {
       type: 'move'
       to: Coordinate
+    })
+  | (BaseGameEvent & {
+      type: 'placement'
+      coordinate: Coordinate
     })
   | (BaseGameEvent & {
       type: 'action'

@@ -20,7 +20,6 @@ export const getSharedGameContext = (context: Context): SharedGameContext => ({
 export const createDefaultDefender = (hostUserId: string, id: DefenderId): Defender => ({
   id,
   userId: hostUserId,
-  originalPosition: [0, 0],
   faceId: 0,
   character: 'dispatch-manager',
   isConfigured: false,
@@ -34,7 +33,6 @@ export const createDefaultAttacker = (hostUserId: string): Attacker => ({
   id: 'attacker',
   userId: hostUserId,
   faceId: 0,
-  originalPosition: [0, 0],
   character: 'disappointed',
   isConfigured: false,
 })

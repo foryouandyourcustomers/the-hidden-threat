@@ -69,11 +69,15 @@ export const getClientGameMachine = ({
       },
       isActionEvent: ({ event: e }) => {
         const event = e as ClientEventOf<'apply game event'>
-        return event.gameEvent.type !== 'move'
+        return event.gameEvent.type === 'action'
+      },
+      isPlacementEvent: ({ event: e }) => {
+        const event = e as ClientEventOf<'apply game event'>
+        return event.gameEvent.type === 'placement'
       },
       lastEventIsAction: ({ context }) => {
         const gameState = GameState.fromContext(context)
-        return !!gameState.lastEvent && gameState.lastEvent.type !== 'move'
+        return !!gameState.lastEvent && gameState.lastEvent.type === 'action'
       },
       lastEventNotFinalized: ({ context }) => {
         const gameState = GameState.fromContext(context)
@@ -86,12 +90,14 @@ export const getClientGameMachine = ({
         'lastEventIsAction',
         'lastEventNotFinalized',
       ]),
+      'userControlsPlayer isPlacementEvent': and(['userControlsPlayer', 'isPlacementEvent']),
       userOnActiveSide: ({ context }) =>
         getCurrentUser(context).side === GameState.fromContext(context).activeSide,
       userNotOnActiveSide: not('userOnActiveSide'),
-      playerMoved: ({ context }) => GameState.fromContext(context).nextEventType === 'action',
-      playerPerformedAction: ({ context }) =>
-        GameState.fromContext(context).nextEventType === 'move',
+      requiresPlacement: ({ context }) =>
+        GameState.fromContext(context).nextEventType === 'placement',
+      requiresAction: ({ context }) => GameState.fromContext(context).nextEventType === 'action',
+      requiresMove: ({ context }) => GameState.fromContext(context).nextEventType === 'move',
       userIsDefender: () => false,
       isServerStopped: () => false,
 

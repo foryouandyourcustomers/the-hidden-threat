@@ -177,17 +177,49 @@ export const machine = createMachine({
               },
             },
             Playing: {
-              initial: 'Ready to move',
+              initial: 'Initial',
               states: {
-                'Ready to move': {
+                Initial: {
+                  always: [
+                    {
+                      target: 'Placing',
+                      guard: 'requiresPlacement',
+                      reenter: false,
+                    },
+                    {
+                      target: 'Moving',
+                      reenter: false,
+                    },
+                  ],
+                },
+                Placing: {
+                  description: 'The user sees all possible starting positions',
                   always: {
-                    target: 'Ready for action',
-                    guard: 'playerMoved',
+                    target: 'Moving',
+                    guard: 'requiresMove',
                     reenter: false,
                   },
                   on: {
                     'apply game event': {
-                      target: 'Ready to move',
+                      guard: 'userControlsPlayer isPlacementEvent',
+                      actions: {
+                        type: 'forwardToServer',
+                        params: {},
+                      },
+                      reenter: true,
+                    },
+                  },
+                },
+                Moving: {
+                  description: 'The board displays possible squares to move to',
+                  always: {
+                    target: 'Action',
+                    guard: 'requiresAction',
+                    reenter: false,
+                  },
+                  on: {
+                    'apply game event': {
+                      target: 'Moving',
                       guard: 'userControlsPlayer isMoveEvent',
                       actions: {
                         type: 'forwardToServer',
@@ -197,15 +229,16 @@ export const machine = createMachine({
                     },
                   },
                 },
-                'Ready for action': {
+                Action: {
+                  description: 'The user gets presented with a list of possible actions to perform',
                   always: {
-                    target: 'Ready to move',
-                    guard: 'playerPerformedAction',
+                    target: 'Moving',
+                    guard: 'requiresMove',
                     reenter: false,
                   },
                   on: {
                     'apply game event': {
-                      target: 'Ready for action',
+                      target: 'Action',
                       guard: 'userControlsPlayer isActionEvent',
                       actions: {
                         type: 'forwardToServer',
@@ -214,7 +247,7 @@ export const machine = createMachine({
                       reenter: false,
                     },
                     'cancel game event': {
-                      target: 'Ready for action',
+                      target: 'Action',
                       guard: 'userControlsPlayer lastEventIsAction lastEventNotFinalized',
                       actions: {
                         type: 'forwardToServer',
