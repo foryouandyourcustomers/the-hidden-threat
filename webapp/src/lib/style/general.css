@@ -23,6 +23,11 @@ body {
   background: none;
   padding: 0;
   color: inherit;
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 :where(.richtext) {

@@ -1,7 +1,7 @@
 <script>
   import EmojiPicker from './EmojiPicker.svelte'
-  import ExpandableButton from './ExpandableButton.svelte'
-  import RollbackButton from './RollbackButton.svelte'
+  import ExpandableButton from './expandable/ExpandableButton.svelte'
+  import RollbackButton from './expandable/RollbackButton.svelte'
   import SettingsIcon from '~icons/lucide/settings'
   import AudioIcon from '~icons/lucide/volume-2'
   import HelpIcon from '~icons/lucide/shield-question'
@@ -9,8 +9,6 @@
 
 <div class="header">
   <div class="title">The hidden threat</div>
-
-  <RollbackButton />
 
   <EmojiPicker />
 
@@ -23,6 +21,7 @@
     </ExpandableButton>
     <ExpandableButton>
       <SettingsIcon slot="icon" />
+      <RollbackButton />
     </ExpandableButton>
   </div>
 </div>
