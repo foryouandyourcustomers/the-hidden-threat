@@ -85,6 +85,9 @@ export class GameState {
       (event) => isGameEventOf(event, 'move') || isGameEventOf(event, 'action'),
     )
 
+    this.lastEvent = context.events[context.events.length - 1]
+    this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]
+
     this.nextEventType =
       finalizedPlacementEvents.length < 5
         ? 'placement'
@@ -104,15 +107,12 @@ export class GameState {
     } else {
       this.activePlayer =
         this.playersInOrder[
-          Math.floor(this.finalizedEvents.length / 2) % this.playersInOrder.length
+          Math.floor(finalizedMoveOrActionEvents.length / 2) % this.playersInOrder.length
         ]
     }
     this.activeSide = getPlayerSide(this.activePlayer.id)
 
     this.currentRound = Math.floor(finalizedMoveOrActionEvents.length / this.eventsPerRound)
-
-    this.lastEvent = context.events[context.events.length - 1]
-    this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]
 
     this.activePlayerPosition = this.playerPositions[this.activePlayer.id]
   }
@@ -204,5 +204,13 @@ export class GameState {
     const xDiff = Math.abs(currentPosition[0] - to[0])
     const yDiff = Math.abs(currentPosition[1] - to[1])
     return xDiff + yDiff <= 2 && xDiff + yDiff != 0
+  }
+
+  isPlaced(playerId: PlayerId) {
+    return (
+      this.context.events
+        .filter(guardForGameEventType('placement'))
+        .filter((event) => event.playerId === playerId && event.finalized).length > 0
+    )
   }
 }

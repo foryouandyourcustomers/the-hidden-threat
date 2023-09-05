@@ -33,6 +33,7 @@
         .filter(([_, position]) => isEqual(position, coordinate))
         .map(([playerId]) => getPlayer(playerId, context))
         .filter((player) => getPlayerSide(player.id) === currentUser.side)
+        .filter((player) => gameState.isPlaced(player.id))
         .map((player) => {
           const user = getUser(player.userId, context)
           return {
@@ -53,16 +54,16 @@
     state.matches('Playing.Gameloop.Playing.Placing'),
   )
   const isCurrentPosition = useSelector(machine.service, (state) => {
-    const readyToMove = state.matches('Playing.Gameloop.Playing.Moving')
-    if (!readyToMove) return false
-    // Ok, this player is ready to move. But is this square a valid move?
+    const moving = state.matches('Playing.Gameloop.Playing.Moving')
+    if (!moving) return false
+    // Ok, this player is moving. But is this square a valid move?
     return isEqual(GameState.fromContext(state.context).activePlayerPosition, coordinate)
   })
 
   const isPossibleMove = useSelector(machine.service, (state) => {
-    const readyToMove = state.matches('Playing.Gameloop.Playing.Moving')
-    if (!readyToMove) return false
-    // Ok, this player is ready to move. But is this square a valid move?
+    const moving = state.matches('Playing.Gameloop.Playing.Moving')
+    if (!moving) return false
+    // Ok, this player is moving. But is this square a valid move?
     const gameState = GameState.fromContext(state.context)
     return gameState.isValidMove(coordinate)
   })
@@ -149,8 +150,6 @@
   {#if $canMove && $isPossibleMove}
     <button class="move-button unstyled" on:click={move}><span>Move</span></button>
   {/if}
-  {$canPlace}
-  {$isPossiblePlacement}
   {#if $canPlace && $isPossiblePlacement}
     <button class="move-button unstyled" on:click={place}><span>Place</span></button>
   {/if}
