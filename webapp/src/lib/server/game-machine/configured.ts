@@ -84,7 +84,6 @@ export const serverGameMachine = machine.provide({
       const event = e as ServerEventOf<'user: apply game event'>
 
       // The validity of the event has already been checked by a guard
-
       const gameEvent: GameEvent = {
         ...event.gameEvent,
         timestamp: Date.now(),
@@ -259,17 +258,19 @@ export const serverGameMachine = machine.provide({
       // TODO: this needs to verify that the given game event is valid in the current context.
 
       const activePlayer = gameState.activePlayer
-
       if (!userControlsPlayer(event.userId, activePlayer, context)) return false
 
       // Make sure it's this player's turn
       if (activePlayer.id !== event.gameEvent.playerId) return false
 
-      // Make sure the player moves or performs an action at the right time
-      if (gameState.nextEventType === 'action' && event.gameEvent.type === 'move') return false
-      if (gameState.nextEventType === 'move' && event.gameEvent.type !== 'move') return false
+      // Make sure the event type is the next expected event type
+      if (gameState.nextEventType !== event.gameEvent.type) return false
 
+      // Make event type specific checks
       switch (event.gameEvent.type) {
+        case 'placement':
+          // TODO: implement role specific check
+          break
         case 'move':
           if (!gameState.isValidMove(event.gameEvent.to)) return false
           break

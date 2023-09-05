@@ -1,3 +1,4 @@
+import { dev } from '$app/environment'
 import type { Attacker, Defender, DefenderId, SharedGameContext } from '$lib/game/types'
 import type { Context } from '$lib/server/game-machine/types'
 
@@ -20,10 +21,9 @@ export const getSharedGameContext = (context: Context): SharedGameContext => ({
 export const createDefaultDefender = (hostUserId: string, id: DefenderId): Defender => ({
   id,
   userId: hostUserId,
-  originalPosition: [0, 0],
   faceId: 0,
   character: 'dispatch-manager',
-  isConfigured: false,
+  isConfigured: dev ? true : false,
 })
 
 /**
@@ -34,7 +34,6 @@ export const createDefaultAttacker = (hostUserId: string): Attacker => ({
   id: 'attacker',
   userId: hostUserId,
   faceId: 0,
-  originalPosition: [0, 0],
   character: 'disappointed',
-  isConfigured: false,
+  isConfigured: dev ? true : false,
 })

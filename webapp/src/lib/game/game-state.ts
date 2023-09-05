@@ -10,6 +10,7 @@ import {
   type PlayerId,
   isPlayerIdOfSide,
   guardForGameEventAction,
+  isGameEventOf,
 } from '$lib/game/types'
 import isEqual from 'lodash/isEqual'
 import {
@@ -19,6 +20,7 @@ import {
   type AttackItemId,
   type DefenseItemId,
 } from './constants'
+import { getPlayerSide } from './utils'
 
 type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
@@ -35,7 +37,7 @@ type ItemInventory<T extends Side> = {
 export class GameState {
   private playersInOrder: Player[]
   private eventsPerRound: number
-  private finalizedEvents: GameEvent[]
+  public finalizedEvents: GameEvent[]
 
   public currentRound: number
   public activePlayer: Player
@@ -45,7 +47,7 @@ export class GameState {
   public lastEvent?: GameEvent
   public lastFinalizedEvent?: GameEvent
 
-  public nextEventType: 'move' | 'action'
+  public nextEventType: GameEvent['type']
 
   private static previousState: { state: GameState; context: SharedGameContext } | undefined
 
@@ -77,29 +79,56 @@ export class GameState {
     ]
     this.eventsPerRound = this.playersInOrder.length * 2 // 6 players * 2 events per player
     this.finalizedEvents = this.context.events.filter((event) => event.finalized)
-    this.currentRound = Math.floor(this.finalizedEvents.length / this.eventsPerRound)
-    this.activePlayer =
-      this.playersInOrder[Math.floor(this.finalizedEvents.length / 2) % this.playersInOrder.length]
 
-    this.activeSide = Math.floor(this.finalizedEvents.length / 2) % 3 === 0 ? 'attack' : 'defense'
+    const finalizedPlacementEvents = this.finalizedEvents.filter(guardForGameEventType('placement'))
+    const finalizedMoveOrActionEvents = this.finalizedEvents.filter(
+      (event) => isGameEventOf(event, 'move') || isGameEventOf(event, 'action'),
+    )
 
     this.lastEvent = context.events[context.events.length - 1]
     this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]
 
     this.nextEventType =
-      this.lastFinalizedEvent && this.lastFinalizedEvent.type === 'move' ? 'action' : 'move'
+      finalizedPlacementEvents.length < 5
+        ? 'placement'
+        : this.lastFinalizedEvent && this.lastFinalizedEvent.type === 'move'
+        ? 'action'
+        : 'move'
+
+    if (this.nextEventType === 'placement') {
+      // We're still in the placement phase.
+      if (finalizedPlacementEvents.length < 4) {
+        // The defenders are still placing
+        this.activePlayer = context.defense.defenders[finalizedPlacementEvents.length]
+      } else {
+        // The attacker is placing
+        this.activePlayer = context.attack.attacker
+      }
+    } else {
+      this.activePlayer =
+        this.playersInOrder[
+          Math.floor(finalizedMoveOrActionEvents.length / 2) % this.playersInOrder.length
+        ]
+    }
+    this.activeSide = getPlayerSide(this.activePlayer.id)
+
+    this.currentRound = Math.floor(finalizedMoveOrActionEvents.length / this.eventsPerRound)
 
     this.activePlayerPosition = this.playerPositions[this.activePlayer.id]
   }
 
   get playerPositions() {
     const playerPositions: { [key in DefenderId | AttackerId]: Coordinate } = {
-      attacker: this.context.attack.attacker.originalPosition,
-      defender0: this.context.defense.defenders[0].originalPosition,
-      defender1: this.context.defense.defenders[1].originalPosition,
-      defender2: this.context.defense.defenders[2].originalPosition,
-      defender3: this.context.defense.defenders[3].originalPosition,
+      attacker: [0, 0],
+      defender0: [0, 0],
+      defender1: [0, 0],
+      defender2: [0, 0],
+      defender3: [0, 0],
     }
+
+    this.context.events
+      .filter(guardForGameEventType('placement'))
+      .forEach((event) => (playerPositions[event.playerId] = event.coordinate))
 
     this.context.events
       .filter(guardForGameEventType('move'))
@@ -175,5 +204,13 @@ export class GameState {
     const xDiff = Math.abs(currentPosition[0] - to[0])
     const yDiff = Math.abs(currentPosition[1] - to[1])
     return xDiff + yDiff <= 2 && xDiff + yDiff != 0
+  }
+
+  isPlaced(playerId: PlayerId) {
+    return (
+      this.context.events
+        .filter(guardForGameEventType('placement'))
+        .filter((event) => event.playerId === playerId && event.finalized).length > 0
+    )
   }
 }
