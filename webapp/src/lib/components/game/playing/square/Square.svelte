@@ -2,12 +2,13 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
   import isEqual from 'lodash/isEqual'
   import Items from './Items.svelte'
   import Players from './Players.svelte'
-  import { getCurrentUser } from '$lib/client/game-machine/utils'
+  import Stage from './Stage.svelte'
 
   export let coordinate: [number, number]
 
@@ -99,6 +100,7 @@
   class:current-position={$isMoving && $isCurrentPosition}
   class:is-active-side={$isActiveSide}
 >
+  <Stage {coordinate} />
   <Items {coordinate} />
   <Players {coordinate} />
   {#if $canMove && $isPossibleMove}
@@ -111,6 +113,7 @@
 
 <style lang="postcss">
   .square {
+    --_inactive-opacity: 0;
     display: block;
     position: relative;
     grid-row: var(--_row);
@@ -125,22 +128,22 @@
       min-width: 0;
       min-height: 0;
     }
-    &.impossible-move:not(.current-position),
-    &:not(.is-active-side) {
-      &::after {
-        position: absolute;
-        opacity: 0.8;
-        z-index: var(--layer-5);
-        mix-blend-mode: hard-light;
-        inset: 0;
-        background: var(--color-bg);
-        content: '';
-      }
+    &::after {
+      position: absolute;
+      opacity: var(--_inactive-opacity);
+      z-index: var(--layer-5);
+      mix-blend-mode: hard-light;
+      transition: opacity 300ms ease-out;
+      inset: 0;
+      background: var(--color-bg);
+      pointer-events: none;
+      content: '';
+    }
+    &.impossible-move:not(.current-position) {
+      --_inactive-opacity: 0.8;
     }
     &:not(.is-active-side) {
-      &::after {
-        opacity: 0.4;
-      }
+      --_inactive-opacity: 0.4;
     }
   }
 

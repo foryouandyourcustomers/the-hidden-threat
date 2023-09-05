@@ -1,5 +1,10 @@
-import type { BoardItem } from '../types'
+import type { Coordinate } from '../types'
+import type { AttackItemId, DefenseItemId } from './items'
 
+export type BoardItem = {
+  id: DefenseItemId | AttackItemId
+  position: Coordinate
+}
 export const BOARD_ITEMS: BoardItem[] = [
   // Row 1
   { id: 'certificate', position: [1, 0] },

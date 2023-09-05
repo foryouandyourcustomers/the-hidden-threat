@@ -195,11 +195,6 @@ export const guardForGameEventAction =
 
 export type AttackScenario = 'todo'
 
-export type BoardItem = {
-  id: DefenseItemId | AttackItemId
-  position: Coordinate
-}
-
 export type SharedGameContext = {
   gameId: string
   hostUserId: string
