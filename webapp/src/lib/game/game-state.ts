@@ -19,7 +19,7 @@ import {
   isDefenseItemId,
   type AttackItemId,
   type DefenseItemId,
-  INITIAL_BOARD_ITEMS,
+  BOARD_ITEMS,
 } from './constants'
 import { getPlayerSide } from './utils'
 
@@ -174,7 +174,7 @@ export class GameState {
   }
 
   getItemsForCoordinate(coordinate: Coordinate) {
-    const items = INITIAL_BOARD_ITEMS.filter((item) => isEqual(item.position, coordinate))
+    const items = BOARD_ITEMS.filter((item) => isEqual(item.position, coordinate))
 
     return items.map((item) => {
       const collectedCount = this.context.events

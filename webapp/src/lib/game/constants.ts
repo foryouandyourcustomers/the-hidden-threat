@@ -268,7 +268,7 @@ export const FACES = [
 
 export type FaceId = (typeof FACES)[number]['id']
 
-export const INITIAL_BOARD_ITEMS: BoardItem[] = [
+export const BOARD_ITEMS: BoardItem[] = [
   // Row 1
   { id: 'certificate', position: [1, 0] },
   { id: 'usb-stick', position: [1, 0] },

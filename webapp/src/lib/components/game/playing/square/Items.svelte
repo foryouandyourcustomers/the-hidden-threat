@@ -1,11 +1,11 @@
 <script lang="ts">
   import Item from '$lib/components/icons/Item.svelte'
-  import { INITIAL_BOARD_ITEMS, isAttackItemId } from '$lib/game/constants'
+  import { BOARD_ITEMS, isAttackItemId } from '$lib/game/constants'
   import isEqual from 'lodash/isEqual'
 
   export let coordinate: [number, number]
 
-  const items = INITIAL_BOARD_ITEMS.filter((item) => isEqual(item.position, coordinate))
+  const items = BOARD_ITEMS.filter((item) => isEqual(item.position, coordinate))
 </script>
 
 {#each items as item}
