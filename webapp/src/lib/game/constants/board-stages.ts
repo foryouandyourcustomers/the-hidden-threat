@@ -10,8 +10,8 @@ export const BOARD_SUPPLY_CHAINS: BoardStage[][] = [
   [
     { id: 'supply', coordinate: [2, 0] },
     { id: 'production', coordinate: [0, 0] },
-    { id: 'datacenter', coordinate: [1, 2] },
-    { id: 'storage', coordinate: [1, 3] },
+    { id: 'storage', coordinate: [1, 2] },
+    { id: 'datacenter', coordinate: [1, 3] },
     { id: 'logistics', coordinate: [2, 3] },
     { id: 'sales', coordinate: [0, 4] },
   ],
