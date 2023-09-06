@@ -57,10 +57,8 @@
 
 <style lang="postcss">
   .dimming {
-    /* display: none; */
     position: absolute;
     z-index: var(--layer-5);
-    /* mix-blend-mode: hard-light; */
     transition: opacity 500ms ease-out;
     inset: 0;
     background: var(--color-bg);
