@@ -2,10 +2,8 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
-  import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
-  import isEqual from 'lodash/isEqual'
   import Items from './Items.svelte'
   import Players from './Players.svelte'
   import Stage from './Stage.svelte'
@@ -13,23 +11,6 @@
   export let coordinate: [number, number]
 
   const { machine } = getGameContext()
-
-  const isMoving = useSelector(machine.service, (state) =>
-    state.matches('Playing.Gameloop.Playing.Moving'),
-  )
-  const isPlacing = useSelector(machine.service, (state) =>
-    state.matches('Playing.Gameloop.Playing.Placing'),
-  )
-  const isActiveSide = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return gameState.activeSide === getCurrentUser(context).side
-  })
-  const isCurrentPosition = useSelector(machine.service, (state) => {
-    const moving = state.matches('Playing.Gameloop.Playing.Moving')
-    if (!moving) return false
-    // Ok, this player is moving. But is this square a valid move?
-    return isEqual(GameState.fromContext(state.context).activePlayerPosition, coordinate)
-  })
 
   const isPossibleMove = useSelector(machine.service, (state) => {
     const moving = state.matches('Playing.Gameloop.Playing.Moving')
@@ -42,8 +23,8 @@
   const isPossiblePlacement = useSelector(machine.service, (state) => {
     const placing = state.matches('Playing.Gameloop.Playing.Placing')
     if (!placing) return false
-    // FIXME
-    return (coordinate[0] + (coordinate[1] % 2)) % 2 == 0
+    const gameState = GameState.fromContext(state.context)
+    return gameState.isValidPlacement(coordinate)
   })
 
   const getMoveEvent = (
@@ -91,15 +72,7 @@
   }
 </script>
 
-<div
-  class="square"
-  style:--_row={coordinate[1] + 1}
-  style:--_column={coordinate[0] + 1}
-  class:possible-move={($isMoving && $isPossibleMove) || ($isPlacing && $isPossiblePlacement)}
-  class:impossible-move={($isMoving && !$isPossibleMove) || ($isPlacing && !$isPossiblePlacement)}
-  class:current-position={$isMoving && $isCurrentPosition}
-  class:is-active-side={$isActiveSide}
->
+<div class="square" style:--_row={coordinate[1] + 1} style:--_column={coordinate[0] + 1}>
   <Stage {coordinate} />
   <Items {coordinate} />
   <Players {coordinate} />
@@ -127,23 +100,6 @@
     > * {
       min-width: 0;
       min-height: 0;
-    }
-    &::after {
-      position: absolute;
-      opacity: var(--_inactive-opacity);
-      z-index: var(--layer-5);
-      mix-blend-mode: hard-light;
-      transition: opacity 300ms ease-out;
-      inset: 0;
-      background: var(--color-bg);
-      pointer-events: none;
-      content: '';
-    }
-    &.impossible-move:not(.current-position) {
-      --_inactive-opacity: 0.8;
-    }
-    &:not(.is-active-side) {
-      --_inactive-opacity: 0.4;
     }
   }
 

@@ -207,6 +207,14 @@ export class GameState {
     return xDiff + yDiff <= 2 && xDiff + yDiff != 0
   }
 
+  isValidPlacement(coordinate: Coordinate) {
+    if (coordinate[0] < 0 || coordinate[0] > 8 || coordinate[1] < 0 || coordinate[1] > 7)
+      return false
+
+    // FIXME
+    return (coordinate[0] + (coordinate[1] % 2)) % 2 == 0
+  }
+
   isPlaced(playerId: PlayerId) {
     return (
       this.context.events
