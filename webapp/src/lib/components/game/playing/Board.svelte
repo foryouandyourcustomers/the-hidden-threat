@@ -1,11 +1,14 @@
 <script lang="ts">
   import Backdrop from '$lib/components/game/playing/Backdrop.svelte'
   import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants/general'
+  import StageLines from './StageLines.svelte'
   import Square from './square/Square.svelte'
 </script>
 
 <div class="board">
   <Backdrop />
+  <StageLines />
+
   {#each [...new Array(ROW_COUNT)] as _, y}
     {#each [...new Array(COLUMN_COUNT)] as _, x}
       <Square coordinate={[x, y]} />
