@@ -6,7 +6,7 @@
     ATTACKER_REVEAL_ROUNDS,
     NEW_GLOBAL_ATTACK_ROUNDS,
     TOTAL_ROUNDS,
-  } from '$lib/game/constants'
+  } from '$lib/game/constants/general'
   import { GameState } from '$lib/game/game-state'
 
   const { machine } = getGameContext()

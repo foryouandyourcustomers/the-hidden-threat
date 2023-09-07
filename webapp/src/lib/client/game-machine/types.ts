@@ -1,4 +1,5 @@
-import type { CharacterId, FaceId } from '$lib/game/constants'
+import type { CharacterId } from '$lib/game/constants/characters'
+import type { FaceId } from '$lib/game/constants/faces'
 import type {
   FromClientGameEvent,
   GameEvent,

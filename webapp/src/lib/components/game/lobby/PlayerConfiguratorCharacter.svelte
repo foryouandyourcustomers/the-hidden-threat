@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getGameContext } from '$lib/client/game-context'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
-  import { CHARACTERS, type CharacterId } from '$lib/game/constants'
+  import { CHARACTERS, type CharacterId } from '$lib/game/constants/characters'
   import type { Player, Side } from '$lib/game/types'
 
   export let player: Player

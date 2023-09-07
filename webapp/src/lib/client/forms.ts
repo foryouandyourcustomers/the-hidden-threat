@@ -4,7 +4,7 @@ const createAndJoinGameSchema = {
   acceptedTos: z.literal<boolean>(true, {
     errorMap: () => ({ message: 'Bitte Datenschutzerklärung & Nutzungsbedingungen akzeptieren.' }),
   }),
-  userName: z.string().min(3).max(10),
+  userName: z.string().min(3).max(20),
 } satisfies ZodRawShape
 
 export const createGameSchema = z.object({

@@ -6,7 +6,8 @@
     },
     {
       "name": "tools",
-      "path": "tools"
+      "path": "tools",
+      "deno.enable": true
     },
     {
       "name": ".github",

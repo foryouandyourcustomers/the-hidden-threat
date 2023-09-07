@@ -1,7 +1,7 @@
 <script>
   import Item from '$lib/components/icons/Item.svelte'
   import Section from '$lib/components/layout/Section.svelte'
-  import { ITEMS } from '$lib/game/constants'
+  import { ITEMS } from '$lib/game/constants/items'
 </script>
 
 <Section>

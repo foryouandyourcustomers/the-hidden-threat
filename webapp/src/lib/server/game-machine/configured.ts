@@ -1,8 +1,5 @@
-import {
-  isItemIdOfSide,
-  type AttackCharacterId,
-  type DefenseCharacterId,
-} from '$lib/game/constants'
+import type { AttackCharacterId, DefenseCharacterId } from '$lib/game/constants/characters'
+import { isItemIdOfSide } from '$lib/game/constants/items'
 import { GameState } from '$lib/game/game-state'
 import { sharedGuards } from '$lib/game/guards'
 import {

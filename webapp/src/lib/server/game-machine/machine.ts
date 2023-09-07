@@ -1,7 +1,5 @@
-import { INITIAL_BOARD_ITEMS } from '$lib/game/constants'
 import type { User } from '$lib/game/types'
 import { createDefaultAttacker, createDefaultDefender } from '$lib/server/game/utils'
-import cloneDeep from 'lodash/cloneDeep'
 import { createMachine } from 'xstate'
 import type { Context, ServerEvent } from './types'
 
@@ -15,7 +13,6 @@ export const machine = createMachine({
       gameId: input.gameId,
       hostUserId: input.host.id,
       finishedAssigningSides: false,
-      items: cloneDeep(INITIAL_BOARD_ITEMS),
       globalAttackScenarios: ['todo', 'todo', 'todo', 'todo'],
       defense: {
         finishedAssigning: false,

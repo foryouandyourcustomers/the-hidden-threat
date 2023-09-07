@@ -1,26 +1,30 @@
 import {
+  guardForGameEventAction,
   guardForGameEventType,
+  isGameEventOf,
+  isPlayerIdOfSide,
   type AttackerId,
   type Coordinate,
   type DefenderId,
   type GameEvent,
   type Player,
+  type PlayerId,
   type SharedGameContext,
   type Side,
-  type PlayerId,
-  isPlayerIdOfSide,
-  guardForGameEventAction,
-  isGameEventOf,
 } from '$lib/game/types'
 import isEqual from 'lodash/isEqual'
+import { BOARD_ITEMS } from './constants/board-items'
 import {
   ITEMS,
   isAttackItemId,
   isDefenseItemId,
   type AttackItemId,
   type DefenseItemId,
-} from './constants'
+} from './constants/items'
 import { getPlayerSide } from './utils'
+import { objectEntries } from '$lib/utils'
+import type { StageId } from './constants/stages'
+import { BOARD_SUPPLY_CHAINS } from './constants/board-stages'
 
 type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
@@ -173,7 +177,7 @@ export class GameState {
   }
 
   getItemsForCoordinate(coordinate: Coordinate) {
-    const items = this.context.items.filter((item) => isEqual(item.position, coordinate))
+    const items = BOARD_ITEMS.filter((item) => isEqual(item.position, coordinate))
 
     return items.map((item) => {
       const collectedCount = this.context.events
@@ -204,6 +208,59 @@ export class GameState {
     const xDiff = Math.abs(currentPosition[0] - to[0])
     const yDiff = Math.abs(currentPosition[1] - to[1])
     return xDiff + yDiff <= 2 && xDiff + yDiff != 0
+  }
+
+  isValidPlacement(coordinate: Coordinate) {
+    if (coordinate[0] < 0 || coordinate[0] > 8 || coordinate[1] < 0 || coordinate[1] > 7)
+      return false
+
+    // Any position for the attacker is valid.
+    if (this.activePlayer.id === 'attacker') return true
+
+    // Prevent same position for multiple players
+    for (const [playerId, position] of objectEntries(this.playerPositions)) {
+      if (isEqual(position, coordinate) && this.isPlaced(playerId)) return false
+    }
+
+    let stageId: StageId
+    switch (this.activePlayer.character) {
+      case 'dispatch-manager':
+        stageId = 'logistics'
+        break
+      case 'it-specialist':
+        stageId = 'datacenter'
+        break
+      case 'order-manager':
+        stageId = 'sales'
+        break
+      case 'quality-manager':
+        stageId = 'production'
+        break
+    }
+
+    let allValidCoordinates = BOARD_SUPPLY_CHAINS.flat()
+      .filter((stage) => stage.id === stageId)
+      .map((stage) => stage.coordinate)
+      .filter((stageCoordinate) => {
+        for (const [playerId, position] of objectEntries(this.playerPositions)) {
+          if (isEqual(position, stageCoordinate) && this.isPlaced(playerId)) return false
+        }
+        return true
+      })
+
+    if (allValidCoordinates.length === 0) {
+      // There actually are no valid coordinates (since all stages have already
+      // been used by other players), so we allow the coordinates of all stages.
+      //
+      // Note, that it's not necessary to exclude the ones where other players
+      // have already been placed, since we already checked that above.
+      allValidCoordinates = BOARD_SUPPLY_CHAINS.flat().map((stage) => stage.coordinate)
+    }
+
+    for (const stageCoordinate of allValidCoordinates) {
+      if (isEqual(stageCoordinate, coordinate)) return true
+    }
+    return false
   }
 
   isPlaced(playerId: PlayerId) {
