@@ -38,8 +38,9 @@
     for (let x = 0; x < COLUMN_COUNT; x++) {
       for (let y = 0; y < ROW_COUNT; y++) {
         if (
-          (moving && gameState.isValidMove([x, y])) ||
-          isEqual(GameState.fromContext(state.context).activePlayerPosition, [x, y]) ||
+          (moving &&
+            (gameState.isValidMove([x, y]) ||
+              isEqual(GameState.fromContext(state.context).activePlayerPosition, [x, y]))) ||
           (placing && gameState.isValidPlacement([x, y]))
         ) {
           undimmedSquares.push([x, y])
