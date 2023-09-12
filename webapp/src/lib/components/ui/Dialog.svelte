@@ -1,36 +1,56 @@
 <script lang="ts">
   import CloseIcon from '$lib/components/icons/Close.svelte'
+  import { createEventDispatcher } from 'svelte'
   import Heading from './Heading.svelte'
 
-  export let open = false
   export let title = ''
 
-  let element: HTMLDialogElement
-
-  $: if (element) {
-    if (open) {
-      element.showModal()
-    } else {
-      element.close()
-    }
-  }
+  const dispatch = createEventDispatcher<{ close: void }>()
 
   const close = () => {
-    element.close()
+    dispatch('close')
+  }
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.code === 'Escape') {
+      close()
+    }
   }
 </script>
 
-<dialog bind:this={element} on:close>
-  <Heading separator>
-    {#if title}{title}{/if}
+<div class="dialog-wrapper">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div class="backdrop" on:click={close} />
+  <div class="dialog">
+    <Heading separator>
+      {#if title}{title}{/if}
 
-    <button class="unstyled close-button" slot="info" on:click={close}><CloseIcon /></button>
-  </Heading>
-  <slot />
-</dialog>
+      <button class="unstyled close-button" slot="info" on:click={close}><CloseIcon /></button>
+    </Heading>
+    <slot />
+  </div>
+</div>
+
+<svelte:window on:keydown|preventDefault={onKeyDown} />
 
 <style lang="postcss">
-  dialog {
+  .dialog-wrapper {
+    display: grid;
+    position: fixed;
+    place-content: center;
+    inset: 0;
+  }
+
+  .backdrop {
+    position: absolute;
+    opacity: 0.85;
+    inset: 0;
+    background-color: var(--color-bg);
+  }
+
+  .dialog {
+    position: relative;
     margin: auto;
     box-shadow: 0px 0px 30px 0px var(--color-shadow-secondary);
     border: none;
@@ -42,9 +62,5 @@
     :global(svg) {
       display: block;
     }
-  }
-  dialog::backdrop {
-    opacity: 0.85;
-    background-color: var(--color-bg);
   }
 </style>

@@ -62,7 +62,6 @@
 
 <Dialog
   title="Rolle bestimmen"
-  open
   on:close={() => machine.send({ type: 'stop editing player', side })}
 >
   <div class="configurator">
