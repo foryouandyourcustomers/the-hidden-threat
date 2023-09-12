@@ -49,6 +49,7 @@ body {
   --background: var(--color-blue-spielbrett);
   --border: 1px solid transparent;
   --border-focused: 1px solid var(--color-border);
+  --item-color: var(--color-blue-spielbrett);
   --item-is-active-bg: var(--color-bg-strong);
   --item-is-active-color: var(--color-text-onstrong);
   --item-hover-bg: var(--color-blue-spielbrett);
