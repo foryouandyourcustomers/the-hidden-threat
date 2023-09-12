@@ -59,10 +59,16 @@ export const machine = createMachine({
                 'user: next step': {
                   target: '#gameServer.Game.Assigning roles',
                   guard: 'isAdmin',
-                  actions: {
-                    type: 'setAssigningSidesFinished',
-                    params: {},
-                  },
+                  actions: [
+                    {
+                      type: 'setAssigningSidesFinished',
+                      params: {},
+                    },
+                    {
+                      type: 'setAdminsForPlayers',
+                      params: {},
+                    },
+                  ],
                   reenter: false,
                 },
               },

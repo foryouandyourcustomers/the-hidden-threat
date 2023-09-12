@@ -28,6 +28,22 @@ export const serverGameMachine = machine.provide({
       // todo
     },
     setAssigningSidesFinished: assign(() => ({ finishedAssigningSides: true })),
+    setAdminsForPlayers: assign(({ context }) => {
+      const attackAdmin = context.users.find((user) => user.isAdmin && user.side === 'attack')
+      const defenseAdmin = context.users.find((user) => user.isAdmin && user.side === 'defense')
+      if (!attackAdmin || !defenseAdmin) return {}
+
+      return {
+        attack: produce(context.attack, (attack) => {
+          attack.attacker.userId = attackAdmin.id
+        }),
+        defense: produce(context.defense, (defense) => {
+          defense.defenders.forEach((defender) => {
+            defender.userId = defenseAdmin.id
+          })
+        }),
+      }
+    }),
     setAssigningRolesFinished: assign(({ context, event: e }) => {
       const { userId } = e as ServerEventOf<'user: next step'>
       const side = context.users.find((user) => user.id === userId)?.side
