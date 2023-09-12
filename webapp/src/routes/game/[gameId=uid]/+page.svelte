@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { dev } from '$app/environment'
   import { useSelector } from '$lib/@xstate/svelte'
   import { useMachine } from '$lib/@xstate/svelte/useMachine.js'
   import { setGameContext } from '$lib/client/game-context.js'
@@ -23,6 +24,9 @@
 
   const mousePositions: { [key: string]: [number, number] } = {}
 
+  let debug =
+    (dev && !window.location.hash.match('#nodebug')) || !!window.location.hash.match('#debug')
+
   const socketConnection = createWebSocketConnection({
     gameId,
     userId,
@@ -33,6 +37,7 @@
         machine.send(message)
       }
     },
+    debug,
   })
 
   const machine = useMachine(
@@ -80,8 +85,10 @@
   </svelte:fragment>
 </Game>
 
-<pre>
+{#if debug}
+  <pre>
 {$socketConnection.log.join('\n')}
 
 {JSON.stringify($state, null, 2)}
 </pre>
+{/if}

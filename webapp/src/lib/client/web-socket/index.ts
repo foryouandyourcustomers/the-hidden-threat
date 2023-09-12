@@ -10,14 +10,17 @@ export const createWebSocketConnection = ({
   gameId,
   userId,
   onMessage,
+  debug,
 }: {
   gameId: string
   userId: string
   onMessage: (message: ServerMessage) => void
+  debug: boolean
 }) => {
   const webSocketConnection = writable<WebSocketConnection>({ status: 'opening', log: [] })
 
   const logEvent = (message: string, consoleData?: unknown) => {
+    if (!debug) return
     console.debug('[websocket]', message, consoleData)
     return webSocketConnection.update((connection) => ({
       ...connection,
