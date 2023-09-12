@@ -2,15 +2,20 @@
   export let centered = false
   export let size: 'sm' | 'md' | 'lg' = 'md'
   export let width: 'default' | 'full' = 'default'
+  export let spacing: 'default' | 'none' = 'default'
 </script>
 
-<p class="size-{size} width-{width}" class:centered><slot /></p>
+<p class="size-{size} width-{width} spacing-{spacing}" class:centered><slot /></p>
 
 <style lang="postcss">
   p {
-    margin-block: 1.5rem;
+    margin: 0;
     &.width-default {
       max-width: 44rem;
+    }
+
+    &.spacing-default {
+      margin-block: 1.5rem;
     }
   }
   .centered {

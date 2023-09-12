@@ -4,7 +4,7 @@
   import { GameState } from '$lib/game/game-state'
   import type { Attacker, Defender, User } from '$lib/game/types'
   import isEqual from 'lodash/isEqual'
-  import Player from './Player.svelte'
+  import Player from '../Player.svelte'
 
   const { machine } = getGameContext()
 
@@ -85,6 +85,7 @@
 
 <style lang="postcss">
   .players-container {
+    flex: 1;
     margin-inline: 1rem;
   }
   h3 {

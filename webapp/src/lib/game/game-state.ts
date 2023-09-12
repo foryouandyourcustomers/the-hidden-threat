@@ -26,7 +26,7 @@ import { objectEntries } from '$lib/utils'
 import type { StageId } from './constants/stages'
 import { BOARD_SUPPLY_CHAINS } from './constants/board-stages'
 
-type ItemInventory<T extends Side> = {
+export type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
 }
 

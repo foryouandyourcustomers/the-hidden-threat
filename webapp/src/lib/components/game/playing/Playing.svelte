@@ -1,21 +1,21 @@
 <script>
   import Actions from '$lib/components/game/playing/actions/Actions.svelte'
   import Board from './Board.svelte'
-  import Players from './Players.svelte'
-  import Status from './status/Status.svelte'
-  import TempActionButton from './TempActionButton.svelte'
+  import Players from './player-status/Players.svelte'
+  import Status from './game-status/Status.svelte'
+  import InfoPanel from './player-status/InfoPanel.svelte'
 </script>
 
 <div class="playing">
-  <div class="actions">
+  <div class="player-status">
     <Players />
-    <TempActionButton />
+    <InfoPanel />
   </div>
   <div class="board">
     <Board />
     <Actions />
   </div>
-  <div class="status">
+  <div class="game-status">
     <Status />
   </div>
 </div>
@@ -33,5 +33,11 @@
     --board-width: calc(var(--board-height) * var(--column-count) / var(--row-count));
     --board-square-size: calc(var(--board-height) / var(--row-count));
     position: relative;
+  }
+
+  .player-status {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 </style>

@@ -67,6 +67,7 @@
     &.size-sm {
       .h {
         font: var(--display-h4);
+        text-transform: none;
       }
     }
     .info {
