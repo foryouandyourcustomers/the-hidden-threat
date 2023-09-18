@@ -23,7 +23,10 @@
       return objectEntries(playerPositions)
         .filter(([_, position]) => isEqual(position, coordinate))
         .map(([playerId]) => getPlayer(playerId, context))
-        .filter((player) => getPlayerSide(player.id) === currentUser.side)
+        .filter(
+          (player) =>
+            currentUser.side === 'attack' || getPlayerSide(player.id) === currentUser.side,
+        )
         .filter((player) => gameState.isPlaced(player.id))
         .map((player) => {
           const user = getUser(player.userId, context)
