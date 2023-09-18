@@ -91,8 +91,6 @@
     position: relative;
     grid-row: var(--_row);
     grid-column: var(--_column);
-    margin: calc(var(--px) / 2);
-    outline: 1px #fff dashed;
     isolation: isolate;
     min-width: 0;
     min-height: 0;

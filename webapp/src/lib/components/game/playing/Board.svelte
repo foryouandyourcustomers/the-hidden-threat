@@ -1,5 +1,6 @@
 <script lang="ts">
   import Backdrop from '$lib/components/game/playing/Backdrop.svelte'
+  import Grid from '$lib/components/game/playing/Grid.svelte'
   import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants/general'
   import Dimming from './Dimming.svelte'
   import StageLines from './StageLines.svelte'
@@ -15,7 +16,7 @@
       <Square coordinate={[x, y]} />
     {/each}
   {/each}
-
+  <Grid />
   <Dimming />
 </div>
 
@@ -26,7 +27,6 @@
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
     gap: 0;
-    margin: 0 auto;
     width: var(--board-width);
     height: var(--board-height);
   }
