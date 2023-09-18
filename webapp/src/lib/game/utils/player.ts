@@ -1,3 +1,4 @@
+import { CHARACTERS, type CharacterId } from '../constants/characters'
 import {
   isDefenderId,
   type Player,
@@ -18,3 +19,7 @@ export const getPlayer = (playerId: PlayerId, context: SharedGameContext): Playe
 
 export const getPlayerSide = (playerId: PlayerId): Side =>
   isDefenderId(playerId) ? 'defense' : 'attack'
+
+export const getCharacter = (characterId: CharacterId) =>
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  CHARACTERS.find((character) => character.id === characterId)!
