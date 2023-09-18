@@ -1,10 +1,10 @@
 <script>
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import { GameState } from '$lib/game/game-state'
-  import BackIcon from '~icons/lucide/chevron-left'
-  import ExpandableIconButton from './IconButton.svelte'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
+  import { GameState } from '$lib/game/game-state'
+  import BackIcon from '~icons/lucide/undo-2'
+  import ExpandableButton from './ExpandableButton.svelte'
 
   const { machine } = getGameContext()
 
@@ -17,13 +17,15 @@
 </script>
 
 {#if $isAdmin}
-  <ExpandableIconButton
+  <ExpandableButton
     disabled={!$lastGameEvent}
     on:click={() =>
       $lastGameEvent
         ? machine.send({ type: 'rollback game event', gameEventType: $lastGameEvent.type })
         : null}
   >
-    <BackIcon />
-  </ExpandableIconButton>
+    Aktion zurücksetzen
+
+    <BackIcon slot="icon" />
+  </ExpandableButton>
 {/if}

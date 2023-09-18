@@ -1,10 +1,10 @@
 <script>
-  import EmojiPicker from './EmojiPicker.svelte'
-  import ExpandableButton from './expandable/ExpandableButton.svelte'
-  import RollbackButton from './expandable/RollbackButton.svelte'
   import SettingsIcon from '~icons/lucide/settings'
-  import AudioIcon from '~icons/lucide/volume-2'
   import HelpIcon from '~icons/lucide/shield-question'
+  import AudioIcon from '~icons/lucide/volume-2'
+  import EmojiPicker from './EmojiPicker.svelte'
+  import Expandable from './expandable/Expandable.svelte'
+  import RollbackButton from './expandable/RollbackButton.svelte'
 </script>
 
 <div class="header">
@@ -13,16 +13,16 @@
   <EmojiPicker />
 
   <div class="actions">
-    <ExpandableButton>
+    <Expandable>
       <HelpIcon slot="icon" />
-    </ExpandableButton>
-    <ExpandableButton>
+    </Expandable>
+    <Expandable>
       <AudioIcon slot="icon" />
-    </ExpandableButton>
-    <ExpandableButton>
+    </Expandable>
+    <Expandable>
       <SettingsIcon slot="icon" />
       <RollbackButton />
-    </ExpandableButton>
+    </Expandable>
   </div>
 </div>
 
@@ -34,7 +34,6 @@
     background: linear-gradient(to bottom, #2b344800, #2b3448a9);
     padding-inline: 3rem 1rem;
     height: 3rem;
-    overflow: hidden;
   }
   .title {
     font: var(--display-h2);

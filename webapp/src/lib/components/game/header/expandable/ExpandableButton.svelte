@@ -1,60 +1,35 @@
 <script lang="ts">
-  import { scale } from 'svelte/transition'
-  import CloseIcon from '~icons/lucide/x-circle'
-  let expanded = false
+  export let disabled = false
 </script>
 
-<div class="expandable" class:expanded>
-  <button class="unstyled icon" on:click={() => (expanded = true)}><slot name="icon" /></button>
-  {#if expanded}
-    <div
-      class="content"
-      in:scale={{ duration: 150, start: 0.7 }}
-      out:scale={{ duration: 150, start: 0.7 }}
-    >
-      <slot />
-      <button class="unstyled icon close" on:click={() => (expanded = false)}><CloseIcon /></button>
+<button {disabled} class="unstyled" on:click>
+  <slot />
+
+  {#if $$slots.icon}
+    <div class="icons">
+      <slot name="icon" />
     </div>
   {/if}
-</div>
+</button>
 
 <style lang="postcss">
-  .expandable {
-    position: relative;
-    z-index: var(--layer-5);
-    isolation: isolate;
-    color: black;
-
-    .icon {
-      display: grid;
-      place-content: center;
-      border-radius: var(--radius-full);
-      background: white;
-      padding: 0.25rem;
-      width: 1.5rem;
-      height: 1.5rem;
+  button {
+    text-wrap: nowrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-inline: 1rem;
+    width: 100%;
+    height: 1.375rem;
+    &:hover {
+      background: #d5d9e34d;
+    }
+    .icons {
+      flex-shrink: 0;
       :global(svg) {
         display: block;
-        width: 100%;
-        height: 100%;
       }
-    }
-    .close {
-      padding: 0;
-    }
-
-    .content {
-      --_padding: 0.25rem;
-      display: flex;
-      position: absolute;
-      top: calc(0px - var(--_padding));
-      right: calc(0px - var(--_padding));
-      align-items: center;
-      gap: 1rem;
-      border-radius: var(--radius-full);
-      background: white;
-      padding: var(--_padding);
-      height: calc(1.5rem + var(--_padding) * 2);
     }
   }
 </style>
