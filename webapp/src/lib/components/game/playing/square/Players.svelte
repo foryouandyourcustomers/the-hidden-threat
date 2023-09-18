@@ -44,7 +44,7 @@
 
 {#each $players as player (`board-player-${player.id}`)}
   <div
-    class="player"
+    class="player {player.side}"
     in:receive={{ key: `board-player-${player.id}` }}
     out:send={{ key: `board-player-${player.id}` }}
   >
@@ -63,6 +63,13 @@
     top: 50%;
     left: 50%;
     translate: -50% -50%;
+    &.defense {
+      z-index: var(--layer-1);
+    }
+
+    &.attack {
+      z-index: var(--layer-2);
+    }
 
     :global(svg) {
       width: 100%;

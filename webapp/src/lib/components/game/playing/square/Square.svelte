@@ -104,6 +104,7 @@
   .move-button {
     display: block;
     position: absolute;
+    z-index: var(--layer-top);
     transition: background 0.3s ease-out;
     cursor: pointer;
     inset: 0;
