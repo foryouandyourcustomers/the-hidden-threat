@@ -28,7 +28,7 @@
         <div class="attacker-reveal">
           <Polygon color="red-angriff" />
           <svg class="eye" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 21">
-            <g clip-path="url(#a)">
+            <g clip-path="url(#a2)">
               <path
                 d="M25.5 12.9c.4 0 .7 0 1-.2.3-.3.6-.8.1-1.3-.8-.9-7.9-7.4-16.3-5.1-8.5 2.2-9.8 6-9.8 6s1.7 4.2 10.3 5.4A17.5 17.5 0 0 0 24.9 13s.3-.3.6-.2Z"
                 stroke="#fff"
@@ -57,7 +57,7 @@
               />
             </g>
             <defs>
-              <clipPath id="a">
+              <clipPath id="a2">
                 <path fill="#fff" d="M0 0h27.4v20.9H0z" />
               </clipPath>
             </defs>

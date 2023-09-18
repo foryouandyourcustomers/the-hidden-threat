@@ -5,9 +5,8 @@
   import Item from '$lib/components/icons/Item.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
-  import { ITEMS, type ItemId } from '$lib/game/constants/items'
+  import { ITEMS } from '$lib/game/constants/items'
   import { GameState, type ItemInventory } from '$lib/game/game-state'
-  import { objectEntries } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
 
   const { machine } = getGameContext()

@@ -118,7 +118,7 @@
 {:else if itemId === 'lock'}
   <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g
-      clip-path="url(#a)"
+      clip-path="url(#a3)"
       stroke="currentColor"
       stroke-width=".8"
       stroke-linecap="round"
@@ -135,7 +135,7 @@
       />
     </g>
     <defs>
-      <clipPath id="a">
+      <clipPath id="a3">
         <path fill="#fff" transform="translate(8 2)" d="M0 0h23v36H0z" />
       </clipPath>
     </defs>
