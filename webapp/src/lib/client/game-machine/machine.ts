@@ -40,7 +40,6 @@ export const machine = createMachine({
                   guard: 'isAdmin',
                   actions: {
                     type: 'forwardToServer',
-                    params: {},
                   },
                   reenter: false,
                 },
@@ -58,7 +57,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'forwardToServer',
-                params: {},
               },
               reenter: false,
             },
@@ -67,7 +65,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'forwardToServer',
-                params: {},
               },
               reenter: false,
             },
@@ -104,7 +101,6 @@ export const machine = createMachine({
                   guard: 'isAdmin',
                   actions: {
                     type: 'forwardToServer',
-                    params: {},
                   },
                   reenter: false,
                 },
@@ -123,7 +119,6 @@ export const machine = createMachine({
                   guard: 'isAdmin',
                   actions: {
                     type: 'forwardToServer',
-                    params: {},
                   },
                   reenter: false,
                 },
@@ -141,7 +136,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'forwardToServer',
-                params: {},
               },
               reenter: false,
             },
@@ -150,7 +144,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'forwardToServer',
-                params: {},
               },
               reenter: false,
             },
@@ -204,7 +197,6 @@ export const machine = createMachine({
                       guard: 'userControlsPlayer isPlacementEvent',
                       actions: {
                         type: 'forwardToServer',
-                        params: {},
                       },
                       reenter: true,
                     },
@@ -223,7 +215,6 @@ export const machine = createMachine({
                       guard: 'userControlsPlayer isMoveEvent',
                       actions: {
                         type: 'forwardToServer',
-                        params: {},
                       },
                       reenter: false,
                     },
@@ -242,7 +233,6 @@ export const machine = createMachine({
                       guard: 'userControlsPlayer isActionEvent',
                       actions: {
                         type: 'forwardToServer',
-                        params: {},
                       },
                       reenter: false,
                     },
@@ -251,7 +241,6 @@ export const machine = createMachine({
                       guard: 'userControlsPlayer lastEventIsAction lastEventNotFinalized',
                       actions: {
                         type: 'forwardToServer',
-                        params: {},
                       },
                       reenter: false,
                     },
@@ -271,7 +260,14 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'forwardToServer',
-                params: {},
+              },
+              reenter: false,
+            },
+            'switch sides': {
+              target: 'Gameloop',
+              guard: 'isAdmin',
+              actions: {
+                type: 'forwardToServer',
               },
               reenter: false,
             },
@@ -350,7 +346,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'forwardToServer',
-                params: {},
               },
               reenter: false,
             },

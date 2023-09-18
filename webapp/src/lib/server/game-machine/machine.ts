@@ -62,11 +62,9 @@ export const machine = createMachine({
                   actions: [
                     {
                       type: 'setAssigningSidesFinished',
-                      params: {},
                     },
                     {
                       type: 'setAdminsForPlayers',
-                      params: {},
                     },
                   ],
                   reenter: false,
@@ -79,7 +77,6 @@ export const machine = createMachine({
               target: 'Assigning sides',
               actions: {
                 type: 'storeNewUser',
-                params: {},
               },
               reenter: false,
             },
@@ -88,7 +85,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'assignSide',
-                params: {},
               },
               reenter: false,
             },
@@ -97,7 +93,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'assignAdmin',
-                params: {},
               },
               reenter: false,
             },
@@ -116,7 +111,6 @@ export const machine = createMachine({
               guard: 'isValidGameEvent',
               actions: {
                 type: 'addOrUpdateGameEvent',
-                params: {},
               },
               reenter: true,
             },
@@ -124,7 +118,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'rollbackGameEvent',
-                params: {},
               },
               reenter: true,
             },
@@ -133,9 +126,15 @@ export const machine = createMachine({
               guard: 'isAllowedToCancel',
               actions: {
                 type: 'cancelGameEvent',
-                params: {},
               },
               reenter: false,
+            },
+            'user: switch sides': {
+              guard: 'isAdmin',
+              actions: {
+                type: 'switchSides',
+              },
+              reenter: true,
             },
           },
         },
@@ -164,7 +163,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'updatePlayer',
-                params: {},
               },
               description:
                 'Defines which user controls a player, which role they are and how they look.\n\nThis event can update a defender and an attacker.',
@@ -175,7 +173,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'setEditingPlayer',
-                params: {},
               },
               reenter: false,
             },
@@ -184,7 +181,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'setEditingPlayer',
-                params: {},
               },
               reenter: false,
             },
@@ -192,7 +188,6 @@ export const machine = createMachine({
               guard: 'isAdmin',
               actions: {
                 type: 'setAssigningRolesFinished',
-                params: {},
               },
               reenter: true,
             },
@@ -201,7 +196,6 @@ export const machine = createMachine({
         Finished: {
           entry: {
             type: 'sendSummary',
-            params: {},
           },
         },
       },
@@ -213,28 +207,24 @@ export const machine = createMachine({
         'user: send emoji': {
           actions: {
             type: 'sendEmojiToOtherUsers',
-            params: {},
           },
           reenter: true,
         },
         'user disconnected': {
           actions: {
             type: 'updateUserConnectionState',
-            params: {},
           },
           reenter: true,
         },
         'user reconnected': {
           actions: {
             type: 'updateUserConnectionState',
-            params: {},
           },
           reenter: true,
         },
         'user connected': {
           actions: {
             type: 'updateUserConnectionState',
-            params: {},
           },
           reenter: true,
         },

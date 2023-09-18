@@ -134,6 +134,18 @@ export const serverGameMachine = machine.provide({
         }),
       }
     }),
+    switchSides: assign(({ context, event: e }) => {
+      const event = e as ServerEventOf<'user: switch sides'>
+      const userId = event.userId
+      return {
+        users: produce(context.users, (users) => {
+          const user = users.find((user) => user.id === userId)
+          if (user) {
+            user.side = user?.side === 'attack' ? 'defense' : 'attack'
+          }
+        }),
+      }
+    }),
     updatePlayer: assign(({ context, event: e }) => {
       const event = e as ServerEventOf<'user: assign role'>
 

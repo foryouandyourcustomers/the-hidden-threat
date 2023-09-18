@@ -48,6 +48,7 @@
       position: absolute;
       top: 2rem;
       right: 0;
+      flex-direction: column;
       align-items: center;
       gap: 1rem;
       border-radius: var(--radius-sm);

@@ -48,6 +48,7 @@ export type NativeClientEvent =
   | { type: 'send emoji'; emoji: string }
   | { type: 'apply game event'; gameEvent: FromClientGameEvent }
   | { type: 'rollback game event'; gameEventType: GameEvent['type'] }
+  | { type: 'switch sides' }
   | { type: 'cancel game event' }
   | { type: 'switch sides' }
   | { type: 'dismiss global attack' }

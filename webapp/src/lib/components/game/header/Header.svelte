@@ -5,6 +5,7 @@
   import EmojiPicker from './EmojiPicker.svelte'
   import Expandable from './expandable/Expandable.svelte'
   import RollbackButton from './expandable/RollbackButton.svelte'
+  import SwitchSidesButton from '$lib/components/game/header/expandable/SwitchSidesButton.svelte'
 </script>
 
 <div class="header">
@@ -21,6 +22,7 @@
     </Expandable>
     <Expandable>
       <SettingsIcon slot="icon" />
+      <SwitchSidesButton />
       <RollbackButton />
     </Expandable>
   </div>

@@ -3,7 +3,7 @@
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { GameState } from '$lib/game/game-state'
-  import BackIcon from '~icons/lucide/undo-2'
+  import Icon from '~icons/lucide/undo-2'
   import ExpandableButton from './ExpandableButton.svelte'
 
   const { machine } = getGameContext()
@@ -26,6 +26,6 @@
   >
     Aktion zurücksetzen
 
-    <BackIcon slot="icon" />
+    <Icon slot="icon" />
   </ExpandableButton>
 {/if}
