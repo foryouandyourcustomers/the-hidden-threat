@@ -222,24 +222,24 @@ export class GameState {
       if (isEqual(position, coordinate) && this.isPlaced(playerId)) return false
     }
 
-    let stageId: StageId
+    let stageIds: StageId[]
     switch (this.activePlayer.character) {
       case 'dispatch-manager':
-        stageId = 'logistics'
+        stageIds = ['logistics', 'storage']
         break
       case 'it-specialist':
-        stageId = 'datacenter'
+        stageIds = ['datacenter']
         break
       case 'order-manager':
-        stageId = 'sales'
+        stageIds = ['sales', 'supply']
         break
       case 'quality-manager':
-        stageId = 'production'
+        stageIds = ['production']
         break
     }
 
     let allValidCoordinates = BOARD_SUPPLY_CHAINS.flat()
-      .filter((stage) => stage.id === stageId)
+      .filter((stage) => stageIds.includes(stage.id))
       .map((stage) => stage.coordinate)
       .filter((stageCoordinate) => {
         for (const [playerId, position] of objectEntries(this.playerPositions)) {
