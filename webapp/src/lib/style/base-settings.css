@@ -18,6 +18,9 @@
   --color-grey-dark: #85817e;
 
   --color-red-medium: #971f38;
+  --color-red-polygon: #b91235;
+
+  --color-orange-dark: #ed860e;
 
   /* Font sizes */
   --scale-0: 1rem;
@@ -31,6 +34,7 @@
   --scale-8: 4.5rem;
   --scale-9: 6rem;
   --scale-10: 8rem;
+  --scale-0000: 0.625rem;
   --scale-000: 0.75rem;
   --scale-00: 0.875rem;
   --scale-fluid-0: clamp(0.875rem, 0.8rem + 0.25vw, 1rem);

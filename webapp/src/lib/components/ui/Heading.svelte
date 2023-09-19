@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let size: 'sm' | 'md' | 'lg' | 'xl' = 'lg'
+  export let size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'lg'
   export let id: string | undefined = undefined
   export let separator = false
   export let centered = false
@@ -11,6 +11,7 @@
     lg: 'h2',
     md: 'h3',
     sm: 'h4',
+    xs: 'h4',
   }
 
   if (!tag) tag = defaultSizeTags[size]
@@ -67,6 +68,12 @@
     &.size-sm {
       .h {
         font: var(--display-h4);
+        text-transform: none;
+      }
+    }
+    &.size-xs {
+      .h {
+        font: var(--display-h5);
         text-transform: none;
       }
     }

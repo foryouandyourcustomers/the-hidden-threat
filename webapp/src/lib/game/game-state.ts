@@ -25,6 +25,8 @@ import { getPlayerSide } from './utils'
 import { objectEntries } from '$lib/utils'
 import type { StageId } from './constants/stages'
 import { BOARD_SUPPLY_CHAINS } from './constants/board-stages'
+import { TARGETED_ATTACKS } from './constants/targeted-attacks'
+import { GLOBAL_ATTACKS } from './constants/global-attacks'
 
 export type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
@@ -269,5 +271,19 @@ export class GameState {
         .filter(guardForGameEventType('placement'))
         .filter((event) => event.playerId === playerId && event.finalized).length > 0
     )
+  }
+
+  getActiveTargetedAttacks() {
+    const attackCount = 3 * (Math.floor(this.currentRound / 3) + 1)
+    return this.context.targetedAttacks
+      .slice(0, attackCount)
+      .map((attackIndex) => TARGETED_ATTACKS[attackIndex])
+  }
+
+  getActiveGlobalAttacks() {
+    const attackCount = Math.floor(this.currentRound / 3) + 1
+    return this.context.globalAttacks
+      .slice(0, attackCount)
+      .map((attackIndex) => GLOBAL_ATTACKS[attackIndex])
   }
 }

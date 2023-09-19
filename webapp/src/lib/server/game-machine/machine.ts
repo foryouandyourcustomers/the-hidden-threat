@@ -1,5 +1,8 @@
+import { GLOBAL_ATTACKS } from '$lib/game/constants/global-attacks'
+import { TARGETED_ATTACKS } from '$lib/game/constants/targeted-attacks'
 import type { User } from '$lib/game/types'
 import { createDefaultAttacker, createDefaultDefender } from '$lib/server/game/utils'
+import shuffle from 'lodash/shuffle'
 import { createMachine } from 'xstate'
 import type { Context, ServerEvent } from './types'
 
@@ -13,7 +16,8 @@ export const machine = createMachine({
       gameId: input.gameId,
       hostUserId: input.host.id,
       finishedAssigningSides: false,
-      globalAttackScenarios: ['todo', 'todo', 'todo', 'todo'],
+      globalAttacks: shuffle([...GLOBAL_ATTACKS.keys()]).slice(0, 4),
+      targetedAttacks: shuffle([...TARGETED_ATTACKS.keys()]).slice(0, 12),
       defense: {
         finishedAssigning: false,
         defenders: [

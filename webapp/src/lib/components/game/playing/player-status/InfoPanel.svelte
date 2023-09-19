@@ -2,6 +2,7 @@
   import Inventory from '$lib/components/game/playing/player-status/Inventory.svelte'
   import InventoryIcon from '$lib/components/game/playing/player-status/InventoryIcon.svelte'
   import ScenariosIcon from '$lib/components/game/playing/player-status/ScenariosIcon.svelte'
+  import Scenarios from './Scenarios.svelte'
 
   let selected: 'scenarios' | 'inventory' = 'scenarios'
 </script>
@@ -26,11 +27,9 @@
 
   <div class="content">
     {#if selected === 'scenarios'}
-      <div>Szenarios</div>
+      <Scenarios />
     {:else if selected === 'inventory'}
-      <div>
-        <Inventory />
-      </div>
+      <Inventory />
     {/if}
   </div>
 </div>
@@ -78,6 +77,8 @@
     border-top-left-radius: 0rem;
     background-color: white;
     padding: 1.25rem;
+    max-width: 100%;
+    overflow: hidden;
     color: var(--color-blue-spielbrett);
   }
 </style>

@@ -9,6 +9,7 @@
   --display-h2: var(--weight-medium) var(--scale-5) / 1.5 var(--font-display);
   --display-h3: var(--weight-medium) var(--scale-3) / 1.5 var(--font-display);
   --display-h4: var(--weight-bold) var(--scale-1) / 1.5 var(--font-text);
+  --display-h5: var(--weight-bold) var(--scale-000) / 1.5 var(--font-text);
 
   --text-big: var(--weight-regular) var(--scale-2) / 1.5 var(--font-text);
   --text-regular: var(--weight-regular) var(--scale-1) / 1.5 var(--font-text);

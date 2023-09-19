@@ -193,15 +193,16 @@ export const guardForGameEventAction =
   (event: GameEvent): event is ActionEventOf<Action> =>
     isActionEventOf(event, action)
 
-export type AttackScenario = 'todo'
-
 export type SharedGameContext = {
   gameId: string
   hostUserId: string
   users: User[]
   events: GameEvent[]
   finishedAssigningSides: boolean
-  globalAttackScenarios: [AttackScenario, AttackScenario, AttackScenario, AttackScenario]
+  /** The indices of the global attacks */
+  globalAttacks: number[]
+  /** The indices of the targeted attacks */
+  targetedAttacks: number[]
   defense: {
     editingPlayerId?: undefined | DefenderId
     finishedAssigning: boolean
