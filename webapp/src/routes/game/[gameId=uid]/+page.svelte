@@ -59,6 +59,7 @@
 
   onMount(() => {
     socketConnection.open()
+
     return () => {
       socketConnection.close()
     }
@@ -66,10 +67,12 @@
 
   const reportMousePosition = throttle(
     (position: [number, number]) => {
-      socketConnection.send({
-        type: 'mouse position',
-        position,
-      })
+      if ($socketConnection.status === 'opened') {
+        socketConnection.send({
+          type: 'mouse position',
+          position,
+        })
+      }
     },
     50,
     { leading: true, trailing: true },
