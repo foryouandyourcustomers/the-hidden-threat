@@ -7,6 +7,7 @@
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import type { DefenderId } from '$lib/game/types'
+  import { getCharacter } from '$lib/game/utils/player'
   import PlayerConfigurator from './PlayerConfigurator.svelte'
 
   const { machine, user } = getGameContext()
@@ -50,7 +51,7 @@
     {#each $players as player, i}
       <div class="player">
         {#if player.isConfigured}
-          <Heading centered spacing="none" size="sm">{player.character}</Heading>
+          <Heading centered spacing="none" size="sm">{getCharacter(player.character).name}</Heading>
           {$users.find((user) => user.id === player.userId)?.name}
           <div class="face">
             <Face faceId={player.faceId} />
