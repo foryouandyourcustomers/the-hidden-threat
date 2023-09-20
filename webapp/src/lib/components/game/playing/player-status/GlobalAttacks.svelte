@@ -50,12 +50,13 @@
 
       <div class="targets">
         {#each selectedAttack.targets as target}
+          {@const stage = getStage(target.stageId)}
           <div class="target">
             <div class="stage">
-              {getStage(target.stageId).name}
+              {stage.name}
             </div>
             <div class="items">
-              {#each target.requiredItems as item}
+              {#each stage.defenseItems as item}
                 <Item itemId={item} />
               {/each}
             </div>
