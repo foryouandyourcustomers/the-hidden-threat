@@ -2,14 +2,17 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
-  import Button from '$lib/components/ui/Button.svelte'
+  import Item from '$lib/components/icons/Item.svelte'
+  import GameDialog from '$lib/components/ui/GameDialog.svelte'
+  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { isItemIdOfSide, type ItemId } from '$lib/game/constants/items'
   import { GameState } from '$lib/game/game-state'
   import { isActionEventOf, type SharedGameContext } from '$lib/game/types'
+  import Action from './Action.svelte'
 
   const { machine } = getGameContext()
 
-  const getCollectActionEvent = (
+  const getActionEvent = (
     context: SharedGameContext,
     finalized: boolean,
     itemId?: ItemId,
@@ -38,7 +41,7 @@
 
   const applyAction = (finalized = false, itemId?: ItemId) => {
     const context = machine.service.getSnapshot().context
-    machine.send(getCollectActionEvent(context, finalized, itemId))
+    machine.send(getActionEvent(context, finalized, itemId))
   }
 
   const startedCollecting = useSelector(machine.service, ({ context }) => {
@@ -49,17 +52,19 @@
   const cancel = () => machine.send({ type: 'cancel game event' })
 </script>
 
-{#if !$startedCollecting}
-  <Button disabled={$collectableItems.length === 0} on:click={() => applyAction(false)}>
-    Gegenstand einsammeln
-  </Button>
-{:else}
-  <Button on:click={cancel}>Abbrechen</Button>
-  {#each $collectableItems as collectableItem}
-    <Button on:click={() => applyAction(true, collectableItem.item.id)}
-      >{collectableItem.item.id}</Button
-    >
-  {/each}
+<Action disabled={$collectableItems.length === 0} on:click={() => applyAction(false)}>
+  Gegenstand einsammeln
+</Action>
+
+{#if $startedCollecting}
+  <GameDialog title="Gegenstand einsammeln" on:close={cancel}>
+    <Paragraph>Klicke auf den Gegenstand den du einsammeln möchtest</Paragraph>
+    {#each $collectableItems as collectableItem}
+      <button class="unstyled" on:click={() => applyAction(true, collectableItem.item.id)}>
+        <Item itemId={collectableItem.item.id} />
+      </button>
+    {/each}
+  </GameDialog>
 {/if}
 
 <style lang="postcss">

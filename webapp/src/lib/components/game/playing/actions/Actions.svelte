@@ -3,6 +3,10 @@
   import { getGameContext } from '$lib/client/game-context'
   import CollectItem from '$lib/components/game/playing/actions/CollectItem.svelte'
   import { GameState } from '$lib/game/game-state'
+  import isEqual from 'lodash/isEqual'
+  import AttackStage from './AttackStage.svelte'
+  import DefendStage from './DefendStage.svelte'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
 
   const { machine } = getGameContext()
 
@@ -10,17 +14,31 @@
     state.matches('Playing.Gameloop.Playing.Action'),
   )
 
-  const activePlayerPosition = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return gameState.activePlayerPosition
-  })
+  const activePlayerPosition = useSelector(
+    machine.service,
+    ({ context }) => {
+      const gameState = GameState.fromContext(context)
+      return gameState.activePlayerPosition
+    },
+    isEqual,
+  )
+
+  const side = useSelector(machine.service, ({ context }) => getCurrentUser(context).side)
 </script>
 
 {#if $canPerformAction}
   <div class="actions" style:--x={$activePlayerPosition[0]} style:--y={$activePlayerPosition[1]}>
     <ul class:on-left={$activePlayerPosition[0] > 5} class:on-top={$activePlayerPosition[1] > 4}>
+      <li class="title">Aktion auswählen</li>
       <li>
         <CollectItem />
+      </li>
+      <li>
+        {#if $side === 'attack'}
+          <AttackStage />
+        {:else}
+          <DefendStage />
+        {/if}
       </li>
     </ul>
   </div>
@@ -35,9 +53,20 @@
 
     & ul {
       position: absolute;
-      background: var(--color-bg);
-      padding: 1rem;
+      margin: 0;
+      border-radius: var(--radius-sm);
+      background: white;
+      padding: 0;
+      min-width: 15rem;
+      overflow: hidden;
+      color: black;
+      font-size: var(--scale-00);
       list-style-type: none;
+
+      li.title {
+        box-shadow: 0 0 0.5rem #0003;
+        padding: 0.5rem 1rem;
+      }
 
       &:not(.on-left) {
         left: calc(var(--board-square-size) + 0.3rem);

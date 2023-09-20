@@ -133,6 +133,18 @@ export type GameEvent =
       itemId?: AttackItemId | DefenseItemId | undefined
       position: Coordinate
     })
+  | (BaseGameEvent & {
+      type: 'action'
+      action: 'defend'
+      /** Can be undefined if the event is not finalized. */
+      position?: Coordinate
+    })
+  | (BaseGameEvent & {
+      type: 'action'
+      action: 'attack'
+      /** Can be undefined if the event is not finalized. */
+      position?: Coordinate
+    })
 
 /**
  * The same as `GameEvent` but without the information that the server will set
