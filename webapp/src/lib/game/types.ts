@@ -199,8 +199,8 @@ export type SharedGameContext = {
   users: User[]
   events: GameEvent[]
   finishedAssigningSides: boolean
-  /** The indices of the global attacks */
-  globalAttacks: number[]
+  /** The index of the global attack scenario */
+  globalAttackScenario: number
   /** The indices of the targeted attacks */
   targetedAttacks: number[]
   defense: {

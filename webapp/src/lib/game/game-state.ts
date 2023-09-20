@@ -12,8 +12,11 @@ import {
   type SharedGameContext,
   type Side,
 } from '$lib/game/types'
+import { objectEntries } from '$lib/utils'
 import isEqual from 'lodash/isEqual'
 import { BOARD_ITEMS } from './constants/board-items'
+import { BOARD_SUPPLY_CHAINS } from './constants/board-stages'
+import { GLOBAL_ATTACK_SCENARIOS } from './constants/global-attacks'
 import {
   ITEMS,
   isAttackItemId,
@@ -21,12 +24,9 @@ import {
   type AttackItemId,
   type DefenseItemId,
 } from './constants/items'
-import { getPlayerSide } from './utils'
-import { objectEntries } from '$lib/utils'
 import type { StageId } from './constants/stages'
-import { BOARD_SUPPLY_CHAINS } from './constants/board-stages'
 import { TARGETED_ATTACKS } from './constants/targeted-attacks'
-import { GLOBAL_ATTACKS } from './constants/global-attacks'
+import { getPlayerSide } from './utils'
 
 export type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
@@ -273,17 +273,22 @@ export class GameState {
     )
   }
 
-  getActiveTargetedAttacks() {
+  get activeTargetedAttacks() {
     const attackCount = 3 * (Math.floor(this.currentRound / 3) + 1)
     return this.context.targetedAttacks
       .slice(0, attackCount)
       .map((attackIndex) => TARGETED_ATTACKS[attackIndex])
   }
 
-  getActiveGlobalAttacks() {
-    const attackCount = Math.floor(this.currentRound / 3) + 1
-    return this.context.globalAttacks
-      .slice(0, attackCount)
-      .map((attackIndex) => GLOBAL_ATTACKS[attackIndex])
+  get activeGlobalAttackIndex() {
+    return this.currentRound % 3
+  }
+
+  get activeGlobalAttack() {
+    return this.globalAttackScenario.attacks[this.activeGlobalAttackIndex]
+  }
+
+  get globalAttackScenario() {
+    return GLOBAL_ATTACK_SCENARIOS[this.context.globalAttackScenario]
   }
 }

@@ -6,7 +6,7 @@ export const getSharedGameContext = (context: Context): SharedGameContext => ({
   gameId: context.gameId,
   hostUserId: context.hostUserId,
   finishedAssigningSides: context.finishedAssigningSides,
-  globalAttacks: context.globalAttacks,
+  globalAttackScenario: context.globalAttackScenario,
   targetedAttacks: context.targetedAttacks,
   users: context.users,
   events: context.events,

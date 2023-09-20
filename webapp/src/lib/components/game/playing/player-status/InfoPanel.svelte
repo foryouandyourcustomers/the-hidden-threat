@@ -1,20 +1,28 @@
 <script lang="ts">
+  import { useSelector } from '$lib/@xstate/svelte'
+  import { getGameContext } from '$lib/client/game-context'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
+  import AttacksIcon from '$lib/components/game/playing/player-status/AttacksIcon.svelte'
   import Inventory from '$lib/components/game/playing/player-status/Inventory.svelte'
   import InventoryIcon from '$lib/components/game/playing/player-status/InventoryIcon.svelte'
-  import ScenariosIcon from '$lib/components/game/playing/player-status/ScenariosIcon.svelte'
-  import Scenarios from './Scenarios.svelte'
+  import GlobalAttacks from './GlobalAttacks.svelte'
+  import TargetedAttacks from './TargetedAttacks.svelte'
 
-  let selected: 'scenarios' | 'inventory' = 'scenarios'
+  let selected: 'attacks' | 'inventory' = 'attacks'
+
+  const { machine } = getGameContext()
+
+  const side = useSelector(machine.service, (state) => getCurrentUser(state.context).side)
 </script>
 
 <div class="info-panel">
   <nav>
     <button
       class="unstyled"
-      class:active={selected === 'scenarios'}
-      on:click={() => (selected = 'scenarios')}
+      class:active={selected === 'attacks'}
+      on:click={() => (selected = 'attacks')}
     >
-      <ScenariosIcon />
+      <AttacksIcon />
     </button>
     <button
       class="unstyled"
@@ -26,8 +34,12 @@
   </nav>
 
   <div class="content">
-    {#if selected === 'scenarios'}
-      <Scenarios />
+    {#if selected === 'attacks'}
+      {#if $side === 'attack'}
+        <TargetedAttacks />
+      {:else}
+        <GlobalAttacks />
+      {/if}
     {:else if selected === 'inventory'}
       <Inventory />
     {/if}

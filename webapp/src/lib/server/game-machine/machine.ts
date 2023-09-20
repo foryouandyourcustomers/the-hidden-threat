@@ -1,4 +1,4 @@
-import { GLOBAL_ATTACKS } from '$lib/game/constants/global-attacks'
+import { GLOBAL_ATTACK_SCENARIOS } from '$lib/game/constants/global-attacks'
 import { TARGETED_ATTACKS } from '$lib/game/constants/targeted-attacks'
 import type { User } from '$lib/game/types'
 import { createDefaultAttacker, createDefaultDefender } from '$lib/server/game/utils'
@@ -16,7 +16,7 @@ export const machine = createMachine({
       gameId: input.gameId,
       hostUserId: input.host.id,
       finishedAssigningSides: false,
-      globalAttacks: shuffle([...GLOBAL_ATTACKS.keys()]).slice(0, 4),
+      globalAttackScenario: shuffle([...GLOBAL_ATTACK_SCENARIOS.keys()])[0],
       targetedAttacks: shuffle([...TARGETED_ATTACKS.keys()]).slice(0, 12),
       defense: {
         finishedAssigning: false,
