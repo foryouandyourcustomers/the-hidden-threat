@@ -271,6 +271,14 @@ export const machine = createMachine({
               },
               reenter: false,
             },
+            'apply game event': {
+              target: 'Gameloop',
+              guard: 'isValidGameEvent',
+              actions: {
+                type: 'forwardToServer',
+              },
+              reenter: false,
+            },
           },
         },
         'Global Attack': {

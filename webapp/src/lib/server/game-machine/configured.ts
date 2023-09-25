@@ -13,6 +13,7 @@ import {
   getPlayerSide,
   userControlsPlayer,
   userControlsPlayerId,
+  userIsAdmin,
 } from '$lib/game/utils'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 import { produce, setAutoFreeze } from 'immer'
@@ -273,6 +274,7 @@ export const serverGameMachine = machine.provide({
       return (
         !!gameState.lastEvent &&
         !gameState.lastEvent.finalized &&
+        gameState.lastEvent.type !== 'admin' &&
         userControlsPlayerId(event.userId, gameState.lastEvent.playerId, context)
       )
     },
@@ -281,6 +283,11 @@ export const serverGameMachine = machine.provide({
       const gameState = GameState.fromContext(context)
 
       // TODO: this needs to verify that the given game event is valid in the current context.
+
+      /** All admin events are allowed */
+      if (event.gameEvent.type === 'admin') {
+        return userIsAdmin(event.userId, context)
+      }
 
       const activePlayer = gameState.activePlayer
       if (!userControlsPlayer(event.userId, activePlayer, context)) return false

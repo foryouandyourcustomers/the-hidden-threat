@@ -32,6 +32,10 @@ export const userControlsPlayer = (
   context: SharedGameContext,
 ): boolean => {
   if (player.userId === userId) return true
+  return userIsAdmin(userId, context)
+}
+
+export const userIsAdmin = (userId: string, context: SharedGameContext) => {
   const user = getUser(userId, context)
   return user.isAdmin
 }

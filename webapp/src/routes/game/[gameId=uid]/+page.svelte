@@ -79,6 +79,12 @@
   )
 
   let showEmoji: (props: { userId: string; emoji: string }) => void
+  const fillInventories = () => {
+    machine.send({
+      type: 'apply game event',
+      gameEvent: { type: 'admin', action: 'fill-inventory', finalized: true },
+    })
+  }
 </script>
 
 <Game {reportMousePosition} --row-count={ROW_COUNT} --column-count={COLUMN_COUNT}>
@@ -89,6 +95,7 @@
 </Game>
 
 {#if debug}
+  <button on:click={fillInventories}>fill inventory</button>
   <pre>
 {$socketConnection.log.join('\n')}
 

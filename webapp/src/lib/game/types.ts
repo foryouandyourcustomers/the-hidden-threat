@@ -145,6 +145,10 @@ export type GameEvent =
       /** Can be undefined if the event is not finalized. */
       position?: Coordinate
     })
+  | (Omit<BaseGameEvent, 'playerId'> & {
+      type: 'admin'
+      action: 'fill-inventory'
+    })
 
 /**
  * The same as `GameEvent` but without the information that the server will set
@@ -158,9 +162,15 @@ export type FromClientGameEvent = DistributiveOmit<GameEvent, 'userId' | 'timest
 export type GameEventOf<Type extends GameEvent['type']> = Extract<GameEvent, { type: Type }>
 export type ActionEvent = GameEventOf<'action'>
 type GameEventAction = GameEventOf<'action'>['action']
+type GameEventAdminAction = GameEventOf<'admin'>['action']
 export type ActionEventOf<Action extends GameEventAction> = Extract<
   GameEvent,
   { type: 'action'; action: Action }
+>
+
+export type AdminActionEventOf<Action extends GameEventAdminAction> = Extract<
+  GameEvent,
+  { type: 'admin'; action: Action }
 >
 
 /** Type guard to check whether the provided event is of type `type` */
@@ -173,6 +183,11 @@ export const isActionEventOf = <Action extends GameEventAction>(
   event: GameEvent | undefined,
   action: Action,
 ): event is ActionEventOf<Action> => event?.type === 'action' && event.action === action
+
+export const isAdminActionEventOf = <Action extends GameEventAdminAction>(
+  event: GameEvent | undefined,
+  action: Action,
+): event is AdminActionEventOf<Action> => event?.type === 'admin' && event.action === action
 
 /**
  * A helper function to create a type guard for a specific `GameEvent` type.
@@ -204,6 +219,11 @@ export const guardForGameEventAction =
   <Action extends GameEventAction>(action: Action) =>
   (event: GameEvent): event is ActionEventOf<Action> =>
     isActionEventOf(event, action)
+
+export const guardForGameEventAdminAction =
+  <Action extends GameEventAdminAction>(action: Action) =>
+  (event: GameEvent): event is AdminActionEventOf<Action> =>
+    isAdminActionEventOf(event, action)
 
 export type SharedGameContext = {
   gameId: string

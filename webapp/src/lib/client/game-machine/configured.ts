@@ -5,6 +5,7 @@ import { and, assign, not } from 'xstate'
 import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
 import { getCurrentUser } from './utils'
+import { userIsAdmin } from '$lib/game/utils'
 
 export const getClientGameMachine = ({
   send,
@@ -82,6 +83,9 @@ export const getClientGameMachine = ({
       lastEventNotFinalized: ({ context }) => {
         const gameState = GameState.fromContext(context)
         return !!gameState.lastEvent && !gameState.lastEvent.finalized
+      },
+      isValidGameEvent: ({ context }) => {
+        return userIsAdmin(context.userId, context)
       },
       'userControlsPlayer isMoveEvent': and(['userControlsPlayer', 'isMoveEvent']),
       'userControlsPlayer isActionEvent': and(['userControlsPlayer', 'isActionEvent']),

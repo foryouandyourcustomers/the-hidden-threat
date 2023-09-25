@@ -27,8 +27,9 @@
     }
   }
 
-  const canDefend = useSelector(machine.service, () => {
-    return false
+  const canDefend = useSelector(machine.service, ({ context }) => {
+    const gameState = GameState.fromContext(context)
+    return gameState.defendableStage
   })
 
   const applyAction = (finalized = false) => {
@@ -49,5 +50,6 @@
 {#if $startedDefending}
   <GameDialog title="Stufe verteidigen" on:close={cancel}>
     <Paragraph>Möchtest du folgende Gegenstände einsetzen um die Stufe zu verteidigen?</Paragraph>
+    <button on:click={() => applyAction(true)}>Ja</button>
   </GameDialog>
 {/if}

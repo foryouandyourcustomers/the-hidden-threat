@@ -11,6 +11,7 @@ import {
   type PlayerId,
   type SharedGameContext,
   type Side,
+  guardForGameEventAdminAction,
 } from '$lib/game/types'
 import { objectEntries } from '$lib/utils'
 import isEqual from 'lodash/isEqual'
@@ -24,7 +25,7 @@ import {
   type AttackItemId,
   type DefenseItemId,
 } from './constants/items'
-import type { StageId } from './constants/stages'
+import { STAGES, type StageId } from './constants/stages'
 import { TARGETED_ATTACKS } from './constants/targeted-attacks'
 import { getPlayerSide } from './utils'
 
@@ -148,8 +149,13 @@ export class GameState {
       .map((item) => item.id)
       .filter(isDefenseItemId)
 
+    let initialAmount = 0
+    if (this.context.events.find(guardForGameEventAdminAction('fill-inventory'))) {
+      initialAmount = 50
+    }
+
     const inventory = Object.fromEntries(
-      defenseInventoryIds.map((id) => [id, 0]),
+      defenseInventoryIds.map((id) => [id, initialAmount]),
     ) as ItemInventory<'defense'>
 
     this.context.events.filter(guardForGameEventAction('collect')).forEach((event) => {
@@ -165,8 +171,13 @@ export class GameState {
       .map((item) => item.id)
       .filter(isAttackItemId)
 
+    let initialAmount = 0
+    if (this.context.events.find(guardForGameEventAdminAction('fill-inventory'))) {
+      initialAmount = 50
+    }
+
     const inventory = Object.fromEntries(
-      attackInventoryIds.map((id) => [id, 0]),
+      attackInventoryIds.map((id) => [id, initialAmount]),
     ) as ItemInventory<'attack'>
 
     this.context.events.filter(guardForGameEventAction('collect')).forEach((event) => {
@@ -293,9 +304,15 @@ export class GameState {
   }
 
   /** All targeted attacks for which the user has all required items. */
-  get attackableAttacks() {
+  get executableAttacks() {
     return this.activeTargetedAttacks.filter((attack) =>
       attack.target.requiredItems.every((item) => this.attackInventory[item] > 0),
+    )
+  }
+
+  get executableDefenseStages() {
+    return STAGES.filter((stage) =>
+      stage.defenseItems.every((item) => this.defenseInventory[item] > 0),
     )
   }
 
@@ -312,13 +329,22 @@ export class GameState {
     )
   }
 
-  /** All stages for which the attacker has the required items and that are reachable. */
+  /** All stages that are reachable and can be attacked. */
   get attackableStages() {
     return this.reachableStages.filter((stage) =>
-      this.attackableAttacks.find(
+      this.executableAttacks.find(
         (attack) =>
           attack.target.stageId === stage.id && attack.target.supplyChainId === stage.supplyChainId,
       ),
     )
+  }
+
+  /** Returns the stage of the player position if all required conditions are met. */
+  get defendableStage() {
+    const currentStage = BOARD_SUPPLY_CHAINS.flat().find((boardStage) =>
+      isEqual(boardStage.coordinate, this.activePlayerPosition),
+    )
+    if (!currentStage) return undefined
+    return this.executableDefenseStages.find((stage) => stage.id === currentStage.id)
   }
 }
