@@ -35,6 +35,8 @@
     <Paragraph size="sm" spacing="none">
       {selectedAttack.description}
     </Paragraph>
+    {selectedAttack.target.supplyChainId}
+    {selectedAttack.target.stageId}
     <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
 
     <div class="targets">

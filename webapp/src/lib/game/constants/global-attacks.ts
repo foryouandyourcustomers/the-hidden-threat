@@ -14,47 +14,22 @@ export const GLOBAL_ATTACK_SCENARIOS: GlobalAttackScenario[] = [
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
-      },
-    ],
-  },
-  {
-    description: 'Beschreibung des Szenarios',
-    attacks: [
-      {
-        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
-        description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
-      },
-      {
-        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
-        description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
-      },
-      {
-        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
-        description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
-      },
-      {
-        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
-        description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
     ],
   },
@@ -64,22 +39,47 @@ export const GLOBAL_ATTACK_SCENARIOS: GlobalAttackScenario[] = [
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
       {
         targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
         description:
-          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowieKundenbeschwerden.',
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
+      },
+    ],
+  },
+  {
+    description: 'Beschreibung des Szenarios',
+    attacks: [
+      {
+        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
+        description:
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
+      },
+      {
+        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
+        description:
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
+      },
+      {
+        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
+        description:
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
+      },
+      {
+        targets: [{ stageId: 'supply' }, { stageId: 'datacenter' }],
+        description:
+          'Schleust minderwertige und gefälschte Materialien in die Lieferkette ein und sorgt dadurch für Produktionsausfälle sowie Kundenbeschwerden.',
       },
     ],
   },

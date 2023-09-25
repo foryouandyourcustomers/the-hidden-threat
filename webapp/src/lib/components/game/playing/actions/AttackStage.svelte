@@ -5,7 +5,7 @@
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { GameState } from '$lib/game/game-state'
-  import { isActionEventOf, type SharedGameContext } from '$lib/game/types'
+  import { isActionEventOf, type Coordinate, type SharedGameContext } from '$lib/game/types'
   import Action from './Action.svelte'
 
   const { machine } = getGameContext()
@@ -13,6 +13,7 @@
   const getActionEvent = (
     context: SharedGameContext,
     finalized: boolean,
+    position?: Coordinate,
   ): ClientEventOf<'apply game event'> => {
     const gameState = GameState.fromContext(context)
     return {
@@ -22,32 +23,38 @@
         action: 'attack',
         finalized,
         playerId: gameState.activePlayer.id,
-        position: gameState.activePlayerPosition,
+        position,
       },
     }
   }
 
-  const canAttack = useSelector(machine.service, () => {
-    return false
+  const attackableStages = useSelector(machine.service, ({ context }) => {
+    const gameState = GameState.fromContext(context)
+    return gameState.attackableStages
   })
 
-  const applyAction = (finalized = false) => {
+  const applyAction = (finalized = false, position?: Coordinate) => {
     const context = machine.service.getSnapshot().context
-    machine.send(getActionEvent(context, finalized))
+    machine.send(getActionEvent(context, finalized, position))
   }
 
   const startedAttacking = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
-    return isActionEventOf(gameState.lastEvent, 'defend')
+    return isActionEventOf(gameState.lastEvent, 'attack')
   })
 
   const cancel = () => machine.send({ type: 'cancel game event' })
 </script>
 
-<Action disabled={!$canAttack} on:click={() => applyAction(false)}>Stufe angreifen</Action>
+<Action disabled={!$attackableStages.length} on:click={() => applyAction(false)}
+  >Stufe angreifen</Action
+>
 
 {#if $startedAttacking}
   <GameDialog title="Stufe angreifen" on:close={cancel}>
     <Paragraph>Möchtest du folgende Gegenstände einsetzen um die Stufe anzugreifen?</Paragraph>
+    {#each $attackableStages as stage}
+      <button on:click={() => applyAction(true, stage.coordinate)}>{stage.id}</button>
+    {/each}
   </GameDialog>
 {/if}

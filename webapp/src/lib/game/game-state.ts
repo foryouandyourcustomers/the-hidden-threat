@@ -291,4 +291,34 @@ export class GameState {
   get globalAttackScenario() {
     return GLOBAL_ATTACK_SCENARIOS[this.context.globalAttackScenario]
   }
+
+  /** All targeted attacks for which the user has all required items. */
+  get attackableAttacks() {
+    return this.activeTargetedAttacks.filter((attack) =>
+      attack.target.requiredItems.every((item) => this.attackInventory[item] > 0),
+    )
+  }
+
+  static isReachable(a: Coordinate, b: Coordinate) {
+    return (
+      (a[0] === b[0] && Math.abs(a[1] - b[1]) <= 1) || (a[1] === b[1] && Math.abs(a[0] - b[0]) <= 1)
+    )
+  }
+
+  /** Stages that are reachable by the attacker. */
+  get reachableStages() {
+    return BOARD_SUPPLY_CHAINS.flat().filter((stage) =>
+      GameState.isReachable(stage.coordinate, this.activePlayerPosition),
+    )
+  }
+
+  /** All stages for which the attacker has the required items and that are reachable. */
+  get attackableStages() {
+    return this.reachableStages.filter((stage) =>
+      this.attackableAttacks.find(
+        (attack) =>
+          attack.target.stageId === stage.id && attack.target.supplyChainId === stage.supplyChainId,
+      ),
+    )
+  }
 }
