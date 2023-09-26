@@ -2,8 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
-  import AttackedIcon from '$lib/components/game/playing/square/AttackedIcon.svelte'
-  import DefendedIcon from '$lib/components/game/playing/square/DefendedIcon.svelte'
+  import StageStatus from '$lib/components/icons/StageStatus.svelte'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
   import Items from './Items.svelte'
@@ -95,9 +94,9 @@
   {#if $isDefended || $isAttacked}
     <div class="status">
       {#if $isDefended}
-        <DefendedIcon />
+        <StageStatus status="defended" />
       {:else if $isAttacked}
-        <AttackedIcon />
+        <StageStatus status="attacked" />
       {/if}
     </div>
   {/if}

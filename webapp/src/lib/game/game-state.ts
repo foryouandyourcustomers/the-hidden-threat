@@ -396,4 +396,13 @@ export class GameState {
 
     return !!this.executableDefenseStages.find((stage) => stage.id === currentStage.id)
   }
+
+  get score() {
+    const attack = this.finalizedActionEvents.filter((event) => event.action === 'attack').length
+    const defense = this.finalizedActionEvents.filter((event) => event.action === 'defend').length
+    return {
+      attack,
+      defense,
+    }
+  }
 }
