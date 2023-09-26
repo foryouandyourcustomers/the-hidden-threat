@@ -111,44 +111,76 @@ export const isPlayerIdOfSide = <T extends Side>(
 
 type BaseGameEvent = {
   timestamp: number
-  playerId: PlayerId
   /** Which user actually triggered the event. */
   userId: string
+}
+
+type BasePlayerGameEvent = BaseGameEvent & {
+  playerId: PlayerId
   finalized: boolean
 }
 
-export type GameEvent =
-  | (BaseGameEvent & {
+/**
+ * These are all events that players can add to the game event list.
+ *
+ * These are the only events that can advance the progress of the game.
+ */
+export type PlayerGameEvent =
+  | (BasePlayerGameEvent & {
       type: 'move'
       to: Coordinate
     })
-  | (BaseGameEvent & {
+  | (BasePlayerGameEvent & {
       type: 'placement'
       coordinate: Coordinate
     })
-  | (BaseGameEvent & {
+  | (BasePlayerGameEvent & {
       type: 'action'
       action: 'collect'
       /** Can be undefined if the event is not finalized. */
       itemId?: AttackItemId | DefenseItemId | undefined
       position: Coordinate
     })
-  | (BaseGameEvent & {
+  | (BasePlayerGameEvent & {
       type: 'action'
       action: 'defend'
       /** Can be undefined if the event is not finalized. */
-      position?: Coordinate
+      position: Coordinate
     })
-  | (BaseGameEvent & {
+  | (BasePlayerGameEvent & {
       type: 'action'
       action: 'attack'
       /** Can be undefined if the event is not finalized. */
       position?: Coordinate
     })
-  | (Omit<BaseGameEvent, 'playerId'> & {
-      type: 'admin'
-      action: 'fill-inventory'
+  | (BasePlayerGameEvent & {
+      type: 'action'
+      action: 'reveal'
+      /** Can be undefined if the event is not finalized. */
+      position?: Coordinate
     })
+
+  /** Special action that allows to reveal the attacker on the whole board. */
+  | (BasePlayerGameEvent & {
+      type: 'action'
+      action: 'global-reveal'
+      /** Can be undefined if the event is not finalized. */
+      position?: Coordinate
+    })
+  | (BasePlayerGameEvent & {
+      type: 'reaction'
+      action: 'joker'
+      useJoker: boolean
+    })
+
+export type SystemGameEvent =
+  | (BaseGameEvent & { type: 'system'; action: 'fill-inventory' })
+  | (BaseGameEvent & { type: 'system'; action: 'set-player-position'; position: Coordinate })
+
+export type GameEvent = PlayerGameEvent | SystemGameEvent
+
+export const gameEventRequiresReaction = (event: GameEvent) =>
+  isActionEventOf(event, 'reveal') || isActionEventOf(event, 'global-reveal')
 
 /**
  * The same as `GameEvent` but without the information that the server will set
@@ -162,13 +194,13 @@ export type FromClientGameEvent = DistributiveOmit<GameEvent, 'userId' | 'timest
 export type GameEventOf<Type extends GameEvent['type']> = Extract<GameEvent, { type: Type }>
 export type ActionEvent = GameEventOf<'action'>
 type GameEventAction = GameEventOf<'action'>['action']
-type GameEventAdminAction = GameEventOf<'admin'>['action']
+type GameEventAdminAction = GameEventOf<'system'>['action']
 export type ActionEventOf<Action extends GameEventAction> = Extract<
   GameEvent,
   { type: 'action'; action: Action }
 >
 
-export type AdminActionEventOf<Action extends GameEventAdminAction> = Extract<
+export type SystemActionEventOf<Action extends GameEventAdminAction> = Extract<
   GameEvent,
   { type: 'admin'; action: Action }
 >
@@ -187,7 +219,7 @@ export const isActionEventOf = <Action extends GameEventAction>(
 export const isAdminActionEventOf = <Action extends GameEventAdminAction>(
   event: GameEvent | undefined,
   action: Action,
-): event is AdminActionEventOf<Action> => event?.type === 'admin' && event.action === action
+): event is SystemActionEventOf<Action> => event?.type === 'system' && event.action === action
 
 /**
  * A helper function to create a type guard for a specific `GameEvent` type.
@@ -203,6 +235,12 @@ export const guardForGameEventType =
   <Type extends GameEvent['type']>(type: Type) =>
   (event: GameEvent): event is GameEventOf<Type> =>
     isGameEventOf(event, type)
+
+export const isPlayerGameEvent = (event: GameEvent): event is PlayerGameEvent =>
+  event.type === 'action' ||
+  event.type === 'placement' ||
+  event.type === 'move' ||
+  event.type === 'reaction'
 
 /**
  * A helper function to create a type guard for a specific `GameEvent` for
@@ -222,7 +260,7 @@ export const guardForGameEventAction =
 
 export const guardForGameEventAdminAction =
   <Action extends GameEventAdminAction>(action: Action) =>
-  (event: GameEvent): event is AdminActionEventOf<Action> =>
+  (event: GameEvent): event is SystemActionEventOf<Action> =>
     isAdminActionEventOf(event, action)
 
 export type SharedGameContext = {

@@ -7,6 +7,7 @@ import {
   type DefenderId,
   type GameEvent,
   type SharedGameContext,
+  isPlayerGameEvent,
 } from '$lib/game/types'
 import {
   findUserIndex,
@@ -106,9 +107,9 @@ export const serverGameMachine = machine.provide({
 
       return {
         events: produce(context.events, (events) => {
-          const lastEvent = events[events.length - 1]
-          if (lastEvent && !lastEvent.finalized) {
-            events[events.length - 1] = gameEvent
+          const lastPlayerEvent = events.filter(isPlayerGameEvent).pop()
+          if (lastPlayerEvent && !lastPlayerEvent.finalized) {
+            events[events.indexOf(lastPlayerEvent)] = gameEvent
           } else {
             events.push(gameEvent)
           }
@@ -118,9 +119,9 @@ export const serverGameMachine = machine.provide({
     cancelGameEvent: assign(({ context }) => {
       return {
         events: produce(context.events, (events) => {
-          const lastEvent = events[events.length - 1]
-          if (lastEvent && !lastEvent.finalized) {
-            events.pop()
+          const lastPlayerEvent = events.filter(isPlayerGameEvent).pop()
+          if (lastPlayerEvent && !lastPlayerEvent.finalized) {
+            events.splice(context.events.indexOf(lastPlayerEvent), 1)
           }
         }),
       }
@@ -274,7 +275,6 @@ export const serverGameMachine = machine.provide({
       return (
         !!gameState.lastEvent &&
         !gameState.lastEvent.finalized &&
-        gameState.lastEvent.type !== 'admin' &&
         userControlsPlayerId(event.userId, gameState.lastEvent.playerId, context)
       )
     },
@@ -282,10 +282,8 @@ export const serverGameMachine = machine.provide({
       const event = e as ServerEventOf<'user: apply game event'>
       const gameState = GameState.fromContext(context)
 
-      // TODO: this needs to verify that the given game event is valid in the current context.
-
-      /** All admin events are allowed */
-      if (event.gameEvent.type === 'admin') {
+      /** All admin events are allowed if the user is an admin. */
+      if (event.gameEvent.type === 'system') {
         return userIsAdmin(event.userId, context)
       }
 

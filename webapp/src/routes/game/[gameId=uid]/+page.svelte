@@ -82,7 +82,7 @@
   const fillInventories = () => {
     machine.send({
       type: 'apply game event',
-      gameEvent: { type: 'admin', action: 'fill-inventory', finalized: true },
+      gameEvent: { type: 'system', action: 'fill-inventory' },
     })
   }
 </script>

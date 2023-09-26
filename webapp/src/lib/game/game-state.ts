@@ -1,17 +1,20 @@
 import {
+  gameEventRequiresReaction,
   guardForGameEventAction,
+  guardForGameEventAdminAction,
   guardForGameEventType,
   isGameEventOf,
+  isPlayerGameEvent,
   isPlayerIdOfSide,
   type AttackerId,
   type Coordinate,
   type DefenderId,
   type GameEvent,
   type Player,
+  type PlayerGameEvent,
   type PlayerId,
   type SharedGameContext,
   type Side,
-  guardForGameEventAdminAction,
 } from '$lib/game/types'
 import { objectEntries } from '$lib/utils'
 import isEqual from 'lodash/isEqual'
@@ -43,16 +46,16 @@ export type ItemInventory<T extends Side> = {
  */
 export class GameState {
   private playersInOrder: Player[]
-  private eventsPerRound: number
-  public finalizedEvents: GameEvent[]
+  public playerEvents: PlayerGameEvent[]
+  public finalizedEvents: PlayerGameEvent[]
 
   public currentRound: number
   public activePlayer: Player
   public activeSide: Side
   public activePlayerPosition: Coordinate
 
-  public lastEvent?: GameEvent
-  public lastFinalizedEvent?: GameEvent
+  public lastEvent?: PlayerGameEvent
+  public lastFinalizedEvent?: PlayerGameEvent
 
   public nextEventType: GameEvent['type']
 
@@ -84,25 +87,43 @@ export class GameState {
       context.defense.defenders[2],
       context.defense.defenders[3],
     ]
-    this.eventsPerRound = this.playersInOrder.length * 2 // 6 players * 2 events per player
-    this.finalizedEvents = this.context.events.filter((event) => event.finalized)
+
+    this.playerEvents = this.context.events.filter(isPlayerGameEvent)
+
+    this.finalizedEvents = this.playerEvents.filter((event) => event.finalized)
 
     const finalizedPlacementEvents = this.finalizedEvents.filter(guardForGameEventType('placement'))
+    const finalizedActionEvents = this.finalizedEvents.filter(guardForGameEventType('action'))
+    const finalizedReactionEvents = this.finalizedEvents.filter(guardForGameEventType('reaction'))
+    const finalizedActionEventsRequiringReaction =
+      finalizedActionEvents.filter(gameEventRequiresReaction)
     const finalizedMoveOrActionEvents = this.finalizedEvents.filter(
       (event) => isGameEventOf(event, 'move') || isGameEventOf(event, 'action'),
     )
 
-    this.lastEvent = context.events[context.events.length - 1]
+    this.lastEvent = this.playerEvents[this.playerEvents.length - 1]
     this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]
 
+    // Determine current round
+    const finalizedAndReactedActionEventCount =
+      finalizedActionEvents.length -
+      (finalizedActionEventsRequiringReaction.length - finalizedReactionEvents.length)
+    this.currentRound = Math.floor(finalizedAndReactedActionEventCount / this.playersInOrder.length)
+
+    // Determine next event type
     this.nextEventType =
       finalizedPlacementEvents.length < 5
         ? 'placement'
         : this.lastFinalizedEvent && this.lastFinalizedEvent.type === 'move'
         ? 'action'
+        : finalizedActionEventsRequiringReaction.length > finalizedReactionEvents.length
+        ? 'reaction'
         : 'move'
 
-    if (this.nextEventType === 'placement') {
+    // Which player is active?
+    if (this.nextEventType === 'reaction') {
+      this.activePlayer = context.attack.attacker
+    } else if (this.nextEventType === 'placement') {
       // We're still in the placement phase.
       if (finalizedPlacementEvents.length < 4) {
         // The defenders are still placing
@@ -117,9 +138,8 @@ export class GameState {
           Math.floor(finalizedMoveOrActionEvents.length / 2) % this.playersInOrder.length
         ]
     }
-    this.activeSide = getPlayerSide(this.activePlayer.id)
 
-    this.currentRound = Math.floor(finalizedMoveOrActionEvents.length / this.eventsPerRound)
+    this.activeSide = getPlayerSide(this.activePlayer.id)
 
     this.activePlayerPosition = this.playerPositions[this.activePlayer.id]
   }
@@ -135,10 +155,12 @@ export class GameState {
 
     this.context.events
       .filter(guardForGameEventType('placement'))
+      .filter((event) => event.finalized)
       .forEach((event) => (playerPositions[event.playerId] = event.coordinate))
 
     this.context.events
       .filter(guardForGameEventType('move'))
+      .filter((event) => event.finalized)
       .forEach((event) => (playerPositions[event.playerId] = event.to))
 
     return playerPositions
