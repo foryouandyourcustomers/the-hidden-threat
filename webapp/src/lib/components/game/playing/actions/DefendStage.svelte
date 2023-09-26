@@ -29,7 +29,7 @@
 
   const canDefend = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
-    return gameState.defendableStage
+    return gameState.canDefendStage
   })
 
   const applyAction = (finalized = false) => {

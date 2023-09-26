@@ -2,7 +2,6 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
-  import { GameState } from '$lib/game/game-state'
   import Icon from '~icons/lucide/undo-2'
   import ExpandableButton from './ExpandableButton.svelte'
 
@@ -11,8 +10,7 @@
   const isAdmin = useSelector(machine.service, ({ context }) => getCurrentUser(context).isAdmin)
 
   const lastGameEvent = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return gameState.lastEvent
+    return context.events[context.events.length - 1]
   })
 </script>
 

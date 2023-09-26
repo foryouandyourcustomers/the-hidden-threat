@@ -332,7 +332,7 @@ export class GameState {
   }
 
   get activeGlobalAttackIndex() {
-    return this.currentRound % 3
+    return Math.floor(this.currentRound / 3)
   }
 
   get activeGlobalAttack() {
@@ -371,20 +371,29 @@ export class GameState {
 
   /** All stages that are reachable and can be attacked. */
   get attackableStages() {
-    return this.reachableStages.filter((stage) =>
-      this.executableAttacks.find(
-        (attack) =>
-          attack.target.stageId === stage.id && attack.target.supplyChainId === stage.supplyChainId,
-      ),
+    return this.reachableStages.filter(
+      (stage) =>
+        !this.isAttacked(stage.coordinate) &&
+        !this.isDefended(stage.coordinate) &&
+        this.executableAttacks.find(
+          (attack) =>
+            attack.target.stageId === stage.id &&
+            attack.target.supplyChainId === stage.supplyChainId,
+        ),
     )
   }
 
   /** Returns the stage of the player position if all required conditions are met. */
-  get defendableStage() {
+  get canDefendStage() {
     const currentStage = BOARD_SUPPLY_CHAINS.flat().find((boardStage) =>
       isEqual(boardStage.coordinate, this.activePlayerPosition),
     )
-    if (!currentStage) return undefined
-    return this.executableDefenseStages.find((stage) => stage.id === currentStage.id)
+    if (!currentStage) return false
+
+    if (this.isAttacked(currentStage.coordinate) || this.isDefended(currentStage.coordinate)) {
+      return false
+    }
+
+    return !!this.executableDefenseStages.find((stage) => stage.id === currentStage.id)
   }
 }

@@ -4,10 +4,10 @@ import { GameState } from '$lib/game/game-state'
 import { sharedGuards } from '$lib/game/guards'
 import {
   isDefenderId,
+  isPlayerGameEvent,
   type DefenderId,
   type GameEvent,
   type SharedGameContext,
-  isPlayerGameEvent,
 } from '$lib/game/types'
 import {
   findUserIndex,
@@ -18,6 +18,7 @@ import {
 } from '$lib/game/utils'
 import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 import { produce, setAutoFreeze } from 'immer'
+import isEqual from 'lodash/isEqual'
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
@@ -324,21 +325,32 @@ export const serverGameMachine = machine.provide({
                 }
               }
               break
+            case 'attack': {
+              const position = event.gameEvent.position
+
+              if (position === undefined && event.gameEvent.finalized) {
+                return false
+              } else if (position === undefined) {
+                if (gameState.attackableStages.length === 0) return false
+              } else if (
+                !gameState.attackableStages.find((stage) => isEqual(stage.coordinate, position))
+              ) {
+                return false
+              }
+
+              break
+            }
+            case 'defend': {
+              const position = event.gameEvent.position
+              if (!isEqual(position, gameState.activePlayerPosition)) return false
+
+              if (!gameState.canDefendStage) return false
+
+              break
+            }
           }
           break
       }
-
-      return true
-
-      // gameState.playerMoved -> 'collect'
-      // collect.finalized = false
-
-      // This means that this guard needs to check:
-      // - that the user has the right to perform the event
-      // - the event happens at the right time
-      // - if the previous event is not finalized, that this is a change to the
-      //   the previous event
-      // ...?
 
       return true
     },
