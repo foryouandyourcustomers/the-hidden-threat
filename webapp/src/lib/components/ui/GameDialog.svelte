@@ -39,6 +39,7 @@
     display: grid;
     position: fixed;
     place-content: center;
+    z-index: var(--layer-top);
     inset: 0;
     padding-left: 18rem;
   }
