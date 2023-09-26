@@ -17,10 +17,10 @@ import {
   type Side,
   type GameEventOf,
 } from '$lib/game/types'
-import { objectEntries } from '$lib/utils'
+import { objectEntries, throwIfNotFound } from '$lib/utils'
 import isEqual from 'lodash/isEqual'
 import { BOARD_ITEMS } from './constants/board-items'
-import { BOARD_SUPPLY_CHAINS } from './constants/board-stages'
+import { BOARD_SUPPLY_CHAINS, type BoardStage } from './constants/board-stages'
 import { GLOBAL_ATTACK_SCENARIOS } from './constants/global-attacks'
 import {
   ITEMS,
@@ -312,16 +312,51 @@ export class GameState {
     )
   }
 
+  get defendedStages(): BoardStage[] {
+    return this.finalizedActionEvents
+      .filter(guardForGameEventAction('defend'))
+      .map(
+        (event) =>
+          BOARD_SUPPLY_CHAINS.flat().find((stage) => isEqual(stage.coordinate, event.position)) ??
+          throwIfNotFound(),
+      )
+  }
+
+  get attackedStages(): BoardStage[] {
+    const stages = this.finalizedActionEvents
+      .filter(guardForGameEventAction('attack'))
+      .map(
+        (event) =>
+          BOARD_SUPPLY_CHAINS.flat().find((stage) => isEqual(stage.coordinate, event.position)) ??
+          throwIfNotFound(),
+      )
+
+    const chainAttackCounts = [
+      stages.filter((stage) => stage.supplyChainId === 0).length,
+      stages.filter((stage) => stage.supplyChainId === 1).length,
+      stages.filter((stage) => stage.supplyChainId === 2).length,
+    ]
+
+    chainAttackCounts.forEach((count, chainId) => {
+      if (count >= 3) {
+        const otherStages = BOARD_SUPPLY_CHAINS[chainId]
+          // Exclude already added stages
+          .filter((stage) => !stages.includes(stage))
+          // Exclude defended stages
+          .filter((stage) => !this.isDefended(stage.coordinate))
+        stages.push(...otherStages)
+      }
+    })
+
+    return stages
+  }
+
   isDefended(position: Coordinate) {
-    return !!this.finalizedActionEvents
-      .filter((event) => event.action === 'defend')
-      .find((event) => isEqual(event.position, position))
+    return !!this.defendedStages.find((stage) => isEqual(stage.coordinate, position))
   }
 
   isAttacked(position: Coordinate) {
-    return !!this.finalizedActionEvents
-      .filter((event) => event.action === 'attack')
-      .find((event) => isEqual(event.position, position))
+    return !!this.attackedStages.find((stage) => isEqual(stage.coordinate, position))
   }
 
   get activeTargetedAttacks() {
@@ -398,8 +433,8 @@ export class GameState {
   }
 
   get score() {
-    const attack = this.finalizedActionEvents.filter((event) => event.action === 'attack').length
-    const defense = this.finalizedActionEvents.filter((event) => event.action === 'defend').length
+    const attack = this.attackedStages.length
+    const defense = this.defendedStages.length
     return {
       attack,
       defense,

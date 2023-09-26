@@ -14,6 +14,7 @@
   import isEqual from 'lodash/isEqual'
   import throttle from 'lodash/throttle'
   import { onMount } from 'svelte'
+  import { writable } from 'svelte/store'
 
   export let data
 
@@ -53,7 +54,7 @@
 
   const user = useSelector(machine.service, ({ context }) => getCurrentUser(context), isEqual)
 
-  setGameContext({ gameId, userId, user, hostUserId, machine })
+  setGameContext({ gameId, userId, user, hostUserId, machine, highlightedFields: writable() })
 
   const state = machine.state
 

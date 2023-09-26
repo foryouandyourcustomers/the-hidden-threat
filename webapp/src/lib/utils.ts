@@ -11,3 +11,18 @@ export const objectEntries = <T extends Record<PropertyKey, unknown>>(
 /** A utility type that allows us to Omit keys of a union type */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never
+
+/**
+ * This utility is useful if you _know_ that an access will be valid but don't
+ * want to suppress the TS warning:
+ *
+ *     const obj = objects[0] ?? throwIfNotFound()
+ *           ^ this object can't be undefined
+ *
+ * instead of:
+ *
+ *     const obj = objects[0]!
+ */
+export const throwIfNotFound = (): never => {
+  throw 'Invalid state'
+}

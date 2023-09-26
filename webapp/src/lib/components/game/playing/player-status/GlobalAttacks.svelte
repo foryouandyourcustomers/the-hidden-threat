@@ -8,8 +8,11 @@
   import { getStage } from '$lib/game/utils'
   import isEqual from 'lodash/isEqual'
   import AttackCard from './AttackCard.svelte'
+  import type { StageId } from '$lib/game/constants/stages'
+  import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
+  import { throwIfNotFound } from '$lib/utils'
 
-  const { machine } = getGameContext()
+  const { machine, highlightedFields } = getGameContext()
 
   const activeAttackIndex = useSelector(
     machine.service,
@@ -31,9 +34,30 @@
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   $: selectedAttack = $globalAttackScenario.attacks[selectedAttackIndex]
+
+  let hovered = false
+
+  const getPositionsForStage = (stageId: StageId) => {
+    return (
+      BOARD_SUPPLY_CHAINS.flat().filter((stage) => stage.id === stageId) ?? throwIfNotFound()
+    ).map((stage) => stage.coordinate)
+  }
+
+  $: if (hovered && selectedAttack) {
+    highlightedFields.set(
+      selectedAttack.targets.map((stage) => getPositionsForStage(stage.stageId)).flat(),
+    )
+  } else {
+    highlightedFields.set(undefined)
+  }
 </script>
 
-<div class="scenarios">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+  class="scenarios"
+  on:mouseenter={() => (hovered = true)}
+  on:mouseleave={() => (hovered = false)}
+>
   <div class="description">
     <Paragraph spacing="none" size="sm">Allgemeiner Angriff</Paragraph>
 

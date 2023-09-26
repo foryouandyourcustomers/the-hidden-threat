@@ -3,6 +3,7 @@
   import Grid from '$lib/components/game/playing/Grid.svelte'
   import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants/general'
   import Dimming from './Dimming.svelte'
+  import HighlightedFields from './HighlightedFields.svelte'
   import StageLines from './StageLines.svelte'
   import Square from './square/Square.svelte'
 </script>
@@ -18,6 +19,7 @@
   {/each}
   <Grid />
   <Dimming />
+  <HighlightedFields />
 </div>
 
 <style lang="postcss">

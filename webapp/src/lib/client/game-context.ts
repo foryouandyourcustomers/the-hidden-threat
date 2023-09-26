@@ -1,8 +1,8 @@
 import type { useMachine } from '$lib/@xstate/svelte'
 import type { getClientGameMachine } from '$lib/client/game-machine/configured'
-import type { User } from '$lib/game/types'
+import type { Coordinate, User } from '$lib/game/types'
 import { getContext, setContext } from 'svelte'
-import type { Readable } from 'svelte/store'
+import type { Readable, Writable } from 'svelte/store'
 
 const KEY = {}
 
@@ -10,6 +10,7 @@ export type GameContext = {
   gameId: string
   userId: string
   user: Readable<User>
+  highlightedFields: Writable<Coordinate[] | undefined>
   hostUserId: string
   machine: ReturnType<typeof useMachine<ReturnType<typeof getClientGameMachine>>>
 }

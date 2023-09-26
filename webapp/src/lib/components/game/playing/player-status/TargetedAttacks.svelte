@@ -4,11 +4,15 @@
   import Item from '$lib/components/icons/Item.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
+  import type { TargetedAttack } from '$lib/game/constants/targeted-attacks'
   import { GameState } from '$lib/game/game-state'
+  import { getStage } from '$lib/game/utils'
+  import { throwIfNotFound } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
   import AttackCard from './AttackCard.svelte'
 
-  const { machine } = getGameContext()
+  const { machine, highlightedFields } = getGameContext()
 
   const activeAttacks = useSelector(
     machine.service,
@@ -25,9 +29,32 @@
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   $: selectedAttack = $activeAttacks[selectedAttackIndex]!
+
+  $: selectedStage = getStage(selectedAttack.target.stageId)
+
+  const getPositionForTarget = (target: TargetedAttack['target']) => {
+    return (
+      BOARD_SUPPLY_CHAINS.flat().find(
+        (stage) => stage.id === target.stageId && stage.supplyChainId === target.supplyChainId,
+      ) ?? throwIfNotFound()
+    ).coordinate
+  }
+
+  let hovered = false
+
+  $: if (hovered) {
+    highlightedFields.set([getPositionForTarget(selectedAttack.target)])
+  } else {
+    highlightedFields.set(undefined)
+  }
 </script>
 
-<div class="scenarios">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+  class="scenarios"
+  on:mouseenter={() => (hovered = true)}
+  on:mouseleave={() => (hovered = false)}
+>
   <div class="description">
     <Paragraph spacing="none" size="sm">Gezielter Angriff</Paragraph>
 
@@ -35,8 +62,13 @@
     <Paragraph size="sm" spacing="none">
       {selectedAttack.description}
     </Paragraph>
-    {selectedAttack.target.supplyChainId}
-    {selectedAttack.target.stageId}
+
+    <Heading size="xs" spacing="none">Aufgabe</Heading>
+    <Paragraph size="sm" spacing="none">
+      Legt {selectedStage.gender === 'f' ? 'die' : selectedStage.gender === 'n' ? 'das' : 'den'}
+      {selectedStage.name} der Supply Chain {selectedAttack.target.supplyChainId + 1} lahm.
+    </Paragraph>
+
     <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
 
     <div class="targets">
