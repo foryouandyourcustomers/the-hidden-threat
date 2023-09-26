@@ -2,6 +2,8 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
+  import AttackedIcon from '$lib/components/game/playing/square/AttackedIcon.svelte'
+  import DefendedIcon from '$lib/components/game/playing/square/DefendedIcon.svelte'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
   import Items from './Items.svelte'
@@ -26,6 +28,14 @@
     const gameState = GameState.fromContext(state.context)
     return gameState.isValidPlacement(coordinate)
   })
+
+  const isDefended = useSelector(machine.service, (state) =>
+    GameState.fromContext(state.context).isDefended(coordinate),
+  )
+
+  const isAttacked = useSelector(machine.service, (state) =>
+    GameState.fromContext(state.context).isAttacked(coordinate),
+  )
 
   const getMoveEvent = (
     to: Coordinate,
@@ -82,6 +92,15 @@
   {#if $canPlace && $isPossiblePlacement}
     <button class="move-button unstyled" on:click={place}><span>Place</span></button>
   {/if}
+  {#if $isDefended || $isAttacked}
+    <div class="status">
+      {#if $isDefended}
+        <DefendedIcon />
+      {:else if $isAttacked}
+        <AttackedIcon />
+      {/if}
+    </div>
+  {/if}
 </div>
 
 <style lang="postcss">
@@ -116,5 +135,14 @@
       transition-duration: 0ms;
       background: #fff2;
     }
+  }
+
+  .status {
+    display: grid;
+    position: absolute;
+    place-content: center;
+    inset: 0;
+    background-color: color-mix(in oklab, var(--color-blue-spielbrett), transparent 20%);
+    pointer-events: none;
   }
 </style>

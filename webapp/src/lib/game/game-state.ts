@@ -15,6 +15,7 @@ import {
   type PlayerId,
   type SharedGameContext,
   type Side,
+  type GameEventOf,
 } from '$lib/game/types'
 import { objectEntries } from '$lib/utils'
 import isEqual from 'lodash/isEqual'
@@ -48,6 +49,11 @@ export class GameState {
   private playersInOrder: Player[]
   public playerEvents: PlayerGameEvent[]
   public finalizedEvents: PlayerGameEvent[]
+  public finalizedPlacementEvents: PlayerGameEvent[]
+  public finalizedActionEvents: GameEventOf<'action'>[]
+  public finalizedReactionEvents: GameEventOf<'reaction'>[]
+  public finalizedActionEventsRequiringReaction: GameEventOf<'action'>[]
+  public finalizedMoveOrActionEvents: GameEventOf<'action' | 'move'>[]
 
   public currentRound: number
   public activePlayer: Player
@@ -92,31 +98,31 @@ export class GameState {
 
     this.finalizedEvents = this.playerEvents.filter((event) => event.finalized)
 
-    const finalizedPlacementEvents = this.finalizedEvents.filter(guardForGameEventType('placement'))
-    const finalizedActionEvents = this.finalizedEvents.filter(guardForGameEventType('action'))
-    const finalizedReactionEvents = this.finalizedEvents.filter(guardForGameEventType('reaction'))
-    const finalizedActionEventsRequiringReaction =
-      finalizedActionEvents.filter(gameEventRequiresReaction)
-    const finalizedMoveOrActionEvents = this.finalizedEvents.filter(
+    this.finalizedPlacementEvents = this.finalizedEvents.filter(guardForGameEventType('placement'))
+    this.finalizedActionEvents = this.finalizedEvents.filter(guardForGameEventType('action'))
+    this.finalizedReactionEvents = this.finalizedEvents.filter(guardForGameEventType('reaction'))
+    this.finalizedActionEventsRequiringReaction =
+      this.finalizedActionEvents.filter(gameEventRequiresReaction)
+    this.finalizedMoveOrActionEvents = this.finalizedEvents.filter(
       (event) => isGameEventOf(event, 'move') || isGameEventOf(event, 'action'),
-    )
+    ) as GameEventOf<'action' | 'move'>[]
 
     this.lastEvent = this.playerEvents[this.playerEvents.length - 1]
     this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]
 
     // Determine current round
     const finalizedAndReactedActionEventCount =
-      finalizedActionEvents.length -
-      (finalizedActionEventsRequiringReaction.length - finalizedReactionEvents.length)
+      this.finalizedActionEvents.length -
+      (this.finalizedActionEventsRequiringReaction.length - this.finalizedReactionEvents.length)
     this.currentRound = Math.floor(finalizedAndReactedActionEventCount / this.playersInOrder.length)
 
     // Determine next event type
     this.nextEventType =
-      finalizedPlacementEvents.length < 5
+      this.finalizedPlacementEvents.length < 5
         ? 'placement'
         : this.lastFinalizedEvent && this.lastFinalizedEvent.type === 'move'
         ? 'action'
-        : finalizedActionEventsRequiringReaction.length > finalizedReactionEvents.length
+        : this.finalizedActionEventsRequiringReaction.length > this.finalizedReactionEvents.length
         ? 'reaction'
         : 'move'
 
@@ -125,9 +131,9 @@ export class GameState {
       this.activePlayer = context.attack.attacker
     } else if (this.nextEventType === 'placement') {
       // We're still in the placement phase.
-      if (finalizedPlacementEvents.length < 4) {
+      if (this.finalizedPlacementEvents.length < 4) {
         // The defenders are still placing
-        this.activePlayer = context.defense.defenders[finalizedPlacementEvents.length]
+        this.activePlayer = context.defense.defenders[this.finalizedPlacementEvents.length]
       } else {
         // The attacker is placing
         this.activePlayer = context.attack.attacker
@@ -135,7 +141,7 @@ export class GameState {
     } else {
       this.activePlayer =
         this.playersInOrder[
-          Math.floor(finalizedMoveOrActionEvents.length / 2) % this.playersInOrder.length
+          Math.floor(this.finalizedMoveOrActionEvents.length / 2) % this.playersInOrder.length
         ]
     }
 
@@ -304,6 +310,18 @@ export class GameState {
         .filter(guardForGameEventType('placement'))
         .filter((event) => event.playerId === playerId && event.finalized).length > 0
     )
+  }
+
+  isDefended(position: Coordinate) {
+    return !!this.finalizedActionEvents
+      .filter((event) => event.action === 'defend')
+      .find((event) => isEqual(event.position, position))
+  }
+
+  isAttacked(position: Coordinate) {
+    return !!this.finalizedActionEvents
+      .filter((event) => event.action === 'attack')
+      .find((event) => isEqual(event.position, position))
   }
 
   get activeTargetedAttacks() {
