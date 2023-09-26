@@ -62,7 +62,8 @@
     <Paragraph spacing="none" size="sm">Allgemeiner Angriff</Paragraph>
 
     {#if !selectedAttack}
-      <Paragraph>
+      <Heading size="sm" spacing="none">{$globalAttackScenario.name}</Heading>
+      <Paragraph size="sm" spacing="none">
         {$globalAttackScenario.description}
       </Paragraph>
     {:else}
@@ -124,6 +125,7 @@
   }
   .description {
     flex: 1;
+    overflow-y: scroll;
   }
   .attacks {
     display: flex;
