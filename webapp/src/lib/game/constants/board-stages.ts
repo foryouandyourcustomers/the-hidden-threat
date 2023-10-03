@@ -37,5 +37,7 @@ export const BOARD_SUPPLY_CHAINS: BoardStage[][] = [
 ]
 
 export const getStageAt = (coordinate: Coordinate): BoardStage =>
-  BOARD_SUPPLY_CHAINS.flat().find((stage) => isEqual(stage.coordinate, coordinate)) ??
-  throwIfNotFound()
+  findStageAt(coordinate) ?? throwIfNotFound()
+
+export const findStageAt = (coordinate: Coordinate): BoardStage | undefined =>
+  BOARD_SUPPLY_CHAINS.flat().find((stage) => isEqual(stage.coordinate, coordinate))

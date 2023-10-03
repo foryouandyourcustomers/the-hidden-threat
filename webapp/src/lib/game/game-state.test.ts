@@ -1,5 +1,5 @@
 import { GameState } from '$lib/game/game-state'
-import type { GameEvent, PlayerGameEvent, SharedGameContext, User } from '$lib/game/types'
+import type { PlayerGameEvent, SharedGameContext, User } from '$lib/game/types'
 import { createDefaultAttacker, createDefaultDefender } from '$lib/server/game/utils'
 import type { DistributiveOmit } from '$lib/utils'
 import { describe, it, expect, beforeEach } from 'vitest'

@@ -1,5 +1,5 @@
 import type { AttackCharacterId, DefenseCharacterId } from '$lib/game/constants/characters'
-import { isItemIdOfSide } from '$lib/game/constants/items'
+import { isAttackItemId, isItemIdOfSide } from '$lib/game/constants/items'
 import { GameState } from '$lib/game/game-state'
 import { sharedGuards } from '$lib/game/guards'
 import {
@@ -8,6 +8,7 @@ import {
   type DefenderId,
   type GameEvent,
   type SharedGameContext,
+  isAttackerId,
 } from '$lib/game/types'
 import {
   findUserIndex,
@@ -326,11 +327,12 @@ export const serverGameMachine = machine.provide({
               }
               break
             case 'attack': {
+              if (!isAttackerId(activePlayer.id)) return false
               const position = event.gameEvent.position
 
-              if (position === undefined && event.gameEvent.finalized) {
+              if (!position && event.gameEvent.finalized) {
                 return false
-              } else if (position === undefined) {
+              } else if (!position) {
                 if (gameState.attackableStages.length === 0) return false
               } else if (
                 !gameState.attackableStages.find((stage) => isEqual(stage.coordinate, position))
@@ -341,11 +343,20 @@ export const serverGameMachine = machine.provide({
               break
             }
             case 'defend': {
+              if (!isDefenderId(activePlayer.id)) return false
               const position = event.gameEvent.position
               if (!isEqual(position, gameState.activePlayerPosition)) return false
 
               if (!gameState.canDefendStage) return false
 
+              break
+            }
+            case 'exchange-joker': {
+              const itemId = event.gameEvent.itemId
+              if (!isAttackerId(activePlayer.id)) return false
+              if (gameState.jokers <= 0) return false
+              if (!itemId && event.gameEvent.finalized) return false
+              if (itemId && !isAttackItemId(itemId)) return false
               break
             }
           }

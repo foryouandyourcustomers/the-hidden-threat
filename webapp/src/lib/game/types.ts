@@ -159,6 +159,12 @@ export type PlayerGameEvent =
       /** Can be undefined if the event is not finalized. */
       position?: Coordinate
     })
+  | (BasePlayerGameEvent & {
+      type: 'action'
+      action: 'exchange-joker'
+      /** Can be undefined if the event is not finalized. */
+      itemId?: AttackItemId
+    })
 
   /** Special action that allows to reveal the attacker on the whole board. */
   | (BasePlayerGameEvent & {

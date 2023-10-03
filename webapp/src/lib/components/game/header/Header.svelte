@@ -6,12 +6,14 @@
   import Expandable from './expandable/Expandable.svelte'
   import RollbackButton from './expandable/RollbackButton.svelte'
   import SwitchSidesButton from '$lib/components/game/header/expandable/SwitchSidesButton.svelte'
+  import Jokers from '$lib/components/game/header/Jokers.svelte'
 </script>
 
 <div class="header">
   <div class="title">The hidden threat</div>
 
   <EmojiPicker />
+  <Jokers />
 
   <div class="actions">
     <Expandable>

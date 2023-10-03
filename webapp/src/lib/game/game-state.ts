@@ -21,7 +21,12 @@ import {
 import { objectEntries, seededRandomGenerator } from '$lib/utils'
 import isEqual from 'lodash/isEqual'
 import { BOARD_ITEMS } from './constants/board-items'
-import { BOARD_SUPPLY_CHAINS, getStageAt, type BoardStage } from './constants/board-stages'
+import {
+  BOARD_SUPPLY_CHAINS,
+  getStageAt,
+  type BoardStage,
+  findStageAt,
+} from './constants/board-stages'
 import { GLOBAL_ATTACK_SCENARIOS } from './constants/global-attacks'
 import {
   ITEMS,
@@ -183,6 +188,17 @@ export class GameState {
     return playerPositions
   }
 
+  get jokers() {
+    return (
+      2 -
+      this.finalizedEvents.filter(
+        (event) =>
+          (event.type === 'action' && event.action === 'exchange-joker') ||
+          (event.type === 'reaction' && event.action === 'joker'),
+      ).length
+    )
+  }
+
   get defenseInventory() {
     const defenseInventoryIds = Object.values(ITEMS)
       .map((item) => item.id)
@@ -197,7 +213,7 @@ export class GameState {
       defenseInventoryIds.map((id) => [id, initialAmount]),
     ) as ItemInventory<'defense'>
 
-    this.context.events.filter(guardForGameEventAction('collect')).forEach((event) => {
+    this.finalizedActionEvents.filter(guardForGameEventAction('collect')).forEach((event) => {
       if (event.itemId && isDefenseItemId(event.itemId)) {
         inventory[event.itemId] += 1
       }
@@ -205,6 +221,7 @@ export class GameState {
 
     return inventory
   }
+
   get attackInventory() {
     const attackInventoryIds = Object.values(ITEMS)
       .map((item) => item.id)
@@ -219,11 +236,19 @@ export class GameState {
       attackInventoryIds.map((id) => [id, initialAmount]),
     ) as ItemInventory<'attack'>
 
-    this.context.events.filter(guardForGameEventAction('collect')).forEach((event) => {
+    this.finalizedActionEvents.filter(guardForGameEventAction('collect')).forEach((event) => {
       if (event.itemId && isAttackItemId(event.itemId)) {
         inventory[event.itemId] += 1
       }
     })
+
+    this.finalizedActionEvents
+      .filter(guardForGameEventAction('exchange-joker'))
+      .forEach((event) => {
+        if (event.itemId) {
+          inventory[event.itemId] += 1
+        }
+      })
 
     return inventory
   }
@@ -489,7 +514,7 @@ export class GameState {
 
   /** Returns the stage of the player position if all required conditions are met. */
   get canDefendStage() {
-    const currentStage = getStageAt(this.activePlayerPosition)
+    const currentStage = findStageAt(this.activePlayerPosition)
     if (!currentStage) return false
 
     if (this.isAttacked(currentStage.coordinate) || this.isDefended(currentStage.coordinate)) {

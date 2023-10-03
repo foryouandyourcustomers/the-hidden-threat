@@ -7,6 +7,7 @@
   import AttackStage from './AttackStage.svelte'
   import DefendStage from './DefendStage.svelte'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
+  import ExchangeJoker from '$lib/components/game/playing/actions/ExchangeJoker.svelte'
 
   const { machine } = getGameContext()
 
@@ -33,13 +34,18 @@
       <li>
         <CollectItem />
       </li>
-      <li>
-        {#if $side === 'attack'}
+      {#if $side === 'attack'}
+        <li>
           <AttackStage />
-        {:else}
+        </li>
+        <li>
+          <ExchangeJoker />
+        </li>
+      {:else}
+        <li>
           <DefendStage />
-        {/if}
-      </li>
+        </li>
+      {/if}
     </ul>
   </div>
 {/if}
