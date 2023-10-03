@@ -1,3 +1,5 @@
+import { throwIfNotFound } from '$lib/utils'
+import isEqual from 'lodash/isEqual'
 import type { Coordinate } from '../types'
 import type { StageId } from './stages'
 
@@ -33,3 +35,7 @@ export const BOARD_SUPPLY_CHAINS: BoardStage[][] = [
     { supplyChainId: 2, id: 'sales', coordinate: [4, 3] },
   ],
 ]
+
+export const getStageAt = (coordinate: Coordinate): BoardStage =>
+  BOARD_SUPPLY_CHAINS.flat().find((stage) => isEqual(stage.coordinate, coordinate)) ??
+  throwIfNotFound()

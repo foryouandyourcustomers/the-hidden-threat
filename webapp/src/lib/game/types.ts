@@ -264,6 +264,7 @@ export const guardForGameEventAdminAction =
     isAdminActionEventOf(event, action)
 
 export type SharedGameContext = {
+  timestamp: number
   gameId: string
   hostUserId: string
   users: User[]

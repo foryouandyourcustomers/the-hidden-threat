@@ -3,6 +3,7 @@ import {
   guardForGameEventAction,
   guardForGameEventAdminAction,
   guardForGameEventType,
+  isActionEventOf,
   isGameEventOf,
   isPlayerGameEvent,
   isPlayerIdOfSide,
@@ -10,17 +11,17 @@ import {
   type Coordinate,
   type DefenderId,
   type GameEvent,
+  type GameEventOf,
   type Player,
   type PlayerGameEvent,
   type PlayerId,
   type SharedGameContext,
   type Side,
-  type GameEventOf,
 } from '$lib/game/types'
-import { objectEntries, throwIfNotFound } from '$lib/utils'
+import { objectEntries, seededRandomGenerator } from '$lib/utils'
 import isEqual from 'lodash/isEqual'
 import { BOARD_ITEMS } from './constants/board-items'
-import { BOARD_SUPPLY_CHAINS, type BoardStage } from './constants/board-stages'
+import { BOARD_SUPPLY_CHAINS, getStageAt, type BoardStage } from './constants/board-stages'
 import { GLOBAL_ATTACK_SCENARIOS } from './constants/global-attacks'
 import {
   ITEMS,
@@ -47,6 +48,8 @@ export type ItemInventory<T extends Side> = {
  */
 export class GameState {
   private playersInOrder: Player[]
+  private randomNumbers: number[]
+
   public playerEvents: PlayerGameEvent[]
   public finalizedEvents: PlayerGameEvent[]
   public finalizedPlacementEvents: PlayerGameEvent[]
@@ -78,6 +81,9 @@ export class GameState {
 
   /** Use GameState.fromContext() to create a GameState */
   private constructor(private context: SharedGameContext) {
+    const numberGenerator = seededRandomGenerator(context.timestamp)
+    this.randomNumbers = Array.from({ length: 23 }, () => numberGenerator())
+
     // The rules are:
     // - the attacker moves + performs an action
     // - defender 1 moves + performs an action
@@ -313,42 +319,99 @@ export class GameState {
   }
 
   get defendedStages(): BoardStage[] {
-    return this.finalizedActionEvents
-      .filter(guardForGameEventAction('defend'))
-      .map(
-        (event) =>
-          BOARD_SUPPLY_CHAINS.flat().find((stage) => isEqual(stage.coordinate, event.position)) ??
-          throwIfNotFound(),
-      )
+    return this.attackedAndDefendedStages.defended
   }
 
   get attackedStages(): BoardStage[] {
-    const stages = this.finalizedActionEvents
-      .filter(guardForGameEventAction('attack'))
-      .map(
-        (event) =>
-          BOARD_SUPPLY_CHAINS.flat().find((stage) => isEqual(stage.coordinate, event.position)) ??
-          throwIfNotFound(),
-      )
+    return this.attackedAndDefendedStages.attacked
+  }
 
-    const chainAttackCounts = [
-      stages.filter((stage) => stage.supplyChainId === 0).length,
-      stages.filter((stage) => stage.supplyChainId === 1).length,
-      stages.filter((stage) => stage.supplyChainId === 2).length,
-    ]
+  // Returns a random number, but always the same for i
+  private getRandomNumber(i: number) {
+    return this.randomNumbers[Math.round(i) % this.randomNumbers.length]
+  }
 
-    chainAttackCounts.forEach((count, chainId) => {
-      if (count >= 3) {
-        const otherStages = BOARD_SUPPLY_CHAINS[chainId]
-          // Exclude already added stages
-          .filter((stage) => !stages.includes(stage))
-          // Exclude defended stages
-          .filter((stage) => !this.isDefended(stage.coordinate))
-        stages.push(...otherStages)
+  private attackedAndDefendedStagesCache:
+    | { attacked: BoardStage[]; defended: BoardStage[] }
+    | undefined
+
+  private get attackedAndDefendedStages(): { attacked: BoardStage[]; defended: BoardStage[] } {
+    if (this.attackedAndDefendedStagesCache) return this.attackedAndDefendedStagesCache
+
+    const attackedStages: BoardStage[] = []
+    const defendedStages: BoardStage[] = []
+
+    let defendedStagesInSection: StageId[] = []
+
+    // Get all stages for which there are explicit attacks
+    this.finalizedActionEvents.forEach((event, i) => {
+      const round = Math.floor(i / this.playersInOrder.length)
+
+      if (isActionEventOf(event, 'attack')) {
+        // We assume that every attack is valid, otherwise it wouldn't be in
+        // the list.
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        attackedStages.push(getStageAt(event.position!))
+      } else if (isActionEventOf(event, 'defend')) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        defendedStages.push(getStageAt(event.position!))
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        defendedStagesInSection.push(getStageAt(event.position!).id)
       }
+
+      const nextRound = Math.floor((i + 1) / this.playersInOrder.length)
+      if (nextRound % 3 === 0 && nextRound !== 0) {
+        // We're at the end of a section, so let's see if a global attack
+        // succeeded.
+
+        const section = Math.floor(round / 3)
+        const globalAttack = this.globalAttackScenario.attacks[section]
+
+        globalAttack.targets.forEach((attackedStage) => {
+          if (!defendedStagesInSection.includes(attackedStage.stageId)) {
+            // So the global attack succeeded. Destroy a stage.
+            const allAvailableStages = BOARD_SUPPLY_CHAINS.flat()
+              .filter((stage) => stage.id === attackedStage.stageId)
+              .filter(
+                (stage) =>
+                  ![...defendedStages, ...attackedStages].find((s) =>
+                    isEqual(s.coordinate, stage.coordinate),
+                  ),
+              )
+
+            if (allAvailableStages.length > 0) {
+              attackedStages.push(
+                allAvailableStages[Math.floor(allAvailableStages.length * this.getRandomNumber(i))],
+              )
+            }
+          }
+        })
+
+        // Reset the defended stages for global attacks every 3 rounds
+        defendedStagesInSection = []
+      }
+
+      // Destroy supply chains if there are 3 or more attacks on a supply chain
+      const chainAttackCounts = [
+        attackedStages.filter((stage) => stage.supplyChainId === 0).length,
+        attackedStages.filter((stage) => stage.supplyChainId === 1).length,
+        attackedStages.filter((stage) => stage.supplyChainId === 2).length,
+      ]
+
+      chainAttackCounts.forEach((count, chainId) => {
+        if (count >= 3) {
+          const otherStages = BOARD_SUPPLY_CHAINS[chainId]
+            // Exclude already added stages
+            .filter((stage) => ![...attackedStages, ...defendedStages].includes(stage))
+          attackedStages.push(...otherStages)
+        }
+      })
     })
 
-    return stages
+    return (this.attackedAndDefendedStagesCache = {
+      attacked: attackedStages,
+      defended: defendedStages,
+    })
   }
 
   isDefended(position: Coordinate) {
@@ -420,9 +483,7 @@ export class GameState {
 
   /** Returns the stage of the player position if all required conditions are met. */
   get canDefendStage() {
-    const currentStage = BOARD_SUPPLY_CHAINS.flat().find((boardStage) =>
-      isEqual(boardStage.coordinate, this.activePlayerPosition),
-    )
+    const currentStage = getStageAt(this.activePlayerPosition)
     if (!currentStage) return false
 
     if (this.isAttacked(currentStage.coordinate) || this.isDefended(currentStage.coordinate)) {

@@ -13,6 +13,7 @@ export const machine = createMachine({
 
   context: ({ input }: { input: { gameId: string; host: User } }) =>
     ({
+      timestamp: Date.now(),
       gameId: input.gameId,
       hostUserId: input.host.id,
       finishedAssigningSides: false,

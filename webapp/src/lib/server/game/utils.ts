@@ -3,6 +3,7 @@ import type { Attacker, Defender, DefenderId, SharedGameContext } from '$lib/gam
 import type { Context } from '$lib/server/game-machine/types'
 
 export const getSharedGameContext = (context: Context): SharedGameContext => ({
+  timestamp: context.timestamp,
   gameId: context.gameId,
   hostUserId: context.hostUserId,
   finishedAssigningSides: context.finishedAssigningSides,

@@ -26,3 +26,16 @@ export type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K
 export const throwIfNotFound = (): never => {
   throw 'Invalid state'
 }
+
+/** Returns a number between 0 (incl) and 1 (excl). */
+export type RandomNumberGenerator = () => number
+
+/** Based on mulberry32 */
+export const seededRandomGenerator =
+  (seed: number): RandomNumberGenerator =>
+  (): number => {
+    let t = (seed += 0x6d2b79f5)
+    t = Math.imul(t ^ (t >>> 15), t | 1)
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
