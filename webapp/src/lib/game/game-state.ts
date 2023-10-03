@@ -332,7 +332,7 @@ export class GameState {
   }
 
   // Returns a random number, but always the same for i
-  private getRandomNumber(i: number) {
+  public getRandomNumber(i: number) {
     return this.randomNumbers[Math.round(i) % this.randomNumbers.length]
   }
 
@@ -364,8 +364,9 @@ export class GameState {
         defendedStagesInSection.push(getStageAt(event.position!).id)
       }
 
-      const nextRound = Math.floor((i + 1) / this.playersInOrder.length)
-      if (nextRound % 3 === 0 && nextRound !== 0) {
+      // Every three rounds a section ends.
+      // In each round, there are 6 action events.
+      if ((i + 1) % (this.playersInOrder.length * 3) === 0) {
         // We're at the end of a section, so let's see if a global attack
         // succeeded.
 
