@@ -155,28 +155,26 @@ export type PlayerGameEvent =
     })
   | (BasePlayerGameEvent & {
       type: 'action'
-      action: 'reveal'
-      /** Can be undefined if the event is not finalized. */
-      position?: Coordinate
-    })
-  | (BasePlayerGameEvent & {
-      type: 'action'
       action: 'exchange-joker'
       /** Can be undefined if the event is not finalized. */
       itemId?: AttackItemId
     })
-
-  /** Special action that allows to reveal the attacker on the whole board. */
   | (BasePlayerGameEvent & {
       type: 'action'
-      action: 'global-reveal'
+      action: 'ask-question'
+      position: Coordinate
       /** Can be undefined if the event is not finalized. */
-      position?: Coordinate
+      question?:
+        | 'is-on-field'
+        | 'has-collected-items'
+        /** Special action that allows to reveal the attacker on the whole board. */
+        | 'global-reveal'
     })
   | (BasePlayerGameEvent & {
       type: 'reaction'
       action: 'joker'
-      useJoker: boolean
+      /** Can be undefined if the event is not finalized. */
+      useJoker?: boolean
     })
 
 export type SystemGameEvent =
@@ -186,7 +184,7 @@ export type SystemGameEvent =
 export type GameEvent = PlayerGameEvent | SystemGameEvent
 
 export const gameEventRequiresReaction = (event: GameEvent) =>
-  isActionEventOf(event, 'reveal') || isActionEventOf(event, 'global-reveal')
+  isActionEventOf(event, 'ask-question')
 
 /**
  * The same as `GameEvent` but without the information that the server will set

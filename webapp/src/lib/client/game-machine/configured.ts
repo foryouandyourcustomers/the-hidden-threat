@@ -102,6 +102,8 @@ export const getClientGameMachine = ({
         GameState.fromContext(context).nextEventType === 'placement',
       requiresAction: ({ context }) => GameState.fromContext(context).nextEventType === 'action',
       requiresMove: ({ context }) => GameState.fromContext(context).nextEventType === 'move',
+      requiresReaction: ({ context }) =>
+        GameState.fromContext(context).nextEventType === 'reaction',
       userIsDefender: () => false,
       isServerStopped: () => false,
 

@@ -59,6 +59,7 @@
     background-color: white;
     padding: 0.75rem 1.5rem 1.5rem;
     min-width: 30rem;
+    color: black;
   }
   .close-button {
     :global(svg) {

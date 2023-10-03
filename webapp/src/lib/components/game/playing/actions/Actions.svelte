@@ -1,13 +1,14 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
   import CollectItem from '$lib/components/game/playing/actions/CollectItem.svelte'
+  import ExchangeJoker from '$lib/components/game/playing/actions/ExchangeJoker.svelte'
   import { GameState } from '$lib/game/game-state'
   import isEqual from 'lodash/isEqual'
   import AttackStage from './AttackStage.svelte'
   import DefendStage from './DefendStage.svelte'
-  import { getCurrentUser } from '$lib/client/game-machine/utils'
-  import ExchangeJoker from '$lib/components/game/playing/actions/ExchangeJoker.svelte'
+  import AskQuestion from './AskQuestion.svelte'
 
   const { machine } = getGameContext()
 
@@ -35,16 +36,11 @@
         <CollectItem />
       </li>
       {#if $side === 'attack'}
-        <li>
-          <AttackStage />
-        </li>
-        <li>
-          <ExchangeJoker />
-        </li>
+        <li><AttackStage /></li>
+        <li><ExchangeJoker /></li>
       {:else}
-        <li>
-          <DefendStage />
-        </li>
+        <li><DefendStage /></li>
+        <li><AskQuestion /></li>
       {/if}
     </ul>
   </div>

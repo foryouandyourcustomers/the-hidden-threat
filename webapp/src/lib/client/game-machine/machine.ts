@@ -180,6 +180,11 @@ export const machine = createMachine({
                       reenter: false,
                     },
                     {
+                      target: 'Reacting',
+                      guard: 'requiresReaction',
+                      reenter: false,
+                    },
+                    {
                       target: 'Moving',
                       reenter: false,
                     },
@@ -200,6 +205,14 @@ export const machine = createMachine({
                       },
                       reenter: true,
                     },
+                  },
+                },
+                Reacting: {
+                  description: 'The defender asked something, and the attacker needs to respond.',
+                  always: {
+                    target: 'Moving',
+                    guard: 'requiresMove',
+                    reenter: false,
                   },
                 },
                 Moving: {

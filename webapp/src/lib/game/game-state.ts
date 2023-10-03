@@ -163,7 +163,10 @@ export class GameState {
   }
 
   get isFinished() {
-    return this.finalizedActionEvents.length >= this.playersInOrder.length * TOTAL_ROUNDS
+    return (
+      this.nextEventType !== 'reaction' &&
+      this.finalizedActionEvents.length >= this.playersInOrder.length * TOTAL_ROUNDS
+    )
   }
 
   get playerPositions() {
@@ -391,7 +394,7 @@ export class GameState {
 
       // Every three rounds a section ends.
       // In each round, there are 6 action events.
-      if ((i + 1) % (this.playersInOrder.length * 3) === 0) {
+      if ((i + 1) % (this.playersInOrder.length * 3) === 0 && this.nextEventType !== 'reaction') {
         // We're at the end of a section, so let's see if a global attack
         // succeeded.
 

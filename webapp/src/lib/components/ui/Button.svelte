@@ -9,6 +9,7 @@
   export let disabled = false
   export let disabledReason: string | undefined = undefined
   export let primary = false
+  export let inverse = false
   export let href: string | undefined = undefined
   export let title: string | undefined = undefined
   export let target: string | undefined = undefined
@@ -27,6 +28,7 @@
     on:click
     class={`button ${size}`}
     class:primary
+    class:inverse
     {type}
     {target}
     {href}
@@ -73,6 +75,13 @@
       --_color-bg: var(--color-bg-strong);
       --_color-bg-hover: var(--color-bg-strong);
       --_color-text: var(--color-text-onstrong);
+      --_color-border: transparent;
+    }
+
+    &.inverse {
+      --_color-bg: var(--color-bg);
+      --_color-bg-hover: var(--color-bg-secondary);
+      --_color-text: var(--color-text);
       --_color-border: transparent;
     }
 

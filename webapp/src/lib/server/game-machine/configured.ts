@@ -23,6 +23,7 @@ import isEqual from 'lodash/isEqual'
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
+import { findStageAt } from '$lib/game/constants/board-stages'
 
 setAutoFreeze(false)
 
@@ -357,6 +358,14 @@ export const serverGameMachine = machine.provide({
               if (gameState.jokers <= 0) return false
               if (!itemId && event.gameEvent.finalized) return false
               if (itemId && !isAttackItemId(itemId)) return false
+              break
+            }
+            case 'ask-question': {
+              const question = event.gameEvent.question
+              if (!isDefenderId(activePlayer.id)) return false
+              if (!question && event.gameEvent.finalized) return false
+              if (question === 'has-collected-items' && !!findStageAt(event.gameEvent.position))
+                return false
               break
             }
           }
