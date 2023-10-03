@@ -1,9 +1,10 @@
 import type { SharedGameContext } from '$lib/game/types'
+import { GameState } from './game-state'
 
 export const sharedGuards: { [key: string]: (details: { context: SharedGameContext }) => boolean } =
   {
     // TODO
-    gameFinished: () => false,
+    gameFinished: ({ context }) => GameState.fromContext(context).isFinished,
     /** All users have been assigned a side, and there is at least one admin on both sides */
     allSidesAssigned: ({ context }) =>
       context.users.every((user) => user.isSideAssigned) &&

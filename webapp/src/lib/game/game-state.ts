@@ -33,6 +33,7 @@ import {
 import { STAGES, type StageId } from './constants/stages'
 import { TARGETED_ATTACKS } from './constants/targeted-attacks'
 import { getPlayerSide } from './utils'
+import { TOTAL_ROUNDS } from './constants/general'
 
 export type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
@@ -154,6 +155,10 @@ export class GameState {
     this.activeSide = getPlayerSide(this.activePlayer.id)
 
     this.activePlayerPosition = this.playerPositions[this.activePlayer.id]
+  }
+
+  get isFinished() {
+    return this.finalizedActionEvents.length >= this.playersInOrder.length * TOTAL_ROUNDS
   }
 
   get playerPositions() {
