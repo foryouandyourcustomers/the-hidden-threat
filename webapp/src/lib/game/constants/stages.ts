@@ -1,16 +1,16 @@
 import type { DefenseItemId } from './items'
 
-type Stage = {
-  id: string
+export type StageId = 'supply' | 'production' | 'datacenter' | 'storage' | 'logistics' | 'sales'
+
+export type Stage = {
+  id: StageId
   name: string
   description: string
   gender: 'm' | 'f' | 'n'
   defenseItems: readonly DefenseItemId[]
 }
 
-export type StageId = (typeof STAGES)[number]['id']
-
-export const STAGES = [
+export const STAGES: readonly Stage[] = [
   {
     id: 'supply',
     name: 'Beschaffung',
@@ -53,4 +53,4 @@ export const STAGES = [
     gender: 'm',
     defenseItems: ['certificate', 'insurance', 'lock'],
   },
-] as const satisfies readonly Stage[]
+] as const
