@@ -43,9 +43,12 @@
   let hovered = false
 
   $: if (hovered) {
-    highlightedFields.set([getPositionForTarget(selectedAttack.target)])
+    highlightedFields.update((fields) => ({
+      ...fields,
+      info: [getPositionForTarget(selectedAttack.target)],
+    }))
   } else {
-    highlightedFields.set(undefined)
+    highlightedFields.update((fields) => ({ ...fields, info: undefined }))
   }
 </script>
 

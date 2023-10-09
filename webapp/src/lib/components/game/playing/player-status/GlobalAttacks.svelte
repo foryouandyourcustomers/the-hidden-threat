@@ -44,11 +44,15 @@
   }
 
   $: if (hovered && selectedAttack) {
-    highlightedFields.set(
-      selectedAttack.targets.map((stage) => getPositionsForStage(stage.stageId)).flat(),
-    )
+    highlightedFields.update((fields) => ({
+      ...fields,
+      info: selectedAttack.targets.map((stage) => getPositionsForStage(stage.stageId)).flat(),
+    }))
   } else {
-    highlightedFields.set(undefined)
+    highlightedFields.update((fields) => ({
+      ...fields,
+      info: undefined,
+    }))
   }
 </script>
 
