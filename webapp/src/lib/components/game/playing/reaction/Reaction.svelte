@@ -14,6 +14,11 @@
     state.matches('Playing.Gameloop.Playing.Reacting'),
   )
 
+  const hasJoker = useSelector(machine.service, ({ context }) => {
+    const gameState = GameState.fromContext(context)
+    return gameState.jokers > 0
+  })
+
   const getReactionEvent = (
     context: SharedGameContext,
     finalized: boolean,
@@ -33,7 +38,7 @@
   }
   const applyReaction = (finalized = false) => {
     const context = machine.service.getSnapshot().context
-    machine.send(getReactionEvent(context, finalized, answer))
+    machine.send(getReactionEvent(context, finalized, $hasJoker ? answer : false))
   }
   let answer: boolean | undefined = undefined
 
@@ -44,19 +49,36 @@
 
 {#if $canPerformReaction}
   <GameDialog title="Joker einsetzen">
-    <Paragraph>Möchtest Du Deinen Joker einsetzen, um der Frage auszuweichen?</Paragraph>
+    <Paragraph
+      >{#if $hasJoker}Möchtest Du Deinen Joker einsetzen, um der Frage auszuweichen?{:else}Du hast
+        leider keinen Joker mehr zur Verfügung um der Frage auszuweichen.{/if}
+    </Paragraph>
 
     <form on:submit|preventDefault={onSubmit}>
-      <div class="options">
-        <label>
-          <input type="radio" name="answer" value={true} bind:group={answer} />
-          Ja
-        </label>
-        <label>
-          <input type="radio" name="answer" value={false} bind:group={answer} />
-          Nein
-        </label>
-      </div>
+      {#if $hasJoker}
+        <div class="options">
+          <label>
+            <input
+              type="radio"
+              name="answer"
+              on:change={() => applyReaction(false)}
+              value={true}
+              bind:group={answer}
+            />
+            Ja
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="answer"
+              on:change={() => applyReaction(false)}
+              value={false}
+              bind:group={answer}
+            />
+            Nein
+          </label>
+        </div>
+      {/if}
 
       <Button inverse type="submit">Bestätigen</Button>
     </form>
