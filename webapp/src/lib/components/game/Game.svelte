@@ -83,9 +83,10 @@
     gap: 1rem;
     border-radius: var(--radius-sm);
     background-color: var(--color-bg);
-    width: 90rem;
-    height: 50rem;
+    width: var(--size-game-width);
+    height: var(--size-game-height);
     overflow: hidden;
+
     &.section-playing {
       background-image: url('/images/board-backdrop.svg');
       background-size: cover;
@@ -98,5 +99,9 @@
     @media (width < 1200px) or (height < 675px) {
       scale: 0.6;
     }
+  }
+
+  .content {
+    isolation: isolate;
   }
 </style>
