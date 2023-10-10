@@ -1,7 +1,10 @@
 <script>
-  import CenteredContent from '$lib/components/layout/CenteredContent.svelte'
+  import Board from '$lib/components/game/Board.svelte'
+  import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Checkbox from '$lib/components/ui/Checkbox.svelte'
+  import Heading from '$lib/components/ui/Heading.svelte'
+  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import TextInput from '$lib/components/ui/TextInput.svelte'
   import { superForm } from 'sveltekit-superforms/client'
 
@@ -10,28 +13,49 @@
   const form = superForm(data.form)
 </script>
 
-<CenteredContent>
-  <form method="post" use:form.enhance>
-    <h1>Neues Spiel</h1>
+<Board paddedContent>
+  <Heading separator>
+    Username vergeben
 
-    <TextInput {form} field="userName">Dein Name *</TextInput>
+    <svelte:fragment slot="info">Schritt 1 von 3</svelte:fragment>
+  </Heading>
+
+  <Paragraph>
+    Willkommen zum Online-Spiel The Hidden Threat*. Gleich geht es los. Nach der Vergabe des
+    Usernamen werden Sie in die Lobby geleitet.
+  </Paragraph>
+
+  <form method="post" use:form.enhance>
+    <div class="field">
+      <Heading centered>Dein Username</Heading>
+
+      <Paragraph>Bitte gib Dir einen Username mit maximal 20 Buchstaben.</Paragraph>
+
+      <TextInput
+        {form}
+        field="userName"
+        placeholder="z.B. Vor-und Nachname, Spitzname, Initalen, etc."
+      />
+    </div>
 
     <Checkbox {form} field="acceptedTos">
-      Ich habe die <a href="/privacy" target="_blank">Datenschutzerklärung</a>, die
-      <a href="/tos" target="_blank">Nutzungsbedingungen</a> gelesen und akzeptiere sie und bin über
-      18 Jahre alt. *
+      Hiermit stimme ich der Speicherung meiner eingegebenen Daten zu und bestätige dass ich
+      mindestens 18 Jahre alt bin.*
     </Checkbox>
 
-    <div class="actions">
+    <Actions>
       <Button href="/">Abbrechen</Button>
       <Button type="submit" primary>Start</Button>
-    </div>
+    </Actions>
   </form>
-</CenteredContent>
+</Board>
 
 <style lang="postcss">
-  .actions {
-    display: flex;
-    gap: 0.5rem;
+  form {
+    width: 44rem;
+  }
+  .field {
+    background: var(--color-blue-transp-760);
+    padding: 1rem 2rem;
   }
 </style>

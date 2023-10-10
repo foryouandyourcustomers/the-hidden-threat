@@ -1,7 +1,7 @@
 <script>
   import Actions from '$lib/components/game/playing/actions/Actions.svelte'
   import ReactionResult from '$lib/components/game/playing/reaction/ReactionResult.svelte'
-  import Board from './Board.svelte'
+  import Grid from './Grid.svelte'
   import Status from './game-status/Status.svelte'
   import InfoPanel from './player-status/InfoPanel.svelte'
   import Players from './player-status/Players.svelte'
@@ -14,8 +14,8 @@
     <Players />
     <InfoPanel />
   </div>
-  <div class="board">
-    <Board />
+  <div class="grid">
+    <Grid />
     <Actions />
     <Reaction />
     <AwaitingReaction />
@@ -34,10 +34,10 @@
     gap: 1rem;
   }
 
-  .board {
-    --board-height: 45rem;
-    --board-width: calc(var(--board-height) * var(--column-count) / var(--row-count));
-    --board-square-size: calc(var(--board-height) / var(--row-count));
+  .grid {
+    --grid-height: 45rem;
+    --grid-width: calc(var(--grid-height) * var(--column-count) / var(--row-count));
+    --grid-square-size: calc(var(--grid-height) / var(--row-count));
     position: relative;
   }
 

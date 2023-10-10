@@ -1,19 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 8">
-  {#each new Array(10) as _, x}
-    <path d="M {x} 0 L {x} 8" stroke="white" stroke-width="0.01" stroke-dasharray="0.02 0.02" />
-  {/each}
+<script lang="ts">
+  import Backdrop from '$lib/components/game/playing/Backdrop.svelte'
+  import GridLines from '$lib/components/game/playing/GridLines.svelte'
+  import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants/general'
+  import Dimming from './Dimming.svelte'
+  import HighlightedFields from './HighlightedFields.svelte'
+  import StageLines from './StageLines.svelte'
+  import Square from './square/Square.svelte'
+</script>
 
-  {#each new Array(9) as _, y}
-    <path d="M 0 {y} L 9 {y}" stroke="white" stroke-width="0.01" stroke-dasharray="0.02 0.02" />
+<div class="grid">
+  <Backdrop />
+  <StageLines />
+
+  {#each [...new Array(ROW_COUNT)] as _, y}
+    {#each [...new Array(COLUMN_COUNT)] as _, x}
+      <Square coordinate={[x, y]} />
+    {/each}
   {/each}
-</svg>
+  <GridLines />
+  <Dimming />
+  <HighlightedFields />
+</div>
 
 <style lang="postcss">
-  svg {
-    display: block;
-    position: absolute;
-    inset: 0;
-    max-width: none;
-    pointer-events: none;
+  .grid {
+    display: grid;
+    position: relative;
+    grid-template-rows: repeat(var(--row-count), 1fr);
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    gap: 0;
+    width: var(--grid-width);
+    height: var(--grid-height);
   }
 </style>
