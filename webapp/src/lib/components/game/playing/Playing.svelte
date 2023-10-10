@@ -1,5 +1,6 @@
 <script>
   import Actions from '$lib/components/game/playing/actions/Actions.svelte'
+  import ReactionResult from '$lib/components/game/playing/reaction/ReactionResult.svelte'
   import Board from './Board.svelte'
   import Status from './game-status/Status.svelte'
   import InfoPanel from './player-status/InfoPanel.svelte'
@@ -18,6 +19,7 @@
     <Actions />
     <Reaction />
     <AwaitingReaction />
+    <ReactionResult />
   </div>
   <div class="game-status">
     <Status />

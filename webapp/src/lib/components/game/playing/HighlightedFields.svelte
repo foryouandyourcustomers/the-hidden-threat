@@ -4,9 +4,16 @@
   const { highlightedFields } = getGameContext()
 </script>
 
-{#if $highlightedFields}
-  <div class="highlighted-fields">
-    {#each $highlightedFields as coordinates}
+{#if $highlightedFields.info}
+  <div class="highlighted-fields info">
+    {#each $highlightedFields.info as coordinates}
+      <div class="field" style:--column={coordinates[0] + 1} style:--row={coordinates[1] + 1} />
+    {/each}
+  </div>
+{/if}
+{#if $highlightedFields.attacker}
+  <div class="highlighted-fields attacker">
+    {#each $highlightedFields.attacker as coordinates}
       <div class="field" style:--column={coordinates[0] + 1} style:--row={coordinates[1] + 1} />
     {/each}
   </div>
@@ -31,14 +38,22 @@
     z-index: var(--layer-5);
     inset: 0;
     pointer-events: none;
+
+    &.info {
+      --_color: #fcb337;
+    }
+    &.attacker {
+      --_color: var(--color-red-polygon);
+    }
+
     .field {
       grid-row: var(--row);
       grid-column: var(--column);
       transform-origin: center;
       animation: pulsate 1s infinite;
-      border: var(--px) solid #fcb337;
+      border: var(--px) solid var(--_color);
       border-radius: var(--radius-xl);
-      background: radial-gradient(transparent 50%, #fcb337 100%);
+      background: radial-gradient(transparent 50%, var(--_color) 100%);
     }
   }
 </style>

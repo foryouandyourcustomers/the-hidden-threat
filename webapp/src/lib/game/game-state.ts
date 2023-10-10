@@ -61,6 +61,7 @@ export class GameState {
   public finalizedPlacementEvents: PlayerGameEvent[]
   public finalizedActionEvents: GameEventOf<'action'>[]
   public finalizedReactionEvents: GameEventOf<'reaction'>[]
+  public finalizedPlayerEvents: GameEventOf<'action' | 'move' | 'placement' | 'reaction'>[]
   public finalizedActionEventsRequiringReaction: GameEventOf<'action'>[]
   public finalizedMoveOrActionEvents: GameEventOf<'action' | 'move'>[]
 
@@ -118,6 +119,13 @@ export class GameState {
     this.finalizedMoveOrActionEvents = this.finalizedEvents.filter(
       (event) => isGameEventOf(event, 'move') || isGameEventOf(event, 'action'),
     ) as GameEventOf<'action' | 'move'>[]
+    this.finalizedPlayerEvents = this.finalizedEvents.filter(
+      (event) =>
+        isGameEventOf(event, 'move') ||
+        isGameEventOf(event, 'action') ||
+        isGameEventOf(event, 'placement') ||
+        isGameEventOf(event, 'reaction'),
+    ) as GameEventOf<'action' | 'move' | 'placement' | 'reaction'>[]
 
     this.lastEvent = this.playerEvents[this.playerEvents.length - 1]
     this.lastFinalizedEvent = this.finalizedEvents[this.finalizedEvents.length - 1]

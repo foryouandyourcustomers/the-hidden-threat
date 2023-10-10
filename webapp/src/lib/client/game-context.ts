@@ -10,7 +10,10 @@ export type GameContext = {
   gameId: string
   userId: string
   user: Readable<User>
-  highlightedFields: Writable<Coordinate[] | undefined>
+  highlightedFields: Writable<{
+    info: Coordinate[] | undefined
+    attacker: Coordinate[] | undefined
+  }>
   hostUserId: string
   machine: ReturnType<typeof useMachine<ReturnType<typeof getClientGameMachine>>>
 }
