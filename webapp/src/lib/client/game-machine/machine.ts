@@ -60,14 +60,6 @@ export const machine = createMachine({
               },
               reenter: false,
             },
-            'assign admin': {
-              target: 'Assigning sides',
-              guard: 'isAdmin',
-              actions: {
-                type: 'forwardToServer',
-              },
-              reenter: false,
-            },
           },
         },
         'Assigning roles': {

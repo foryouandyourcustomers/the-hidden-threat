@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import Header from './header/Header.svelte'
 
   export let reportMousePosition: ((position: [number, number]) => void) | undefined = undefined
@@ -28,6 +29,8 @@
     if (scale >= 1.3) scale = 1.3
     else scale = Math.min(scale, 1)
   }
+
+  onMount(onResize)
 </script>
 
 <svelte:window on:resize={onResize} bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />

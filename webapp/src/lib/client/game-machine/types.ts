@@ -26,10 +26,6 @@ export type NativeClientEvent =
       type: 'assign side'
       otherUserId: string
       side: Side
-    }
-  | {
-      type: 'assign admin'
-      otherUserId: string
       isAdmin: boolean
     }
   | { type: 'admin starts game' }

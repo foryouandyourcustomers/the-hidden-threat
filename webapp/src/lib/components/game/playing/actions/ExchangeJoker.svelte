@@ -4,9 +4,9 @@
   import type { ClientEventOf } from '$lib/client/game-machine/types'
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
-  import { isAttackItemId, type AttackItemId, ITEMS } from '$lib/game/constants/items'
+  import { ITEMS, isAttackItemId, type AttackItemId } from '$lib/game/constants/items'
   import { GameState } from '$lib/game/game-state'
-  import { isActionEventOf, type Coordinate, type SharedGameContext } from '$lib/game/types'
+  import { isActionEventOf, type SharedGameContext } from '$lib/game/types'
   import Action from './Action.svelte'
 
   const { machine } = getGameContext()

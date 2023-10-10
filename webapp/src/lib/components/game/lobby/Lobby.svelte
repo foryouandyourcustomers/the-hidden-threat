@@ -26,7 +26,7 @@
 {:else if $section === 'Assigning roles'}
   <AssigningRoles />
 {:else if $section === 'Waiting for other side'}
-  Waiting for other side
+  Sobald die andere Seite fertig ist, geht es weiter.
 {:else}
   Unknown lobby state
 {/if}

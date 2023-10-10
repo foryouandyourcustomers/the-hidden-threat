@@ -249,20 +249,11 @@ export const serverGameMachine = machine.provide({
 
       return {
         users: produce(context.users, (users) => {
-          users[userIndex].side = event.side
-          users[userIndex].isSideAssigned = true
-        }),
-      }
-    }),
-    assignAdmin: assign(({ context, event: e }) => {
-      const event = e as ServerEventOf<'user: assign admin'>
-
-      const userIndex = findUserIndex(event.otherUserId, context)
-      if (userIndex === undefined) return {}
-
-      return {
-        users: produce(context.users, (users) => {
-          users[userIndex].isAdmin = event.isAdmin
+          const user = users[userIndex]
+          user.side = event.side
+          // An admin can't unassign themselves from being an admin.
+          user.isAdmin = event.userId === user.id ? true : event.isAdmin
+          user.isSideAssigned = true
         }),
       }
     }),

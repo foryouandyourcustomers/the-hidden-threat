@@ -14,3 +14,6 @@ export const createGameSchema = z.object({
 export const joinGameSchema = z.object({
   ...createAndJoinGameSchema,
 })
+
+export type CreateGameSchema = typeof createGameSchema
+export type JoinGameSchema = typeof joinGameSchema

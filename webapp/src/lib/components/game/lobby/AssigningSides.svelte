@@ -4,34 +4,25 @@
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
-  import type { Side } from '$lib/game/types'
+  import AssigningSidesColumn from './AssigningSidesColumn.svelte'
 
-  const { userId, user, machine } = getGameContext()
+  const { user, machine } = getGameContext()
 
   const canAssignSides = useSelector(machine.service, (snapshot) =>
-    snapshot.can({ type: 'assign side', otherUserId: '', side: 'attack' }),
-  )
-  const canAssignAdmin = useSelector(machine.service, (snapshot) =>
-    snapshot.can({ type: 'assign admin', otherUserId: '', isAdmin: true }),
+    snapshot.can({ type: 'assign side', otherUserId: '', side: 'attack', isAdmin: true }),
   )
   const canContinue = useSelector(machine.service, (snapshot) =>
     snapshot.can({ type: 'next step' }),
   )
-  const users = useSelector(machine.service, (snapshot) => snapshot.context.users)
+  const unassignedUsers = useSelector(machine.service, (snapshot) =>
+    snapshot.context.users.filter((user) => !user.isSideAssigned),
+  )
 
-  const assignSide = (userId: string, side: Side) => {
-    machine.send({
-      type: 'assign side',
-      otherUserId: userId,
-      side,
-    })
-  }
-  const assignAdmin = (userId: string, isAdmin: boolean) => {
-    machine.send({
-      type: 'assign admin',
-      otherUserId: userId,
-      isAdmin,
-    })
+  const onDragstart = (e: DragEvent, userId: string) => {
+    if (e.dataTransfer) {
+      e.dataTransfer.setData('userId', userId)
+      e.dataTransfer.effectAllowed = 'move'
+    }
   }
 </script>
 
@@ -46,31 +37,23 @@
   Teams einteilen.
 </p>
 
-<div class="users">
-  {#each $users as user}
-    <div class="user">
-      {user.name}
-      {#if user.isAdmin}
-        <span class="admin">(admin)</span>
-      {/if}
-      {#if user.isSideAssigned}
-        <span class="side">
-          {#if user.side === 'attack'}
-            Angriff
-          {:else}
-            Verteidigung
-          {/if}
-        </span>
-      {/if}
-      {#if $canAssignSides}
-        <Button on:click={() => assignSide(user.id, 'attack')}>Angriff</Button>
-        <Button on:click={() => assignSide(user.id, 'defense')}>Verteidigung</Button>
-      {/if}
-      {#if $canAssignAdmin && user.id !== userId}
-        <Button on:click={() => assignAdmin(user.id, !user.isAdmin)}>Toggle Admin</Button>
-      {/if}
-    </div>
-  {/each}
+<div class="columns">
+  <AssigningSidesColumn side="defense" />
+
+  <div class="unassigned">
+    {#each $unassignedUsers as user}
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <div
+        class="user"
+        on:dragstart={(e) => onDragstart(e, user.id)}
+        draggable={$canAssignSides ? 'true' : 'false'}
+      >
+        {user.name}
+      </div>
+    {/each}
+  </div>
+
+  <AssigningSidesColumn side="attack" />
 </div>
 
 <Actions>
@@ -85,15 +68,31 @@
 </Actions>
 
 <style lang="postcss">
-  .users {
+  .columns {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.5fr;
+    gap: 3rem;
     margin-block: 3rem;
+    height: 24rem;
   }
-  .side {
-    display: inline-block;
-    border-radius: 0.5em;
-    background: black;
-    padding: 0.25rem 0.5rem;
-    color: white;
-    font-size: 0.875rem;
+  .unassigned {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .user {
+    word-wrap: nowrap;
+    border-radius: var(--radius-xs);
+    background: var(--color-white-80);
+    padding: 0rem 0.5rem;
+    height: 2rem;
+    overflow: hidden;
+    color: var(--color-blue-spielbrett);
+    line-height: 2rem;
+    text-align: center;
+    text-overflow: ellipsis;
+    &[draggable='true'] {
+      cursor: grab;
+    }
   }
 </style>

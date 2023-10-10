@@ -93,14 +93,6 @@ export const machine = createMachine({
               },
               reenter: false,
             },
-            'user: assign admin': {
-              target: 'Assigning sides',
-              guard: 'isAdmin',
-              actions: {
-                type: 'assignAdmin',
-              },
-              reenter: false,
-            },
           },
         },
         Playing: {
