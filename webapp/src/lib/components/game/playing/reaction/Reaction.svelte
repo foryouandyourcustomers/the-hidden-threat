@@ -10,6 +10,11 @@
 
   const { machine } = getGameContext()
 
+  const question = useSelector(
+    machine.service,
+    ({ context }) => GameState.fromContext(context).activeQuestion,
+  )
+
   const canPerformReaction = useSelector(machine.service, (state) =>
     state.matches('Playing.Gameloop.Playing.Reacting'),
   )
@@ -49,9 +54,25 @@
 
 {#if $canPerformReaction}
   <GameDialog title="Joker einsetzen">
-    <Paragraph
-      >{#if $hasJoker}Möchtest Du Deinen Joker einsetzen, um der Frage auszuweichen?{:else}Du hast
-        leider keinen Joker mehr zur Verfügung um der Frage auszuweichen.{/if}
+    <Paragraph>
+      {#if $question === 'is-on-field'}
+        Die Verteidigung fragt ob Du auf dem Feld bist.
+      {:else if $question === 'has-collected-items'}
+        Die Verteidigung fragt ob Du Gegenstände gesammelt hast.
+      {:else if $question === 'quarter-reveal'}
+        Die Verteidigung fragt auf welchem Viertel des Spielbretts Du dich befindest.
+      {:else if $question === 'is-attacking-stage'}
+        Die Verteidigung fragt ob Du einen gezielten Angriff auf eine Stufe hast.
+      {:else if $question === 'is-next-to-attacker'}
+        Die Verteidigung fragt ob Du dich auf einem angrenzend Feld befindest.
+      {/if}
+    </Paragraph>
+    <Paragraph>
+      {#if $hasJoker}
+        Möchtest Du Deinen Joker einsetzen, um der Frage auszuweichen?
+      {:else}
+        Du hast leider keinen Joker mehr zur Verfügung um der Frage auszuweichen.
+      {/if}
     </Paragraph>
 
     <form on:submit|preventDefault={onSubmit}>

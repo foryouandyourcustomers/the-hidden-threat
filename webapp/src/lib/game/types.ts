@@ -2,7 +2,7 @@ import type { ClientEvent } from '$lib/client/game-machine/types'
 import type { DistributiveOmit } from '$lib/utils'
 import type { AttackCharacterId, DefenseCharacterId } from './constants/characters'
 import type { FaceId } from './constants/faces'
-import type { AttackItemId, DefenseItemId } from './constants/items'
+import type { AttackItemId, DefenseItemId, ItemId } from './constants/items'
 
 export type Side = 'defense' | 'attack'
 
@@ -164,11 +164,39 @@ export type PlayerGameEvent =
       action: 'ask-question'
       position: Coordinate
       /** Can be undefined if the event is not finalized. */
-      question?:
-        | 'is-on-field'
-        | 'has-collected-items'
-        /** Special action that allows to reveal the attacker on the whole board. */
-        | 'global-reveal'
+      question?: 'is-on-field' | 'has-collected-items'
+    })
+  /** Special action that allows to reveal on which quarter of the board
+   * the attacker is. */
+  | (BasePlayerGameEvent & {
+      type: 'action'
+      action: 'quarter-reveal'
+    })
+  /** Special action that checks whether one of the active attacks targets
+   * a stage the defender is bordering. */
+  | (BasePlayerGameEvent & {
+      type: 'action'
+      action: 'is-attacking-stage'
+      /**
+       * The position of the stage that is being asked for. Can be undefined if
+       * the event is not finalized. */
+      position?: Coordinate
+    })
+  /** Special action that checks whether one of the active attacks targets
+   * a stage the defender is bordering. */
+  | (BasePlayerGameEvent & {
+      type: 'action'
+      action: 'is-next-to-attacker'
+      /** Redundant field of the position of the defender. */
+      position: Coordinate
+    })
+  /** Special action that checks whether one of the active attacks targets
+   * a stage the defender is bordering. */
+  | (BasePlayerGameEvent & {
+      type: 'action'
+      action: 'exchange-digital-footprint'
+      /** Can be undefined if the event is not finalized. */
+      item?: ItemId
     })
   | (BasePlayerGameEvent & {
       type: 'reaction'
@@ -183,8 +211,19 @@ export type SystemGameEvent =
 
 export type GameEvent = PlayerGameEvent | SystemGameEvent
 
-export const gameEventRequiresReaction = (event: GameEvent) =>
-  isActionEventOf(event, 'ask-question')
+export const gameEventRequiresReaction = (
+  event: GameEvent,
+): event is ActionEventOf<
+  'ask-question' | 'quarter-reveal' | 'is-attacking-stage' | 'is-next-to-attacker'
+> =>
+  !!(
+    [
+      'ask-question',
+      'quarter-reveal',
+      'is-attacking-stage',
+      'is-next-to-attacker',
+    ] satisfies GameEventAction[]
+  ).find((action) => isActionEventOf(event, action))
 
 /**
  * The same as `GameEvent` but without the information that the server will set

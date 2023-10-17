@@ -60,6 +60,7 @@ export class GameState {
   public finalizedEvents: PlayerGameEvent[]
   public finalizedPlacementEvents: PlayerGameEvent[]
   public finalizedActionEvents: GameEventOf<'action'>[]
+  public finalizedMoveEvents: GameEventOf<'move'>[]
   public finalizedReactionEvents: GameEventOf<'reaction'>[]
   public finalizedPlayerEvents: GameEventOf<'action' | 'move' | 'placement' | 'reaction'>[]
   public finalizedActionEventsRequiringReaction: GameEventOf<'action'>[]
@@ -113,6 +114,7 @@ export class GameState {
 
     this.finalizedPlacementEvents = this.finalizedEvents.filter(guardForGameEventType('placement'))
     this.finalizedActionEvents = this.finalizedEvents.filter(guardForGameEventType('action'))
+    this.finalizedMoveEvents = this.finalizedEvents.filter(guardForGameEventType('move'))
     this.finalizedReactionEvents = this.finalizedEvents.filter(guardForGameEventType('reaction'))
     this.finalizedActionEventsRequiringReaction =
       this.finalizedActionEvents.filter(gameEventRequiresReaction)
@@ -542,5 +544,22 @@ export class GameState {
       attack,
       defense,
     }
+  }
+
+  /**
+   * Returns the "active" question, meaning: if the last *finalized* action was
+   * an action that requires a reaction.
+   */
+  get activeQuestion() {
+    const lastEvent = this.finalizedActionEvents.at(-1)
+
+    if (lastEvent) {
+      if (lastEvent.action === 'ask-question') return lastEvent.question
+      if (gameEventRequiresReaction(lastEvent)) {
+        return lastEvent.action
+      }
+    }
+
+    return undefined
   }
 }

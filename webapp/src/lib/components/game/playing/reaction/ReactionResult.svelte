@@ -5,17 +5,24 @@
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { GameState } from '$lib/game/game-state'
-  import isEqual from 'lodash/isEqual'
+  import ResultHasCollectedItems from './result/ResultHasCollectedItems.svelte'
+  import ResultIsAttackingStage from './result/ResultIsAttackingStage.svelte'
+  import ResultIsNextToAttacker from './result/ResultIsNextToAttacker.svelte'
+  import ResultIsOnField from './result/ResultIsOnField.svelte'
+  import ResultQuarterReveal from './result/ResultQuarterReveal.svelte'
 
-  const { machine, highlightedFields } = getGameContext()
+  const { machine } = getGameContext()
+
+  /**
+   * Every time we reach a condition where the result should be shown, this
+   * will be set to true. The user can then dismiss this Dialog, but it will
+   * only be dismissed "in memory" so a reload will show it again.
+   *
+   * The dismissal of the Dialog is also not synced between clients.
+   */
   let visible = true
 
-  const attackerPosition = useSelector(
-    machine.service,
-    ({ context }) => GameState.fromContext(context).playerPositions.attacker,
-    isEqual,
-  )
-
+  /** Whether the attacking side used a joker to avoid answering the question */
   const didUseJoker = useSelector(machine.service, ({ context }) => {
     const lastFinalizedPlayerEvent = GameState.fromContext(context).finalizedPlayerEvents.at(-1)
     if (
@@ -27,13 +34,16 @@
     return undefined
   })
 
-  $: {
-    if ($didUseJoker === false) {
-      highlightedFields.update((fields) => ({ ...fields, attacker: [$attackerPosition] }))
-    } else {
-      highlightedFields.update((fields) => ({ ...fields, attacker: undefined }))
-    }
-  }
+  /**
+   * The question being asked.
+   *
+   * This is undefined if no question has been asked, at which point this will
+   * not show anything.
+   */
+  const question = useSelector(
+    machine.service,
+    ({ context }) => GameState.fromContext(context).activeQuestion,
+  )
 
   $: {
     visible = true
@@ -41,18 +51,26 @@
   }
 
   const side = useSelector(machine.service, ({ context }) => getCurrentUser(context).side)
+
+  const onClose = () => (visible = false)
 </script>
 
-{#if $side === 'defense' && $didUseJoker !== undefined && visible}
+{#if $question && $side === 'defense' && $didUseJoker !== undefined && visible}
   {#if $didUseJoker}
-    <GameDialog title="Joker eingesetzt" on:close={() => (visible = false)}>
-      <Paragraph
-        >Der/Die Angreifer:in hat einen Joker eingesetzt um der Frage auszuweichen.</Paragraph
-      >
+    <GameDialog title="Joker eingesetzt" on:close={onClose}>
+      <Paragraph>
+        Der/Die Angreifer:in hat einen Joker eingesetzt um der Frage auszuweichen.
+      </Paragraph>
     </GameDialog>
-  {:else}
-    <GameDialog title="Position aufgedeckt" on:close={() => (visible = false)}>
-      <Paragraph>Die Position wird jetzt angezeigt.</Paragraph>
-    </GameDialog>
+  {:else if $question === 'is-on-field'}
+    <ResultIsOnField on:close={onClose} />
+  {:else if $question === 'has-collected-items'}
+    <ResultHasCollectedItems on:close={onClose} />
+  {:else if $question === 'quarter-reveal'}
+    <ResultQuarterReveal on:close={onClose} />
+  {:else if $question === 'is-attacking-stage'}
+    <ResultIsAttackingStage on:close={onClose} />
+  {:else if $question === 'is-next-to-attacker'}
+    <ResultIsNextToAttacker on:close={onClose} />
   {/if}
 {/if}

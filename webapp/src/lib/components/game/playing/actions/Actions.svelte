@@ -71,7 +71,7 @@
       }
 
       &:not(.on-left) {
-        left: calc(var(--board-square-size) + 0.3rem);
+        left: calc(var(--grid-square-size) + 0.3rem);
       }
       &.on-left {
         right: 0.3rem;
@@ -80,7 +80,7 @@
         top: 0.3rem;
       }
       &.on-top {
-        bottom: calc(0px - var(--board-square-size) + 0.3rem);
+        bottom: calc(0px - var(--grid-square-size) + 0.3rem);
       }
     }
   }
