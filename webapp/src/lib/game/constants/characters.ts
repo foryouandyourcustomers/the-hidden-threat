@@ -1,15 +1,28 @@
 import type { Side } from '../types'
 
-export type Character = {
-  id: string
+export type DefenseCharacterId =
+  | 'order-manager'
+  | 'dispatch-manager'
+  | 'quality-manager'
+  | 'it-specialist'
+export type AttackCharacterId = 'frustrated' | 'disappointed'
+export type CharacterId = DefenseCharacterId | AttackCharacterId
+
+type AttackCharacter = {
+  id: CharacterId
   name: string
   description: string
-  ability?: AbilityId
   side: Side
 }
-export type DefenseCharacterId = Extract<(typeof CHARACTERS)[number], { side: 'defense' }>['id']
-export type AttackCharacterId = Extract<(typeof CHARACTERS)[number], { side: 'attack' }>['id']
-export type CharacterId = DefenseCharacterId | AttackCharacterId
+
+type DefenseCharacter = AttackCharacter & {
+  ability: AbilityId
+}
+
+export type Character = AttackCharacter | DefenseCharacter
+
+export const isDefenseCharacter = (character: Character): character is DefenseCharacter =>
+  Object.hasOwn(character, 'ability')
 
 export const ABILITIES = {
   'quarter-reveal':
@@ -24,7 +37,7 @@ export const ABILITIES = {
 
 export type AbilityId = keyof typeof ABILITIES
 
-export const CHARACTERS = [
+export const CHARACTERS: readonly Character[] = [
   {
     id: 'order-manager',
     name: 'Auftragsmanagement',
@@ -71,4 +84,4 @@ export const CHARACTERS = [
       'Als System-Administratorin hast du Zugriff auf die sensibelsten Daten. Durch einen Blick in die interne Kommunikation der Geschäftsführung erfährt deine Kollegin, dass länger geplant ist, eure Abteilung demnächst zu outsourcen. Zutiefst enttäuscht darüber, dass man euch vor vollendete Tatsachen stellen wird. Jetzt willst du ihnen einen Denkzettel verpassen',
     side: 'attack',
   },
-] as const satisfies readonly Character[]
+] as const

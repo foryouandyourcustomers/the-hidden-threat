@@ -1,14 +1,19 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import { getCurrentUser } from '$lib/client/game-machine/utils'
   import CollectItem from '$lib/components/game/playing/actions/CollectItem.svelte'
   import ExchangeJoker from '$lib/components/game/playing/actions/ExchangeJoker.svelte'
+  import { isDefenseCharacter } from '$lib/game/constants/characters'
   import { GameState } from '$lib/game/game-state'
+  import { getCharacter } from '$lib/game/utils'
   import isEqual from 'lodash/isEqual'
+  import AskQuestion from './AskQuestion.svelte'
   import AttackStage from './AttackStage.svelte'
   import DefendStage from './DefendStage.svelte'
-  import AskQuestion from './AskQuestion.svelte'
+  import ExchangeDigitalFootprint from './ExchangeDigitalFootprint.svelte'
+  import IsAttackingStage from './IsAttackingStage.svelte'
+  import IsNextToAttacker from './IsNextToAttacker.svelte'
+  import QuarterReveal from './QuarterReveal.svelte'
 
   const { machine } = getGameContext()
 
@@ -24,8 +29,12 @@
     },
     isEqual,
   )
+  const activePlayerCharacterId = useSelector(
+    machine.service,
+    ({ context }) => GameState.fromContext(context).activePlayer.character,
+  )
 
-  const side = useSelector(machine.service, ({ context }) => getCurrentUser(context).side)
+  $: activePlayerCharacter = getCharacter($activePlayerCharacterId)
 </script>
 
 {#if $canPerformAction}
@@ -35,12 +44,23 @@
       <li>
         <CollectItem />
       </li>
-      {#if $side === 'attack'}
+      {#if !isDefenseCharacter(activePlayerCharacter)}
         <li><AttackStage /></li>
         <li><ExchangeJoker /></li>
       {:else}
         <li><DefendStage /></li>
         <li><AskQuestion /></li>
+        <li>
+          {#if activePlayerCharacter.ability === 'quarter-reveal'}
+            <QuarterReveal />
+          {:else if activePlayerCharacter.ability === 'exchange-digital-footprint'}
+            <ExchangeDigitalFootprint />
+          {:else if activePlayerCharacter.ability === 'is-attacking-stage'}
+            <IsAttackingStage />
+          {:else if activePlayerCharacter.ability === 'is-next-to-attacker'}
+            <IsNextToAttacker />
+          {/if}
+        </li>
       {/if}
     </ul>
   </div>

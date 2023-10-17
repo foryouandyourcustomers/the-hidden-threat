@@ -2,7 +2,12 @@
   import { getGameContext } from '$lib/client/game-context'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
-  import { ABILITIES, CHARACTERS, type CharacterId } from '$lib/game/constants/characters'
+  import {
+    ABILITIES,
+    CHARACTERS,
+    isDefenseCharacter,
+    type CharacterId,
+  } from '$lib/game/constants/characters'
   import type { Player, Side } from '$lib/game/types'
 
   export let player: Player
@@ -48,7 +53,7 @@
         {/if}
       </Paragraph>
     </div>
-    {#if activeCharacter?.side === 'defense'}
+    {#if activeCharacter && isDefenseCharacter(activeCharacter)}
       <div>
         <Heading spacing="none" size="sm">Fähigkeit</Heading>
         <Paragraph spacing="none">
