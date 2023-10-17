@@ -1,7 +1,8 @@
 <script lang="ts">
   import { getGameContext } from '$lib/client/game-context'
+  import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
-  import { CHARACTERS, type CharacterId } from '$lib/game/constants/characters'
+  import { ABILITIES, CHARACTERS, type CharacterId } from '$lib/game/constants/characters'
   import type { Player, Side } from '$lib/game/types'
 
   export let player: Player
@@ -39,11 +40,22 @@
     {/each}
   </div>
   <div class="content">
-    <Paragraph>
-      {#if activeCharacter}
-        {activeCharacter.description}
-      {/if}
-    </Paragraph>
+    <div>
+      <Heading spacing="none" size="sm">Beschreibung</Heading>
+      <Paragraph spacing="none">
+        {#if activeCharacter}
+          {activeCharacter.description}
+        {/if}
+      </Paragraph>
+    </div>
+    {#if activeCharacter?.side === 'defense'}
+      <div>
+        <Heading spacing="none" size="sm">Fähigkeit</Heading>
+        <Paragraph spacing="none">
+          {ABILITIES[activeCharacter.ability]}
+        </Paragraph>
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -80,11 +92,14 @@
     }
   }
   .content {
+    display: flex;
+    gap: 1rem;
     border-radius: var(--radius-md);
     border-top-right-radius: 0;
     border-top-left-radius: 0;
     background: var(--color-bg-strong-secondary);
     padding: 1rem 1.5rem;
+    min-height: 10rem;
     color: var(--color-text-onstrong-secondary);
   }
 </style>

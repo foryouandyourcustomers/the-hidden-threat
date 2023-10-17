@@ -83,30 +83,33 @@
 
     <div class="spacer" />
 
-    <Heading size="md" spacing="none">3. Wähle einen Avatar für deinen Charakter</Heading>
+    <div class="faces-actions">
+      <div>
+        <Heading size="md" spacing="none">3. Wähle einen Avatar für deinen Charakter</Heading>
+        <div class="faces">
+          {#each FACES.slice(0, 3) as face}
+            <button
+              disabled={!$canUpdate}
+              class:active={face.id === faceId}
+              class="unstyled face"
+              on:click={() => setFace(face.id)}
+            >
+              <Face faceId={face.id} />
+            </button>
+          {/each}
+        </div>
+      </div>
 
-    <div class="faces">
-      {#each FACES.slice(0, 3) as face}
-        <button
+      <Actions>
+        <Button
+          primary
           disabled={!$canUpdate}
-          class:active={face.id === faceId}
-          class="unstyled face"
-          on:click={() => setFace(face.id)}
+          on:click={() => machine.send({ type: 'stop editing player', side })}
         >
-          <Face faceId={face.id} />
-        </button>
-      {/each}
+          Bestätigen und weiter
+        </Button>
+      </Actions>
     </div>
-
-    <Actions>
-      <Button
-        primary
-        disabled={!$canUpdate}
-        on:click={() => machine.send({ type: 'stop editing player', side })}
-      >
-        Bestätigen und weiter
-      </Button>
-    </Actions>
   </div>
 </Dialog>
 
@@ -140,5 +143,11 @@
         color: var(--color-text-onstrong);
       }
     }
+  }
+  .faces-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
   }
 </style>

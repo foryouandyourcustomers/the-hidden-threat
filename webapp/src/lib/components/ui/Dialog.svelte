@@ -57,6 +57,7 @@
     border-radius: var(--radius-md);
     background-color: var(--color-bg-secondary);
     padding: 1.5rem;
+    max-width: 90%;
   }
   .close-button {
     :global(svg) {
