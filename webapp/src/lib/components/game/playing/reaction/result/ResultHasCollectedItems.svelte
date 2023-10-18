@@ -5,5 +5,5 @@
 
 <GameDialog title="Gesammelte Gegenstände" on:close>
   <Paragraph>Der/die Angreifer:in hat folgende Gegenstände gesammelt:</Paragraph>
-  TODO
+  Noch nicht implementiert
 </GameDialog>

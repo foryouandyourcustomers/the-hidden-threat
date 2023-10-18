@@ -23,7 +23,7 @@ export const createDefaultDefender = (hostUserId: string, id: DefenderId): Defen
   id,
   userId: hostUserId,
   faceId: 0,
-  character: 'dispatch-manager',
+  character: 'order-manager',
   isConfigured: dev ? true : false,
 })
 
@@ -35,6 +35,6 @@ export const createDefaultAttacker = (hostUserId: string): Attacker => ({
   id: 'attacker',
   userId: hostUserId,
   faceId: 0,
-  character: 'disappointed',
+  character: 'frustrated',
   isConfigured: dev ? true : false,
 })

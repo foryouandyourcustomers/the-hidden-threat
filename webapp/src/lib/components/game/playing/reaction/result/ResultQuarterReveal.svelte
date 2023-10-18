@@ -5,5 +5,5 @@
 
 <GameDialog title="Globale Position" on:close>
   <Paragraph>Die Position des/der Angreifer:in wird nun gezeigt</Paragraph>
-  TODO
+  <Paragraph>Noch nicht implementiert</Paragraph>
 </GameDialog>

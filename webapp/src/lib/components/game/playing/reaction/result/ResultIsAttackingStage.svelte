@@ -4,5 +4,5 @@
 </script>
 
 <GameDialog title="Angriff auf Stufe" on:close>
-  <Paragraph>TODO</Paragraph>
+  <Paragraph>Noch nicht implementiert</Paragraph>
 </GameDialog>

@@ -1,21 +1,34 @@
 <script lang="ts">
-  import { useSelector } from '$lib/@xstate/svelte'
-  import { getGameContext } from '$lib/client/game-context'
-  import { GameState } from '$lib/game/game-state'
+  import GameDialog from '$lib/components/ui/GameDialog.svelte'
+  import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
+  import isEqual from 'lodash/isEqual'
   import Action from './Action.svelte'
+  import { createActionHandler } from './utils'
 
-  const { machine } = getGameContext()
-
-  const canBeUsed = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return !!gameState
+  const { isEnabled, inProgress, applyAction, cancel } = createActionHandler('is-attacking-stage', {
+    createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
+    enabledCheck: (gameState) =>
+      !!BOARD_SUPPLY_CHAINS.flat().find((stage) =>
+        isEqual(stage.coordinate, gameState.activePlayerPosition),
+      ),
   })
-
-  const applyAction = (finalized = false) => {
-    console.log(finalized)
-  }
 </script>
 
-<Action title="Rollenfähigkeit" disabled={$canBeUsed} on:click={() => applyAction(false)}
-  >Aktiver Angriff?</Action
+<Action
+  title="Rollenfähigkeit"
+  disabled={!$isEnabled}
+  on:click={() => applyAction({ finalized: false })}
 >
+  Aktiver Angriff?
+</Action>
+
+{#if $inProgress}
+  <GameDialog title="Aktiver Angriff?" on:close={cancel}>
+    <Paragraph>
+      Möchtest du abfragen ob der/die Angreifer:in einen aktiven Angriff auf die Stufe auf der du
+      dich befindest hat?
+    </Paragraph>
+    <button on:click={() => applyAction({ finalized: true })}>Ja</button>
+  </GameDialog>
+{/if}

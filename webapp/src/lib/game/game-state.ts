@@ -207,7 +207,7 @@ export class GameState {
       this.finalizedEvents.filter(
         (event) =>
           (event.type === 'action' && event.action === 'exchange-joker') ||
-          (event.type === 'reaction' && event.action === 'joker'),
+          (event.type === 'reaction' && event.action === 'joker' && event.useJoker === true),
       ).length
     )
   }
@@ -231,6 +231,15 @@ export class GameState {
         inventory[event.itemId] += 1
       }
     })
+
+    this.finalizedActionEvents
+      .filter(guardForGameEventAction('exchange-digital-footprint'))
+      .forEach((event) => {
+        if (event.item) {
+          inventory[event.item]++
+          inventory['digital-footprint']--
+        }
+      })
 
     return inventory
   }

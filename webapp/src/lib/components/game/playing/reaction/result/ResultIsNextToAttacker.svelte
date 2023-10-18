@@ -4,5 +4,5 @@
 </script>
 
 <GameDialog title="Angreifer:in angrenzend?" on:close>
-  <Paragraph>TODO</Paragraph>
+  <Paragraph>Noch nicht implementiert</Paragraph>
 </GameDialog>

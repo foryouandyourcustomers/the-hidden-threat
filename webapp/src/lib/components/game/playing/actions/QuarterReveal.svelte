@@ -1,21 +1,27 @@
 <script lang="ts">
-  import { useSelector } from '$lib/@xstate/svelte'
-  import { getGameContext } from '$lib/client/game-context'
-  import { GameState } from '$lib/game/game-state'
+  import GameDialog from '$lib/components/ui/GameDialog.svelte'
+  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import Action from './Action.svelte'
+  import { createActionHandler } from './utils'
 
-  const { machine } = getGameContext()
-
-  const canBeUsed = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return !!gameState
+  const { inProgress, isEnabled, applyAction, cancel } = createActionHandler('quarter-reveal', {
+    createEvent: () => ({}),
   })
-
-  const applyAction = (finalized = false) => {
-    console.log(finalized)
-  }
 </script>
 
-<Action title="Rollenfähigkeit" disabled={$canBeUsed} on:click={() => applyAction(false)}
-  >Viertel aufdecken</Action
+<Action
+  title="Rollenfähigkeit"
+  disabled={!$isEnabled}
+  on:click={() => applyAction({ finalized: false })}
 >
+  Viertel aufdecken
+</Action>
+
+{#if $inProgress}
+  <GameDialog title="Viertel aufdecken" on:close={cancel}>
+    <Paragraph>
+      Möchtest du abfragen auf welchem Viertel des Spielfelds der/die Angreifer:in sich befindet?
+    </Paragraph>
+    <button on:click={() => applyAction({ finalized: true })}>Ja</button>
+  </GameDialog>
+{/if}

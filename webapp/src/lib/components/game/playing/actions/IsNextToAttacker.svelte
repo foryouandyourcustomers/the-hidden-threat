@@ -1,21 +1,30 @@
 <script lang="ts">
-  import { useSelector } from '$lib/@xstate/svelte'
-  import { getGameContext } from '$lib/client/game-context'
-  import { GameState } from '$lib/game/game-state'
+  import GameDialog from '$lib/components/ui/GameDialog.svelte'
+  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import Action from './Action.svelte'
+  import { createActionHandler } from './utils'
 
-  const { machine } = getGameContext()
-
-  const canBeUsed = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return !!gameState
-  })
-
-  const applyAction = (finalized = false) => {
-    console.log(finalized)
-  }
+  const { inProgress, isEnabled, applyAction, cancel } = createActionHandler(
+    'is-next-to-attacker',
+    {
+      createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
+    },
+  )
 </script>
 
-<Action title="Rollenfähigkeit" disabled={$canBeUsed} on:click={() => applyAction(false)}
-  >Angreifer:in angrenzend?</Action
+<Action
+  title="Rollenfähigkeit"
+  disabled={!$isEnabled}
+  on:click={() => applyAction({ finalized: false })}
 >
+  Angreifer:in angrenzend?
+</Action>
+
+{#if $inProgress}
+  <GameDialog title="Angreifer:in angrenzend?" on:close={cancel}>
+    <Paragraph>
+      Möchtest du abfragen ob der/die Angreifer:in sich auf einem der angrenzenden Felder befindet?
+    </Paragraph>
+    <button on:click={() => applyAction({ finalized: true })}>Ja</button>
+  </GameDialog>
+{/if}

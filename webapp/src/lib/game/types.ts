@@ -2,7 +2,7 @@ import type { ClientEvent } from '$lib/client/game-machine/types'
 import type { DistributiveOmit } from '$lib/utils'
 import type { AttackCharacterId, DefenseCharacterId } from './constants/characters'
 import type { FaceId } from './constants/faces'
-import type { AttackItemId, DefenseItemId, ItemId } from './constants/items'
+import type { AttackItemId, DefenseItemId } from './constants/items'
 
 export type Side = 'defense' | 'attack'
 
@@ -196,7 +196,7 @@ export type PlayerGameEvent =
       type: 'action'
       action: 'exchange-digital-footprint'
       /** Can be undefined if the event is not finalized. */
-      item?: ItemId
+      item?: DefenseItemId
     })
   | (BasePlayerGameEvent & {
       type: 'reaction'
@@ -236,7 +236,7 @@ export type FromClientGameEvent = DistributiveOmit<GameEvent, 'userId' | 'timest
 
 export type GameEventOf<Type extends GameEvent['type']> = Extract<GameEvent, { type: Type }>
 export type ActionEvent = GameEventOf<'action'>
-type GameEventAction = GameEventOf<'action'>['action']
+export type GameEventAction = GameEventOf<'action'>['action']
 type GameEventAdminAction = GameEventOf<'system'>['action']
 export type ActionEventOf<Action extends GameEventAction> = Extract<
   GameEvent,

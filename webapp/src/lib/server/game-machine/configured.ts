@@ -1,17 +1,23 @@
-import type { AttackCharacterId, DefenseCharacterId } from '$lib/game/constants/characters'
-import { isAttackItemId, isItemIdOfSide } from '$lib/game/constants/items'
+import { findStageAt } from '$lib/game/constants/board-stages'
+import {
+  isDefenseCharacter,
+  type AttackCharacterId,
+  type DefenseCharacterId,
+} from '$lib/game/constants/characters'
+import { isAttackItemId, isDefenseItemId, isItemIdOfSide } from '$lib/game/constants/items'
 import { GameState } from '$lib/game/game-state'
 import { sharedGuards } from '$lib/game/guards'
 import {
+  isAttackerId,
   isDefenderId,
   isPlayerGameEvent,
   type DefenderId,
   type GameEvent,
   type SharedGameContext,
-  isAttackerId,
 } from '$lib/game/types'
 import {
   findUserIndex,
+  getCharacter,
   getPlayerSide,
   userControlsPlayer,
   userControlsPlayerId,
@@ -23,7 +29,6 @@ import isEqual from 'lodash/isEqual'
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
-import { findStageAt } from '$lib/game/constants/board-stages'
 
 setAutoFreeze(false)
 
@@ -290,6 +295,8 @@ export const serverGameMachine = machine.provide({
       // Make sure the event type is the next expected event type
       if (gameState.nextEventType !== event.gameEvent.type) return false
 
+      const character = getCharacter(gameState.activePlayer.character)
+
       // Make event type specific checks
       switch (event.gameEvent.type) {
         case 'placement':
@@ -357,6 +364,44 @@ export const serverGameMachine = machine.provide({
               if (!question && event.gameEvent.finalized) return false
               if (question === 'has-collected-items' && !!findStageAt(event.gameEvent.position))
                 return false
+              break
+            }
+
+            // Special abilities
+            // =================
+
+            case 'exchange-digital-footprint': {
+              if (!isDefenseCharacter(character)) return false
+              if (character.ability !== 'exchange-digital-footprint') return false
+              const itemId = event.gameEvent.item
+              if (!itemId && event.gameEvent.finalized) return false
+              if (itemId && (!isDefenseItemId(itemId) || itemId === 'digital-footprint'))
+                return false
+              if (gameState.defenseInventory['digital-footprint'] <= 0) return false
+              break
+            }
+            case 'is-attacking-stage': {
+              if (!isDefenseCharacter(character)) return false
+              if (character.ability !== 'is-attacking-stage') return false
+              if (event.gameEvent.position) {
+                if (!findStageAt(event.gameEvent.position)) return false
+                if (!isEqual(event.gameEvent.position, gameState.activePlayerPosition)) return false
+              }
+              if (!event.gameEvent.position && event.gameEvent.finalized) return false
+              break
+            }
+            case 'is-next-to-attacker': {
+              if (!isDefenseCharacter(character)) return false
+              if (character.ability !== 'is-next-to-attacker') return false
+              if (!event.gameEvent.position && event.gameEvent.finalized) return false
+              if (event.gameEvent.position) {
+                if (!isEqual(event.gameEvent.position, gameState.activePlayerPosition)) return false
+              }
+              break
+            }
+            case 'quarter-reveal': {
+              if (!isDefenseCharacter(character)) return false
+              if (character.ability !== 'quarter-reveal') return false
               break
             }
           }

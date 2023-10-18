@@ -15,7 +15,7 @@ type AttackCharacter = {
   side: Side
 }
 
-type DefenseCharacter = AttackCharacter & {
+export type DefenseCharacter = AttackCharacter & {
   ability: AbilityId
 }
 

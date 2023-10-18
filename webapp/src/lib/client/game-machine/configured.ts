@@ -6,6 +6,11 @@ import { machine } from './machine'
 import type { Actions, ClientEvent, ClientEventOf } from './types'
 import { getCurrentUser } from './utils'
 import { userIsAdmin } from '$lib/game/utils'
+import type { useMachine } from '$lib/@xstate/svelte'
+
+export type ClientUsedMachine = ReturnType<
+  typeof useMachine<ReturnType<typeof getClientGameMachine>>
+>
 
 export const getClientGameMachine = ({
   send,
