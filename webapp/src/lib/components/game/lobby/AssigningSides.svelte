@@ -56,7 +56,7 @@
   <AssigningSidesColumn side="attack" />
 </div>
 
-<Actions>
+<Actions spacing="none">
   <Button
     primary
     disabled={!$canContinue}
@@ -72,8 +72,9 @@
     display: grid;
     grid-template-columns: 1.5fr 1fr 1.5fr;
     gap: 3rem;
-    margin-block: 3rem;
-    height: 24rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    height: 27.5rem;
   }
   .unassigned {
     display: flex;

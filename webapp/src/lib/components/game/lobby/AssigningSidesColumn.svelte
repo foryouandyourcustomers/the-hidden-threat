@@ -15,7 +15,9 @@
   )
 
   const users = useSelector(machine.service, (snapshot) =>
-    snapshot.context.users.filter((user) => user.side === side && user.isSideAssigned),
+    snapshot.context.users
+      .filter((user) => user.side === side && user.isSideAssigned)
+      .sort((a, b) => a.name.localeCompare(b.name)),
   )
 
   const assignSide = (userId: string, isAdmin: boolean) => {
@@ -45,10 +47,12 @@
     }
   }
 
+  // If you want to restrict the number of possible admins per side, you can set this to a lower number.
+  const maxAdmins = 999
+
   const onDragover = (e: DragEvent, tgt: 'players' | 'admins') => {
     if (e.dataTransfer) {
-      console.log('a', e, e.dataTransfer.getData('userId'), 'i', userId)
-      if (tgt === 'admins' && $users.filter((user) => user.isAdmin).length > 0) {
+      if (tgt === 'admins' && $users.filter((user) => user.isAdmin).length >= maxAdmins) {
         target = undefined
         e.dataTransfer.dropEffect = 'none'
       } else {
@@ -57,10 +61,16 @@
       }
     }
   }
+
+  $: usersColumnCount = Math.ceil(($users.length + (Math.ceil($users.length / 5) - 1)) / 5)
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div class="assigned {side}" class:can-assign={$canAssignSides}>
+<div
+  class="assigned {side}"
+  class:can-assign={$canAssignSides}
+  style:--column-count={usersColumnCount}
+>
   <Heading centered size="lg" spacing="none">
     {#if side === 'defense'}Verteidigung{:else}Angriff{/if}
   </Heading>
@@ -71,16 +81,18 @@
     on:dragover|preventDefault={(e) => onDragover(e, 'players')}
     on:dragleave|preventDefault={() => (target = undefined)}
   >
-    <Heading centered size="sm">Spieler:innen</Heading>
-    {#each $users.filter((user) => !user.isAdmin) as user (user.id)}
-      <div
-        class="user"
-        on:dragstart={(e) => onDragstart(e, user.id)}
-        draggable={$canAssignSides ? 'true' : 'false'}
-      >
-        {user.name}
-      </div>
-    {/each}
+    <Heading centered size="sm" spacing="none">Spieler:innen</Heading>
+    <div class="user-list">
+      {#each $users.filter((user) => !user.isAdmin) as user (user.id)}
+        <div
+          class="user"
+          on:dragstart={(e) => onDragstart(e, user.id)}
+          draggable={$canAssignSides ? 'true' : 'false'}
+        >
+          {user.name}
+        </div>
+      {/each}
+    </div>
   </div>
   <div
     class="users admins"
@@ -89,16 +101,18 @@
     on:dragover|preventDefault={(e) => onDragover(e, 'admins')}
     on:dragleave|preventDefault={() => (target = undefined)}
   >
-    <Heading centered size="sm">Spielleitung</Heading>
-    {#each $users.filter((user) => user.isAdmin) as user (user.id)}
-      <div
-        class="user"
-        on:dragstart={(e) => onDragstart(e, user.id)}
-        draggable={$canAssignSides ? 'true' : 'false'}
-      >
-        {user.name}
-      </div>
-    {/each}
+    <Heading centered size="sm" spacing="none">Spielleitung</Heading>
+    <div class="user-list">
+      {#each $users.filter((user) => user.isAdmin) as user (user.id)}
+        <div
+          class="user"
+          on:dragstart={(e) => onDragstart(e, user.id)}
+          draggable={$canAssignSides ? 'true' : 'false'}
+        >
+          {user.name}
+        </div>
+      {/each}
+    </div>
   </div>
 </div>
 
@@ -116,11 +130,18 @@
     background: var(--color-bg);
     padding: 0.5rem 0.8rem 0.8rem;
     text-align: center;
+
+    .user-list {
+      display: grid;
+      grid-template-columns: repeat(var(--column-count, 1), 1fr);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
     &.players {
       flex: 1;
     }
     &.admins {
-      min-height: 6.25rem;
+      min-height: 5.5rem;
     }
     &.target {
       outline: 2px solid var(--color-orange-dark);

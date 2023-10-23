@@ -1,8 +1,9 @@
 <script lang="ts">
   export let align: 'left' | 'right' = 'right'
+  export let spacing: 'default' | 'none' = 'default'
 </script>
 
-<div class="actions align-{align}">
+<div class="actions align-{align} spacing-{spacing}">
   <slot />
 </div>
 
@@ -11,7 +12,9 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-top: 2.5rem;
+    &.spacing-default {
+      margin-top: 2.5rem;
+    }
     &.align-left {
       justify-content: flex-start;
     }
