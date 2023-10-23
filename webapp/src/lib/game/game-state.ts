@@ -174,8 +174,9 @@ export class GameState {
 
   get isFinished() {
     return (
-      this.nextEventType !== 'reaction' &&
-      this.finalizedActionEvents.length >= this.playersInOrder.length * TOTAL_ROUNDS
+      (this.nextEventType !== 'reaction' &&
+        this.finalizedActionEvents.length >= this.playersInOrder.length * TOTAL_ROUNDS) ||
+      this.attackerIsCaught
     )
   }
 
@@ -546,9 +547,40 @@ export class GameState {
     return !!this.executableDefenseStages.find((stage) => stage.id === currentStage.id)
   }
 
+  get attackerIsCaught() {
+    const lastFinalizedActionEvent = this.finalizedActionEvents.at(-1)
+    if (
+      lastFinalizedActionEvent?.action !== 'ask-question' ||
+      lastFinalizedActionEvent.question !== 'is-on-field'
+    ) {
+      return false
+    }
+
+    // The defense asked whether the attacker is on the field
+
+    const lastFinalizedPlayerEvent = this.finalizedPlayerEvents.at(-1)
+    if (
+      lastFinalizedPlayerEvent?.type === 'reaction' &&
+      lastFinalizedPlayerEvent.action === 'joker' &&
+      lastFinalizedPlayerEvent.useJoker === false &&
+      lastFinalizedPlayerEvent.finalized
+    ) {
+      // There is a reaction, and no joker was used.
+
+      // The attacker was caught if the defender was on the same field.
+      return isEqual(lastFinalizedActionEvent.position, this.playerPositions.attacker)
+    }
+
+    return false
+  }
+
   get score() {
+    const section = Math.floor(this.currentRound / 3)
+
+    const attackerCaughtPoints = Math.max(1, 3 - section)
+
     const attack = this.attackedStages.length
-    const defense = this.defendedStages.length
+    const defense = this.defendedStages.length + (this.attackerIsCaught ? attackerCaughtPoints : 0)
     return {
       attack,
       defense,

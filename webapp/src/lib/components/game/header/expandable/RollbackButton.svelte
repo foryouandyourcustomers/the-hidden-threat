@@ -8,6 +8,7 @@
   const { machine } = getGameContext()
 
   const isAdmin = useSelector(machine.service, ({ context }) => getCurrentUser(context).isAdmin)
+  const isActive = useSelector(machine.service, (state) => state.matches('Playing.Gameloop'))
 
   const lastGameEvent = useSelector(machine.service, ({ context }) => {
     return context.events[context.events.length - 1]
@@ -16,7 +17,7 @@
 
 {#if $isAdmin}
   <ExpandableButton
-    disabled={!$lastGameEvent}
+    disabled={!$lastGameEvent || !$isActive}
     on:click={() =>
       $lastGameEvent
         ? machine.send({ type: 'rollback game event', gameEventType: $lastGameEvent.type })

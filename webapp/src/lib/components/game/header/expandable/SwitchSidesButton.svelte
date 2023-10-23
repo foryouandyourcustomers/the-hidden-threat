@@ -8,12 +8,16 @@
 
   const { machine } = getGameContext()
   const user = useSelector(machine.service, ({ context }) => getCurrentUser(context))
+  const isActive = useSelector(machine.service, (state) => state.matches('Playing.Gameloop'))
   $: isAdmin = $user.isAdmin
   $: side = $user.side
 </script>
 
 {#if isAdmin}
-  <ExpandableButton disabled={!isAdmin} on:click={() => machine.send({ type: 'switch sides' })}>
+  <ExpandableButton
+    disabled={!isAdmin || !$isActive}
+    on:click={() => machine.send({ type: 'switch sides' })}
+  >
     Zu {side === 'attack' ? 'Verteidigung' : 'Angriff'} wechseln
     {#if side === 'attack'}
       <IconRightLeft slot="icon" />
