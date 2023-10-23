@@ -18,6 +18,13 @@
     {/each}
   </div>
 {/if}
+{#if $highlightedFields.reveal}
+  <div class="highlighted-fields reveal">
+    {#each $highlightedFields.reveal as coordinates}
+      <div class="field" style:--column={coordinates[0] + 1} style:--row={coordinates[1] + 1} />
+    {/each}
+  </div>
+{/if}
 
 <style lang="postcss">
   @keyframes pulsate {
@@ -43,6 +50,9 @@
       --_color: #fcb337;
     }
     &.attacker {
+      --_color: var(--color-red-polygon);
+    }
+    &.reveal {
       --_color: var(--color-red-polygon);
     }
 

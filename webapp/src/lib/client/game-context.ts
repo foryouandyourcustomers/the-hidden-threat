@@ -12,6 +12,7 @@ export type GameContext = {
   highlightedFields: Writable<{
     info: Coordinate[] | undefined
     attacker: Coordinate[] | undefined
+    reveal: Coordinate[] | undefined
   }>
   hostUserId: string
   machine: ClientUsedMachine

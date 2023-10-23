@@ -23,12 +23,16 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div class="backdrop" on:click={close} />
   <div class="dialog">
-    <Heading size="sm">
+    <Heading size="sm" spacing="none">
       {#if title}{title}{/if}
 
       <button class="unstyled close-button" slot="info" on:click={close}><CloseIcon /></button>
     </Heading>
-    <slot />
+    {#if $$slots.default}
+      <div class="content">
+        <slot />
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -57,7 +61,7 @@
     border: none;
     border-radius: var(--radius-md);
     background-color: white;
-    padding: 0.75rem 1.5rem 1.5rem;
+    padding: 0.75rem 1.5rem;
     min-width: 30rem;
     color: black;
   }

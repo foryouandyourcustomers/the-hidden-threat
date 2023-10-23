@@ -5,6 +5,7 @@
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { GameState } from '$lib/game/game-state'
+  import { gameEventRequiresReaction } from '$lib/game/types'
   import ResultHasCollectedItems from './result/ResultHasCollectedItems.svelte'
   import ResultIsAttackingStage from './result/ResultIsAttackingStage.svelte'
   import ResultIsNextToAttacker from './result/ResultIsNextToAttacker.svelte'
@@ -24,12 +25,20 @@
 
   /** Whether the attacking side used a joker to avoid answering the question */
   const didUseJoker = useSelector(machine.service, ({ context }) => {
-    const lastFinalizedPlayerEvent = GameState.fromContext(context).finalizedPlayerEvents.at(-1)
-    if (
-      lastFinalizedPlayerEvent?.type === 'reaction' &&
-      lastFinalizedPlayerEvent.action === 'joker'
-    ) {
-      return lastFinalizedPlayerEvent.useJoker
+    const gameState = GameState.fromContext(context)
+    const lastDefenderAction = gameState.finalizedPlayerEvents
+      .filter((event) => event.playerId !== 'attacker')
+      .at(-1)
+    if (!lastDefenderAction || !gameEventRequiresReaction(lastDefenderAction)) return undefined
+
+    const reactionEvent = gameState.finalizedPlayerEvents.at(
+      gameState.finalizedPlayerEvents.indexOf(lastDefenderAction) + 1,
+    )
+
+    if (!reactionEvent) return undefined
+
+    if (reactionEvent?.type === 'reaction' && reactionEvent.action === 'joker') {
+      return reactionEvent.useJoker
     }
     return undefined
   })

@@ -590,9 +590,13 @@ export class GameState {
   /**
    * Returns the "active" question, meaning: if the last *finalized* action was
    * an action that requires a reaction.
+   *
+   * This ignores any attacker movement or actions after.
    */
   get activeQuestion() {
-    const lastEvent = this.finalizedActionEvents.at(-1)
+    const lastEvent = this.finalizedActionEvents
+      .filter((event) => event.playerId !== 'attacker')
+      .at(-1)
 
     if (lastEvent) {
       if (lastEvent.action === 'ask-question') return lastEvent.question
