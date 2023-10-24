@@ -4,17 +4,24 @@
   import type { Side } from '$lib/game/types'
 
   export let name: string
+  export let character: string
   export let faceId: FaceId | undefined = undefined
   export let isConnected: boolean | undefined = undefined
   export let isPlaying = false
   export let side: Side | 'admin'
+  export let showFace = true
 </script>
 
 <div class="player side-{side}" class:playing={isPlaying}>
-  <div class="face">
-    <Face faceId={faceId ?? 0} />
+  {#if showFace}
+    <div class="face">
+      <Face faceId={faceId ?? 0} />
+    </div>
+  {/if}
+  <div class="description">
+    <div class="character">{character}</div>
+    <div class="name">{name}</div>
   </div>
-  <div class="name">{name}</div>
   {#if isConnected !== undefined}
     <div class="online-status" class:connected={isConnected} />
   {/if}
@@ -22,18 +29,12 @@
 
 <style lang="postcss">
   .player {
-    --_radius: var(--radius-md);
+    --_radius: var(--radius-sm);
     display: flex;
     position: relative;
-    flex-direction: column;
     align-items: center;
-    gap: 0.12rem;
     border-radius: var(--_radius);
-    padding-top: 0.5rem;
-    width: 4.875rem;
-    max-width: 100%;
-    height: 4.875rem;
-    max-height: 100%;
+    height: 3.125rem;
     &.playing {
       &::after {
         position: absolute;
@@ -41,9 +42,6 @@
         border: 2px solid white;
         border-radius: var(--_radius);
         content: '';
-      }
-      .name {
-        font-weight: bold;
       }
     }
 
@@ -56,17 +54,29 @@
     &.side-admin {
       background: var(--color-blue-transp-12);
     }
-    .name {
-      display: flex;
-      flex-shrink: 0;
-      justify-content: center;
-      align-items: center;
-      height: 1.25rem;
-      font-size: 0.5rem;
+    .description {
+      padding-inline: 0.5rem;
+      min-width: 0;
+      .character,
+      .name {
+        text-wrap: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .character {
+        font-size: var(--scale-00);
+      }
+      .name {
+        font-size: var(--scale-000);
+      }
     }
     .face {
-      width: 2.625rem;
-      height: 2.625rem;
+      flex-shrink: 0;
+      background: #fff1;
+      padding: 0.375rem;
+      aspect-ratio: 1;
+      height: 100%;
     }
     .online-status {
       position: absolute;

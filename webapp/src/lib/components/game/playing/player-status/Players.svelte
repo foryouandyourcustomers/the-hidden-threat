@@ -1,11 +1,12 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import type { FaceId } from '$lib/game/constants/faces'
   import { GameState } from '$lib/game/game-state'
-  import type { Attacker, Defender, User } from '$lib/game/types'
-  import isEqual from 'lodash/isEqual'
-  import Player from '../Player.svelte'
+  import type { Attacker, Defender, Player, PlayerId, User } from '$lib/game/types'
   import { getCharacter } from '$lib/game/utils'
+  import isEqual from 'lodash/isEqual'
+  import PlayersList from './PlayersList.svelte'
 
   const { machine } = getGameContext()
 
@@ -42,108 +43,44 @@
     machine.service,
     ({ context }) => GameState.fromContext(context).activePlayer.id,
   )
+
+  const mapPlayer = (player: Player, activePlayerId: PlayerId) => {
+    const user = getUserForPlayer(player, $users)
+    const character = getCharacter(player.character)
+
+    return {
+      faceId: player.faceId,
+      name: user.name,
+      character: character.name,
+      isConnected: user.isConnected,
+      isPlaying: activePlayerId === player.id,
+    }
+  }
+
+  $: defensePlayerDescriptions = $defensePlayers.map((player) => mapPlayer(player, $activePlayerId))
+  $: attackPlayerDescriptions = $attackPlayers.map((player) => mapPlayer(player, $activePlayerId))
+  $: adminPlayerDescriptions = [...$defenseAdmins, ...$attackAdmins].map((admin) => ({
+    faceId: 0 as FaceId,
+    name: admin.name,
+    character: admin.side === 'attack' ? 'Angriff' : 'Verteidigung',
+    isConnected: admin.isConnected,
+    isPlaying: false,
+  }))
 </script>
 
 <div class="players-container">
-  <div class="defense">
-    <h3>Verteidiger:innen</h3>
-
-    <div class="players">
-      {#each $defensePlayers as player}
-        {@const user = getUserForPlayer(player, $users)}
-        {@const character = getCharacter(player.character)}
-
-        <div class="player">
-          <div class="player-role">{character.name}</div>
-          <Player
-            faceId={player.faceId}
-            name={user.name}
-            isConnected={user.isConnected}
-            isPlaying={$activePlayerId === player.id}
-            side="defense"
-          />
-        </div>
-      {/each}
-    </div>
-  </div>
-
-  <div class="attack">
-    <h3>Angreifer:innen</h3>
-
-    <div class="players">
-      {#each $attackPlayers as player}
-        {@const user = getUserForPlayer(player, $users)}
-        {@const character = getCharacter(player.character)}
-
-        <div class="player">
-          <div class="player-role">{character.name}</div>
-          <Player
-            faceId={player.faceId}
-            name={user.name}
-            isConnected={user.isConnected}
-            isPlaying={$activePlayerId === player.id}
-            side="attack"
-          />
-        </div>
-      {/each}
-    </div>
-  </div>
-
-  <div class="admin">
-    <h3>Spielleitung</h3>
-
-    <div class="players">
-      {#each [...$defenseAdmins, ...$attackAdmins] as admin}
-        <div class="player">
-          <div class="player-role">{admin.side === 'attack' ? 'Angriff' : 'Verteidigung'}</div>
-          <Player name={admin.name} side="admin" isConnected={admin.isConnected} />
-        </div>
-      {/each}
-    </div>
-  </div>
+  <PlayersList side="defense" players={defensePlayerDescriptions} />
+  <PlayersList side="attack" players={attackPlayerDescriptions} />
+  <PlayersList side="admin" players={adminPlayerDescriptions} />
 </div>
 
 <style lang="postcss">
   .players-container {
-    display: grid;
-    grid-template-areas:
-      'defense defense'
-      'attack admin';
-    flex: 1;
-    align-content: start;
-    gap: 1rem;
-    margin-inline: 1rem;
-    .attack {
-      grid-area: attack;
-    }
-    .defense {
-      grid-area: defense;
-    }
-    .admin {
-      grid-area: admin;
-    }
-  }
-  h3 {
-    margin-block: 0 0.25rem;
-    font: var(--text-small);
-  }
-
-  .players {
     display: flex;
-    column-gap: 1rem;
-    flex-wrap: wrap;
-    .player {
-      width: 4.875rem;
-    }
-    .player-role {
-      text-wrap: nowrap;
-      margin-bottom: 0.25rem;
-      width: 100%;
-      height: 1.5em;
-      overflow: hidden;
-      font-size: 0.625rem;
-      text-align: center;
-      text-overflow: ellipsis;
-    }
+    flex: 1;
+    flex-direction: column;
+    align-content: flex-start;
+    gap: 1rem;
+    margin-left: 1rem;
   }
 </style>

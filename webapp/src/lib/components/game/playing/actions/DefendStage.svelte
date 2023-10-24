@@ -50,6 +50,9 @@
 {#if $startedDefending}
   <GameDialog title="Stufe verteidigen" on:close={cancel}>
     <Paragraph>Möchtest du folgende Gegenstände einsetzen um die Stufe zu verteidigen?</Paragraph>
+
+    TODO<br /><br />
+
     <button on:click={() => applyAction(true)}>Ja</button>
   </GameDialog>
 {/if}
