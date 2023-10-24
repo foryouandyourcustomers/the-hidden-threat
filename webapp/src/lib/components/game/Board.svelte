@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { useSelector } from '$lib/@xstate/svelte'
+  import { getGameContext } from '$lib/client/game-context'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { onMount } from 'svelte'
   import Header from './header/Header.svelte'
 
@@ -6,6 +9,14 @@
 
   export let showBackdrop = false
   export let paddedContent = false
+
+  const { machine } = getGameContext()
+
+  const adminSide = useSelector(machine.service, ({ context }) => {
+    const user = getCurrentUser(context)
+    if (!user.isAdmin) return undefined
+    else return user.side
+  })
 
   let gameContainer: HTMLDivElement
   let boardWidth = 1
@@ -38,7 +49,7 @@
 <div class="board-wrapper" style:--board-scale={scale}>
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
-    class="board"
+    class="board {$adminSide ? `side-${$adminSide}` : ''}"
     class:backdrop={showBackdrop}
     on:mousemove={onMouseMove}
     bind:this={gameContainer}
@@ -72,6 +83,13 @@
     width: var(--size-game-width);
     height: var(--size-game-height);
     overflow: hidden;
+
+    &.side-defense {
+      outline: 10px solid var(--color-blue-medium);
+    }
+    &.side-attack {
+      outline: 10px solid var(--color-red-medium);
+    }
 
     &.backdrop {
       background-image: url('/images/board-backdrop.svg');
