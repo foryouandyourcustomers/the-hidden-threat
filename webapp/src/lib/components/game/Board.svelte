@@ -4,19 +4,24 @@
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { onMount } from 'svelte'
   import Header from './header/Header.svelte'
+  import { readable } from 'svelte/store'
 
   export let reportMousePosition: ((position: [number, number]) => void) | undefined = undefined
 
   export let showBackdrop = false
   export let paddedContent = false
 
-  const { machine } = getGameContext()
+  // Because this component is used in the onboarding process, we need to make
+  // sure that the game context is available.
+  const gameContext = getGameContext()
 
-  const adminSide = useSelector(machine.service, ({ context }) => {
-    const user = getCurrentUser(context)
-    if (!user.isAdmin) return undefined
-    else return user.side
-  })
+  const adminSide = gameContext
+    ? useSelector(gameContext.machine.service, ({ context }) => {
+        const user = getCurrentUser(context)
+        if (!user.isAdmin) return undefined
+        else return user.side
+      })
+    : readable(undefined)
 
   let gameContainer: HTMLDivElement
   let boardWidth = 1
