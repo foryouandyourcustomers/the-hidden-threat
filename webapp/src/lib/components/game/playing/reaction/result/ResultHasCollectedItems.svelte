@@ -9,6 +9,8 @@
   import isEqual from 'lodash/isEqual'
   import Item from '$lib/components/icons/Item.svelte'
 
+  let visible = true
+
   const { machine } = getGameContext()
 
   const collectedItems = useSelector(machine.service, ({ context }) => {
@@ -33,8 +35,8 @@
   })
 </script>
 
-{#if $collectedItems}
-  <GameDialog title="Gesammelte Gegenstände" on:close>
+{#if $collectedItems && visible}
+  <GameDialog title="Gesammelte Gegenstände" on:close={() => (visible = false)}>
     {#if $collectedItems.length > 0}
       <Paragraph>Der/die Angreifer:in hat folgende Gegenstände gesammelt:</Paragraph>
       {#each $collectedItems as item}

@@ -5,6 +5,8 @@
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { GameState } from '$lib/game/game-state'
 
+  let visible = true
+
   const { machine } = getGameContext()
   const isNextToAttacker = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
@@ -20,8 +22,10 @@
   })
 </script>
 
-<GameDialog title="Angreifer:in angrenzend?" on:close>
-  <Paragraph>
-    Angreifer:in {$isNextToAttacker ? '' : 'nicht'} ist auf diesem oder einem angrenzenden Feld.
-  </Paragraph>
-</GameDialog>
+{#if visible}
+  <GameDialog title="Angreifer:in angrenzend?" on:close={() => (visible = false)}>
+    <Paragraph>
+      Angreifer:in {$isNextToAttacker ? '' : 'nicht'} ist auf diesem oder einem angrenzenden Feld.
+    </Paragraph>
+  </GameDialog>
+{/if}

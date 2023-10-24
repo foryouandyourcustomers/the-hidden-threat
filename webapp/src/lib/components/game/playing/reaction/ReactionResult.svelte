@@ -2,10 +2,9 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
-  import GameDialog from '$lib/components/ui/GameDialog.svelte'
-  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { GameState } from '$lib/game/game-state'
   import { gameEventRequiresReaction } from '$lib/game/types'
+  import ResultDidUseJoker from './result/ResultDidUseJoker.svelte'
   import ResultHasCollectedItems from './result/ResultHasCollectedItems.svelte'
   import ResultIsAttackingStage from './result/ResultIsAttackingStage.svelte'
   import ResultIsNextToAttacker from './result/ResultIsNextToAttacker.svelte'
@@ -13,15 +12,6 @@
   import ResultQuarterReveal from './result/ResultQuarterReveal.svelte'
 
   const { machine } = getGameContext()
-
-  /**
-   * Every time we reach a condition where the result should be shown, this
-   * will be set to true. The user can then dismiss this Dialog, but it will
-   * only be dismissed "in memory" so a reload will show it again.
-   *
-   * The dismissal of the Dialog is also not synced between clients.
-   */
-  let visible = true
 
   /** Whether the attacking side used a joker to avoid answering the question */
   const didUseJoker = useSelector(machine.service, ({ context }) => {
@@ -54,32 +44,21 @@
     ({ context }) => GameState.fromContext(context).activeQuestion,
   )
 
-  $: {
-    visible = true
-    $didUseJoker
-  }
-
   const side = useSelector(machine.service, ({ context }) => getCurrentUser(context).side)
-
-  const onClose = () => (visible = false)
 </script>
 
-{#if $question && $side === 'defense' && $didUseJoker !== undefined && visible}
+{#if $question && $side === 'defense' && $didUseJoker !== undefined}
   {#if $didUseJoker}
-    <GameDialog title="Joker eingesetzt" on:close={onClose}>
-      <Paragraph>
-        Der/Die Angreifer:in hat einen Joker eingesetzt um der Frage auszuweichen.
-      </Paragraph>
-    </GameDialog>
+    <ResultDidUseJoker />
   {:else if $question === 'is-on-field'}
-    <ResultIsOnField on:close={onClose} />
+    <ResultIsOnField />
   {:else if $question === 'has-collected-items'}
-    <ResultHasCollectedItems on:close={onClose} />
+    <ResultHasCollectedItems />
   {:else if $question === 'quarter-reveal'}
-    <ResultQuarterReveal on:close={onClose} />
+    <ResultQuarterReveal />
   {:else if $question === 'is-attacking-stage'}
-    <ResultIsAttackingStage on:close={onClose} />
+    <ResultIsAttackingStage />
   {:else if $question === 'is-next-to-attacker'}
-    <ResultIsNextToAttacker on:close={onClose} />
+    <ResultIsNextToAttacker />
   {/if}
 {/if}

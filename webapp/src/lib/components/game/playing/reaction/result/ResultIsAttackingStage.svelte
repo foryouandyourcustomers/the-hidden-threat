@@ -7,6 +7,8 @@
   import { GameState } from '$lib/game/game-state'
   import isEqual from 'lodash/isEqual'
 
+  let visible = true
+
   const { machine } = getGameContext()
   const isAttackingStage = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
@@ -24,10 +26,12 @@
   })
 </script>
 
-<GameDialog title="Angriff auf Stufe" on:close>
-  {#if $isAttackingStage}
-    <Paragraph>Der/die Angreifer:in hat einen gezielten Angriff auf diese Stufe.</Paragraph>
-  {:else}
-    <Paragraph>Der/die Angreifer:in hat keinen gezielten Angriff auf diese Stufe.</Paragraph>
-  {/if}
-</GameDialog>
+{#if visible}
+  <GameDialog title="Angriff auf Stufe" on:close={() => (visible = false)}>
+    {#if $isAttackingStage}
+      <Paragraph>Der/die Angreifer:in hat einen gezielten Angriff auf diese Stufe.</Paragraph>
+    {:else}
+      <Paragraph>Der/die Angreifer:in hat keinen gezielten Angriff auf diese Stufe.</Paragraph>
+    {/if}
+  </GameDialog>
+{/if}

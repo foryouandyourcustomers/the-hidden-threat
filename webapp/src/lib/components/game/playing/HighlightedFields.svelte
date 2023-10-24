@@ -30,10 +30,11 @@
   @keyframes pulsate {
     0%,
     100% {
-      scale: 1.4;
+      opacity: 0.2;
     }
-    50% {
-      scale: 1.5;
+    40%,
+    60% {
+      opacity: 0.7;
     }
   }
   .highlighted-fields {
@@ -60,10 +61,15 @@
       grid-row: var(--row);
       grid-column: var(--column);
       transform-origin: center;
-      animation: pulsate 1s infinite;
-      border: var(--px) solid var(--_color);
-      border-radius: var(--radius-xl);
+      animation: pulsate 1.8s infinite;
+      /* background: var(--_color); */
+      /* border: var(--px) solid var(--_color); */
+      /* border-radius: var(--radius-xl); */
       background: radial-gradient(transparent 50%, var(--_color) 100%);
+      background: radial-gradient(
+        color-mix(in oklab, var(--_color), transparent 40%) 50%,
+        var(--_color) 100%
+      );
     }
   }
 </style>

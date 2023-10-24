@@ -2,10 +2,13 @@
   import { useSelector } from '$lib/@xstate/svelte/useSelector'
   import { getGameContext } from '$lib/client/game-context'
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
+  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { GameState } from '$lib/game/game-state'
   import { guardForGameEventType, type Coordinate } from '$lib/game/types'
   import isEqual from 'lodash/isEqual'
   import { onDestroy } from 'svelte'
+
+  let visible = true
 
   const sections: Coordinate[][] = [
     [
@@ -73,4 +76,10 @@
   })
 </script>
 
-<GameDialog title="Die Felder werden nun angezeigt" on:close />
+{#if visible}
+  <GameDialog title="Angreifer:innen Position" on:close={() => (visible = false)}>
+    <Paragraph>
+      Das Viertel des Spielbretts auf dem sich der/die Angreifer:in befindet werden nun angezeigt.
+    </Paragraph>
+  </GameDialog>
+{/if}
