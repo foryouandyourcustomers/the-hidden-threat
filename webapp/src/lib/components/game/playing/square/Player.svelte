@@ -30,10 +30,8 @@
     gap: 0.12rem;
     border-radius: var(--_radius);
     padding-top: 0.5rem;
-    width: 4.875rem;
-    max-width: 100%;
-    height: 4.875rem;
-    max-height: 100%;
+    width: 3.375rem;
+    height: 3.375rem;
     &.playing {
       &::after {
         position: absolute;
@@ -65,8 +63,8 @@
       font-size: 0.5rem;
     }
     .face {
-      width: 2.625rem;
-      height: 2.625rem;
+      width: 1.5rem;
+      height: 1.5rem;
     }
     .online-status {
       position: absolute;

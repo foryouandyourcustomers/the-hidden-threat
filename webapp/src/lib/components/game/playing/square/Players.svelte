@@ -6,7 +6,7 @@
   import { getPlayer, getPlayerSide, getUser } from '$lib/game/utils'
   import { objectEntries } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
-  import Player from '../Player.svelte'
+  import Player from './Player.svelte'
   import { receive, send } from '../transition'
 
   export let coordinate: [number, number]
@@ -40,11 +40,14 @@
     },
     isEqual,
   )
+
+  $: multiple = $players.length > 1
 </script>
 
-{#each $players as player (`board-player-${player.id}`)}
+{#each $players as player (`board-player-${multiple ? 'multiple-' : ''}${player.id}`)}
   <div
     class="player {player.side}"
+    class:multiple
     in:receive={{ key: `board-player-${player.id}` }}
     out:send={{ key: `board-player-${player.id}` }}
   >
@@ -63,6 +66,12 @@
     top: 50%;
     left: 50%;
     translate: -50% -50%;
+    &.multiple.defense {
+      translate: -70% -70%;
+    }
+    &.multiple.attack {
+      translate: -30% -30%;
+    }
     &.defense {
       z-index: var(--layer-1);
     }
