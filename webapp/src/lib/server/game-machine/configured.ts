@@ -305,6 +305,10 @@ export const serverGameMachine = machine.provide({
         case 'move':
           if (!gameState.isValidMove(event.gameEvent.to)) return false
           break
+        case 'reaction':
+          if (event.gameEvent.finalized && event.gameEvent.useJoker === undefined) return false
+          // TODO: check that there was an action that needs a reaction
+          break
         case 'action':
           switch (event.gameEvent.action) {
             case 'collect':
