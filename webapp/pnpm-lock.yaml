@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 devDependencies:
   '@iconify-json/lucide':
     specifier: ^1.1.114
@@ -29,6 +25,9 @@ devDependencies:
   '@sveltejs/kit':
     specifier: ^1.22.1
     version: 1.22.1(svelte@4.0.5)(vite@4.4.3)
+  '@types/date-fns':
+    specifier: ^2.6.0
+    version: 2.6.0
   '@types/howler':
     specifier: ^2.2.7
     version: 2.2.7
@@ -56,6 +55,9 @@ devDependencies:
   cssnano:
     specifier: ^6.0.1
     version: 6.0.1(postcss@8.4.25)
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
@@ -330,6 +332,13 @@ packages:
     hasBin: true
     dependencies:
       '@babel/types': 7.22.5
+    dev: true
+
+  /@babel/runtime@7.23.2:
+    resolution: {integrity: sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.0
     dev: true
 
   /@babel/template@7.22.5:
@@ -1271,6 +1280,13 @@ packages:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
     dev: true
 
+  /@types/date-fns@2.6.0:
+    resolution: {integrity: sha512-9DSw2ZRzV0Tmpa6PHHJbMcZn79HHus+BBBohcOaDzkK/G3zMjDUDYjJIWBFLbkh+1+/IOS0A59BpQfdr37hASg==}
+    deprecated: This is a stub types definition for date-fns (https://github.com/date-fns/date-fns). date-fns provides its own type definitions, so you don't need @types/date-fns installed!
+    dependencies:
+      date-fns: 2.30.0
+    dev: true
+
   /@types/estree@1.0.1:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
@@ -2051,6 +2067,13 @@ packages:
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
     dependencies:
       css-tree: 2.2.1
+    dev: true
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.23.2
     dev: true
 
   /date-time@3.1.0:
@@ -3965,6 +3988,10 @@ packages:
       tslib: 2.6.0
     dev: true
 
+  /regenerator-runtime@0.14.0:
+    resolution: {integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==}
+    dev: true
+
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
@@ -4755,3 +4782,7 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
