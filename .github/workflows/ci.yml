@@ -27,6 +27,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Create and populate .env file
+        run: |
+          cat <<EOF > .env
+
+          MAILERSEND_API_KEY="${{ secrets.MAILERSEND_API_KEY }}"
+          SUMMARY_MAIL_FROM="${{ vars.SUMMARY_MAIL_FROM }}"
+          SUMMARY_MAIL_TO="${{ vars.SUMMARY_MAIL_TO }}"
+
       - name: Build the project
         run: pnpm run build
 

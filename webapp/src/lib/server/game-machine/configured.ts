@@ -29,14 +29,12 @@ import isEqual from 'lodash/isEqual'
 import { assign, fromPromise } from 'xstate'
 import { machine } from './machine'
 import type { ServerEventOf } from './types'
+import { sendSummaryEmail } from '$lib/server/mail/mail'
 
 setAutoFreeze(false)
 
 export const serverGameMachine = machine.provide({
   actions: {
-    sendSummary: () => {
-      // todo
-    },
     setAssigningSidesFinished: assign(() => ({ finishedAssigningSides: true })),
     setAdminsForPlayers: assign(({ context }) => {
       const attackAdmin = context.users.find((user) => user.isAdmin && user.side === 'attack')
@@ -417,11 +415,8 @@ export const serverGameMachine = machine.provide({
     ...sharedGuards,
   },
   actors: {
-    loadParticipants: fromPromise(async () => {
-      // This is just a placeholder for any actual actors we might need in the
-      // future.
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      return ['a', 'b']
+    sendSummary: fromPromise(async (context: { input: { sharedContext: SharedGameContext } }) => {
+      await sendSummaryEmail(JSON.stringify(context.input.sharedContext))
     }),
   },
 })

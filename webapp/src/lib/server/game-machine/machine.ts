@@ -1,7 +1,11 @@
 import { GLOBAL_ATTACK_SCENARIOS } from '$lib/game/constants/global-attacks'
 import { TARGETED_ATTACKS } from '$lib/game/constants/targeted-attacks'
 import type { User } from '$lib/game/types'
-import { createDefaultAttacker, createDefaultDefender } from '$lib/server/game/utils'
+import {
+  createDefaultAttacker,
+  createDefaultDefender,
+  getSharedGameContext,
+} from '$lib/server/game/utils'
 import shuffle from 'lodash/shuffle'
 import { createMachine } from 'xstate'
 import type { Context, ServerEvent } from './types'
@@ -56,7 +60,7 @@ export const machine = createMachine({
               always: {
                 target: 'Ready',
                 guard: 'allSidesAssigned',
-                reenter: false,
+                reenter: true,
               },
             },
             Ready: {
@@ -72,7 +76,7 @@ export const machine = createMachine({
                       type: 'setAdminsForPlayers',
                     },
                   ],
-                  reenter: false,
+                  reenter: true,
                 },
               },
             },
@@ -101,10 +105,11 @@ export const machine = createMachine({
           always: {
             target: 'Finished',
             guard: 'gameFinished',
-            reenter: false,
+            reenter: true,
           },
           on: {
             'user: apply game event': {
+              target: 'Playing',
               guard: 'isValidGameEvent',
               actions: {
                 type: 'addOrUpdateGameEvent',
@@ -112,6 +117,7 @@ export const machine = createMachine({
               reenter: true,
             },
             'user: rollback game event': {
+              target: 'Playing',
               guard: 'isAdmin',
               actions: {
                 type: 'rollbackGameEvent',
@@ -127,6 +133,7 @@ export const machine = createMachine({
               reenter: false,
             },
             'user: switch sides': {
+              target: 'Playing',
               guard: 'isAdmin',
               actions: {
                 type: 'switchSides',
@@ -143,14 +150,14 @@ export const machine = createMachine({
               always: {
                 target: 'Ready',
                 guard: 'allRolesAssigned',
-                reenter: false,
+                reenter: true,
               },
             },
             Ready: {
               always: {
                 target: '#gameServer.Game.Playing',
                 guard: 'finishedAssigningRoles',
-                reenter: false,
+                reenter: true,
               },
             },
           },
@@ -182,6 +189,7 @@ export const machine = createMachine({
               reenter: false,
             },
             'user: next step': {
+              target: 'Assigning roles',
               guard: 'isAdmin',
               actions: {
                 type: 'setAssigningRolesFinished',
@@ -191,8 +199,29 @@ export const machine = createMachine({
           },
         },
         Finished: {
-          entry: {
-            type: 'sendSummary',
+          initial: 'Sending summary',
+          states: {
+            'Sending summary': {
+              invoke: {
+                src: 'sendSummary',
+                id: 'invoke-vcyw6',
+                input: ({ context }: { context: Context }) => {
+                  return { sharedContext: getSharedGameContext(context) }
+                },
+                onDone: [
+                  {
+                    target: 'Success',
+                  },
+                ],
+                onError: [
+                  {
+                    target: 'Error',
+                  },
+                ],
+              },
+            },
+            Success: {},
+            Error: {},
           },
         },
       },
@@ -202,24 +231,28 @@ export const machine = createMachine({
         '✨ This state only serves to group events that can happen at any time during the whole game lifecycle.',
       on: {
         'user: send emoji': {
+          target: 'Ubiquitous',
           actions: {
             type: 'sendEmojiToOtherUsers',
           },
           reenter: true,
         },
         'user disconnected': {
+          target: 'Ubiquitous',
           actions: {
             type: 'updateUserConnectionState',
           },
           reenter: true,
         },
         'user reconnected': {
+          target: 'Ubiquitous',
           actions: {
             type: 'updateUserConnectionState',
           },
           reenter: true,
         },
         'user connected': {
+          target: 'Ubiquitous',
           actions: {
             type: 'updateUserConnectionState',
           },
