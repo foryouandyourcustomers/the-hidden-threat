@@ -1,11 +1,8 @@
 import { GLOBAL_ATTACK_SCENARIOS } from '$lib/game/constants/global-attacks'
 import { TARGETED_ATTACKS } from '$lib/game/constants/targeted-attacks'
 import type { User } from '$lib/game/types'
-import {
-  createDefaultAttacker,
-  createDefaultDefender,
-  getSharedGameContext,
-} from '$lib/server/game/utils'
+import { getSharedGameContext } from '$lib/game/utils'
+import { createDefaultAttacker, createDefaultDefender } from '$lib/server/game/utils'
 import shuffle from 'lodash/shuffle'
 import { createMachine } from 'xstate'
 import type { Context, ServerEvent } from './types'

@@ -1,14 +1,14 @@
 import type { SharedGameContext, User } from '$lib/game/types'
+import { getSharedGameContext } from '$lib/game/utils'
 import { serverGameMachine } from '$lib/server/game-machine/configured'
 import type { ServerEvent } from '$lib/server/game-machine/types'
+import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
+import cloneDeep from 'lodash/cloneDeep'
+import isEqual from 'lodash/isEqual'
 import shortUuid from 'short-uuid'
 import { interpret } from 'xstate'
 import { addGame, getGame } from './global'
 import type { Game } from './types'
-import { getSharedGameContext } from './utils'
-import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
-import isEqual from 'lodash/isEqual'
-import cloneDeep from 'lodash/cloneDeep'
 
 /**
  * Returns the uuid of the game

@@ -416,7 +416,7 @@ export const serverGameMachine = machine.provide({
   },
   actors: {
     sendSummary: fromPromise(async (context: { input: { sharedContext: SharedGameContext } }) => {
-      await sendSummaryEmail(JSON.stringify(context.input.sharedContext))
+      await sendSummaryEmail(context.input.sharedContext)
     }),
   },
 })

@@ -1,6 +1,6 @@
 import type { Context } from '$lib/client/game-machine/types'
+import { getSharedGameContext } from '$lib/game/utils'
 import { getGame } from '$lib/server/game/global'
-import { getSharedGameContext } from '$lib/server/game/utils.js'
 import { error, redirect } from '@sveltejs/kit'
 
 export const load = async ({ params, parent, locals }) => {

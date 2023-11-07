@@ -1,19 +1,5 @@
 import { dev } from '$app/environment'
-import type { Attacker, Defender, DefenderId, SharedGameContext } from '$lib/game/types'
-import type { Context } from '$lib/server/game-machine/types'
-
-export const getSharedGameContext = (context: Context): SharedGameContext => ({
-  timestamp: context.timestamp,
-  gameId: context.gameId,
-  hostUserId: context.hostUserId,
-  finishedAssigningSides: context.finishedAssigningSides,
-  globalAttackScenario: context.globalAttackScenario,
-  targetedAttacks: context.targetedAttacks,
-  users: context.users,
-  events: context.events,
-  defense: context.defense,
-  attack: context.attack,
-})
+import type { Attacker, Defender, DefenderId } from '$lib/game/types'
 
 /**
  * @param hostUserId Will only be used as default until configured.
