@@ -1,6 +1,6 @@
 import type { Context as ClientContext } from '$lib/client/game-machine/types'
 import type { Context as ServerContext } from '$lib/server/game-machine/types'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { BOARD_ITEMS } from '../constants/board-items'
 import { BOARD_SUPPLY_CHAINS } from '../constants/board-stages'
 import { GLOBAL_ATTACK_SCENARIOS, type GlobalAttack } from '../constants/global-attacks'
