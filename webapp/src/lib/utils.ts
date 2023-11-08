@@ -39,3 +39,7 @@ export const seededRandomGenerator =
     t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
+
+/** Converts an environment variable to a boolean. */
+export const envBool = (env: string) =>
+  typeof env === 'string' && (env === '1' || env.toLowerCase() === 'true')

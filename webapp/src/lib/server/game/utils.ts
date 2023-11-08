@@ -1,5 +1,6 @@
-import { dev } from '$app/environment'
+import { DEV_AUTO_CONFIGURE_PLAYERS } from '$env/static/private'
 import type { Attacker, Defender, DefenderId } from '$lib/game/types'
+import { envBool } from '$lib/utils'
 
 /**
  * @param hostUserId Will only be used as default until configured.
@@ -10,7 +11,7 @@ export const createDefaultDefender = (hostUserId: string, id: DefenderId): Defen
   userId: hostUserId,
   faceId: 0,
   character: 'order-manager',
-  isConfigured: dev ? true : false,
+  isConfigured: envBool(DEV_AUTO_CONFIGURE_PLAYERS),
 })
 
 /**
@@ -22,5 +23,5 @@ export const createDefaultAttacker = (hostUserId: string): Attacker => ({
   userId: hostUserId,
   faceId: 0,
   character: 'frustrated',
-  isConfigured: dev ? true : false,
+  isConfigured: envBool(DEV_AUTO_CONFIGURE_PLAYERS),
 })
