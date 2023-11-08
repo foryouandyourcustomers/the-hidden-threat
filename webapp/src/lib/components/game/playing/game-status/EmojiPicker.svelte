@@ -4,7 +4,7 @@
 
   const context = getGameContext()
 
-  const validEmojis = ['👋', '👍', '👏', '😃', '🧠', '🤔']
+  const validEmojis = ['👋', '👍', '👏', '😃', '🧠', '🤔', '🥳', '❤️']
 
   const sendEmoji = (emoji: string) => {
     context.machine.send({ type: 'send emoji', emoji })
@@ -14,7 +14,7 @@
   let open = false
 </script>
 
-<div class="picker">
+<div class="picker" class:open>
   <button class="unstyled toggle" on:click={() => (open = !open)}><ChatIcon /></button>
 
   {#if open}
@@ -32,6 +32,9 @@
     isolation: isolate;
     aspect-ratio: 1;
     width: 2.5rem;
+    &.open {
+      z-index: var(--layer-top);
+    }
   }
   .toggle {
     display: grid;
