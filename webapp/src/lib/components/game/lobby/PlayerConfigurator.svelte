@@ -104,7 +104,10 @@
         <Button
           primary
           disabled={!$canUpdate}
-          on:click={() => machine.send({ type: 'stop editing player', side })}
+          on:click={() => {
+            sendUpdate()
+            machine.send({ type: 'stop editing player', side })
+          }}
         >
           Bestätigen und weiter
         </Button>

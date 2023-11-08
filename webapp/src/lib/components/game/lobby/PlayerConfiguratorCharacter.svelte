@@ -34,7 +34,6 @@
 <div class="roles">
   <div class="tabs">
     {#each characters as character}
-      <!-- <button class="unstyled tab"> -->
       <button
         class="unstyled tab"
         on:click={() => updateCharacter(character.id)}
