@@ -48,9 +48,9 @@ export const getClientGameMachine = ({
         if (!side) return false
 
         if (side === 'attack') {
-          return !!context.attack.attacker
+          return context.attack.attacker.isConfigured
         } else {
-          return context.defense.defenders.length === 4
+          return context.defense.defenders.filter((defender) => defender.isConfigured).length === 4
         }
       },
       finishedAssigningRolesOfSide: ({ context }) => {
