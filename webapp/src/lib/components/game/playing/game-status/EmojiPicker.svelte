@@ -72,5 +72,8 @@
     aspect-ratio: 1;
     width: 2.5rem;
     font-size: var(--scale-3);
+    &:hover {
+      scale: 1.2;
+    }
   }
 </style>
