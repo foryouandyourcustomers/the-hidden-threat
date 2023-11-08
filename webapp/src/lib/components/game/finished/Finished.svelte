@@ -2,7 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
-  import Score from '$lib/components/game/playing/game-status/Score.svelte'
+  import Score from '$lib/components/game/Score.svelte'
   import { getGameSummary, getGameSummaryFilename, getSharedGameContext } from '$lib/game/utils'
 
   const { machine } = getGameContext()

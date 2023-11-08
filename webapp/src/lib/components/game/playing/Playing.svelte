@@ -33,7 +33,7 @@
   .playing {
     display: grid;
     position: relative;
-    grid-template-columns: 27.75rem auto 1fr;
+    grid-template-columns: 30rem auto 1fr;
     gap: 1rem;
   }
 

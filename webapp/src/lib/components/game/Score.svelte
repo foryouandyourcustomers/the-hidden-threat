@@ -41,17 +41,18 @@
 <style lang="postcss">
   .score-board {
     display: grid;
-    grid-template-areas:
-      'title title title'
-      'attack separator defense';
-    margin-right: 1rem;
-    margin-bottom: 1.25rem;
-    border-radius: var(--radius-sm);
-    background-color: var(--color-blue-transp-760);
-    padding: 0.25rem;
+    grid-template-areas: 'title attack separator defense';
+    align-items: center;
+    align-self: start;
+    border-radius: var(--radius-md);
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    background-color: var(--color-blue-spielbrett);
+    padding: 0.25rem 1rem;
 
     h2 {
       grid-area: title;
+      margin-right: 1.5rem;
       font-weight: 400;
       font-size: 0.875rem;
       text-align: center;
@@ -78,22 +79,25 @@
 
     &.defense {
       flex-direction: row-reverse;
+      .label {
+        flex-direction: row-reverse;
+      }
     }
 
     .label {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
       gap: 0.25rem;
     }
 
     h3 {
       font-weight: 400;
-      font-size: 0.5rem;
+      font-size: var(--scale-0000);
     }
     .icon {
-      width: 0.75rem;
-      height: 0.75rem;
+      width: 1.5rem;
+      height: 1.5rem;
     }
 
     .number {
