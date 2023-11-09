@@ -1,9 +1,10 @@
 <script>
   import Actions from '$lib/components/game/playing/actions/Actions.svelte'
   import ReactionResult from '$lib/components/game/playing/reaction/ReactionResult.svelte'
-  import GlobalActions from './global-actions/GlobalActions.svelte'
   import Grid from './Grid.svelte'
+  import ToastMessages from './ToastMessages.svelte'
   import Status from './game-status/Status.svelte'
+  import GlobalActions from './global-actions/GlobalActions.svelte'
   import InfoPanel from './player-status/InfoPanel.svelte'
   import Players from './player-status/Players.svelte'
   import AwaitingReaction from './reaction/AwaitingReaction.svelte'
@@ -11,6 +12,7 @@
 </script>
 
 <GlobalActions />
+<ToastMessages />
 
 <div class="playing">
   <div class="player-status">

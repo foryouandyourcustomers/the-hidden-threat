@@ -1,6 +1,7 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import { Toaster } from 'svelte-sonner'
   import Board from './Board.svelte'
   import Finished from './finished/Finished.svelte'
   import InGame from './header/InGame.svelte'
@@ -41,5 +42,4 @@
   <slot name="overlays" slot="overlays" />
 </Board>
 
-<style lang="postcss">
-</style>
+<Toaster position="top-right" closeButton duration={1000 * 60} theme="light" />

@@ -10,7 +10,6 @@ export const machine = createMachine({
     // typegen: {} as import('./machine.typegen').Typegen0,
     context: {} as Context,
     events: {} as ClientEvent,
-    actors: {} as { loadParticipants: { output: Promise<string[]> } },
   },
 
   initial: 'Lobby',

@@ -25,9 +25,6 @@ devDependencies:
   '@sveltejs/kit':
     specifier: ^1.22.1
     version: 1.22.1(svelte@4.0.5)(vite@4.4.3)
-  '@types/date-fns':
-    specifier: ^2.6.0
-    version: 2.6.0
   '@types/howler':
     specifier: ^2.2.7
     version: 2.2.7
@@ -51,7 +48,7 @@ devDependencies:
     version: 0.5.2
   '@xstate/svelte':
     specifier: ^2.0.1
-    version: 2.0.1(svelte@4.0.5)(xstate@5.0.0-beta.18)
+    version: 2.0.1(svelte@4.0.5)(xstate@5.0.0-beta.40)
   cssnano:
     specifier: ^6.0.1
     version: 6.0.1(postcss@8.4.25)
@@ -121,6 +118,9 @@ devDependencies:
   svelte-select:
     specifier: ^5.6.1
     version: 5.6.1
+  svelte-sonner:
+    specifier: ^0.3.0
+    version: 0.3.0(svelte@4.0.5)
   sveltekit-superforms:
     specifier: ^1.2.0
     version: 1.2.0(@sveltejs/kit@1.22.1)(svelte@4.0.5)(zod@3.21.4)
@@ -143,8 +143,8 @@ devDependencies:
     specifier: ^8.13.0
     version: 8.13.0
   xstate:
-    specifier: 5.0.0-beta.18
-    version: 5.0.0-beta.18
+    specifier: 5.0.0-beta.40
+    version: 5.0.0-beta.40
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -1280,13 +1280,6 @@ packages:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
     dev: true
 
-  /@types/date-fns@2.6.0:
-    resolution: {integrity: sha512-9DSw2ZRzV0Tmpa6PHHJbMcZn79HHus+BBBohcOaDzkK/G3zMjDUDYjJIWBFLbkh+1+/IOS0A59BpQfdr37hASg==}
-    deprecated: This is a stub types definition for date-fns (https://github.com/date-fns/date-fns). date-fns provides its own type definitions, so you don't need @types/date-fns installed!
-    dependencies:
-      date-fns: 2.30.0
-    dev: true
-
   /@types/estree@1.0.1:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
@@ -1533,7 +1526,7 @@ packages:
       - supports-color
     dev: true
 
-  /@xstate/svelte@2.0.1(svelte@4.0.5)(xstate@5.0.0-beta.18):
+  /@xstate/svelte@2.0.1(svelte@4.0.5)(xstate@5.0.0-beta.40):
     resolution: {integrity: sha512-A4QSCt4EpbyzbPIPGCRLoRn50VUq6gXcmJPIwgBaCTsTRsPsp8KSvltDqS2msBKEDr4FHWXEXOC4QVGDWFL5dg==}
     peerDependencies:
       '@xstate/fsm': ^2.0.0
@@ -1546,7 +1539,7 @@ packages:
         optional: true
     dependencies:
       svelte: 4.0.5
-      xstate: 5.0.0-beta.18
+      xstate: 5.0.0-beta.40
     dev: true
 
   /@xstate/tools-shared@3.0.1(xstate@4.38.0):
@@ -4318,6 +4311,14 @@ packages:
       svelte-floating-ui: 1.2.8
     dev: true
 
+  /svelte-sonner@0.3.0(svelte@4.0.5):
+    resolution: {integrity: sha512-AbRxxqQJb0cc2wEbluc+HVbHukYcnXUZtfSCAcxCHjV3JxB7qrBK4s4XUDSBsVT4Lboqk/0Qv7THIghkEl665A==}
+    peerDependencies:
+      svelte: '>=3 <5'
+    dependencies:
+      svelte: 4.0.5
+    dev: true
+
   /svelte@4.0.5:
     resolution: {integrity: sha512-PHKPWP1wiWHBtsE57nCb8xiWB3Ht7/3Kvi3jac0XIxUM2rep8alO7YoAtgWeGD7++tFy46krilOrPW0mG3Dx+A==}
     engines: {node: '>=16'}
@@ -4752,8 +4753,8 @@ packages:
     resolution: {integrity: sha512-oFjw2YZPyu6HeO0JWCSqfhAALsjFPURsrD2FUFN3u213dWwYU68RFuLtSHco+cEUhpQFW+hRG3PNYgq8HatudQ==}
     dev: true
 
-  /xstate@5.0.0-beta.18:
-    resolution: {integrity: sha512-sRRb/8SM6UxeaP1dTdIKZ2Ktk4v9xLbZZ2+xRVCBEWSIfWngpZjGuYq5pIkkXWf1uO/7Fb2eBovM9V+IkEqPXg==}
+  /xstate@5.0.0-beta.40:
+    resolution: {integrity: sha512-q3tGXbfaHC785Eol2YFU3NmYfRy3XIA/pN2m2rK2oHY5t70SCUO0TvmLqxheE5sB4yJI+47U6XX7pdCtCVA3hg==}
     dev: true
 
   /yallist@3.1.1:

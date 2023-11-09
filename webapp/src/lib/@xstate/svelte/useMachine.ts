@@ -1,14 +1,15 @@
 import { onDestroy } from 'svelte'
-import { readable, type Readable } from 'svelte/store'
-import type {
-  AnyStateMachine,
-  AreAllImplementationsAssumedToBeProvided,
-  InternalMachineImplementations,
-  InterpreterFrom,
-  InterpreterOptions,
-  StateFrom,
+import { type Readable, readable } from 'svelte/store'
+import {
+  type AnyStateMachine,
+  type AreAllImplementationsAssumedToBeProvided,
+  type InternalMachineImplementations,
+  createActor,
+  type ActorOptions,
+  type StateFrom,
+  type TODO,
+  Actor,
 } from 'xstate'
-import { interpret } from 'xstate'
 
 type Prop<T, K> = K extends keyof T ? T[K] : never
 
@@ -16,27 +17,30 @@ type RestParams<TMachine extends AnyStateMachine> = AreAllImplementationsAssumed
   TMachine['__TResolvedTypesMeta']
 > extends false
   ? [
-      options: InterpreterOptions<TMachine> &
+      options: ActorOptions<TMachine> &
         InternalMachineImplementations<
           TMachine['__TContext'],
           TMachine['__TEvent'],
+          TODO,
+          TODO,
+          TODO,
           TMachine['__TResolvedTypesMeta'],
           true
         >,
     ]
   : [
-      options?: InterpreterOptions<TMachine> &
+      options?: ActorOptions<TMachine> &
         InternalMachineImplementations<
           TMachine['__TContext'],
           TMachine['__TEvent'],
+          TODO,
+          TODO,
+          TODO,
           TMachine['__TResolvedTypesMeta']
         >,
     ]
 
-type UseMachineReturn<
-  TMachine extends AnyStateMachine,
-  TInterpreter = InterpreterFrom<TMachine>,
-> = {
+type UseMachineReturn<TMachine extends AnyStateMachine, TInterpreter = Actor<TMachine>> = {
   state: Readable<StateFrom<TMachine>>
   send: Prop<TInterpreter, 'send'>
   service: TInterpreter
@@ -58,7 +62,7 @@ export function useMachine<TMachine extends AnyStateMachine>(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const resolvedMachine = machine.provide(machineConfig as any)
 
-  const service = interpret(resolvedMachine, interpreterOptions).start()
+  const service = createActor(resolvedMachine, interpreterOptions).start()
 
   onDestroy(() => service.stop())
 

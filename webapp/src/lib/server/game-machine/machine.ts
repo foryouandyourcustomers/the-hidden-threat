@@ -41,7 +41,6 @@ export const machine = createMachine({
     // typegen: {} as import('./machine.typegen').Typegen0,
     context: {} as Context,
     events: {} as ServerEvent,
-    actors: {} as { loadParticipants: { output: string[] } },
   },
 
   states: {
@@ -57,7 +56,7 @@ export const machine = createMachine({
               always: {
                 target: 'Ready',
                 guard: 'allSidesAssigned',
-                reenter: true,
+                reenter: false,
               },
             },
             Ready: {
@@ -73,7 +72,6 @@ export const machine = createMachine({
                       type: 'setAdminsForPlayers',
                     },
                   ],
-                  reenter: true,
                 },
               },
             },
@@ -102,7 +100,6 @@ export const machine = createMachine({
           always: {
             target: 'Finished',
             guard: 'gameFinished',
-            reenter: true,
           },
           on: {
             'user: apply game event': {
@@ -111,7 +108,7 @@ export const machine = createMachine({
               actions: {
                 type: 'addOrUpdateGameEvent',
               },
-              reenter: true,
+              reenter: false,
             },
             'user: rollback game event': {
               target: 'Playing',
@@ -119,7 +116,7 @@ export const machine = createMachine({
               actions: {
                 type: 'rollbackGameEvent',
               },
-              reenter: true,
+              reenter: false,
             },
             'user: cancel game event': {
               target: 'Playing',
@@ -135,7 +132,7 @@ export const machine = createMachine({
               actions: {
                 type: 'switchSides',
               },
-              reenter: true,
+              reenter: false,
             },
           },
         },
@@ -147,14 +144,13 @@ export const machine = createMachine({
               always: {
                 target: 'Ready',
                 guard: 'allRolesAssigned',
-                reenter: true,
+                reenter: false,
               },
             },
             Ready: {
               always: {
                 target: '#gameServer.Game.Playing',
                 guard: 'finishedAssigningRoles',
-                reenter: true,
               },
             },
           },
@@ -191,7 +187,7 @@ export const machine = createMachine({
               actions: {
                 type: 'setAssigningRolesFinished',
               },
-              reenter: true,
+              reenter: false,
             },
           },
         },
@@ -232,28 +228,24 @@ export const machine = createMachine({
           actions: {
             type: 'sendEmojiToOtherUsers',
           },
-          reenter: true,
         },
         'user disconnected': {
           target: 'Ubiquitous',
           actions: {
             type: 'updateUserConnectionState',
           },
-          reenter: true,
         },
         'user reconnected': {
           target: 'Ubiquitous',
           actions: {
             type: 'updateUserConnectionState',
           },
-          reenter: true,
         },
         'user connected': {
           target: 'Ubiquitous',
           actions: {
             type: 'updateUserConnectionState',
           },
-          reenter: true,
         },
       },
       type: 'parallel',
