@@ -1,6 +1,7 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import { linear } from 'svelte/easing'
   import { fly } from 'svelte/transition'
 
   const context = getGameContext()
@@ -26,7 +27,7 @@
     <div
       class="displayed-emoji"
       style:--_x={emoji.position[0]}
-      in:fly={{ duration: 2000, y: height, opacity: 1, easing: (t) => t }}
+      in:fly={{ duration: 2000, y: height, opacity: 1, easing: linear }}
       on:introend={() => {
         delete emojis[i]
         emojis = emojis
