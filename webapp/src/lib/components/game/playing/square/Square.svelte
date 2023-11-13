@@ -2,6 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
+  import SquareInfo from '$lib/components/game/playing/square/SquareInfo.svelte'
   import StageStatus from '$lib/components/icons/StageStatus.svelte'
   import { GameState } from '$lib/game/game-state'
   import type { Coordinate, SharedGameContext } from '$lib/game/types'
@@ -79,9 +80,19 @@
   const place = () => {
     machine.send(getPlacementEvent(coordinate, machine.service.getSnapshot().context))
   }
+
+  let isHovered = false
 </script>
 
-<div class="square" style:--_row={coordinate[1] + 1} style:--_column={coordinate[0] + 1}>
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<div
+  class="square"
+  style:--_row={coordinate[1] + 1}
+  style:--_column={coordinate[0] + 1}
+  on:mouseenter={() => (isHovered = true)}
+  on:mouseleave={() => (isHovered = false)}
+>
   <Stage {coordinate} />
   <Items {coordinate} />
   <Players {coordinate} />
@@ -101,6 +112,9 @@
     </div>
   {/if}
 </div>
+{#if isHovered}
+  <SquareInfo />
+{/if}
 
 <style lang="postcss">
   .square {
