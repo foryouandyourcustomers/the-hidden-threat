@@ -7,6 +7,8 @@
   import InGame from './header/InGame.svelte'
   import Lobby from './lobby/Lobby.svelte'
   import Playing from './playing/Playing.svelte'
+  import Sound from './Sound.svelte'
+  import { didWarmup, warmup } from '$lib/sound'
 
   const { machine } = getGameContext()
 
@@ -26,6 +28,8 @@
   })
 </script>
 
+<svelte:body on:click={() => !$didWarmup && warmup()} />
+
 <Board {reportMousePosition} paddedContent={$section !== 'Playing'}>
   <InGame slot="header" />
 
@@ -43,3 +47,5 @@
 </Board>
 
 <Toaster position="top-right" closeButton duration={1000 * 60} theme="light" />
+
+<Sound />

@@ -1,4 +1,5 @@
 import { Howl } from 'howler'
+import { get, writable } from 'svelte/store'
 import type sounds from './sounds'
 
 export type Sound = (typeof sounds)[number]
@@ -25,10 +26,14 @@ const getHowl = () => {
   return howl
 }
 
+export const didWarmup = writable(false)
+
 /**
  * Invoke this function on a user interaction, to initialize the playback engine.
  */
 export const warmup = () => {
+  if (get(didWarmup)) return
+  didWarmup.set(true)
   getHowl().play('silence')
 }
 
