@@ -11,6 +11,7 @@
   type NotificationSpec = {
     id: NotificationId
     message: string
+    description?: string | undefined
   }
 
   type ToastId = number | string
@@ -29,16 +30,17 @@
       if (gameState.nextEventType === 'move') {
         notifications.push({
           id: `move-${gameState.activePlayer.id}`,
-          message: `${user.name}, du bist dran! Bewege dich auf eines der markierten Felder, indem du auf das gewünschte Feld klickst.`,
+          message: `${user.name}, du bist dran!`,
+          description: `Bewege dich auf eines der markierten Felder, indem du auf das gewünschte Feld klickst.`,
         })
       } else if (gameState.nextEventType === 'placement') {
         notifications.push({
           id: `placement-${gameState.activePlayer.id}`,
-          message: `${user.name}, du bist dran! ${
+          message: `${user.name}, du bist dran!`,
+          description:
             gameState.activeSide === 'attack'
               ? 'Platziere dich auf einem Feld deiner Wahl.'
-              : 'Platziere dich auf einem der markierten Felder.'
-          }`,
+              : 'Platziere dich auf einem der markierten Felder.',
         })
       }
     }
@@ -55,9 +57,9 @@
         delete toastIds[key]
       }
     })
-    for (const { id, message } of $notifications) {
+    for (const { id, message, description } of $notifications) {
       if (!Object.keys(toastIds).includes(id)) {
-        toastIds[id] = toast(message)
+        toastIds[id] = toast(message, { description })
       }
     }
   }
