@@ -1,5 +1,6 @@
 <script lang="ts">
   import { dev } from '$app/environment'
+  import { PUBLIC_DEV_DISABLE_CURSOR_POSITIONS } from '$env/static/public'
   import { useSelector } from '$lib/@xstate/svelte'
   import { useMachine } from '$lib/@xstate/svelte/useMachine.js'
   import { setGameContext } from '$lib/client/game-context.js'
@@ -11,6 +12,7 @@
   import Game from '$lib/components/game/Game.svelte'
   import { COLUMN_COUNT, ROW_COUNT } from '$lib/game/constants/general.js'
   import { play } from '$lib/sound/index.js'
+  import { envBool } from '$lib/utils.js'
   import isEqual from 'lodash/isEqual'
   import throttle from 'lodash/throttle'
   import { onMount } from 'svelte'
@@ -68,6 +70,7 @@
 
   const reportMousePosition = throttle(
     (position: [number, number]) => {
+      if (envBool(PUBLIC_DEV_DISABLE_CURSOR_POSITIONS)) return
       if ($socketConnection.status === 'opened') {
         socketConnection.send({
           type: 'mouse position',

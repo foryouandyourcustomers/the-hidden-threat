@@ -35,6 +35,7 @@ jobs:
           SUMMARY_MAIL_FROM="${{ vars.SUMMARY_MAIL_FROM }}"
           SUMMARY_MAIL_TO="${{ vars.SUMMARY_MAIL_TO }}"
           DEV_AUTO_CONFIGURE_PLAYERS=false
+          PUBLIC_DEV_DISABLE_CURSOR_POSITIONS=false
 
       - name: Build the project
         run: pnpm run build
