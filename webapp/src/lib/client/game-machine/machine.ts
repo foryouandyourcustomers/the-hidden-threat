@@ -48,7 +48,6 @@ export const machine = createMachine({
           always: {
             target: 'Assigning roles',
             guard: 'finishedAssigningSides',
-            reenter: false,
           },
           on: {
             'assign side': {
@@ -71,12 +70,10 @@ export const machine = createMachine({
                   target: 'Ready',
                   guard: 'allRolesAssignedOfSide',
                   description: 'All users have been assigned a role.',
-                  reenter: false,
                 },
                 {
                   target: 'Editing player',
                   guard: 'isEditingPlayerOfSide',
-                  reenter: false,
                 },
               ],
             },
@@ -84,7 +81,6 @@ export const machine = createMachine({
               always: {
                 target: 'Editing player',
                 guard: 'isEditingPlayerOfSide',
-                reenter: false,
               },
               on: {
                 'next step': {
@@ -102,7 +98,6 @@ export const machine = createMachine({
               always: {
                 target: 'Incomplete',
                 guard: 'isNotEditingPlayerOfSide',
-                reenter: false,
               },
               on: {
                 'assign role': {
@@ -119,7 +114,6 @@ export const machine = createMachine({
           always: {
             target: 'Waiting for other side',
             guard: 'finishedAssigningRolesOfSide',
-            reenter: false,
           },
           on: {
             'start editing player': {
@@ -145,7 +139,6 @@ export const machine = createMachine({
       always: {
         target: 'Playing',
         guard: 'finishedAssigningRoles',
-        reenter: false,
       },
     },
     Playing: {
@@ -157,7 +150,6 @@ export const machine = createMachine({
               always: {
                 target: 'Playing',
                 guard: 'userOnActiveSide',
-                reenter: false,
               },
             },
             Playing: {
@@ -168,16 +160,13 @@ export const machine = createMachine({
                     {
                       target: 'Placing',
                       guard: 'requiresPlacement',
-                      reenter: false,
                     },
                     {
                       target: 'Reacting',
                       guard: 'requiresReaction',
-                      reenter: false,
                     },
                     {
                       target: 'Moving',
-                      reenter: false,
                     },
                   ],
                 },
@@ -186,15 +175,15 @@ export const machine = createMachine({
                   always: {
                     target: 'Moving',
                     guard: 'requiresMove',
-                    reenter: false,
                   },
                   on: {
                     'apply game event': {
+                      target: 'Placing',
                       guard: 'userControlsPlayer isPlacementEvent',
                       actions: {
                         type: 'forwardToServer',
                       },
-                      reenter: true,
+                      reenter: false,
                     },
                   },
                 },
@@ -203,7 +192,6 @@ export const machine = createMachine({
                   always: {
                     target: 'Moving',
                     guard: 'requiresMove',
-                    reenter: false,
                   },
                 },
                 Moving: {
@@ -211,7 +199,6 @@ export const machine = createMachine({
                   always: {
                     target: 'Action',
                     guard: 'requiresAction',
-                    reenter: false,
                   },
                   on: {
                     'apply game event': {
@@ -229,7 +216,6 @@ export const machine = createMachine({
                   always: {
                     target: 'Moving',
                     guard: 'requiresMove',
-                    reenter: false,
                   },
                   on: {
                     'apply game event': {
@@ -254,7 +240,6 @@ export const machine = createMachine({
               always: {
                 target: 'Waiting',
                 guard: 'userNotOnActiveSide',
-                reenter: false,
               },
             },
           },
@@ -292,7 +277,6 @@ export const machine = createMachine({
               on: {
                 'dismiss global attack': {
                   target: 'Dismissed',
-                  reenter: false,
                 },
               },
             },
@@ -300,66 +284,11 @@ export const machine = createMachine({
               on: {
                 'new global attack': {
                   target: 'Showing current global attack',
-                  reenter: false,
                 },
                 'show global attack': {
                   target: 'Showing current global attack',
-                  reenter: false,
                 },
               },
-            },
-          },
-        },
-        Sides: {
-          initial: 'Initial',
-          states: {
-            Initial: {
-              always: [
-                {
-                  target: 'Defense',
-                  guard: 'userIsDefender',
-                  reenter: false,
-                },
-                {
-                  target: 'Attack',
-                  reenter: false,
-                },
-              ],
-            },
-            Defense: {
-              states: {
-                'Attacker visibility': {
-                  initial: 'Invisible',
-                  states: {
-                    Invisible: {
-                      always: {
-                        target: 'Visible',
-                        guard: 'attackerShouldBeVisible',
-                        reenter: false,
-                      },
-                    },
-                    Visible: {
-                      always: {
-                        target: 'Invisible',
-                        guard: 'attackerShouldBeInvisible',
-                        reenter: false,
-                      },
-                    },
-                  },
-                },
-              },
-              type: 'parallel',
-            },
-            Attack: {},
-          },
-          on: {
-            'switch sides': {
-              target: 'Sides',
-              guard: 'isAdmin',
-              actions: {
-                type: 'forwardToServer',
-              },
-              reenter: false,
             },
           },
         },
@@ -367,7 +296,6 @@ export const machine = createMachine({
       always: {
         target: 'Finished',
         guard: 'gameFinished',
-        reenter: false,
       },
       type: 'parallel',
     },
@@ -388,7 +316,6 @@ export const machine = createMachine({
       target: '#gameClient',
       actions: {
         type: 'updateSharedGameContext',
-        params: {},
       },
       reenter: false,
     },
@@ -396,16 +323,15 @@ export const machine = createMachine({
       target: '#gameClient',
       actions: {
         type: 'forwardToServer',
-        params: {},
       },
       reenter: false,
     },
     'show emoji': {
+      target: '#gameClient',
       actions: {
         type: 'showEmoji',
-        params: {},
       },
-      reenter: true,
+      reenter: false,
     },
   },
 })
