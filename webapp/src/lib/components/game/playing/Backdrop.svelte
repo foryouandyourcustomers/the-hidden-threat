@@ -148,5 +148,6 @@
   svg {
     grid-row: 1 / -1;
     grid-column: 1 / -1;
+    z-index: var(--layer-grid-backdrop);
   }
 </style>

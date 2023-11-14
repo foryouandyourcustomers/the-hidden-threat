@@ -59,7 +59,7 @@
 <style lang="postcss">
   .dimming {
     position: absolute;
-    z-index: var(--layer-5);
+    z-index: var(--layer-grid-dimming);
     transition: opacity 500ms ease-out;
     inset: 0;
     background: var(--color-bg);

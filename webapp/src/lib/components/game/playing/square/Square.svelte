@@ -43,21 +43,24 @@
   use:clickOutside
   on:outclick={() => (showInfo = false)}
 >
-  <Stage {coordinate} />
-  <Items {coordinate} />
-  <Players {coordinate} />
+  <div class="content">
+    <Stage {coordinate} />
+    <Items {coordinate} />
+    <Players {coordinate} />
 
-  <button class="info-button unstyled" on:click={toggleInfo}><span>Show info</span></button>
+    <button class="info-button unstyled" on:click={toggleInfo}><span>Show info</span></button>
 
-  {#if $isDefended || $isAttacked}
-    <div class="status">
-      {#if $isDefended}
-        <StageStatus status="defended" />
-      {:else if $isAttacked}
-        <StageStatus status="attacked" />
-      {/if}
-    </div>
-  {/if}
+    {#if $isDefended || $isAttacked}
+      <div class="status">
+        {#if $isDefended}
+          <StageStatus status="defended" />
+        {:else if $isAttacked}
+          <StageStatus status="attacked" />
+        {/if}
+      </div>
+    {/if}
+  </div>
+
   {#if showInfo}
     <SquareInfo
       {coordinate}
@@ -75,13 +78,17 @@
     position: relative;
     grid-row: var(--_row);
     grid-column: var(--_column);
-    z-index: var(--layer-1);
-    isolation: isolate;
     min-width: 0;
     min-height: 0;
 
-    &.with-info {
-      z-index: var(--layer-3);
+    .content {
+      position: absolute;
+      z-index: var(--layer-grid-square);
+      inset: 0;
+    }
+
+    &.with-info .content {
+      z-index: var(--layer-grid-square-with-info);
     }
 
     > * {

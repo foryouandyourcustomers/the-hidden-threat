@@ -12,6 +12,7 @@
   svg {
     display: block;
     position: absolute;
+    z-index: var(--layer-grid-lines);
     inset: 0;
     max-width: none;
     pointer-events: none;

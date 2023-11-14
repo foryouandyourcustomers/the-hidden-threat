@@ -43,7 +43,7 @@
     grid-template-rows: repeat(var(--row-count), 1fr);
     grid-template-columns: repeat(var(--column-count), 1fr);
     gap: 0;
-    z-index: var(--layer-5);
+    z-index: var(--layer-grid-highlight);
     inset: 0;
     pointer-events: none;
 

@@ -87,11 +87,12 @@
     position: absolute;
     top: calc((100% / 8) * (var(--y)));
     left: calc((100% / 9) * (var(--x)));
-    z-index: var(--layer-4);
+    z-index: var(--layer-grid-actions);
 
     & ul {
       position: absolute;
       margin: 0;
+      box-shadow: 0 0 1rem #0005;
       border-radius: var(--radius-sm);
       background: white;
       padding: 0;

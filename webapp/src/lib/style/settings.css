@@ -41,4 +41,14 @@
 
   --color-bg-disabled-strong: var(--color-grey-light);
   --color-text-disabled-onstrong: var(--color-grey-dark);
+
+  --layer-grid-backdrop: 1;
+  --layer-grid-stage-lines: 2;
+  --layer-grid-lines: 8;
+  --layer-grid-square: 9;
+  --layer-grid-dimming: 10;
+  --layer-grid-highlight: 20;
+  --layer-grid-square-with-info: 30;
+  --layer-grid-actions: 100;
+  --layer-grid-square-info: 110;
 }

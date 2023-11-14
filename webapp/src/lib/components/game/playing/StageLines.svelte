@@ -65,6 +65,7 @@
 <style lang="postcss">
   svg {
     position: absolute;
+    z-index: var(--layer-grid-stage-lines);
     inset: 0;
     pointer-events: none;
   }

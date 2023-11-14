@@ -19,7 +19,7 @@
     <Players />
     <InfoPanel />
   </div>
-  <div class="grid">
+  <div class="grid-wrapper">
     <Grid />
     <Actions />
     <Reaction />
@@ -39,11 +39,12 @@
     gap: 1rem;
   }
 
-  .grid {
+  .grid-wrapper {
     --grid-height: 45rem;
     --grid-width: calc(var(--grid-height) * var(--column-count) / var(--row-count));
     --grid-square-size: calc(var(--grid-height) / var(--row-count));
     position: relative;
+    isolation: isolate;
   }
 
   .player-status {

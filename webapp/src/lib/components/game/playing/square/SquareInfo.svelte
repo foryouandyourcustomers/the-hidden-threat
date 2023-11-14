@@ -145,11 +145,11 @@
     display: flex;
     position: absolute;
     flex-direction: column;
-    z-index: var(--layer-top);
+    z-index: var(--layer-grid-square-info);
+    box-shadow: 0 0 1rem #0005;
     border-radius: var(--radius-sm);
     background: white;
     padding: 0.25rem 0.75rem;
-    /* width: max-content; */
     color: var(--color-black-dark);
 
     &.top {
@@ -191,6 +191,7 @@
 
     li {
       padding-block: 0.5rem;
+      white-space: nowrap;
       &:not(:last-of-type) {
         border-bottom: 1px solid var(--color-white-80);
       }
