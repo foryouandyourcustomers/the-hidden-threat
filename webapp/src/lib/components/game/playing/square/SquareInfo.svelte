@@ -11,6 +11,8 @@
   import { BOARD_ITEMS } from '$lib/game/constants/board-items'
   import isEqual from 'lodash/isEqual'
   import { getItem, isAttackItemId } from '$lib/game/constants/items'
+  import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
+  import { getStage } from '$lib/game/utils'
 
   export let coordinate: Coordinate
   export let isDefended: boolean
@@ -52,6 +54,14 @@
 
   const items = BOARD_ITEMS.filter((item) => isEqual(item.position, coordinate))
 
+  const stage = getStage(
+    BOARD_SUPPLY_CHAINS.flat().filter((stage) => isEqual(stage.coordinate, coordinate))[0]?.id,
+  )
+
+  const positionClass = `${coordinate[1] < 4 ? 'bottom' : 'top'} ${
+    coordinate[0] < 1 ? 'right' : coordinate[0] < 8 ? 'center' : 'left'
+  }`
+
   const isPossibleMove = useSelector(machine.service, (state) => {
     const moving = state.matches('Playing.Gameloop.Playing.Moving')
     if (!moving) return false
@@ -79,7 +89,19 @@
   }
 </script>
 
-<ul class="tooltip" in:fade={{ duration: 100 }} out:fade={{ duration: 100 }}>
+<ul class="tooltip {positionClass}" in:fade={{ duration: 100 }} out:fade={{ duration: 100 }}>
+  {#if stage}
+    <li>
+      <div class="stage">{stage.name}</div>
+      <div class="stage-items">
+        {#each stage.defenseItems as itemId}
+          <div class="icon">
+            <Item {itemId} />
+          </div>
+        {/each}
+      </div>
+    </li>
+  {/if}
   {#if isAttacked}
     <li>Stufe ist angegriffen</li>
   {/if}
@@ -108,6 +130,9 @@
       <button class="unstyled" on:click={place}>Figur hier platzieren</button>
     </li>
   {/if}
+  <svg class="arrow" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14 0H0l5.3 8.3a2 2 0 0 0 3.4 0L14 0Z" fill="#fff" />
+  </svg>
 </ul>
 
 <style lang="postcss">
@@ -119,10 +144,7 @@
   .tooltip {
     display: flex;
     position: absolute;
-    top: 110%;
-    left: 50%;
     flex-direction: column;
-    translate: -50% 0;
     z-index: var(--layer-top);
     border-radius: var(--radius-sm);
     background: white;
@@ -130,9 +152,46 @@
     /* width: max-content; */
     color: var(--color-black-dark);
 
+    &.top {
+      bottom: 105%;
+      .arrow {
+        bottom: -0.6rem;
+      }
+    }
+
+    &.bottom {
+      top: 105%;
+      .arrow {
+        top: -0.6rem;
+        rotate: 0.5turn;
+      }
+    }
+
+    &.left {
+      right: 10%;
+      .arrow {
+        right: 2rem;
+      }
+    }
+    &.center {
+      left: 50%;
+      translate: -50% 0;
+      .arrow {
+        left: 50%;
+        translate: -50% 0;
+      }
+    }
+
+    &.right {
+      left: 10%;
+      .arrow {
+        left: 2rem;
+      }
+    }
+
     li {
       padding-block: 0.5rem;
-      &:not(:last-child) {
+      &:not(:last-of-type) {
         border-bottom: 1px solid var(--color-white-80);
       }
     }
@@ -170,5 +229,29 @@
   button {
     text-decoration: underline;
     white-space: nowrap;
+  }
+
+  .stage {
+    font-weight: 700;
+  }
+
+  .stage-items {
+    display: flex;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+
+    .icon {
+      display: block;
+      width: 1.75rem;
+      height: 1.75rem;
+    }
+  }
+
+  .arrow {
+    display: block;
+    position: absolute;
+    width: 0.875rem;
+    height: 0.625rem;
+    /* Positioning is done in individual position (left, right) */
   }
 </style>
