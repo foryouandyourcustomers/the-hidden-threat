@@ -14,6 +14,8 @@
   import IsAttackingStage from './IsAttackingStage.svelte'
   import IsNextToAttacker from './IsNextToAttacker.svelte'
   import QuarterReveal from './QuarterReveal.svelte'
+  import ExpandIcon from '~icons/lucide/chevron-down'
+  import CollapseIcon from '~icons/lucide/chevron-up'
 
   const { machine } = getGameContext()
 
@@ -35,32 +37,45 @@
   )
 
   $: activePlayerCharacter = getCharacter($activePlayerCharacterId)
+
+  let isExpanded = true
 </script>
 
 {#if $canPerformAction}
   <div class="actions" style:--x={$activePlayerPosition[0]} style:--y={$activePlayerPosition[1]}>
     <ul class:on-left={$activePlayerPosition[0] > 5} class:on-top={$activePlayerPosition[1] > 4}>
-      <li class="title">Aktion auswählen</li>
-      <li>
-        <CollectItem />
-      </li>
-      {#if !isDefenseCharacter(activePlayerCharacter)}
-        <li><AttackStage /></li>
-        <li><ExchangeJoker /></li>
-      {:else}
-        <li><DefendStage /></li>
-        <li><AskQuestion /></li>
-        <li>
-          {#if activePlayerCharacter.ability === 'quarter-reveal'}
-            <QuarterReveal />
-          {:else if activePlayerCharacter.ability === 'exchange-digital-footprint'}
-            <ExchangeDigitalFootprint />
-          {:else if activePlayerCharacter.ability === 'is-attacking-stage'}
-            <IsAttackingStage />
-          {:else if activePlayerCharacter.ability === 'is-next-to-attacker'}
-            <IsNextToAttacker />
+      <li class="title">
+        <button on:click={() => (isExpanded = !isExpanded)} class="unstyled">
+          Aktion auswählen
+          {#if isExpanded}
+            <CollapseIcon />
+          {:else}
+            <ExpandIcon />
           {/if}
+        </button>
+      </li>
+      {#if isExpanded}
+        <li>
+          <CollectItem />
         </li>
+        {#if !isDefenseCharacter(activePlayerCharacter)}
+          <li><AttackStage /></li>
+          <li><ExchangeJoker /></li>
+        {:else}
+          <li><DefendStage /></li>
+          <li><AskQuestion /></li>
+          <li>
+            {#if activePlayerCharacter.ability === 'quarter-reveal'}
+              <QuarterReveal />
+            {:else if activePlayerCharacter.ability === 'exchange-digital-footprint'}
+              <ExchangeDigitalFootprint />
+            {:else if activePlayerCharacter.ability === 'is-attacking-stage'}
+              <IsAttackingStage />
+            {:else if activePlayerCharacter.ability === 'is-next-to-attacker'}
+              <IsNextToAttacker />
+            {/if}
+          </li>
+        {/if}
       {/if}
     </ul>
   </div>
@@ -72,6 +87,7 @@
     position: absolute;
     top: calc((100% / 8) * (var(--y)));
     left: calc((100% / 9) * (var(--x)));
+    z-index: var(--layer-4);
 
     & ul {
       position: absolute;
@@ -88,6 +104,13 @@
       li.title {
         box-shadow: 0 0 0.5rem #0003;
         padding: 0.5rem 1rem;
+        font-weight: var(--weight-bold);
+        button {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
       }
 
       &:not(.on-left) {

@@ -21,6 +21,9 @@ export const isItemIdOfSide = <T extends Side>(
 ): itemId is T extends 'attack' ? AttackItemId : DefenseItemId =>
   side === 'attack' ? isAttackItemId(itemId) : isDefenseItemId(itemId)
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+export const getItem = (itemId: ItemId) => ITEMS.find((item) => item.id === itemId)!
+
 export const ITEMS = [
   {
     id: 'certificate',

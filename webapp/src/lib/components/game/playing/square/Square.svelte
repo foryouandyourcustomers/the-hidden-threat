@@ -1,33 +1,18 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
+  import { clickOutside } from '$lib/actions/click-outside'
   import { getGameContext } from '$lib/client/game-context'
-  import type { ClientEventOf } from '$lib/client/game-machine/types'
   import SquareInfo from '$lib/components/game/playing/square/SquareInfo.svelte'
   import StageStatus from '$lib/components/icons/StageStatus.svelte'
   import { GameState } from '$lib/game/game-state'
-  import type { Coordinate, SharedGameContext } from '$lib/game/types'
+  import type { Coordinate } from '$lib/game/types'
   import Items from './Items.svelte'
   import Players from './Players.svelte'
   import Stage from './Stage.svelte'
 
-  export let coordinate: [number, number]
+  export let coordinate: Coordinate
 
   const { machine } = getGameContext()
-
-  const isPossibleMove = useSelector(machine.service, (state) => {
-    const moving = state.matches('Playing.Gameloop.Playing.Moving')
-    if (!moving) return false
-    // Ok, this player is moving. But is this square a valid move?
-    const gameState = GameState.fromContext(state.context)
-    return gameState.isValidMove(coordinate)
-  })
-
-  const isPossiblePlacement = useSelector(machine.service, (state) => {
-    const placing = state.matches('Playing.Gameloop.Playing.Placing')
-    if (!placing) return false
-    const gameState = GameState.fromContext(state.context)
-    return gameState.isValidPlacement(coordinate)
-  })
 
   const isDefended = useSelector(machine.service, (state) =>
     GameState.fromContext(state.context).isDefended(coordinate),
@@ -37,71 +22,33 @@
     GameState.fromContext(state.context).isAttacked(coordinate),
   )
 
-  const getMoveEvent = (
-    to: Coordinate,
-    context: SharedGameContext,
-  ): ClientEventOf<'apply game event'> => {
-    return {
-      type: 'apply game event',
-      gameEvent: {
-        type: 'move',
-        finalized: true,
-        playerId: GameState.fromContext(context).activePlayer.id,
-        to,
-      },
+  let showInfo = false
+
+  const toggleInfo = () => (showInfo = !showInfo)
+
+  const onKeydown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      showInfo = false
     }
   }
-
-  const getPlacementEvent = (
-    to: Coordinate,
-    context: SharedGameContext,
-  ): ClientEventOf<'apply game event'> => {
-    return {
-      type: 'apply game event',
-      gameEvent: {
-        type: 'placement',
-        finalized: true,
-        playerId: GameState.fromContext(context).activePlayer.id,
-        coordinate: to,
-      },
-    }
-  }
-
-  const canMove = useSelector(machine.service, (state) =>
-    state.can(getMoveEvent(coordinate, machine.service.getSnapshot().context)),
-  )
-  const canPlace = useSelector(machine.service, (state) =>
-    state.can(getPlacementEvent(coordinate, machine.service.getSnapshot().context)),
-  )
-
-  const move = () => {
-    machine.send(getMoveEvent(coordinate, machine.service.getSnapshot().context))
-  }
-  const place = () => {
-    machine.send(getPlacementEvent(coordinate, machine.service.getSnapshot().context))
-  }
-
-  let isHovered = false
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<svelte:body on:keydown={onKeydown} />
+
 <div
   class="square"
+  class:with-info={showInfo}
   style:--_row={coordinate[1] + 1}
   style:--_column={coordinate[0] + 1}
-  on:mouseenter={() => (isHovered = true)}
-  on:mouseleave={() => (isHovered = false)}
+  use:clickOutside
+  on:outclick={() => (showInfo = false)}
 >
   <Stage {coordinate} />
   <Items {coordinate} />
   <Players {coordinate} />
-  {#if $canMove && $isPossibleMove}
-    <button class="move-button unstyled" on:click={move}><span>Move</span></button>
-  {/if}
-  {#if $canPlace && $isPossiblePlacement}
-    <button class="move-button unstyled" on:click={place}><span>Place</span></button>
-  {/if}
+
+  <button class="info-button unstyled" on:click={toggleInfo}><span>Show info</span></button>
+
   {#if $isDefended || $isAttacked}
     <div class="status">
       {#if $isDefended}
@@ -111,10 +58,15 @@
       {/if}
     </div>
   {/if}
+  {#if showInfo}
+    <SquareInfo
+      {coordinate}
+      isDefended={$isDefended}
+      isAttacked={$isAttacked}
+      on:close={() => (showInfo = false)}
+    />
+  {/if}
 </div>
-{#if isHovered}
-  <SquareInfo />
-{/if}
 
 <style lang="postcss">
   .square {
@@ -123,9 +75,14 @@
     position: relative;
     grid-row: var(--_row);
     grid-column: var(--_column);
+    z-index: var(--layer-1);
     isolation: isolate;
     min-width: 0;
     min-height: 0;
+
+    &.with-info {
+      z-index: var(--layer-3);
+    }
 
     > * {
       min-width: 0;
@@ -133,12 +90,12 @@
     }
   }
 
-  .move-button {
+  .info-button {
     display: block;
     position: absolute;
     z-index: var(--layer-top);
     transition: background 0.3s ease-out;
-    cursor: pointer;
+    cursor: default;
     inset: 0;
     background: transparent;
     & span {

@@ -21,4 +21,10 @@ declare global {
     // interface PageData {}
     // interface Platform {}
   }
+
+  namespace svelteHTML {
+    interface HTMLAttributes {
+      'on:outclick'?: (event: CustomEvent) => void
+    }
+  }
 }
