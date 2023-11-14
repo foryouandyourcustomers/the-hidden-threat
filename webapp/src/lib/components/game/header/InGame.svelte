@@ -6,9 +6,12 @@
   import SettingsIcon from '~icons/lucide/settings'
   import HelpIcon from '~icons/lucide/shield-question'
   import AudioIcon from '~icons/lucide/volume-2'
+  import AudioOffIcon from '~icons/lucide/volume-x'
   import Score from '../Score.svelte'
   import Expandable from './expandable/Expandable.svelte'
   import RollbackButton from './expandable/RollbackButton.svelte'
+  import OpenButton from './expandable/OpenButton.svelte'
+  import { enabled } from '$lib/sound'
 
   const { machine } = getGameContext()
 
@@ -24,9 +27,13 @@
   <Expandable>
     <HelpIcon slot="icon" />
   </Expandable>
-  <Expandable>
-    <AudioIcon slot="icon" />
-  </Expandable>
+  <OpenButton on:click={() => ($enabled = !$enabled)}>
+    {#if $enabled}
+      <AudioIcon />
+    {:else}
+      <AudioOffIcon />
+    {/if}
+  </OpenButton>
   <Expandable>
     <SettingsIcon slot="icon" />
     <SwitchSidesButton />

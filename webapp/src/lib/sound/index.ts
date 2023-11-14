@@ -26,6 +26,7 @@ const getHowl = () => {
   return howl
 }
 
+export const enabled = writable(true)
 export const didWarmup = writable(false)
 
 /**
@@ -48,5 +49,6 @@ export const unload = () => {
  * call `initialize` first.
  */
 export const play = (sound: Sound) => {
+  if (!get(enabled)) return
   getHowl().play(sound)
 }

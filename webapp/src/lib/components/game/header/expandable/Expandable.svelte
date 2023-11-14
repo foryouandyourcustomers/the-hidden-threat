@@ -1,12 +1,11 @@
 <script lang="ts">
   import { scale } from 'svelte/transition'
+  import OpenButton from './OpenButton.svelte'
   let expanded = false
 </script>
 
 <div class="expandable" class:expanded>
-  <button class="unstyled icon open-button" on:click={() => (expanded = !expanded)}
-    ><slot name="icon" /></button
-  >
+  <OpenButton on:click={() => (expanded = !expanded)}><slot name="icon" /></OpenButton>
   {#if expanded}
     <div
       class="content"
@@ -24,24 +23,6 @@
     z-index: var(--layer-top);
     isolation: isolate;
     color: black;
-
-    .open-button {
-      border-radius: var(--radius-full);
-      background: white;
-      padding: 0.25rem;
-    }
-
-    .icon {
-      display: grid;
-      place-content: center;
-      width: 1.5rem;
-      height: 1.5rem;
-      :global(svg) {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-    }
 
     .content {
       display: flex;
