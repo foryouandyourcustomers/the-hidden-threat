@@ -1,9 +1,11 @@
 <script lang="ts">
-  export let group: string | undefined = undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export let group: any | undefined = undefined
 
   export let checked = false
 
-  export let value: string | undefined = undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export let value: any | undefined = undefined
 
   export let disabled = false
 </script>

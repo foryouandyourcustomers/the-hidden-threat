@@ -2,9 +2,12 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { ClientEventOf } from '$lib/client/game-machine/types'
+  import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import RadioButton from '$lib/components/ui/RadioButton.svelte'
+  import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { GameState } from '$lib/game/game-state'
   import type { SharedGameContext } from '$lib/game/types'
 
@@ -66,8 +69,7 @@
       {:else if $question === 'is-next-to-attacker'}
         Die Verteidigung fragt ob Du dich auf einem angrenzend Feld befindest.
       {/if}
-    </Paragraph>
-    <Paragraph>
+      <br />
       {#if $hasJoker}
         Möchtest Du Deinen Joker einsetzen, um der Frage auszuweichen?
       {:else}
@@ -77,31 +79,27 @@
 
     <form on:submit|preventDefault={onSubmit}>
       {#if $hasJoker}
-        <div class="options">
-          <label>
-            <input
-              type="radio"
-              name="answer"
-              on:change={() => applyReaction(false)}
-              value={true}
-              bind:group={answer}
-            />
+        <RadioOptions>
+          <RadioButton on:change={() => applyReaction(false)} value={true} bind:group={answer}>
             Ja
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="answer"
-              on:change={() => applyReaction(false)}
-              value={false}
-              bind:group={answer}
-            />
+            <Paragraph size="sm" spacing="none">
+              Wir möchten den Joker einsetzen und der Frage ausweichen.
+            </Paragraph>
+          </RadioButton>
+
+          <RadioButton on:change={() => applyReaction(false)} value={false} bind:group={answer}>
             Nein
-          </label>
-        </div>
+            <Paragraph size="sm" spacing="none">
+              Wir möchten den Joker nicht einsetzen und die Verteidigung soll die Antwort
+              automatisch erhalten.
+            </Paragraph>
+          </RadioButton>
+        </RadioOptions>
       {/if}
 
-      <Button inverse type="submit">Bestätigen</Button>
+      <Actions>
+        <Button size="small" inverse type="submit">Bestätigen</Button>
+      </Actions>
     </form>
   </GameDialog>
 {/if}

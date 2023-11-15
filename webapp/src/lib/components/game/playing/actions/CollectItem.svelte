@@ -79,9 +79,9 @@
         size="small"
         inverse
         disabled={!selectedItemId || !$canApplyAction}
-        disabledReason={!selectedItemId
-          ? 'Bitte wähle einen Gegenstand aus'
-          : 'Du bist nicht am Zug'}
+        disabledReason={!$canApplyAction
+          ? 'Du bist nicht am Zug'
+          : 'Bitte wähle einen Gegenstand aus'}
         on:click={() => applyAction(true)}
       >
         Auswahl bestätigen

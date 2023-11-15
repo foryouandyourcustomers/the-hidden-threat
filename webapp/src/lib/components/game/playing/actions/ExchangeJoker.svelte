@@ -1,85 +1,96 @@
 <script lang="ts">
-  import { useSelector } from '$lib/@xstate/svelte'
-  import { getGameContext } from '$lib/client/game-context'
-  import type { ClientEventOf } from '$lib/client/game-machine/types'
+  import Item from '$lib/components/icons/Item.svelte'
+  import Actions from '$lib/components/ui/Actions.svelte'
+  import Button from '$lib/components/ui/Button.svelte'
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import RadioButton from '$lib/components/ui/RadioButton.svelte'
+  import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { ITEMS, isAttackItemId, type AttackItemId } from '$lib/game/constants/items'
-  import { GameState } from '$lib/game/game-state'
-  import { isActionEventOf, type SharedGameContext } from '$lib/game/types'
+  import { derived } from 'svelte/store'
   import Action from './Action.svelte'
-
-  const { machine } = getGameContext()
-
-  const getActionEvent = (
-    context: SharedGameContext,
-    finalized: boolean,
-    itemId?: AttackItemId,
-  ): ClientEventOf<'apply game event'> => {
-    const gameState = GameState.fromContext(context)
-    return {
-      type: 'apply game event',
-      gameEvent: {
-        type: 'action',
-        action: 'exchange-joker',
-        playerId: gameState.activePlayer.id,
-        finalized,
-        itemId,
-      },
-    }
-  }
-
-  const hasJoker = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return gameState.jokers > 0
-  })
-
-  const applyAction = (finalized = false, itemId?: AttackItemId) => {
-    const context = machine.service.getSnapshot().context
-    machine.send(getActionEvent(context, finalized, itemId))
-  }
-
-  const startedExchanchingJoker = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return isActionEventOf(gameState.lastEvent, 'exchange-joker')
-  })
-
-  const cancel = () => machine.send({ type: 'cancel game event' })
+  import { createActionHandler } from './utils'
 
   let selectedItemId: AttackItemId | undefined
 
+  const { inProgressEvent, applyAction, cancel, canApplyAction, isEnabled } = createActionHandler(
+    'exchange-joker',
+    {
+      createEvent: (gameState) => ({
+        itemId: selectedItemId,
+        position: gameState.activePlayerPosition,
+      }),
+      enabledCheck: (gameState) => gameState.jokers > 0,
+    },
+  )
+
   const onSubmit = () => {
     if (!selectedItemId) return
-    applyAction(true, selectedItemId)
+    applyAction(true)
   }
+
+  const inProgressItem = derived(inProgressEvent, ($inProgressEvent) => $inProgressEvent?.itemId)
+
+  $: if (selectedItemId && $inProgressItem !== selectedItemId) {
+    applyAction()
+  }
+  $: selectedItemId = $inProgressItem
 </script>
 
-<Action disabled={!$hasJoker} on:click={() => applyAction(false)}>Joker einsetzen</Action>
+<Action disabled={!$isEnabled} on:click={() => applyAction()}>Joker einsetzen</Action>
 
-{#if $startedExchanchingJoker}
+{#if $inProgressEvent}
   <GameDialog title="Joker einsetzen" on:close={cancel}>
     <Paragraph
       >Tausche den Joker gegen einen anderen Schadensgegenstand indem du einen Gegenstand aus der
       Liste wählst.
     </Paragraph>
     <form on:submit|preventDefault={onSubmit}>
-      <div class="items">
+      <RadioOptions>
         {#each ITEMS.filter((item) => isAttackItemId(item.id)) as item}
-          <label>
-            <input name="itemId" type="radio" bind:group={selectedItemId} value={item.id} />
-            {item.name}
-          </label>
+          <RadioButton bind:group={selectedItemId} disabled={!$canApplyAction} value={item.id}>
+            <div class="item-choice">
+              <div class="icon">
+                <Item itemId={item.id} />
+              </div>
+              <div class="name">
+                {item.name}
+              </div>
+            </div>
+          </RadioButton>
         {/each}
-      </div>
-      <button disabled={!selectedItemId} type="submit">Auswahl bestätigen</button>
+      </RadioOptions>
+      <Actions>
+        <Button
+          size="small"
+          inverse
+          disabled={!selectedItemId || !$canApplyAction}
+          disabledReason={!$canApplyAction
+            ? 'Du bist nicht am Zug'
+            : 'Bitte wähle einen Gegenstand aus'}
+          type="submit"
+        >
+          Auswahl bestätigen
+        </Button>
+      </Actions>
     </form>
   </GameDialog>
 {/if}
 
 <style lang="postcss">
-  .items {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  .item-choice {
+    display: flex;
+    align-items: center;
     gap: 0.25rem;
+
+    .icon {
+      width: 2rem;
+      height: 2rem;
+      :global(svg) {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 </style>

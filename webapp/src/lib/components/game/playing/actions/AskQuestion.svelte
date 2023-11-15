@@ -1,87 +1,86 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import type { ClientEventOf } from '$lib/client/game-machine/types'
+  import Actions from '$lib/components/ui/Actions.svelte'
+  import Button from '$lib/components/ui/Button.svelte'
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import RadioButton from '$lib/components/ui/RadioButton.svelte'
+  import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { findStageAt } from '$lib/game/constants/board-stages'
   import { GameState } from '$lib/game/game-state'
-  import { isActionEventOf, type ActionEventOf, type SharedGameContext } from '$lib/game/types'
+  import type { ActionEventOf } from '$lib/game/types'
+  import { derived } from 'svelte/store'
   import Action from './Action.svelte'
+  import { createActionHandler } from './utils'
 
   const { machine } = getGameContext()
 
   type Question = ActionEventOf<'ask-question'>['question']
-
-  const getActionEvent = (
-    context: SharedGameContext,
-    finalized: boolean,
-    question: Question = undefined,
-  ): ClientEventOf<'apply game event'> => {
-    const gameState = GameState.fromContext(context)
-    return {
-      type: 'apply game event',
-      gameEvent: {
-        type: 'action',
-        action: 'ask-question',
-        finalized,
-        question,
-        playerId: gameState.activePlayer.id,
-        position: gameState.activePlayerPosition,
-      },
-    }
-  }
-
   let question: Question = undefined
 
-  const applyAction = (finalized = false) => {
-    const context = machine.service.getSnapshot().context
-    machine.send(getActionEvent(context, finalized, question))
-  }
-
-  const startedQuestioning = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    return isActionEventOf(gameState.lastEvent, 'ask-question')
-  })
+  const { inProgressEvent, applyAction, cancel, canApplyAction } = createActionHandler(
+    'ask-question',
+    {
+      createEvent: (gameState) => ({
+        question,
+        position: gameState.activePlayerPosition,
+      }),
+      enabledCheck: (gameState) => gameState.jokers > 0,
+    },
+  )
 
   const canAskForItems = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
     return !findStageAt(gameState.activePlayerPosition)
   })
 
-  const cancel = () => machine.send({ type: 'cancel game event' })
+  const inProgressQuestion = derived(
+    inProgressEvent,
+    ($inProgressEvent) => $inProgressEvent?.question,
+  )
+
+  $: if (question && $inProgressQuestion !== question) {
+    applyAction()
+  }
+  $: question = $inProgressQuestion
 </script>
 
 <Action on:click={() => applyAction(false)}>Frage stellen</Action>
 
-{#if $startedQuestioning}
+{#if $inProgressEvent}
   <GameDialog title="Frage stellen" on:close={cancel}>
-    <Paragraph>Stellen Sie dem/der Angreifer:in eine der folgenden Fragen:</Paragraph>
+    <Paragraph>Stelle dem/der Angreifer:in eine der folgenden Fragen:</Paragraph>
     <form on:submit|preventDefault={() => applyAction(true)}>
-      <label>
-        <input
-          disabled={!$canAskForItems}
-          type="radio"
-          name="question"
-          value="has-collected-items"
-          bind:group={question}
-        />
-        Nach Gegenstand
+      <RadioOptions vertical>
+        <RadioButton disabled={!$canAskForItems} value="has-collected-items" bind:group={question}>
+          Nach Gegenstand
 
-        <Paragraph>
-          Hat der/die Angreifer:in den Gegenstand, der auf dem Feld abgebildet ist, wo sich der
-          Verteidiger befindet, schon gesammelt?
-        </Paragraph>
-      </label>
+          <Paragraph size="sm" spacing="none">
+            Hat der/die Angreifer:in den Gegenstand, der auf dem Feld abgebildet ist, wo sich der
+            Verteidiger befindet, schon gesammelt?
+          </Paragraph>
+        </RadioButton>
 
-      <label>
-        <input type="radio" name="question" value="is-on-field" bind:group={question} />
-        Nach Standort
+        <RadioButton value="is-on-field" bind:group={question}>
+          Nach Standort
 
-        <Paragraph>Befindet sich der/die Angreifer:in auf dem gleichen Feld?</Paragraph>
-      </label>
+          <Paragraph size="sm" spacing="none"
+            >Befindet sich der/die Angreifer:in auf dem gleichen Feld?</Paragraph
+          >
+        </RadioButton>
+      </RadioOptions>
 
-      <button type="submit" disabled={!question}>Bestätigen</button>
+      <Actions>
+        <Button
+          size="small"
+          inverse
+          type="submit"
+          disabled={!question || !$canApplyAction}
+          disabledReason={!$canApplyAction ? 'Du bist nicht am Zug' : 'Bitte wähle eine Frage aus'}
+          >Bestätigen</Button
+        >
+      </Actions>
     </form>
   </GameDialog>
 {/if}
