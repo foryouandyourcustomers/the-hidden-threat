@@ -12,11 +12,7 @@
   )
 </script>
 
-<Action
-  title="Rollenfähigkeit"
-  disabled={!$isEnabled}
-  on:click={() => applyAction({ finalized: false })}
->
+<Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
   Angreifer:in angrenzend?
 </Action>
 
@@ -25,6 +21,6 @@
     <Paragraph>
       Möchtest du abfragen ob der/die Angreifer:in sich auf einem der angrenzenden Felder befindet?
     </Paragraph>
-    <button on:click={() => applyAction({ finalized: true })}>Ja</button>
+    <button on:click={() => applyAction(true)}>Ja</button>
   </GameDialog>
 {/if}

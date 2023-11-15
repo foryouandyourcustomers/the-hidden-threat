@@ -9,11 +9,7 @@
   })
 </script>
 
-<Action
-  title="Rollenfähigkeit"
-  disabled={!$isEnabled}
-  on:click={() => applyAction({ finalized: false })}
->
+<Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
   Viertel aufdecken
 </Action>
 
@@ -22,6 +18,6 @@
     <Paragraph>
       Möchtest du abfragen auf welchem Viertel des Spielfelds der/die Angreifer:in sich befindet?
     </Paragraph>
-    <button on:click={() => applyAction({ finalized: true })}>Ja</button>
+    <button on:click={() => applyAction(true)}>Ja</button>
   </GameDialog>
 {/if}

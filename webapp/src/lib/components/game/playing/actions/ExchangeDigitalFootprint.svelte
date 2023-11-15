@@ -17,15 +17,11 @@
 
   const onSubmit = () => {
     if (!itemId) return
-    applyAction({ finalized: true })
+    applyAction(true)
   }
 </script>
 
-<Action
-  title="Rollenfähigkeit"
-  disabled={!$isEnabled}
-  on:click={() => applyAction({ finalized: false })}
->
+<Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
   "Digital Footprint" eintauschen
 </Action>
 

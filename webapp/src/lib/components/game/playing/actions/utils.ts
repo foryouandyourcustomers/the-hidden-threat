@@ -5,7 +5,7 @@ import type { ClientEventOf } from '$lib/client/game-machine/types'
 import { GameState } from '$lib/game/game-state'
 import { isActionEventOf, type ActionEventOf, type GameEventAction } from '$lib/game/types'
 import type { DistributiveOmit } from '$lib/utils'
-import { readable } from 'svelte/store'
+import { derived, readable } from 'svelte/store'
 
 export const isActionInProgress = (machine: ClientUsedMachine, action: GameEventAction) =>
   useSelector(machine.service, ({ context }) => {
@@ -13,7 +13,7 @@ export const isActionInProgress = (machine: ClientUsedMachine, action: GameEvent
     return isActionEventOf(gameState.lastEvent, action)
   })
 
-export const createActionHandler = <Action extends GameEventAction, GetEventOptions extends object>(
+export const createActionHandler = <Action extends GameEventAction>(
   action: Action,
   {
     createEvent,
@@ -21,7 +21,6 @@ export const createActionHandler = <Action extends GameEventAction, GetEventOpti
   }: {
     createEvent: (
       gameState: GameState,
-      options: GetEventOptions,
     ) => DistributiveOmit<
       ActionEventOf<Action>,
       'userId' | 'action' | 'type' | 'timestamp' | 'finalized' | 'playerId'
@@ -31,10 +30,14 @@ export const createActionHandler = <Action extends GameEventAction, GetEventOpti
 ) => {
   const { machine } = getGameContext()
 
-  const inProgress = useSelector(machine.service, ({ context }) => {
+  const inProgressEvent = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
-    return isActionEventOf(gameState.lastEvent, action)
+    if (isActionEventOf(gameState.lastEvent, action)) {
+      return gameState.lastEvent
+    } else return undefined
   })
+
+  const inProgress = derived(inProgressEvent, ($inProgressEvent) => !!$inProgressEvent)
 
   const isEnabled = enabledCheck
     ? useSelector(machine.service, ({ context }) => {
@@ -42,15 +45,13 @@ export const createActionHandler = <Action extends GameEventAction, GetEventOpti
       })
     : readable(true)
 
-  const getActionEvent = (
-    options: { finalized: boolean } & GetEventOptions,
-  ): ClientEventOf<'apply game event'> => {
+  const getActionEvent = (finalized = false): ClientEventOf<'apply game event'> => {
     const gameState = GameState.fromContext(machine.service.getSnapshot().context)
     return {
       type: 'apply game event',
       gameEvent: {
-        ...createEvent(gameState, options),
-        finalized: options.finalized,
+        ...createEvent(gameState),
+        finalized,
         type: 'action',
         action,
         playerId: gameState.activePlayer.id,
@@ -58,8 +59,10 @@ export const createActionHandler = <Action extends GameEventAction, GetEventOpti
     }
   }
 
-  const applyAction = (options: { finalized: boolean } & GetEventOptions) => {
-    machine.send(getActionEvent(options))
+  const canApplyAction = useSelector(machine.service, (state) => state.can(getActionEvent()))
+
+  const applyAction = (finalized = false) => {
+    machine.send(getActionEvent(finalized))
   }
 
   const cancel = () => machine.send({ type: 'cancel game event' })
@@ -68,6 +71,8 @@ export const createActionHandler = <Action extends GameEventAction, GetEventOpti
     isEnabled,
     applyAction,
     inProgress,
+    inProgressEvent,
     cancel,
+    canApplyAction,
   }
 }

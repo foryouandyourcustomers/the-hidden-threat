@@ -15,11 +15,7 @@
   })
 </script>
 
-<Action
-  title="Rollenfähigkeit"
-  disabled={!$isEnabled}
-  on:click={() => applyAction({ finalized: false })}
->
+<Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
   Aktiver Angriff?
 </Action>
 
@@ -29,6 +25,6 @@
       Möchtest du abfragen ob der/die Angreifer:in einen aktiven Angriff auf die Stufe auf der du
       dich befindest hat?
     </Paragraph>
-    <button on:click={() => applyAction({ finalized: true })}>Ja</button>
+    <button on:click={() => applyAction(true)}>Ja</button>
   </GameDialog>
 {/if}

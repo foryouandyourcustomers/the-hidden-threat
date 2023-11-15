@@ -25,9 +25,8 @@
   <div class="dialog">
     <Heading size="sm" spacing="none">
       {#if title}{title}{/if}
-
-      <button class="unstyled close-button" slot="info" on:click={close}><CloseIcon /></button>
     </Heading>
+    <button class="unstyled close-button" on:click={close}><CloseIcon /></button>
     {#if $$slots.default}
       <div class="content">
         <slot />
@@ -59,17 +58,20 @@
     position: relative;
     box-shadow: 0px 0px 30px 0px var(--color-shadow-secondary);
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     background-color: white;
     padding: 0.75rem 1.5rem;
     min-width: 30rem;
     color: black;
   }
   .close-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
     :global(svg) {
       display: block;
-      width: 1rem;
-      height: 1rem;
+      width: 1.5rem;
+      height: 1.5rem;
     }
   }
 </style>
