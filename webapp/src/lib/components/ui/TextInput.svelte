@@ -35,10 +35,14 @@
     display: block;
     border: 1px solid var(--color-grey-300);
     border-radius: var(--radius-md);
+    background: var(--color-blue-spielbrett);
     padding-inline: 0.75rem;
     width: 100%;
     min-width: 18rem;
     height: 2.5rem;
+    &:focus-visible {
+      outline: 3px solid #fff8;
+    }
   }
 
   .invalid {

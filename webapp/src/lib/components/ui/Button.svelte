@@ -106,5 +106,9 @@
         --_color-border: transparent;
       }
     }
+
+    &:focus-visible {
+      outline: 3px solid #fff8;
+    }
   }
 </style>
