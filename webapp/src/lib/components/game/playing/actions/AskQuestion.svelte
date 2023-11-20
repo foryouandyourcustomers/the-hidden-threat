@@ -53,7 +53,11 @@
     <Paragraph>Stelle dem/der Angreifer:in eine der folgenden Fragen:</Paragraph>
     <form on:submit|preventDefault={() => applyAction(true)}>
       <RadioOptions vertical>
-        <RadioButton disabled={!$canAskForItems} value="has-collected-items" bind:group={question}>
+        <RadioButton
+          disabled={!$canAskForItems || !$canApplyAction}
+          value="has-collected-items"
+          bind:group={question}
+        >
           Nach Gegenstand
 
           <Paragraph size="sm" spacing="none">
@@ -62,7 +66,7 @@
           </Paragraph>
         </RadioButton>
 
-        <RadioButton value="is-on-field" bind:group={question}>
+        <RadioButton disabled={!$canApplyAction} value="is-on-field" bind:group={question}>
           Nach Standort
 
           <Paragraph size="sm" spacing="none"

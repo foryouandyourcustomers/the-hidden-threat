@@ -23,6 +23,7 @@
 <style lang="postcss">
   .radio-container {
     display: flex;
+    position: relative;
     gap: 0.5rem;
     cursor: pointer;
     border-radius: var(--radius-sm);
@@ -41,6 +42,17 @@
     &:not(.with-title) {
       input {
         margin-top: 0.75rem;
+      }
+    }
+    .title {
+      margin-right: 1.5rem;
+    }
+    &.with-title {
+      flex-direction: column;
+      input {
+        position: absolute;
+        top: 0.7rem;
+        right: 0.5rem;
       }
     }
   }
