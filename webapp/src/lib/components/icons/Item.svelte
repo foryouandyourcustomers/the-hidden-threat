@@ -4,8 +4,8 @@
   export let itemId: AttackItemId | DefenseItemId
 </script>
 
-{#if itemId === 'certificate'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {#if itemId === 'certificate'}
     <path
       d="M24 29.6h-7.8a412.3 412.3 0 0 1-14-.3c-.2 0-.2-.2-.2-.3.2-1.8.5-6.1.4-8l-.1-10.5V9.2c0-.2.2-.4.4-.4 0 0 0 0 0 0h2l14.5.2c5.6 0 11-.5 16.4-.9L37 8l.3.1.2.3V18a160.1 160.1 0 0 0 .5 11l-.3.2c-2.6 0-7.6.3-7.6.3"
       stroke="currentColor"
@@ -27,9 +27,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'insurance'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'insurance'}
     <path
       d="M19.7 3s7 4.5 13.6 4.2l.9 10.9S35.7 32.6 20.5 37c0 0-13-2.3-14.2-17.7L6 8.3s7-.6 13.7-5.3Z"
       stroke="currentColor"
@@ -51,9 +49,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'security-camera'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'security-camera'}
     <path
       d="M17.1 24.8c0-.9-.8-1.5-2-1.6-1.2 0-2 .7-2 1.7s.9 1.8 2 1.8c1.2 0 2-.7 2-1.9Z"
       stroke="currentColor"
@@ -82,9 +78,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'alarm-system'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'alarm-system'}
     <path
       d="M25.1 24s0 0 0 0l-.2-.1v-.4c.2 0 .4 0 .4.2 0 .1 0 .2-.2.2Z"
       fill="currentColor"
@@ -114,9 +108,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'lock'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'lock'}
     <g
       clip-path="url(#a3)"
       stroke="currentColor"
@@ -139,9 +131,7 @@
         <path fill="#fff" transform="translate(8 2)" d="M0 0h23v36H0z" />
       </clipPath>
     </defs>
-  </svg>
-{:else if itemId === 'gps-tracker'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'gps-tracker'}
     <path
       d="m23.6 31.7 3.6.8c1.7.6 2.8 1.6 2.3 2.3-.8 1.2-3.3 2-6.8 2.2H19a19 19 0 0 1-6.7-1.7c-1.7-1-1.7-2-.2-2.7 1-.4 2.6-.8 4.4-1"
       stroke="currentColor"
@@ -163,9 +153,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'license'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'license'}
     <path
       d="m13.2 3.3-6.7.2c-.3 0-.5.2-.5.5 0 1 .2 3.4.1 4v14.7l.5 12.7.1 2.2c0 .2.3.4.5.4h5.5c4 0 7.9-.1 11.8-.3l5.3-.2c.3 0 .5-.2.5-.4v-4.2m-.5-11.6-.2-8-.2-7.5V3.4c0-.3-.3-.5-.5-.5l-6.4.2"
       stroke="currentColor"
@@ -194,9 +182,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'encrypted-data'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'encrypted-data'}
     <path
       d="M34.6 16v-6l-.2-.3-.3-.1-1.4.1c-4.8.5-9.3.1-14.4.1 0 0-1 .2-1.4-.8-.2-.5-.7-1.7-1.6-1.8-1 0-9.5-.6-11.4 0 0 0-1.6.4-1.6 1.4v14.5c.1 1.9-.1 6.5-.3 8.4"
       stroke="currentColor"
@@ -239,9 +225,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'extinguisher'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'extinguisher'}
     <path
       d="M21.6 14.7a3.7 3.7 0 0 0-2.8-2.4M21.7 25v-8.2m-.2 14.7V27m6.4-5.7-1.4-5.1m2.3 8.6-.5-2.1m-2.5-7.5-.5.4s0 0 0 0 0 0 0 0 0 0 0 0v.1s0 0 0 0 0 0 0 0l2.3 11s0 0 0 0l.1.2a3.6 3.6 0 0 0 1.6.1c.5 0 1.4-.4 1.7-.6.3-.2 1-.8 1-1.2l-.6-1.6s0 0 0 0 0 0 0 0l-3.8-8.5s0 0 0 0V15a2 2 0 0 0-.7-.2c-.9.1-1.2.4-1.2.4h0Z"
       stroke="currentColor"
@@ -270,9 +254,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'firewall'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'firewall'}
     <path
       d="M2.5 5.2c-.2 0-.3 0-.4.3v3.4c-.1 1 1.2.7 1.5.7h7c.8 0 1 0 1-.6V5.3c0-.5-8.7-.2-9-.1Zm19.7 4.3c.2 0 .4 0 .5-.3V5.7c0-.9-1.2-.7-1.6-.7-.2 0-4.8.2-6.9 0-.8 0-1 .1-1 .6v3.7c0 .6 8.7.3 9 .2Zm2.5-4.3c-.2 0-.4 0-.5.3v3.4c0 1 1.2.7 1.6.7h6.9c.8 0 1 0 1-.6V5.3c0-.5-8.6-.2-9-.1Zm11.5 10c.2 0 .3 0 .4-.3.2-.4.1-3.2.1-3.4 0-1-1.3-.7-1.6-.7h-7c-.7 0-1 0-.9.6v2.1c0 .5-.1 1.1 0 1.6 0 .5 8.6.2 9 .1ZM16.6 11c-.2 0-.3 0-.4.2v3.5c-.1.9 1.2.7 1.5.7.3 0 4.8-.2 7 0 .8 0 1-.1 1-.6v-3.7c0-.6-8.7-.2-9-.2ZM14 15.2c.2 0 .4 0 .5-.3v-3.4c0-1-1.2-.7-1.5-.7H6c-.8 0-1 0-1 .6V15c0 .5 8.7.2 9 .1ZM2.6 16.8c-.2 0-.3.1-.4.4-.2.4-.1 3.2-.1 3.4 0 1 1.3.7 1.6.7h7c.7 0 1 0 .9-.6v-2.1c0-.5.1-1.1 0-1.6 0-.6-8.6-.2-9-.2Zm19.7 4.4c.2 0 .3 0 .4-.3.2-.4.1-3.3.1-3.5 0-.9-1.3-.7-1.6-.7h-7c-.7 0-1 .1-.9.6v2.1c0 .5-.1 1.2 0 1.6 0 .6 8.6.2 9 .2Zm11.5-2.1v-2c0-.7-8.7-.3-9-.3-.3 0-.4.1-.5.4v3.4m-.4 1.7a67 67 0 0 0-7.8.1c-.2 0-.3 0-.4.3v3.5c0 .9 1.2.7 1.5.7.3 0 4.3-.2 6.4 0m-10-.2c.1 0 .3 0 .4-.3V23c0-1-1.2-.7-1.5-.7h-7c-.8 0-1 0-1 .5v3.8c0 .5 8.7.2 9 .1Z"
       stroke="currentColor"
@@ -301,9 +283,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'fake-identity-card'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'fake-identity-card'}
     <path
       d="M15.4 7.2H9s0 0 0 0l.3 9c.2 7.2 1.1 20.5 1.2 21 0 .5.1.6.6.8l9.6-.2h2.4l6.8-.6h.4l.2-.1v-.3l.1-.5a190 190 0 0 0-.3-8.6l-.2-2.3-.2-4.3-1-13.6c0-.3-.1-.4-.5-.5h-3.9l-5.6.2h-1.7m-.2 2c-.4.6-.4 1.7.4 2.4 1 .8 2.3.7 3.1-.2.4-.5.5-1 .5-1.6a2 2 0 0 0-.4-1c-.2-.1-.4-.5-1.5-.7-.5 0-.9 0-1.2.2"
       stroke="currentColor"
@@ -336,9 +316,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'usb-stick'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'usb-stick'}
     <path
       d="M9.4 7.5v.1l.4 1c.1.3.4 0 .5 0l1.6-.8c.2 0 .2-.1.1-.2l-.3-.7-.2-.4c0-.2-2 .9-2.1 1h0Zm4.4-2.1v.2l.5 1c0 .3.3 0 .4 0l1.6-.8c.2 0 .2-.1.2-.2l-.3-.7-.2-.4c-.1-.2-2 .9-2.2 1h0Z"
       stroke="currentColor"
@@ -360,9 +338,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'blueprint'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'blueprint'}
     <path
       d="M4.5 35.3a2 2 0 0 1 0-3.4c1.8-1.2 3.5.3 3.5.3.3-3.5 1-27.9 1-27.9C7.6 3 5.5 3 5.5 3S2.3 3 2 4.3c0 1.4 0 24.7.3 30 0 0 0 3 4.8 3l14.5-.6 12.7-.3h2.2c.2-.2.4-.4.4-.7v-6a309.8 309.8 0 0 0-.6-22h-4.2L9 8.6"
       stroke="currentColor"
@@ -384,9 +360,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'cloud'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'cloud'}
     <path
       d="M27 15.5c.3 0 .5 0 .7-.3.2-.4.1-3 .1-3.2 0-.9-2-.7-2.5-.7-.4 0-7.4.2-10.7 0-1.3 0-1.6.1-1.5.6l-.1 2v1.5c0 .5 13.4.2 14 .1h0ZM13.7 17c-.3.1-.5.1-.6.4-.2.4-.1 3-.2 3.2 0 .9 2 .7 2.5.7h10.8c1.2 0 1.5-.1 1.5-.6v-2c0-.4.2-1 .1-1.5 0-.5-13.5-.2-14-.1h0ZM27 26.5c.3 0 .5 0 .7-.3.2-.3.1-3 .1-3.2 0-.9-2-.7-2.5-.6H14.6c-1.3 0-1.6 0-1.5.5l-.1 2v1.5c0 .5 13.4.2 14 .1h0Z"
       stroke="currentColor"
@@ -408,9 +382,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'virus'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'virus'}
     <path
       d="m35.7 28.4.5-10.7V7.6l-.2-.2-.2-.1-.5-.1a172.4 172.4 0 0 0-8.8-.2H20l-13.7.3c-.4 0-.5.1-.6.5L5.5 9l-1 19.4M35 32.2c.7 0 1.5 0 1.9-.2.5-.3 1-2.6 1.1-2.8 0-.7-4.8-.6-6-.6H5.7c-3.1 0-3.7.1-3.7.5 0 1 0 1.4.3 2 .2.4 1 1 1.7 1 .6 0 29.5.2 31 .1v0Z"
       stroke="currentColor"
@@ -446,9 +418,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'tools'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'tools'}
     <path
       d="M9.7 23.7 9 7.3s1.5-.4 1.2-2.4L10 3.5s-.2-1.2-.5-1.2L7.7 2s-.4 0-.6.7l-.6 1.8s-.8 2.1 1 2.7l-.1 16.5m1 .3-2.5-.1s-.6 0-.6 1.4c0 0 0 .6.6.7 0 0-.5 0-.6.7L5 35.9s-.1 1 .8 1c1.1.1 3.7.5 4.4.4 0 0 1.4 0 1.4-1.4l-.4-9.1s0-.8-.8-.8c0 0 1.2-.1 1.2-.5 0 0 0-1.1-.2-1.4-.2-.3-1.7 0-3-.1h0Z"
       stroke="currentColor"
@@ -484,9 +454,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'gun'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'gun'}
     <path
       d="m9.6 15.9-.3.1v1.3c0 .3.7.2.9.2a101.3 101.3 0 0 1 4.6-.2v-1.4c0-.2-5 0-5.2 0h0ZM33 9.2l.7-1s.6-.7 1 .2c.3 1 .6 1 .6 1"
       stroke="currentColor"
@@ -522,9 +490,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'binoculars'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'binoculars'}
     <path
       d="M38 30c.2-2.4-2.6-4.1-7-4.2-4-.1-6.9 1.7-6.9 4.4s3 4.8 7 4.9c4 .1 6.7-1.9 6.9-5v0Zm-22.4 0c.1-2.4-2.6-4.1-6.9-4.2-4-.1-6.7 1.7-6.7 4.4S4.9 35 8.7 35c4 .1 6.7-1.9 6.9-5v0Z"
       stroke="currentColor"
@@ -553,9 +519,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'dynamite'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'dynamite'}
     <path
       d="M6.2 28.1c.8.1 1.3-1.4 1.4-3.7 0-2.2-.5-3.8-1.4-3.8-.8 0-1.5 1.6-1.5 3.8 0 2.1.6 3.6 1.5 3.7v0Z"
       stroke="currentColor"
@@ -598,9 +562,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'data-exchange'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'data-exchange'}
     <path
       d="M26 10c-.6.1-9 .2-13.2 0-1.5 0-1.9.2-1.8.7l-.1 2.6V15c0 .7 16.7.3 17.4.2m-16.5 2c-.4 0-.7 0-.8.4-.3.5-.2 3.8-.2 4 0 1.1 2.5.9 3.1.8h13.4c1.6.1 1.9 0 1.9-.6v-2.5c0-.6.2-1.4.1-1.9 0-.6-16.8-.2-17.5-.2h0ZM14 29.1c4.8.2 13.8 0 14.3-.1.4 0 .7 0 .9-.4.2-.5.1-3.7.1-4 0-1-2.5-.8-3-.8h-14"
       stroke="currentColor"
@@ -636,9 +598,7 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{:else if itemId === 'digital-footprint'}
-  <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {:else if itemId === 'digital-footprint'}
     <path
       d="M20.1 3.46c-.64-1.37-1.63-2.05-2.48-1.69-.91.39-1.14 1.84-.52 3.36.63 1.57 1.75 2.34 2.85 1.97.6-.2.84-.92.7-1.91m-7.57-1.41c-.63.25-.65 1.28-.05 2.56.57 1.2 1.41 1.79 2.08 1.46.66-.32.75-1.44.2-2.6-.55-1.18-1.43-1.74-2.23-1.42v0Zm-1.7 6.45c.32.11.62.09.86-.09.53-.39.45-1.36-.18-2.25-.65-.9-1.49-1.23-2.14-.82-.5.32-.38 1.2.32 2.18M7.97 10.8c-.33.33-.07.98.64 1.6.66.58 1.35.7 1.68.31.34-.4.1-1.12-.54-1.68-.66-.57-1.36-.66-1.78-.23Zm-.9 3.7c-.21.43.08.92.73 1.21.6.29 1.17.15 1.37-.32.2-.47-.08-1.04-.67-1.3-.6-.28-1.16-.12-1.43.42h0Zm9.98-5.06s-10.18 3.62-5.68 11.08c0 0 1.46 2.48 3.85 4.54 2.39 2.07 4.4 2.86 6.07 6.29 1.66 3.42 4 7.45 7.9 6.51 3.9-.93 3.28-4.31 3.28-4.31"
       stroke="currentColor"
@@ -681,5 +641,13 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
-  </svg>
-{/if}
+  {/if}
+</svg>
+
+<style lang="postcss">
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
