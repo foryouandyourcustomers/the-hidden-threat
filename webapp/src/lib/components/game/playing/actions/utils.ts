@@ -5,7 +5,7 @@ import type { ClientEventOf } from '$lib/client/game-machine/types'
 import { GameState } from '$lib/game/game-state'
 import { isActionEventOf, type ActionEventOf, type GameEventAction } from '$lib/game/types'
 import type { DistributiveOmit } from '$lib/utils'
-import { derived, readable } from 'svelte/store'
+import { readable } from 'svelte/store'
 
 export const isActionInProgress = (machine: ClientUsedMachine, action: GameEventAction) =>
   useSelector(machine.service, ({ context }) => {

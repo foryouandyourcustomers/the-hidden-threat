@@ -31,6 +31,7 @@
     background: color-mix(in oklab, var(--color-white-80), transparent 60%);
     padding: 0.5rem;
     &.disabled {
+      opacity: 0.5;
       cursor: not-allowed;
     }
     .content {

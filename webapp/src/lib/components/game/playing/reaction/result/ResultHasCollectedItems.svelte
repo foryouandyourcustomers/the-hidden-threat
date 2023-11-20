@@ -8,6 +8,8 @@
   import { GameState } from '$lib/game/game-state'
   import isEqual from 'lodash/isEqual'
   import Item from '$lib/components/icons/Item.svelte'
+  import Actions from '$lib/components/ui/Actions.svelte'
+  import Button from '$lib/components/ui/Button.svelte'
 
   let visible = true
 
@@ -36,14 +38,30 @@
 </script>
 
 {#if $collectedItems && visible}
-  <GameDialog title="Gesammelte Gegenstände" on:close={() => (visible = false)}>
+  <GameDialog title="Frage stellen" on:close={() => (visible = false)}>
     {#if $collectedItems.length > 0}
       <Paragraph>Der/die Angreifer:in hat folgende Gegenstände gesammelt:</Paragraph>
-      {#each $collectedItems as item}
-        <Item itemId={item.id} />
-      {/each}
+      <div class="items">
+        {#each $collectedItems as item}
+          <Item itemId={item.id} />
+        {/each}
+      </div>
     {:else}
       <Paragraph>Der/die Angreifer:in hat keine der Gegenstände gesammelt.</Paragraph>
     {/if}
+    <Actions>
+      <Button on:click={() => (visible = false)} inverse size="small">Weiter geht's!</Button>
+    </Actions>
   </GameDialog>
 {/if}
+
+<style lang="postcss">
+  .items {
+    display: flex;
+    gap: 1rem;
+    :global(svg) {
+      width: 4rem;
+      height: 4rem;
+    }
+  }
+</style>

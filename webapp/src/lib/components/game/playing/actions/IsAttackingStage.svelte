@@ -5,6 +5,8 @@
   import isEqual from 'lodash/isEqual'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
+  import Actions from '$lib/components/ui/Actions.svelte'
+  import Button from '$lib/components/ui/Button.svelte'
 
   const { isEnabled, inProgressEvent, applyAction, cancel } = createActionHandler(
     'is-attacking-stage',
@@ -23,11 +25,13 @@
 </Action>
 
 {#if $inProgressEvent}
-  <GameDialog title="Aktiver Angriff?" on:close={cancel}>
+  <GameDialog title="Rollenfähigkeit einsetzen" on:close={cancel}>
     <Paragraph>
       Möchtest du abfragen ob der/die Angreifer:in einen aktiven Angriff auf die Stufe auf der du
       dich befindest hat?
     </Paragraph>
-    <button on:click={() => applyAction(true)}>Ja</button>
+    <Actions>
+      <Button on:click={() => applyAction(true)} inverse size="small">Bestätigen</Button>
+    </Actions>
   </GameDialog>
 {/if}

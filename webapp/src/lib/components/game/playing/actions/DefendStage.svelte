@@ -52,7 +52,13 @@
     </div>
 
     <Actions>
-      <Button disabled={!$canApplyAction} on:click={() => applyAction(true)} inverse size="small">
+      <Button
+        disabled={!$canApplyAction}
+        disabledReason={'Du bist nicht am Zug'}
+        on:click={() => applyAction(true)}
+        inverse
+        size="small"
+      >
         Stufe verteidigen
       </Button>
     </Actions>

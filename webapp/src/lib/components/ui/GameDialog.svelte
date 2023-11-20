@@ -1,7 +1,6 @@
 <script lang="ts">
-  import CloseIcon from '~icons/lucide/x'
   import { createEventDispatcher } from 'svelte'
-  import Heading from './Heading.svelte'
+  import CloseIcon from '~icons/lucide/x'
 
   export let title = ''
 
@@ -23,9 +22,7 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div class="backdrop" on:click={close} />
   <div class="dialog">
-    <Heading size="sm" spacing="none">
-      {#if title}{title}{/if}
-    </Heading>
+    {#if title}<h2>{title}</h2>{/if}
     <button class="unstyled close-button" on:click={close}><CloseIcon /></button>
     {#if $$slots.default}
       <div class="content">
@@ -38,6 +35,13 @@
 <svelte:window on:keydown|preventDefault={onKeyDown} />
 
 <style lang="postcss">
+  h2 {
+    font-weight: 500;
+    font-size: 1.25rem;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
   .dialog-wrapper {
     display: grid;
     position: fixed;

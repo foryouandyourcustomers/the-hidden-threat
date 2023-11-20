@@ -96,7 +96,7 @@
 
     &[disabled] {
       --_color-text: var(--color-text-disabled);
-      --_color-border: var(--color-border-disabled);
+      /* --_color-border: var(--color-border-disabled); */
       opacity: 0.6;
       cursor: not-allowed;
       pointer-events: none;
