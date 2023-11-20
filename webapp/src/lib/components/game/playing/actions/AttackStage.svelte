@@ -1,7 +1,6 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
-  import type { ClientEventOf } from '$lib/client/game-machine/types'
   import Item from '$lib/components/icons/Item.svelte'
   import Stage from '$lib/components/icons/Stage.svelte'
   import Actions from '$lib/components/ui/Actions.svelte'
@@ -10,9 +9,8 @@
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import RadioButton from '$lib/components/ui/RadioButton.svelte'
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
-  import type { StageId } from '$lib/game/constants/stages'
   import { GameState } from '$lib/game/game-state'
-  import type { Coordinate, SharedGameContext } from '$lib/game/types'
+  import type { Coordinate } from '$lib/game/types'
   import { getStage } from '$lib/game/utils'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
@@ -22,7 +20,7 @@
   let selectedPosition: Coordinate | undefined = undefined
 
   const { inProgressEvent, applyAction, cancel, canApplyAction } = createActionHandler('attack', {
-    createEvent: (gameState) => ({
+    createEvent: () => ({
       position: selectedPosition,
     }),
   })
