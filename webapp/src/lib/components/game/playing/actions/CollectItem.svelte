@@ -64,7 +64,7 @@
             </div>
             <div class="content">
               <div class="name">{item.name}</div>
-              <div class="description">{item.description}</div>
+              <div class="description">{item.description.split('.')[0]}.</div>
             </div>
           </div>
         </RadioButton>
@@ -90,6 +90,7 @@
 <style lang="postcss">
   .item-choice {
     display: flex;
+    gap: 0.5rem;
     .icon {
       flex-shrink: 0;
       width: 3rem;
@@ -100,7 +101,7 @@
     }
     .content {
       max-width: 20ch;
-      max-height: 10rem;
+      max-height: 15rem;
       overflow-y: auto;
     }
   }
