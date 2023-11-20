@@ -4,7 +4,7 @@
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
-  const { inProgress, isEnabled, applyAction, cancel } = createActionHandler(
+  const { inProgressEvent, isEnabled, applyAction, cancel } = createActionHandler(
     'is-next-to-attacker',
     {
       createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
@@ -16,7 +16,7 @@
   Angreifer:in angrenzend?
 </Action>
 
-{#if $inProgress}
+{#if $inProgressEvent}
   <GameDialog title="Angreifer:in angrenzend?" on:close={cancel}>
     <Paragraph>
       Möchtest du abfragen ob der/die Angreifer:in sich auf einem der angrenzenden Felder befindet?

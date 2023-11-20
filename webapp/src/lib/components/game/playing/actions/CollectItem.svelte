@@ -18,15 +18,12 @@
 
   let selectedItemId: ItemId | undefined = undefined
 
-  const { inProgress, inProgressEvent, applyAction, cancel, canApplyAction } = createActionHandler(
-    'collect',
-    {
-      createEvent: (gameState) => ({
-        itemId: selectedItemId,
-        position: gameState.activePlayerPosition,
-      }),
-    },
-  )
+  const { inProgressEvent, applyAction, cancel, canApplyAction } = createActionHandler('collect', {
+    createEvent: (gameState) => ({
+      itemId: selectedItemId,
+      position: gameState.activePlayerPosition,
+    }),
+  })
 
   const collectableItems = useSelector(machine.service, ({ context }) => {
     const gameState = GameState.fromContext(context)
@@ -48,7 +45,7 @@
   Gegenstand einsammeln
 </Action>
 
-{#if $inProgress}
+{#if $inProgressEvent}
   <GameDialog title="Gegenstand einsammeln" on:close={cancel}>
     <Paragraph>Bitte wähle einen Gegenstand aus</Paragraph>
 

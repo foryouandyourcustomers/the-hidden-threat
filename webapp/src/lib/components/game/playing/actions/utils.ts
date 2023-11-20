@@ -37,8 +37,6 @@ export const createActionHandler = <Action extends GameEventAction>(
     } else return undefined
   })
 
-  const inProgress = derived(inProgressEvent, ($inProgressEvent) => !!$inProgressEvent)
-
   const isEnabled = enabledCheck
     ? useSelector(machine.service, ({ context }) => {
         return enabledCheck(GameState.fromContext(context))
@@ -70,7 +68,6 @@ export const createActionHandler = <Action extends GameEventAction>(
   return {
     isEnabled,
     applyAction,
-    inProgress,
     inProgressEvent,
     cancel,
     canApplyAction,

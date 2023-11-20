@@ -6,20 +6,23 @@
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
-  const { isEnabled, inProgress, applyAction, cancel } = createActionHandler('is-attacking-stage', {
-    createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
-    enabledCheck: (gameState) =>
-      !!BOARD_SUPPLY_CHAINS.flat().find((stage) =>
-        isEqual(stage.coordinate, gameState.activePlayerPosition),
-      ),
-  })
+  const { isEnabled, inProgressEvent, applyAction, cancel } = createActionHandler(
+    'is-attacking-stage',
+    {
+      createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
+      enabledCheck: (gameState) =>
+        !!BOARD_SUPPLY_CHAINS.flat().find((stage) =>
+          isEqual(stage.coordinate, gameState.activePlayerPosition),
+        ),
+    },
+  )
 </script>
 
 <Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
   Aktiver Angriff?
 </Action>
 
-{#if $inProgress}
+{#if $inProgressEvent}
   <GameDialog title="Aktiver Angriff?" on:close={cancel}>
     <Paragraph>
       Möchtest du abfragen ob der/die Angreifer:in einen aktiven Angriff auf die Stufe auf der du

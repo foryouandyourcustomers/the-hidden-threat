@@ -5,7 +5,7 @@
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
-  const { inProgress, isEnabled, applyAction, cancel } = createActionHandler(
+  const { inProgressEvent, isEnabled, applyAction, cancel } = createActionHandler(
     'exchange-digital-footprint',
     {
       createEvent: () => ({ item: itemId }),
@@ -25,7 +25,7 @@
   "Digital Footprint" eintauschen
 </Action>
 
-{#if $inProgress}
+{#if $inProgressEvent}
   <GameDialog title="Digital Footprint eintauschen" on:close={cancel}>
     <Paragraph>
       Wähle den Gegenstand den du gegen den Digital Footprint eintauschen willst
