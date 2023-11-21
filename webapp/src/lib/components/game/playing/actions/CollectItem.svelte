@@ -8,19 +8,26 @@
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import RadioButton from '$lib/components/ui/RadioButton.svelte'
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
-  import { getItem, isItemIdOfSide, type ItemId } from '$lib/game/constants/items'
+  import { getItem, isItemIdOfSide } from '$lib/game/constants/items'
   import { GameState } from '$lib/game/game-state'
-  import { derived } from 'svelte/store'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
   const { machine } = getGameContext()
 
-  let selectedItemId: ItemId | undefined = undefined
-
-  const { inProgressEvent, applyAction, cancel, canApplyAction } = createActionHandler('collect', {
-    createEvent: (gameState) => ({
-      itemId: selectedItemId,
+  const {
+    inProgressEvent,
+    applyAction,
+    cancel,
+    canApplyAction,
+    selectedOption,
+    formAction,
+    buttonDisabled,
+    buttonDisabledReason,
+  } = createActionHandler('collect', {
+    extractSelectedOption: (event) => event.itemId,
+    createEvent: (gameState, itemId) => ({
+      itemId,
       position: gameState.activePlayerPosition,
     }),
   })
@@ -32,13 +39,6 @@
       .getItemsForCoordinate(playerPosition)
       .filter((item) => isItemIdOfSide(item.item.id, gameState.activeSide))
   })
-
-  const inProgressItem = derived(inProgressEvent, ($inProgressEvent) => $inProgressEvent?.itemId)
-
-  $: if (selectedItemId && $inProgressItem !== selectedItemId) {
-    applyAction()
-  }
-  $: selectedItemId = $inProgressItem
 </script>
 
 <Action disabled={$collectableItems.length === 0} on:click={() => applyAction()}>
@@ -49,41 +49,41 @@
   <GameDialog title="Gegenstand einsammeln" on:close={cancel}>
     <Paragraph>Bitte wähle einen Gegenstand aus</Paragraph>
 
-    <RadioOptions>
-      {#each $collectableItems as collectableItem}
-        <RadioButton
-          disabled={!$canApplyAction}
-          bind:group={selectedItemId}
-          value={collectableItem.item.id}
+    <form use:formAction>
+      <RadioOptions>
+        {#each $collectableItems as collectableItem}
+          <RadioButton
+            disabled={!$canApplyAction}
+            bind:group={$selectedOption}
+            value={collectableItem.item.id}
+          >
+            {@const item = getItem(collectableItem.item.id)}
+
+            <div class="item-choice">
+              <div class="icon">
+                <Item itemId={collectableItem.item.id} />
+              </div>
+              <div class="content">
+                <div class="name">{item.name}</div>
+                <div class="description">{item.description.split('.')[0]}.</div>
+              </div>
+            </div>
+          </RadioButton>
+        {/each}
+      </RadioOptions>
+
+      <Actions>
+        <Button
+          type="submit"
+          size="small"
+          inverse
+          disabled={$buttonDisabled}
+          disabledReason={$buttonDisabledReason}
         >
-          {@const item = getItem(collectableItem.item.id)}
-
-          <div class="item-choice">
-            <div class="icon">
-              <Item itemId={collectableItem.item.id} />
-            </div>
-            <div class="content">
-              <div class="name">{item.name}</div>
-              <div class="description">{item.description.split('.')[0]}.</div>
-            </div>
-          </div>
-        </RadioButton>
-      {/each}
-    </RadioOptions>
-
-    <Actions>
-      <Button
-        size="small"
-        inverse
-        disabled={!selectedItemId || !$canApplyAction}
-        disabledReason={!$canApplyAction
-          ? 'Du bist nicht am Zug'
-          : 'Bitte wähle einen Gegenstand aus'}
-        on:click={() => applyAction(true)}
-      >
-        Auswahl bestätigen
-      </Button>
-    </Actions>
+          Auswahl bestätigen
+        </Button>
+      </Actions>
+    </form>
   </GameDialog>
 {/if}
 

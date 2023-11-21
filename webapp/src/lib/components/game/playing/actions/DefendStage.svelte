@@ -15,15 +15,20 @@
 
   const { machine } = getGameContext()
 
-  const { inProgressEvent, applyAction, cancel, canApplyAction, isEnabled } = createActionHandler(
-    'defend',
-    {
-      createEvent: (gameState) => ({
-        position: gameState.activePlayerPosition,
-      }),
-      enabledCheck: (gameState) => gameState.canDefendStage,
-    },
-  )
+  const {
+    inProgressEvent,
+    applyAction,
+    cancel,
+    isEnabled,
+    formAction,
+    buttonDisabled,
+    buttonDisabledReason,
+  } = createActionHandler('defend', {
+    createEvent: (gameState) => ({
+      position: gameState.activePlayerPosition,
+    }),
+    enabledCheck: (gameState) => gameState.canDefendStage,
+  })
 
   const boardStage = useSelector(machine.service, ({ context }) =>
     findStageAt(GameState.fromContext(context).activePlayerPosition),
@@ -37,31 +42,33 @@
     <Paragraph>Möchtest Du wirklich diese Stufe verteidigen?</Paragraph>
 
     {@const stage = getStage($boardStage.id)}
-    <div class="stage">
-      <div class="icon">
-        <Stage stageId={$boardStage.id} />
+    <form use:formAction>
+      <div class="stage">
+        <div class="icon">
+          <Stage stageId={$boardStage.id} />
+        </div>
+        <div class="name">
+          {stage.name}
+        </div>
+        <div class="items">
+          {#each stage.defenseItems as itemId}
+            <Item {itemId} />
+          {/each}
+        </div>
       </div>
-      <div class="name">
-        {stage.name}
-      </div>
-      <div class="items">
-        {#each stage.defenseItems as itemId}
-          <Item {itemId} />
-        {/each}
-      </div>
-    </div>
 
-    <Actions>
-      <Button
-        disabled={!$canApplyAction}
-        disabledReason={'Du bist nicht am Zug'}
-        on:click={() => applyAction(true)}
-        inverse
-        size="small"
-      >
-        Stufe verteidigen
-      </Button>
-    </Actions>
+      <Actions>
+        <Button
+          type="submit"
+          disabled={$buttonDisabled}
+          disabledReason={$buttonDisabledReason}
+          inverse
+          size="small"
+        >
+          Stufe verteidigen
+        </Button>
+      </Actions>
+    </form>
   </GameDialog>
 {/if}
 

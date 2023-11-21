@@ -10,18 +10,25 @@
   import RadioButton from '$lib/components/ui/RadioButton.svelte'
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { GameState } from '$lib/game/game-state'
-  import type { Coordinate } from '$lib/game/types'
   import { getStage } from '$lib/game/utils'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
   const { machine } = getGameContext()
 
-  let selectedPosition: Coordinate | undefined = undefined
-
-  const { inProgressEvent, applyAction, cancel, canApplyAction } = createActionHandler('attack', {
-    createEvent: () => ({
-      position: selectedPosition,
+  const {
+    inProgressEvent,
+    applyAction,
+    cancel,
+    canApplyAction,
+    selectedOption: selectedPosition,
+    formAction,
+    buttonDisabled,
+    buttonDisabledReason,
+  } = createActionHandler('attack', {
+    extractSelectedOption: (event) => event.position,
+    createEvent: (_, position) => ({
+      position,
     }),
   })
 
@@ -48,14 +55,14 @@
 {#if $inProgressEvent}
   <GameDialog title="Stufe angreifen" on:close={cancel}>
     <Paragraph>Welche der Stufen möchtest Du angreifen?</Paragraph>
-    <form on:submit|preventDefault={() => applyAction(true)}>
+    <form use:formAction>
       <RadioOptions>
         {#each $attackableStages as boardStage}
           {@const stage = getStage(boardStage.id)}
           <RadioButton
             disabled={!$canApplyAction}
             value={boardStage.coordinate}
-            bind:group={selectedPosition}
+            bind:group={$selectedPosition}
           >
             <svelte:fragment slot="title">
               <div class="title">
@@ -78,12 +85,11 @@
       </RadioOptions>
       <Actions>
         <Button
-          disabled={!$canApplyAction || !selectedPosition}
+          disabled={$buttonDisabled}
+          disabledReason={$buttonDisabledReason}
           type="submit"
           size="small"
-          inverse
-          disabledReason={!$canApplyAction ? 'Du bist nicht am Zug' : 'Bitte wähle eine Stufe aus'}
-          >Bestätigen</Button
+          inverse>Bestätigen</Button
         >
       </Actions>
     </form>

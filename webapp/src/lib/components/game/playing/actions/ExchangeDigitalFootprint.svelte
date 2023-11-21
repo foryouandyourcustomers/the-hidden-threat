@@ -6,32 +6,24 @@
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import RadioButton from '$lib/components/ui/RadioButton.svelte'
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
-  import { ITEMS, isDefenseItemId, type DefenseItemId } from '$lib/game/constants/items'
-  import { derived } from 'svelte/store'
+  import { ITEMS, isDefenseItemId } from '$lib/game/constants/items'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
-  let selectedItemId: DefenseItemId | undefined
-
-  const { inProgressEvent, isEnabled, applyAction, cancel, canApplyAction } = createActionHandler(
-    'exchange-digital-footprint',
-    {
-      createEvent: () => ({ item: selectedItemId }),
-      enabledCheck: (gameState) => gameState.defenseInventory['digital-footprint'] > 0,
-    },
-  )
-
-  const onSubmit = () => {
-    if (!selectedItemId) return
-    applyAction(true)
-  }
-
-  const inProgressItem = derived(inProgressEvent, ($inProgressEvent) => $inProgressEvent?.item)
-
-  $: if (selectedItemId && $inProgressItem !== selectedItemId) {
-    applyAction()
-  }
-  $: selectedItemId = $inProgressItem
+  const {
+    inProgressEvent,
+    isEnabled,
+    applyAction,
+    cancel,
+    selectedOption: selectedItemId,
+    formAction,
+    buttonDisabled,
+    buttonDisabledReason,
+  } = createActionHandler('exchange-digital-footprint', {
+    extractSelectedOption: (event) => event.item,
+    enabledCheck: (gameState) => gameState.defenseInventory['digital-footprint'] > 0,
+    createEvent: (_, item) => ({ item }),
+  })
 </script>
 
 <Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
@@ -45,10 +37,10 @@
       Gegenstand aus der Liste wählst.
     </Paragraph>
 
-    <form on:submit|preventDefault={onSubmit}>
+    <form use:formAction>
       <RadioOptions>
         {#each ITEMS.filter((item) => item.id !== 'digital-footprint' && isDefenseItemId(item.id)) as item}
-          <RadioButton bind:group={selectedItemId} value={item.id}>
+          <RadioButton bind:group={$selectedItemId} value={item.id}>
             <div class="item-choice">
               <div class="icon">
                 <Item itemId={item.id} />
@@ -61,10 +53,8 @@
 
       <Actions>
         <Button
-          disabled={!selectedItemId || !$canApplyAction}
-          disabledReason={!$canApplyAction
-            ? 'Du bist nicht am Zug'
-            : 'Bitte wähle einen Gegenstand aus'}
+          disabled={$buttonDisabled}
+          disabledReason={$buttonDisabledReason}
           size="small"
           inverse
           type="submit">Auswahl bestätigen</Button

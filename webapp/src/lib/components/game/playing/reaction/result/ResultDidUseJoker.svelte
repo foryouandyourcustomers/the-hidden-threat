@@ -17,7 +17,7 @@
       auf die Frage nicht antworten zu müssen. Was das wohl bedeutet?
     </Paragraph>
     <Actions>
-      <Button on:click={() => (visible = false)} size="small" inverse>Weiter geth's!</Button>
+      <Button on:click={() => (visible = false)} size="small" inverse>Weiter geht's!</Button>
     </Actions>
   </GameDialog>
 {/if}

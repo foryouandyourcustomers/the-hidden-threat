@@ -6,35 +6,28 @@
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import RadioButton from '$lib/components/ui/RadioButton.svelte'
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
-  import { ITEMS, isAttackItemId, type AttackItemId } from '$lib/game/constants/items'
-  import { derived } from 'svelte/store'
+  import { ITEMS, isAttackItemId } from '$lib/game/constants/items'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
-  let selectedItemId: AttackItemId | undefined
-
-  const { inProgressEvent, applyAction, cancel, canApplyAction, isEnabled } = createActionHandler(
-    'exchange-joker',
-    {
-      createEvent: (gameState) => ({
-        itemId: selectedItemId,
-        position: gameState.activePlayerPosition,
-      }),
-      enabledCheck: (gameState) => gameState.jokers > 0,
-    },
-  )
-
-  const onSubmit = () => {
-    if (!selectedItemId) return
-    applyAction(true)
-  }
-
-  const inProgressItem = derived(inProgressEvent, ($inProgressEvent) => $inProgressEvent?.itemId)
-
-  $: if (selectedItemId && $inProgressItem !== selectedItemId) {
-    applyAction()
-  }
-  $: selectedItemId = $inProgressItem
+  const {
+    inProgressEvent,
+    applyAction,
+    cancel,
+    canApplyAction,
+    isEnabled,
+    buttonDisabled,
+    buttonDisabledReason,
+    selectedOption,
+    formAction,
+  } = createActionHandler('exchange-joker', {
+    extractSelectedOption: (event) => event.itemId,
+    createEvent: (gameState, itemId) => ({
+      itemId,
+      position: gameState.activePlayerPosition,
+    }),
+    enabledCheck: (gameState) => gameState.jokers > 0,
+  })
 </script>
 
 <Action disabled={!$isEnabled} on:click={() => applyAction()}>Joker einsetzen</Action>
@@ -45,10 +38,10 @@
       >Tausche den Joker gegen einen anderen Schadensgegenstand indem du einen Gegenstand aus der
       Liste wählst.
     </Paragraph>
-    <form on:submit|preventDefault={onSubmit}>
+    <form use:formAction>
       <RadioOptions>
         {#each ITEMS.filter((item) => isAttackItemId(item.id)) as item}
-          <RadioButton bind:group={selectedItemId} disabled={!$canApplyAction} value={item.id}>
+          <RadioButton bind:group={$selectedOption} disabled={!$canApplyAction} value={item.id}>
             <div class="item-choice">
               <div class="icon">
                 <Item itemId={item.id} />
@@ -64,10 +57,8 @@
         <Button
           size="small"
           inverse
-          disabled={!selectedItemId || !$canApplyAction}
-          disabledReason={!$canApplyAction
-            ? 'Du bist nicht am Zug'
-            : 'Bitte wähle einen Gegenstand aus'}
+          disabled={$buttonDisabled}
+          disabledReason={$buttonDisabledReason}
           type="submit"
         >
           Auswahl bestätigen

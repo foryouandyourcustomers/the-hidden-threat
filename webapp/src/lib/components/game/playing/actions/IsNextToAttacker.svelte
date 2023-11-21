@@ -6,12 +6,17 @@
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
-  const { inProgressEvent, isEnabled, applyAction, cancel, canApplyAction } = createActionHandler(
-    'is-next-to-attacker',
-    {
-      createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
-    },
-  )
+  const {
+    inProgressEvent,
+    isEnabled,
+    applyAction,
+    cancel,
+    buttonDisabled,
+    buttonDisabledReason,
+    formAction,
+  } = createActionHandler('is-next-to-attacker', {
+    createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
+  })
 </script>
 
 <Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
@@ -23,10 +28,18 @@
     <Paragraph>
       Möchtest du abfragen ob der/die Angreifer:in sich auf einem der angrenzenden Felder befindet?
     </Paragraph>
-    <Actions>
-      <Button disabled={!$canApplyAction} inverse size="small" on:click={() => applyAction(true)}>
-        Bestätigen
-      </Button>
-    </Actions>
+    <form use:formAction>
+      <Actions>
+        <Button
+          type="submit"
+          disabled={$buttonDisabled}
+          disabledReason={$buttonDisabledReason}
+          inverse
+          size="small"
+        >
+          Bestätigen
+        </Button>
+      </Actions>
+    </form>
   </GameDialog>
 {/if}

@@ -8,16 +8,21 @@
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
 
-  const { isEnabled, inProgressEvent, applyAction, cancel } = createActionHandler(
-    'is-attacking-stage',
-    {
-      createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
-      enabledCheck: (gameState) =>
-        !!BOARD_SUPPLY_CHAINS.flat().find((stage) =>
-          isEqual(stage.coordinate, gameState.activePlayerPosition),
-        ),
-    },
-  )
+  const {
+    isEnabled,
+    inProgressEvent,
+    applyAction,
+    cancel,
+    buttonDisabled,
+    buttonDisabledReason,
+    formAction,
+  } = createActionHandler('is-attacking-stage', {
+    createEvent: (gameState) => ({ position: gameState.activePlayerPosition }),
+    enabledCheck: (gameState) =>
+      !!BOARD_SUPPLY_CHAINS.flat().find((stage) =>
+        isEqual(stage.coordinate, gameState.activePlayerPosition),
+      ),
+  })
 </script>
 
 <Action title="Rollenfähigkeit" disabled={!$isEnabled} on:click={() => applyAction()}>
@@ -26,12 +31,20 @@
 
 {#if $inProgressEvent}
   <GameDialog title="Rollenfähigkeit einsetzen" on:close={cancel}>
-    <Paragraph>
-      Möchtest du abfragen ob der/die Angreifer:in einen aktiven Angriff auf die Stufe auf der du
-      dich befindest hat?
-    </Paragraph>
-    <Actions>
-      <Button on:click={() => applyAction(true)} inverse size="small">Bestätigen</Button>
-    </Actions>
+    <form use:formAction>
+      <Paragraph>
+        Möchtest du abfragen ob der/die Angreifer:in einen aktiven Angriff auf die Stufe auf der du
+        dich befindest hat?
+      </Paragraph>
+      <Actions>
+        <Button
+          type="submit"
+          inverse
+          size="small"
+          disabled={$buttonDisabled}
+          disabledReason={$buttonDisabledReason}>Bestätigen</Button
+        >
+      </Actions>
+    </form>
   </GameDialog>
 {/if}
