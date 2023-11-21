@@ -24,9 +24,9 @@
 {/if}
 
 <div class="actions">
-  <Expandable>
-    <HelpIcon slot="icon" />
-  </Expandable>
+  <OpenButton href="/manual" target="_blank">
+    <HelpIcon />
+  </OpenButton>
   <OpenButton on:click={() => ($enabled = !$enabled)}>
     {#if $enabled}
       <AudioIcon />

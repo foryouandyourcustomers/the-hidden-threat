@@ -7,3 +7,11 @@
     <slot />
   </div>
 </Section>
+
+<style lang="postcss">
+  .richtext {
+    :global(nav.toc) {
+      display: none;
+    }
+  }
+</style>

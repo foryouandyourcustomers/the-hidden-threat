@@ -1,4 +1,12 @@
-<button class="unstyled icon open-button" on:click><slot /></button>
+<script lang="ts">
+  export let href: string | undefined = undefined
+</script>
+
+{#if href}
+  <a class="unstyled icon open-button" on:click {href} {...$$restProps}><slot /></a>
+{:else}
+  <button class="unstyled icon open-button" on:click><slot /></button>
+{/if}
 
 <style lang="postcss">
   .open-button {
