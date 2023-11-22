@@ -52,6 +52,7 @@
       faceId: player.faceId,
       name: user.name,
       character: character.name,
+      characterAbility: character.description,
       isConnected: user.isConnected,
       isPlaying: activePlayerId === player.id,
     }

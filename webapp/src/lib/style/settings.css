@@ -26,7 +26,7 @@
   --color-shadow: #fffa;
 
   --color-border-disabled: var(--color-grey-medium);
-  --color-text-disabled: var(--color-grey-medium);
+  --color-text-disabled: var(--color-grey-dark);
 
   --color-bg-secondary: #29344e;
   --color-shadow-secondary: #1c2526;
@@ -40,7 +40,7 @@
   --color-text-onstrong-secondary: var(--color-text-onstrong);
 
   --color-bg-disabled-strong: var(--color-grey-light);
-  --color-text-disabled-onstrong: var(--color-grey-dark);
+  --color-text-disabled-onstrong: var(--color-grey-extradark);
 
   --layer-grid-backdrop: 1;
   --layer-grid-stage-lines: 2;

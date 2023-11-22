@@ -23,6 +23,7 @@ body {
   background: none;
   padding: 0;
   color: inherit;
+  text-align: unset;
 
   &[disabled] {
     opacity: 0.5;

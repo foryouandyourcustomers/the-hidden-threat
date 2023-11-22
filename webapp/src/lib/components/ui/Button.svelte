@@ -15,26 +15,31 @@
   export let target: string | undefined = undefined
   export let type: 'button' | 'submit' | 'reset' | undefined = undefined
   export let tabIndex = 0
+
+  $: tooltipText = disabled && disabledReason ? disabledReason : title
 </script>
 
 <!--
   It's fine to ignore this warning, because we render either <a> or <button> tag
 -->
-<Tooltip title={disabled && disabledReason ? disabledReason : title}>
-  <svelte:element
-    this={href ? 'a' : 'button'}
-    role="button"
-    tabindex={tabIndex}
-    on:click
-    class={`button ${size}`}
-    class:primary
-    class:inverse
-    {type}
-    {target}
-    {href}
-    disabled={disabled ? true : undefined}><slot>Press me</slot></svelte:element
-  >
-</Tooltip>
+<svelte:element
+  this={href ? 'a' : 'button'}
+  role="button"
+  tabindex={tabIndex}
+  on:click
+  class={`button ${size}`}
+  class:primary
+  class:inverse
+  {type}
+  {target}
+  {href}
+  disabled={disabled ? true : undefined}
+  ><slot>Press me</slot>
+
+  {#if tooltipText}
+    <Tooltip position="left">{tooltipText}</Tooltip>
+  {/if}
+</svelte:element>
 
 <!-- class={`button ${size} ${accent ? 'accent' : ''}`} -->
 <style lang="postcss">
@@ -49,6 +54,7 @@
     --_height: 3rem;
 
     display: inline-flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     gap: 0.5em;
@@ -96,10 +102,9 @@
 
     &[disabled] {
       --_color-text: var(--color-text-disabled);
-      /* --_color-border: var(--color-border-disabled); */
-      opacity: 0.6;
       cursor: not-allowed;
-      pointer-events: none;
+      /* --_color-border: var(--color-border-disabled); */
+      background: color-mix(in oklab, var(--_color-bg), transparent 40%);
       &.primary {
         --_color-text: var(--color-text-disabled-onstrong);
         --_color-bg: var(--color-bg-disabled-strong);

@@ -2,6 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import Polygon from '$lib/components/icons/Polygon.svelte'
+  import Tooltip from '$lib/components/ui/Tooltip.svelte'
   import {
     ATTACKER_REVEAL_ROUNDS,
     NEW_GLOBAL_ATTACK_ROUNDS,
@@ -21,11 +22,26 @@
   {#each new Array(TOTAL_ROUNDS) as _, i}
     <div class="round" style:--round={i} class:current={$currentRound === i}>
       <span>{i + 1}</span>
-      {#if NEW_GLOBAL_ATTACK_ROUNDS.includes(i)}
-        <div class="global-attack"><Polygon color="orange" /></div>
+      {#if NEW_GLOBAL_ATTACK_ROUNDS.includes(i) && i !== 0}
+        <div class="global-attack">
+          <Tooltip click position="left">
+            <div class="tooltip-content">
+              <Polygon color="orange" />
+              Der allgemeine Angriff wird ausgeführt, sofern er nicht verhindert wurde, und ein neues
+              allgemeines Angriffsszenario wird aufgedeckt.
+            </div>
+          </Tooltip>
+          <Polygon color="orange" />
+        </div>
       {/if}
       {#if ATTACKER_REVEAL_ROUNDS.includes(i)}
         <div class="attacker-reveal">
+          <Tooltip click position="left">
+            <div class="tooltip-content">
+              <Polygon color="red-angriff" />
+              Der Angreifer muss seinen Standort offenbaren
+            </div>
+          </Tooltip>
           <Polygon color="red-angriff" />
           <svg class="eye" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 21">
             <g clip-path="url(#a2)">
@@ -108,17 +124,25 @@
         position: absolute;
         top: 1.5rem;
         right: -0.75rem;
+        cursor: pointer;
         width: 2rem;
       }
       .attacker-reveal {
         position: absolute;
         top: 1.5rem;
         left: -1.25rem;
+        cursor: pointer;
         width: 2rem;
         .eye {
           position: absolute;
           top: 0.25rem;
           left: -0.75rem;
+        }
+      }
+      .tooltip-content {
+        :global(svg) {
+          display: block;
+          width: 3rem;
         }
       }
     }

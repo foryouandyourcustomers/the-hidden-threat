@@ -7,6 +7,7 @@
     faceId: FaceId
     name: string
     character: string
+    characterAbility?: string | undefined
     isConnected: boolean
     isPlaying: boolean
   }
@@ -33,6 +34,7 @@
           faceId={player.faceId}
           name={player.name}
           character={player.character}
+          characterAbility={player.characterAbility}
           isConnected={player.isConnected}
           isPlaying={player.isPlaying}
           {side}
