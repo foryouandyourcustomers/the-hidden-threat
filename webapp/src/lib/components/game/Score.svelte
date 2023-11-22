@@ -42,6 +42,7 @@
   .score-board {
     display: grid;
     grid-template-areas: 'title attack separator defense';
+    grid-area: score;
     align-items: center;
     align-self: start;
     border-radius: var(--radius-md);

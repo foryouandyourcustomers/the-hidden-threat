@@ -44,6 +44,7 @@
 <style lang="postcss">
   .actions {
     display: flex;
+    grid-area: options;
     gap: 1rem;
   }
 </style>
