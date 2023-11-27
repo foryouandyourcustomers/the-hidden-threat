@@ -56,7 +56,7 @@
 
   const user = useSelector(machine.service, ({ context }) => getCurrentUser(context), isEqual)
 
-  setGameContext({ gameId, userId, user, hostUserId, machine, highlightedFields: writable() })
+  setGameContext({ gameId, userId, user, hostUserId, machine, highlightedFields: writable({}) })
 
   const state = machine.state
 

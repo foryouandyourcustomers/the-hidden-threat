@@ -1,10 +1,31 @@
 <script lang="ts">
+  import { getGameContext } from '$lib/client/game-context'
   import type { AttackItemId, DefenseItemId } from '$lib/game/constants/items'
 
+  export let highlightOnHover = false
   export let itemId: AttackItemId | DefenseItemId
+
+  const { highlightedFields } = getGameContext()
+
+  const highlight = (highlight = false) => {
+    if (!highlightOnHover) return
+    highlightedFields.update((fields) => ({
+      ...fields,
+      items: highlight ? [itemId] : undefined,
+    }))
+  }
 </script>
 
-<svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<svg
+  viewBox="0 0 40 40"
+  width="40"
+  height="40"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  on:mouseenter={() => highlight(true)}
+  on:mouseleave={() => highlight(false)}
+>
   {#if itemId === 'certificate'}
     <path
       d="M24 29.6h-7.8a412.3 412.3 0 0 1-14-.3c-.2 0-.2-.2-.2-.3.2-1.8.5-6.1.4-8l-.1-10.5V9.2c0-.2.2-.4.4-.4 0 0 0 0 0 0h2l14.5.2c5.6 0 11-.5 16.4-.9L37 8l.3.1.2.3V18a160.1 160.1 0 0 0 .5 11l-.3.2c-2.6 0-7.6.3-7.6.3"

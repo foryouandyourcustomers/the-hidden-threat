@@ -4,14 +4,17 @@
   import { isAttackItemId } from '$lib/game/constants/items'
   import isEqual from 'lodash/isEqual'
   import ItemPolygon from './ItemPolygon.svelte'
+  import { getGameContext } from '$lib/client/game-context'
 
   export let coordinate: [number, number]
+
+  const { highlightedFields } = getGameContext()
 
   const items = BOARD_ITEMS.filter((item) => isEqual(item.position, coordinate))
 </script>
 
 {#each items as item}
-  <div class="item">
+  <div class="item" class:highlight={!!$highlightedFields.items?.includes(item.id)}>
     <ItemPolygon side={isAttackItemId(item.id) ? 'attack' : 'defense'} />
     <div class="icon">
       <Item itemId={item.id} />
@@ -20,28 +23,46 @@
 {/each}
 
 <style lang="postcss">
+  @keyframes pulsate {
+    0%,
+    100% {
+      scale: 1.2;
+    }
+    40%,
+    60% {
+      scale: 1.4;
+    }
+  }
   .item {
     position: absolute;
     width: 1.5rem;
     height: 1.5rem;
+    &.highlight {
+      scale: 1.4;
+      z-index: var(--layer-top);
+      animation: pulsate 1s infinite;
+      outline: 0.3rem solid var(--color-orange-dark);
+      border-radius: var(--radius-full);
+      background: var(--color-orange-dark);
+    }
     > :global(svg) {
       position: absolute;
     }
 
     &:nth-child(1) {
-      top: 0.25rem;
-      left: 0.25rem;
-      .icon {
-        top: 0.25rem;
-        left: 0.25rem;
+      top: 0.5rem;
+      left: 0.5rem;
+      > :global(svg) {
+        top: -0.25rem;
+        left: -0.25rem;
       }
     }
     &:nth-child(2) {
-      right: 0.25rem;
-      bottom: 0.25rem;
-      .icon {
-        right: 0.25rem;
-        bottom: 0.25rem;
+      right: 0.5rem;
+      bottom: 0.5rem;
+      > :global(svg) {
+        right: -0.25rem;
+        bottom: -0.25rem;
       }
     }
     .icon {

@@ -7,6 +7,7 @@
   import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
   import type { TargetedAttack } from '$lib/game/constants/targeted-attacks'
   import { GameState } from '$lib/game/game-state'
+  import type { Coordinate } from '$lib/game/types'
   import { getStage } from '$lib/game/utils'
   import { throwIfNotFound } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
@@ -40,24 +41,23 @@
     ).coordinate
   }
 
-  let hovered = false
+  const highlightAttack = (attackIndex: number | null) => {
+    let highlighted: Coordinate[] | undefined = undefined
 
-  $: if (hovered) {
+    if (attackIndex !== null) {
+      highlighted = [getPositionForTarget($activeAttacks[attackIndex].target)]
+    }
+
+    console.log('highlighting', highlighted, attackIndex)
+
     highlightedFields.update((fields) => ({
       ...fields,
-      info: [getPositionForTarget(selectedAttack.target)],
+      info: highlighted,
     }))
-  } else {
-    highlightedFields.update((fields) => ({ ...fields, info: undefined }))
   }
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-  class="scenarios"
-  on:mouseenter={() => (hovered = true)}
-  on:mouseleave={() => (hovered = false)}
->
+<div class="scenarios">
   <div class="description">
     <Paragraph spacing="none" size="sm">Gezielter Angriff</Paragraph>
 
@@ -78,7 +78,7 @@
       <div class="target">
         <div class="items">
           {#each selectedAttack.target.requiredItems as item}
-            <Item itemId={item} />
+            <Item highlightOnHover itemId={item} />
           {/each}
         </div>
       </div>
@@ -86,11 +86,15 @@
   </div>
   <ul class="attacks">
     {#each new Array($totalAttackCount) as _, index}
-      <li>
+      {@const disabled = index >= $activeAttacks.length}
+      <li
+        on:mouseenter={() => (disabled ? undefined : highlightAttack(index))}
+        on:mouseleave={() => highlightAttack(null)}
+      >
         <AttackCard
           side="attack"
           selected={selectedAttackIndex === index}
-          disabled={index >= $activeAttacks.length}
+          {disabled}
           on:click={() => (selectedAttackIndex = index)}
         >
           Angriff {index + 1}

@@ -11,6 +11,8 @@
   import type { StageId } from '$lib/game/constants/stages'
   import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
   import { throwIfNotFound } from '$lib/utils'
+  import type { GlobalAttack } from '$lib/game/constants/global-attacks'
+  import type { Coordinate } from '$lib/game/types'
 
   const { machine, highlightedFields } = getGameContext()
 
@@ -35,33 +37,29 @@
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   $: selectedAttack = $globalAttackScenario.attacks[selectedAttackIndex]
 
-  let hovered = false
-
   const getPositionsForStage = (stageId: StageId) => {
     return (
       BOARD_SUPPLY_CHAINS.flat().filter((stage) => stage.id === stageId) ?? throwIfNotFound()
     ).map((stage) => stage.coordinate)
   }
 
-  $: if (hovered && selectedAttack) {
+  const highlightAttack = (attack: GlobalAttack | null) => {
+    let highlighted: Coordinate[] | undefined = undefined
+
+    if (attack) {
+      highlighted = attack.targets.map((stage) => getPositionsForStage(stage.stageId)).flat()
+    }
+
     highlightedFields.update((fields) => ({
       ...fields,
-      info: selectedAttack.targets.map((stage) => getPositionsForStage(stage.stageId)).flat(),
-    }))
-  } else {
-    highlightedFields.update((fields) => ({
-      ...fields,
-      info: undefined,
+      info: highlighted,
     }))
   }
+
+  $: console.log($highlightedFields.items)
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-  class="scenarios"
-  on:mouseenter={() => (hovered = true)}
-  on:mouseleave={() => (hovered = false)}
->
+<div class="scenarios">
   <div class="description">
     <Paragraph spacing="none" size="sm">Allgemeiner Angriff</Paragraph>
 
@@ -86,7 +84,7 @@
             </div>
             <div class="items">
               {#each stage.defenseItems as item}
-                <Item itemId={item} />
+                <Item highlightOnHover itemId={item} />
               {/each}
             </div>
           </div>
@@ -105,11 +103,15 @@
         Szenario
       </AttackCard>
     </li>
-    {#each $globalAttackScenario.attacks as _, index}
-      <li>
+    {#each $globalAttackScenario.attacks as attack, index}
+      {@const disabled = index > $activeAttackIndex}
+      <li
+        on:mouseenter={() => (disabled ? undefined : highlightAttack(attack))}
+        on:mouseleave={() => highlightAttack(null)}
+      >
         <AttackCard
           side="defense"
-          disabled={index > $activeAttackIndex}
+          {disabled}
           selected={selectedAttackIndex === index}
           on:click={() => (selectedAttackIndex = index)}
         >

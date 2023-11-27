@@ -36,7 +36,7 @@
   {#each ITEMS as item}
     {#if item.side === $side}
       <li class="item">
-        <Item itemId={item.id} />
+        <Item highlightOnHover itemId={item.id} />
         <div>{item.name} <strong>{$itemInventories[item.id]}</strong></div>
       </li>
     {/if}
