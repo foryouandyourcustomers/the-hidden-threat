@@ -31,7 +31,7 @@
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   $: selectedAttack = $activeAttacks[selectedAttackIndex]!
 
-  $: selectedStage = getStage(selectedAttack.target.stageId)
+  $: selectedStage = selectedAttack ? getStage(selectedAttack.target.stageId) : undefined
 
   const getPositionForTarget = (target: TargetedAttack['target']) => {
     return (
@@ -58,32 +58,8 @@
 </script>
 
 <div class="scenarios">
-  <div class="description">
-    <Paragraph spacing="none" size="sm">Gezielter Angriff</Paragraph>
+  <Paragraph spacing="none" size="sm">Gezielter Angriffe</Paragraph>
 
-    <Heading size="sm" spacing="none">Angriff {selectedAttackIndex + 1}</Heading>
-    <Paragraph size="sm" spacing="none">
-      {selectedAttack.description}
-    </Paragraph>
-
-    <Heading size="xs" spacing="none">Aufgabe</Heading>
-    <Paragraph size="sm" spacing="none">
-      Legt {selectedStage.gender === 'f' ? 'die' : selectedStage.gender === 'n' ? 'das' : 'den'}
-      {selectedStage.name} der Supply Chain {selectedAttack.target.supplyChainId + 1} lahm.
-    </Paragraph>
-
-    <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
-
-    <div class="targets">
-      <div class="target">
-        <div class="items">
-          {#each selectedAttack.target.requiredItems as item}
-            <Item highlightOnHover itemId={item} />
-          {/each}
-        </div>
-      </div>
-    </div>
-  </div>
   <ul class="attacks">
     {#each new Array($totalAttackCount) as _, index}
       {@const disabled = index >= $activeAttacks.length}
@@ -102,12 +78,51 @@
       </li>
     {/each}
   </ul>
+
+  {#if selectedAttack && selectedStage}
+    <div class="description">
+      <Heading size="sm" spacing="none">Angriff {selectedAttackIndex + 1}</Heading>
+      <Paragraph size="sm" spacing="none">
+        {selectedAttack.description}
+      </Paragraph>
+    </div>
+
+    <div class="key-info">
+      <div class="summary">
+        <Heading size="xs" spacing="none">Aufgabe</Heading>
+        <Paragraph size="sm" spacing="none">
+          Legt {selectedStage.gender === 'f' ? 'die' : selectedStage.gender === 'n' ? 'das' : 'den'}
+          {selectedStage.name} der Supply Chain {selectedAttack.target.supplyChainId + 1} lahm.
+        </Paragraph>
+      </div>
+      <div class="items">
+        <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
+        <div class="targets">
+          <div class="target">
+            <div class="items">
+              {#each selectedAttack.target.requiredItems as item}
+                <Item highlightOnHover itemId={item} />
+              {/each}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {:else}
+    <div class="not-started">
+      <Heading size="md" spacing="none">Es sind noch keine Karten aufgedeckt</Heading>
+      <Paragraph spacing="none" size="sm">
+        Sobald alle Spieler:innen platziert wurden, werden die ersten Karten aufgedeckt.
+      </Paragraph>
+    </div>
+  {/if}
 </div>
 
 <style lang="postcss">
   .scenarios {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     height: 100%;
   }
   .description {
@@ -116,9 +131,10 @@
   .attacks {
     display: flex;
     align-items: flex-end;
-    gap: 1rem;
-    margin: 0rem;
-    padding: 0rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin: -1rem;
+    padding: 1rem;
     width: 100%;
     overflow-x: scroll;
     list-style: none;
@@ -131,6 +147,13 @@
     .items {
       display: flex;
       gap: 0.5rem;
+    }
+  }
+  .key-info {
+    display: flex;
+    gap: 2rem;
+    > * {
+      flex: 1;
     }
   }
 </style>

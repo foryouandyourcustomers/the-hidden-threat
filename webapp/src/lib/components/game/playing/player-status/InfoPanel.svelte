@@ -88,7 +88,7 @@
     border-radius: var(--radius-md);
     border-top-left-radius: 0rem;
     background-color: white;
-    padding: 1.25rem;
+    padding: 0.75rem 1.25rem;
     max-width: 100%;
     overflow: hidden;
     color: var(--color-blue-spielbrett);

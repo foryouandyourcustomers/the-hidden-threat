@@ -477,6 +477,9 @@ export class GameState {
   }
 
   get activeTargetedAttacks() {
+    // Active attacks are only available after the placement phase.
+    if (this.finalizedPlacementEvents.length < 5) return []
+
     const attackCount = 3 * (Math.floor(this.currentRound / 3) + 1)
     return this.context.targetedAttacks
       .slice(0, attackCount)

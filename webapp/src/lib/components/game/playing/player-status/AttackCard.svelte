@@ -27,11 +27,11 @@
     border-radius: var(--radius-xs);
     isolation: isolate;
     padding: 0.5rem 0;
-    width: 3.625rem;
-    height: 5.25rem;
+    width: 3rem;
+    height: 4.5rem;
     color: white;
     font-weight: bold;
-    font-size: var(--scale-0000);
+    font-size: 0.5rem;
     text-align: center;
 
     :global(svg) {
@@ -51,9 +51,9 @@
       background-color: var(--color-orange-dark);
     }
     &.selected {
-      box-shadow: 0px 0px 8px 0px rgba(88, 90, 90, 0.4);
-      width: 4rem;
-      height: 5.875rem;
+      box-shadow: 0 0.125rem 0.5rem 0px rgba(88, 90, 90, 0.4);
+      width: 3.5rem;
+      height: 5.25rem;
     }
   }
 </style>

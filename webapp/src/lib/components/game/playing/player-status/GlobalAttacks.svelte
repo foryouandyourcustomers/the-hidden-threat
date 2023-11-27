@@ -60,38 +60,7 @@
 </script>
 
 <div class="scenarios">
-  <div class="description">
-    <Paragraph spacing="none" size="sm">Allgemeiner Angriff</Paragraph>
-
-    {#if !selectedAttack}
-      <Heading size="sm" spacing="none">{$globalAttackScenario.name}</Heading>
-      <Paragraph size="sm" spacing="none">
-        {$globalAttackScenario.description}
-      </Paragraph>
-    {:else}
-      <Heading size="sm" spacing="none">Angriff {selectedAttackIndex + 1}</Heading>
-      <Paragraph size="sm" spacing="none">
-        {selectedAttack.description}
-      </Paragraph>
-      <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
-
-      <div class="targets">
-        {#each selectedAttack.targets as target}
-          {@const stage = getStage(target.stageId)}
-          <div class="target">
-            <div class="stage">
-              {stage.name}
-            </div>
-            <div class="items">
-              {#each stage.defenseItems as item}
-                <Item highlightOnHover itemId={item} />
-              {/each}
-            </div>
-          </div>
-        {/each}
-      </div>
-    {/if}
-  </div>
+  <Paragraph spacing="none" size="sm">Allgemeiner Angriff</Paragraph>
   <ul class="attacks">
     <li>
       <AttackCard
@@ -121,26 +90,59 @@
       </li>
     {/each}
   </ul>
+  {#if !selectedAttack}
+    <div class="description">
+      <Heading size="sm" spacing="none">{$globalAttackScenario.name}</Heading>
+      <Paragraph size="sm" spacing="none">
+        {$globalAttackScenario.description}
+      </Paragraph>
+    </div>
+  {:else}
+    <div class="description">
+      <Heading size="sm" spacing="none">Angriff {selectedAttackIndex + 1}</Heading>
+      <Paragraph size="xs" spacing="none">
+        {selectedAttack.description}
+      </Paragraph>
+    </div>
+
+    <div class="key-info">
+      <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
+      <div class="targets">
+        {#each selectedAttack.targets as target}
+          {@const stage = getStage(target.stageId)}
+          <div class="target">
+            <div class="stage">
+              {stage.name}
+            </div>
+            <div class="items">
+              {#each stage.defenseItems as item}
+                <Item highlightOnHover itemId={item} />
+              {/each}
+            </div>
+          </div>
+        {/each}
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style lang="postcss">
   .scenarios {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     height: 100%;
   }
   .description {
     flex: 1;
-    overflow-y: scroll;
   }
   .attacks {
     display: flex;
-    align-items: flex-end;
-    gap: 1rem;
-    margin: 0rem;
-    padding: 0rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin: -1rem;
+    padding: 1rem;
     width: 100%;
-    overflow-x: scroll;
     list-style: none;
   }
 

@@ -26,32 +26,42 @@
   $: sum = Object.values($itemInventories).reduce((prev, cur) => prev + cur, 0)
 </script>
 
-<Heading size="sm" spacing="none">Gesammelte Schadensgegenstände</Heading>
-<Paragraph size="sm" spacing="none">
-  Die Gegenstandsbeschreibungen sowie die Auflistung aller Gegenstände sind in der Spielanleitung zu
-  finden.
-</Paragraph>
+<div class="inventory">
+  <div class="header">
+    <Heading size="sm" spacing="none">Gesammelte Schadensgegenstände ({sum})</Heading>
+    <Paragraph size="sm" spacing="none">
+      Die Gegenstandsbeschreibungen sowie die Auflistung aller Gegenstände sind in der
+      Spielanleitung zu finden.
+    </Paragraph>
+  </div>
 
-<ul class="items">
-  {#each ITEMS as item}
-    {#if item.side === $side}
-      <li class="item">
-        <Item highlightOnHover itemId={item.id} />
-        <div>{item.name} <strong>{$itemInventories[item.id]}</strong></div>
-      </li>
-    {/if}
-  {/each}
-</ul>
-<div class="sum">{$side === 'attack' ? 'Schadensgegenstände' : 'Schutzgegenstände'} {sum}</div>
+  <ul class="items">
+    {#each ITEMS as item}
+      {#if item.side === $side}
+        <li class="item">
+          <Item highlightOnHover itemId={item.id} />
+          <div>{item.name} <strong>({$itemInventories[item.id]})</strong></div>
+        </li>
+      {/if}
+    {/each}
+  </ul>
+</div>
 
 <style lang="postcss">
+  .inventory {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+  }
   .items {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 1rem;
     row-gap: 0.5rem;
+    flex: 1;
     margin: 0rem;
-    padding: 0rem;
+    padding: 0 0.5rem;
     list-style: none;
     li {
       display: flex;
@@ -66,8 +76,5 @@
         height: 2rem;
       }
     }
-  }
-  .sum {
-    font-size: var(--scale-000);
   }
 </style>

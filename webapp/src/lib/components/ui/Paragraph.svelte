@@ -1,6 +1,6 @@
 <script lang="ts">
   export let centered = false
-  export let size: 'sm' | 'md' | 'lg' = 'md'
+  export let size: 'xs' | 'sm' | 'md' | 'lg' = 'md'
   export let width: 'default' | 'full' = 'default'
   export let spacing: 'default' | 'none' = 'default'
 </script>
@@ -30,5 +30,9 @@
   }
   .size-sm {
     font: var(--text-small);
+  }
+  .size-xs {
+    font: var(--text-small);
+    font-size: var(--scale-000);
   }
 </style>
