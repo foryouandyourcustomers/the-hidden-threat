@@ -1,5 +1,12 @@
+import { dev } from '$app/environment'
+import { cleanupGames } from '$lib/server/cron/cleanup'
 import { setupWebSocketServerListeners } from '$lib/server/web-socket/setup-server-listeners'
 import type { Handle } from '@sveltejs/kit'
+import schedule from 'node-schedule'
+
+if (!dev) {
+  schedule.scheduleJob('0 3 * * *', cleanupGames)
+}
 
 export const handle = (async ({ event, resolve }) => {
   const webSocketServer = setupWebSocketServerListeners()

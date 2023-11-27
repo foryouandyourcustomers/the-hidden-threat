@@ -6,7 +6,7 @@ import { sendMessageToUsers } from '$lib/server/web-socket/game-communication'
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import shortUuid from 'short-uuid'
-import { interpret } from 'xstate'
+import { createActor } from 'xstate'
 import { addGame, getGame } from './global'
 import type { Game } from './types'
 
@@ -16,7 +16,7 @@ import type { Game } from './types'
 export const createGame = ({ host }: { host: User }): Game => {
   const id = shortUuid.generate()
 
-  const machine = interpret(serverGameMachine, {
+  const machine = createActor(serverGameMachine, {
     input: { gameId: id, host },
   }).start()
 
