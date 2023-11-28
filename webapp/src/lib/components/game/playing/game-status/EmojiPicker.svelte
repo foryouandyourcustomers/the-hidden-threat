@@ -4,7 +4,7 @@
 
   const context = getGameContext()
 
-  const validEmojis = ['👋', '👍', '👏', '😃', '🧠', '🤔', '🥳', '❤️']
+  const validEmojis = ['👋', '👍', '👏', '😃', '🧠', '🤔', '🥳', '❤️', '😔', '😡']
 
   const sendEmoji = (emoji: string) => {
     context.machine.send({ type: 'send emoji', emoji })
@@ -48,7 +48,7 @@
     width: 100%;
     height: 100%;
     color: var(--color-blue-spielbrett);
-    font-size: var(--scale-3);
+    font-size: var(--scale-2);
   }
   .emojis {
     display: flex;

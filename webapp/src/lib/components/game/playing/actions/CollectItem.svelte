@@ -50,7 +50,7 @@
     <Paragraph>Bitte wähle einen Gegenstand aus</Paragraph>
 
     <form use:formAction>
-      <RadioOptions>
+      <RadioOptions vertical>
         {#each $collectableItems as collectableItem}
           <RadioButton
             disabled={!$canApplyAction}
@@ -100,7 +100,7 @@
       font-weight: bold;
     }
     .content {
-      max-width: 20ch;
+      /* max-width: 20ch; */
       max-height: 15rem;
       overflow-y: auto;
     }

@@ -67,7 +67,7 @@
         </RadioButton>
       </RadioOptions>
 
-      <Actions>
+      <Actions spacing="dialog">
         <Button
           size="small"
           inverse

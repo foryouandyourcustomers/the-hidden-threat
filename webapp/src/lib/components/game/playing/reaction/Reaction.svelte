@@ -57,7 +57,7 @@
 
 {#if $canPerformReaction}
   <GameDialog title="Joker einsetzen">
-    <Paragraph>
+    <Paragraph size="sm">
       {#if $question === 'is-on-field'}
         Die Verteidigung fragt ob Du auf dem Feld bist.
       {:else if $question === 'has-collected-items'}
@@ -79,7 +79,7 @@
 
     <form on:submit|preventDefault={onSubmit}>
       {#if $hasJoker}
-        <RadioOptions>
+        <RadioOptions vertical>
           <RadioButton on:change={() => applyReaction(false)} value={true} bind:group={answer}>
             Ja
             <Paragraph size="sm" spacing="none">
@@ -97,7 +97,7 @@
         </RadioOptions>
       {/if}
 
-      <Actions>
+      <Actions spacing="dialog">
         <Button size="small" inverse type="submit">Bestätigen</Button>
       </Actions>
     </form>

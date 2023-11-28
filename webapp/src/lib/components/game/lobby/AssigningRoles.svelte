@@ -82,7 +82,7 @@
       : 'Nur Administrator:innen dürfen bestätigen'}
     on:click={() => machine.send({ type: 'next step' })}
   >
-    Bestätigen und weiter
+    Weiter zum Spiel
   </Button>
 </Actions>
 

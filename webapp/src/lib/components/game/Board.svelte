@@ -69,6 +69,7 @@
 
 <style lang="postcss">
   .board-wrapper {
+    --player-status-width: 30rem;
     display: grid;
     place-content: center;
     background: black;

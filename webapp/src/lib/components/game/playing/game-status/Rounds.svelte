@@ -39,7 +39,7 @@
           <Tooltip click position="left">
             <div class="tooltip-content">
               <Polygon color="red-angriff" />
-              Der Angreifer muss seinen Standort offenbaren
+              Die Position vom Angreifer wird offenbart.
             </div>
           </Tooltip>
           <Polygon color="red-angriff" />
@@ -92,7 +92,7 @@
     gap: 0.5rem;
     width: 100%;
     .round {
-      --_base-width: 3.5rem;
+      --_base-width: 3.125rem;
       --_min-percent: 10%;
       --_max-percent: 65%;
       --_percent: calc(
@@ -115,7 +115,7 @@
         text-align: center;
       }
       &.current {
-        width: calc(var(--_base-width) + 1.375rem);
+        width: calc(var(--_base-width) + 0.5rem);
         font-weight: 700;
         font-size: 1rem;
       }

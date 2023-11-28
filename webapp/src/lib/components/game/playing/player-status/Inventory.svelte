@@ -28,10 +28,12 @@
 
 <div class="inventory">
   <div class="header">
-    <Heading size="sm" spacing="none">Gesammelte Schadensgegenstände ({sum})</Heading>
+    <Heading size="sm" spacing="none"
+      >Gesammelte {$side === 'attack' ? 'Schadensgegenstände' : 'Schutzgegenstände'} ({sum})</Heading
+    >
     <Paragraph size="sm" spacing="none">
       Die Gegenstandsbeschreibungen sowie die Auflistung aller Gegenstände sind in der
-      Spielanleitung zu finden.
+      <a href="/manual" target="_blank">Spielanleitung</a> zu finden.
     </Paragraph>
   </div>
 

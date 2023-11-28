@@ -48,7 +48,7 @@
     pointer-events: none;
 
     &.info {
-      --_color: #fcb337;
+      --_color: black;
     }
     &.attacker {
       --_color: var(--color-red-polygon);

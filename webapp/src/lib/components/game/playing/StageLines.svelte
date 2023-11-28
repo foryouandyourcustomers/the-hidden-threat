@@ -72,8 +72,8 @@
 
   path {
     stroke: #000;
-    stroke-width: 1;
+    stroke-width: 1.5;
     fill: none;
-    stroke-dasharray: 8 2;
+    /* stroke-dasharray: 8 2; */
   }
 </style>

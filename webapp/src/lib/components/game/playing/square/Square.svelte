@@ -117,12 +117,12 @@
   .status {
     position: absolute;
     inset: 0;
-    background-color: color-mix(in oklab, var(--color-blue-spielbrett), transparent 20%);
+    background-color: color-mix(in oklab, var(--color-blue-spielbrett), transparent 30%);
     pointer-events: none;
     :global(svg) {
       position: absolute;
-      top: 0rem;
-      right: 0rem;
+      top: 0.125rem;
+      right: 0.125rem;
       width: 1.5rem;
       height: 1.5rem;
     }

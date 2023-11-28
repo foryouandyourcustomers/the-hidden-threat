@@ -75,10 +75,11 @@
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
       background: var(--color-blue-spielbrett);
-      padding: 0.125rem 1.5rem;
+      padding: 0.38rem 1.5rem;
       font-size: var(--scale-2);
-      line-height: 1.875rem;
+      line-height: 150%;
       font-family: var(--font-display);
+      text-transform: uppercase;
       white-space: nowrap;
       &::after {
         display: block;

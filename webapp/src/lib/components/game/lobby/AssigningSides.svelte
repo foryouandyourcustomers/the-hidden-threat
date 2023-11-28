@@ -63,7 +63,7 @@
     disabledReason={$user.isAdmin
       ? 'Alle Spieler:innen müssen einer Seite zugewiesen sein'
       : 'Nur Administrator:innen dürfen bestätigen'}
-    on:click={() => machine.send({ type: 'next step' })}>Next</Button
+    on:click={() => machine.send({ type: 'next step' })}>Bestätigen und weiter</Button
   >
 </Actions>
 

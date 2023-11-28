@@ -129,6 +129,7 @@
   .faces {
     display: flex;
     gap: 1rem;
+    margin-top: 1rem;
     .face {
       border: 1px solid transparent;
       border-radius: var(--radius-md);

@@ -3,22 +3,21 @@
 </script>
 
 <button {disabled} class="unstyled" on:click>
-  <slot />
-
   {#if $$slots.icon}
     <div class="icons">
       <slot name="icon" />
     </div>
   {/if}
+
+  <slot />
 </button>
 
 <style lang="postcss">
   button {
     text-wrap: nowrap;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     padding-inline: 1rem;
     width: 100%;
     height: 1.375rem;

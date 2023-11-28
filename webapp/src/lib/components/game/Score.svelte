@@ -54,7 +54,7 @@
     h2 {
       grid-area: title;
       margin-right: 1.5rem;
-      font-weight: 400;
+      font-weight: 700;
       font-size: 0.875rem;
       text-align: center;
     }

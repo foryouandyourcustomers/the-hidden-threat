@@ -119,7 +119,8 @@
       width: 0.5rem;
       height: 0.5rem;
       &.connected {
-        background: #38c60077;
+        /* background: #38c60077; */
+        display: none;
       }
     }
   }

@@ -121,12 +121,12 @@
   {/each}
 
   {#if $isPossibleMove}
-    <li>
+    <li class="action">
       <button class="unstyled" on:click={move}>Figur hierher bewegen</button>
     </li>
   {/if}
   {#if $isPossiblePlacement}
-    <li>
+    <li class="action">
       <button class="unstyled" on:click={place}>Figur hier platzieren</button>
     </li>
   {/if}
@@ -149,7 +149,7 @@
     box-shadow: 0 0 1rem #0005;
     border-radius: var(--radius-sm);
     background: white;
-    padding: 0.25rem 0.75rem;
+    padding: 0.25rem 1rem;
     color: var(--color-black-dark);
 
     &.top {
@@ -227,19 +227,24 @@
       white-space: nowrap;
     }
   }
+  .action {
+    line-height: 100%;
+  }
   button {
+    font-weight: 700;
+    font-size: 0.75rem;
     text-decoration: underline;
     white-space: nowrap;
   }
 
   .stage {
+    margin-bottom: 0.5rem;
     font-weight: 700;
   }
 
   .stage-items {
     display: flex;
     gap: 0.75rem;
-    padding-bottom: 1rem;
 
     .icon {
       display: block;

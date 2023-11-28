@@ -35,7 +35,7 @@
   .playing {
     display: grid;
     position: relative;
-    grid-template-columns: 30rem auto 1fr;
+    grid-template-columns: var(--player-status-width) auto 1fr;
     gap: 1rem;
   }
 

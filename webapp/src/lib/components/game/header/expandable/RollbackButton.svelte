@@ -23,8 +23,8 @@
         ? machine.send({ type: 'rollback game event', gameEventType: $lastGameEvent.type })
         : null}
   >
-    Aktion zurücksetzen
-
     <Icon slot="icon" />
+
+    Aktion zurücksetzen
   </ExpandableButton>
 {/if}

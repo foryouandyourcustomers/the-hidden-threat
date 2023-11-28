@@ -1,6 +1,6 @@
 <script lang="ts">
   export let align: 'left' | 'right' = 'right'
-  export let spacing: 'default' | 'none' = 'default'
+  export let spacing: 'default' | 'dialog' | 'none' = 'default'
 </script>
 
 <div class="actions align-{align} spacing-{spacing}">
@@ -14,6 +14,9 @@
     gap: 1rem;
     &.spacing-default {
       margin-top: 2.5rem;
+    }
+    &.spacing-dialog {
+      margin-top: 1.5rem;
     }
     &.align-left {
       justify-content: flex-start;

@@ -48,7 +48,8 @@
     place-content: center;
     z-index: var(--layer-top);
     inset: 0;
-    padding-left: 18rem;
+    padding-right: 7.5rem;
+    padding-left: var(--player-status-width);
   }
 
   .backdrop {
@@ -65,7 +66,7 @@
     border-radius: var(--radius-sm);
     background-color: white;
     padding: 0.75rem 1.5rem;
-    min-width: 30rem;
+    width: 28.125rem;
     color: black;
   }
   .close-button {

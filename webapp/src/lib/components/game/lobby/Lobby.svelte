@@ -2,6 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import AssigningSides from '$lib/components/game/lobby/AssigningSides.svelte'
+  import Heading from '$lib/components/ui/Heading.svelte'
   import AssigningRoles from './AssigningRoles.svelte'
 
   const { machine } = getGameContext()
@@ -26,7 +27,18 @@
 {:else if $section === 'Assigning roles'}
   <AssigningRoles />
 {:else if $section === 'Waiting for other side'}
-  Sobald die andere Seite fertig ist, geht es weiter.
+  <div class="waiting">
+    <Heading>Sobald die andere Seite fertig ist, geht es weiter.</Heading>
+  </div>
 {:else}
   Unknown lobby state
 {/if}
+
+<style lang="postcss">
+  .waiting {
+    display: grid;
+    place-content: center;
+    width: 100%;
+    height: 100%;
+  }
+</style>

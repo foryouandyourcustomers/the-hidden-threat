@@ -49,12 +49,15 @@
   h3 {
     margin-block: 0 0.25rem;
     font: var(--text-small);
+    font-size: 1rem;
+    font-family: var(--font-display);
+    text-transform: uppercase;
   }
 
   .players {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-    gap: 0.5rem;
+    gap: 0.75rem;
 
     &.side-admin {
       grid-template-columns: repeat(auto-fit, minmax(1rem, 1fr));

@@ -21,19 +21,19 @@
   <div class="jokers">
     <button class="unstyled">
       <Joker />
-      Jokerkarten ({$jokers})
+      Jokerkarten <strong>({$jokers})</strong>
+      <Tooltip position="bottom" click>
+        <Heading size="sm" spacing="none">Joker</Heading>
+        <Paragraph size="sm" spacing="none">
+          Kann während des Spielzugablaufs gegen einen Gegenstand eurer Wahl, der für einen
+          gezielten Angriff benötigt wird, eingetauscht werden.
+        </Paragraph>
+        <strong>oder</strong>
+        <Paragraph size="sm" spacing="none">
+          Ermöglicht es, die Antwort auf eine Frage von der Verteidigung zu verweigern.
+        </Paragraph>
+      </Tooltip>
     </button>
-    <Tooltip position="bottom" click>
-      <Heading size="sm" spacing="none">Joker</Heading>
-      <Paragraph size="sm" spacing="none">
-        Kann während des Spielzugablaufs gegen einen Gegenstand eurer Wahl, der für einen gezielten
-        Angriff benötigt wird, eingetauscht werden.
-      </Paragraph>
-      <strong>oder</strong>
-      <Paragraph size="sm" spacing="none">
-        Ermöglicht es, die Antwort auf eine Frage von der Verteidigung zu verweigern.
-      </Paragraph>
-    </Tooltip>
   </div>
 {/if}
 
@@ -47,9 +47,9 @@
 
     button {
       display: flex;
+      position: relative;
       align-items: center;
       gap: 0.5rem;
-      font-weight: bold;
       font-size: var(--scale-00);
     }
   }

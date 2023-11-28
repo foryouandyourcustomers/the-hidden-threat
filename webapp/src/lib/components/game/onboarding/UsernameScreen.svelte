@@ -46,8 +46,7 @@
     </Checkbox>
 
     <Actions>
-      <Button href="/">Abbrechen</Button>
-      <Button type="submit" primary>Start</Button>
+      <Button type="submit" primary>Bestätigen und weiter</Button>
     </Actions>
   </form>
 </Board>
@@ -57,6 +56,8 @@
     width: 44rem;
   }
   .field {
+    margin-bottom: 2rem;
+    border-radius: var(--radius-md);
     background: var(--color-blue-transp-760);
     padding: 1rem 2rem;
   }

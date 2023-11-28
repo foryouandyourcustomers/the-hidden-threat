@@ -38,12 +38,14 @@
     width: 1.5rem;
     height: 1.5rem;
     &.highlight {
+      --_color: white;
       scale: 1.4;
       z-index: var(--layer-top);
       animation: pulsate 1s infinite;
-      outline: 0.3rem solid var(--color-orange-dark);
+      outline: 0.3rem solid #0004;
       border-radius: var(--radius-full);
-      background: var(--color-orange-dark);
+      background: transparent;
+      background: #0004;
     }
     > :global(svg) {
       position: absolute;

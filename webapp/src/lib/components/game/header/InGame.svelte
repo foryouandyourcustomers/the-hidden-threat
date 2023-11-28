@@ -4,7 +4,7 @@
   import Jokers from '$lib/components/game/header/Jokers.svelte'
   import SwitchSidesButton from '$lib/components/game/header/expandable/SwitchSidesButton.svelte'
   import SettingsIcon from '~icons/lucide/settings'
-  import HelpIcon from '~icons/lucide/shield-question'
+  import HelpIcon from '~icons/lucide/file-text'
   import AudioIcon from '~icons/lucide/volume-2'
   import AudioOffIcon from '~icons/lucide/volume-x'
   import Score from '../Score.svelte'

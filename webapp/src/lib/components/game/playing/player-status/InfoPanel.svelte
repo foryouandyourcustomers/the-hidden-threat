@@ -69,9 +69,6 @@
 
       &.active {
         background-color: white;
-        padding: 0.625rem;
-        width: 3.125rem;
-        height: 3.125rem;
         color: var(--color-blue-spielbrett);
       }
 

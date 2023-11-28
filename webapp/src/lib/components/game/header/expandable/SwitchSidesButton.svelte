@@ -18,11 +18,11 @@
     disabled={!isAdmin || !$isActive}
     on:click={() => machine.send({ type: 'switch sides' })}
   >
-    Zu {side === 'attack' ? 'Verteidigung' : 'Angriff'} wechseln
     {#if side === 'attack'}
       <IconRightLeft slot="icon" />
     {:else}
       <IconLeftRight slot="icon" />
     {/if}
+    Zu {side === 'attack' ? 'Verteidigung' : 'Angriff'} wechseln
   </ExpandableButton>
 {/if}
