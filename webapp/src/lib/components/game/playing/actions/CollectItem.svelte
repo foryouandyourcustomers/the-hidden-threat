@@ -5,7 +5,6 @@
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import GameDialog from '$lib/components/ui/GameDialog.svelte'
-  import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import RadioButton from '$lib/components/ui/RadioButton.svelte'
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { getItem, isItemIdOfSide } from '$lib/game/constants/items'
@@ -47,7 +46,7 @@
 
 {#if $inProgressEvent}
   <GameDialog title="Gegenstand einsammeln" on:close={cancel}>
-    <Paragraph>Bitte wähle einen Gegenstand aus</Paragraph>
+    <p class="intro text-xs">Bitte wähle einen Gegenstand aus</p>
 
     <form use:formAction>
       <RadioOptions vertical>
@@ -88,6 +87,10 @@
 {/if}
 
 <style lang="postcss">
+  .intro {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+  }
   .item-choice {
     display: flex;
     gap: 0.5rem;

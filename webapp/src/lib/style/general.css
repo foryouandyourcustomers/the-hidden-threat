@@ -1,57 +1,153 @@
-:root {
-  color-scheme: dark;
-}
-
-* {
-  line-height: var(--line-md);
-}
-body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-text);
-}
-
-:where(a) {
-  color: inherit;
-}
-
-:where(button.unstyled) {
-  display: inline-block;
-  cursor: pointer;
-  margin: 0;
-  border: none;
-  background: none;
-  padding: 0;
-  color: inherit;
-  text-align: unset;
-
-  &[disabled] {
-    opacity: 0.5;
-    cursor: not-allowed;
+@layer base {
+  :root {
+    color-scheme: dark;
   }
-}
 
-:where(.richtext) {
-  h1 {
+  * {
+    line-height: var(--line-md);
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-text);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button.unstyled {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0;
+    border: none;
+    background: none;
+    padding: 0;
+    color: inherit;
+    text-align: unset;
+
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .richtext {
+    h1 {
+      font: var(--display-h1);
+    }
+    h2 {
+      font: var(--display-h2);
+    }
+    h3 {
+      font: var(--display-h3);
+    }
+    h4 {
+      font: var(--display-h4);
+    }
+  }
+
+  .svelte-select {
+    --background: var(--color-blue-spielbrett);
+    --border: 1px solid transparent;
+    --border-focused: 1px solid var(--color-border);
+    --item-color: var(--color-blue-spielbrett);
+    --item-is-active-bg: var(--color-bg-strong);
+    --item-is-active-color: var(--color-text-onstrong);
+    --item-hover-bg: var(--color-blue-spielbrett);
+  }
+
+  p {
+    font: var(--text-regular);
+  }
+
+  .text-lg {
+    font: var(--text-big);
+    &.auto-margin {
+      margin-block: 1.5rem;
+    }
+  }
+  .text-md {
+    font: var(--text-regular);
+    &.auto-margin {
+      margin-block: 1rem;
+    }
+  }
+  .text-sm {
+    font: var(--text-small);
+    &.auto-margin {
+      margin-block: 0.5rem;
+    }
+  }
+  .text-xs {
+    font: var(--text-small);
+    font-size: 0.75rem;
+    &.auto-margin {
+      margin-block: 0.25rem;
+    }
+  }
+
+  .display-xl,
+  .display-lg,
+  .display-md,
+  .display-sm,
+  .display-xs,
+  :where(h1, h2, h3, h4, h5).auto {
+    font-weight: 500;
+  }
+
+  .display-xl,
+  h1.auto {
     font: var(--display-h1);
+    text-transform: uppercase;
+    &.auto-margin,
+    &.auto {
+      margin-bottom: 2rem;
+    }
   }
-  h2 {
+  .display-lg,
+  h2.auto {
     font: var(--display-h2);
+    text-transform: uppercase;
+    &.auto-margin,
+    &.auto {
+      margin-bottom: 1rem;
+    }
   }
-  h3 {
+  .display-md,
+  h3.auto {
     font: var(--display-h3);
+    text-transform: uppercase;
+    &.auto-margin,
+    &.auto {
+      margin-bottom: 0.75rem;
+    }
   }
-  h4 {
+  .display-sm,
+  h4.auto {
     font: var(--display-h4);
-  }
-}
+    text-transform: uppercase;
 
-.svelte-select {
-  --background: var(--color-blue-spielbrett);
-  --border: 1px solid transparent;
-  --border-focused: 1px solid var(--color-border);
-  --item-color: var(--color-blue-spielbrett);
-  --item-is-active-bg: var(--color-bg-strong);
-  --item-is-active-color: var(--color-text-onstrong);
-  --item-hover-bg: var(--color-blue-spielbrett);
+    &.auto-margin,
+    &.auto {
+      margin-bottom: 0.25rem;
+    }
+  }
+  .display-xs,
+  h5.auto {
+    font: var(--display-h5);
+
+    &.auto-margin,
+    &.auto {
+      margin-bottom: 0.25rem;
+    }
+  }
+  .display-xxs,
+  h6.auto {
+    font: var(--display-h6);
+    &.auto-margin,
+    &.auto {
+      margin-bottom: 0.25rem;
+    }
+  }
 }

@@ -3,7 +3,6 @@
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import Item from '$lib/components/icons/Item.svelte'
-  import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import { ITEMS } from '$lib/game/constants/items'
   import { GameState, type ItemInventory } from '$lib/game/game-state'
@@ -28,9 +27,9 @@
 
 <div class="inventory">
   <div class="header">
-    <Heading size="sm" spacing="none"
-      >Gesammelte {$side === 'attack' ? 'Schadensgegenstände' : 'Schutzgegenstände'} ({sum})</Heading
-    >
+    <h6 class="auto">
+      Gesammelte {$side === 'attack' ? 'Schadensgegenstände' : 'Schutzgegenstände'} ({sum})
+    </h6>
     <Paragraph size="sm" spacing="none">
       Die Gegenstandsbeschreibungen sowie die Auflistung aller Gegenstände sind in der
       <a href="/manual" target="_blank">Spielanleitung</a> zu finden.

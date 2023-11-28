@@ -36,6 +36,7 @@
 
 <style lang="postcss">
   h2 {
+    margin-bottom: 0.5rem;
     font-weight: 500;
     font-size: 1.25rem;
     font-family: var(--font-display);

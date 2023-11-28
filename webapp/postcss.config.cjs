@@ -11,6 +11,7 @@ module.exports = {
       stage: 2,
       features: {
         'nesting-rules': true,
+        'cascade-layers': false,
       },
     }),
     !dev &&

@@ -44,7 +44,7 @@
       text-transform: uppercase;
     }
     & h3 {
-      font: var(--display-h4);
+      font: var(--display-h5);
     }
     & p {
       font: var(--text-regular);

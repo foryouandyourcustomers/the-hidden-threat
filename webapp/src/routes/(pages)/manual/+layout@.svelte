@@ -61,7 +61,7 @@
     }
     :global(main h2) {
       margin-top: 1.5rem;
-      font: var(--display-h4);
+      font: var(--display-h5);
     }
   }
 </style>

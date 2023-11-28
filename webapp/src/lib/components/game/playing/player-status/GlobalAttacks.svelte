@@ -2,17 +2,15 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import Item from '$lib/components/icons/Item.svelte'
-  import Heading from '$lib/components/ui/Heading.svelte'
-  import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
+  import type { GlobalAttack } from '$lib/game/constants/global-attacks'
+  import type { StageId } from '$lib/game/constants/stages'
   import { GameState } from '$lib/game/game-state'
+  import type { Coordinate } from '$lib/game/types'
   import { getStage } from '$lib/game/utils'
+  import { throwIfNotFound } from '$lib/utils'
   import isEqual from 'lodash/isEqual'
   import AttackCard from './AttackCard.svelte'
-  import type { StageId } from '$lib/game/constants/stages'
-  import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
-  import { throwIfNotFound } from '$lib/utils'
-  import type { GlobalAttack } from '$lib/game/constants/global-attacks'
-  import type { Coordinate } from '$lib/game/types'
 
   const { machine, highlightedFields } = getGameContext()
 
@@ -60,7 +58,7 @@
 </script>
 
 <div class="scenarios">
-  <Paragraph spacing="none" size="sm">Allgemeiner Angriff</Paragraph>
+  <h6 class="display-xxs">Allgemeiner Angriff</h6>
   <ul class="attacks">
     <li>
       <AttackCard
@@ -92,21 +90,21 @@
   </ul>
   {#if !selectedAttack}
     <div class="description">
-      <Heading size="sm" spacing="none">{$globalAttackScenario.name}</Heading>
-      <Paragraph size="sm" spacing="none">
+      <h4 class="auto">{$globalAttackScenario.name}</h4>
+      <p class="text-xs">
         {$globalAttackScenario.description}
-      </Paragraph>
+      </p>
     </div>
   {:else}
     <div class="description">
-      <Heading size="sm" spacing="none">Angriff {selectedAttackIndex + 1}</Heading>
-      <Paragraph size="xs" spacing="none">
+      <h4 class="auto">Angriff {selectedAttackIndex + 1}</h4>
+      <p class="text-xs">
         {selectedAttack.description}
-      </Paragraph>
+      </p>
     </div>
 
     <div class="key-info">
-      <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
+      <h6 class="auto">Benötigte Gegenstände</h6>
       <div class="targets">
         {#each selectedAttack.targets as target}
           {@const stage = getStage(target.stageId)}
