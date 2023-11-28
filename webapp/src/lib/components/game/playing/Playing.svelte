@@ -51,5 +51,6 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding-left: 1rem;
   }
 </style>

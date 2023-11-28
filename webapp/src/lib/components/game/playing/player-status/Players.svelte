@@ -82,6 +82,5 @@
     flex-direction: column;
     align-content: flex-start;
     gap: 1rem;
-    margin-left: 1rem;
   }
 </style>

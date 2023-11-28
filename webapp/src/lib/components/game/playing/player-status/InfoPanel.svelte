@@ -49,7 +49,6 @@
 <style lang="postcss">
   .info-panel {
     display: flex;
-    margin-left: 0.375rem;
     height: 22.5rem;
   }
 
