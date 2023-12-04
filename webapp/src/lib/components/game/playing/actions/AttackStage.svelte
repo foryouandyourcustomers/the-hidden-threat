@@ -10,6 +10,7 @@
   import RadioButton from '$lib/components/ui/RadioButton.svelte'
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { GameState } from '$lib/game/game-state'
+  import type { Coordinate } from '$lib/game/types'
   import { getStage } from '$lib/game/utils'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
@@ -26,9 +27,9 @@
     buttonDisabled,
     buttonDisabledReason,
   } = createActionHandler('attack', {
-    extractSelectedOption: (event) => event.position,
-    createEvent: (_, position) => ({
-      position,
+    extractSelectedOption: (event) => event.position?.toString(),
+    createEvent: (_, pos) => ({
+      position: pos ? (pos.split(',').map(Number) as Coordinate) : undefined,
     }),
   })
 
@@ -61,7 +62,7 @@
           {@const stage = getStage(boardStage.id)}
           <RadioButton
             disabled={!$canApplyAction}
-            value={boardStage.coordinate}
+            value={boardStage.coordinate.toString()}
             bind:group={$selectedPosition}
           >
             <svelte:fragment slot="title">
