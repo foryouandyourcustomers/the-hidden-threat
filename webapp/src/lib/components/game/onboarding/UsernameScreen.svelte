@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { CreateGameSchema, JoinGameSchema } from '$lib/client/forms'
   import Board from '$lib/components/game/Board.svelte'
+  import Polygon from '$lib/components/icons/Polygon.svelte'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Checkbox from '$lib/components/ui/Checkbox.svelte'
@@ -16,6 +17,8 @@
 </script>
 
 <Board paddedContent>
+  <div class="backdrop"><Polygon color="black" /></div>
+
   <Heading separator>
     Username vergeben
 
@@ -60,5 +63,13 @@
     border-radius: var(--radius-md);
     background: var(--color-blue-transp-760);
     padding: 1rem 2rem;
+  }
+  .backdrop {
+    position: absolute;
+    right: -5%;
+    bottom: -5%;
+    rotate: -20deg;
+    z-index: -1;
+    width: 33rem;
   }
 </style>

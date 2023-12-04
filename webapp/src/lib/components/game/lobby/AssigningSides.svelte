@@ -1,6 +1,7 @@
 <script lang="ts">
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
+  import Polygon from '$lib/components/icons/Polygon.svelte'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
@@ -25,6 +26,9 @@
     }
   }
 </script>
+
+<div class="backdrop1"><Polygon color="blue" /></div>
+<div class="backdrop2"><Polygon color="red" /></div>
 
 <Heading separator>
   Einteilung in Teams
@@ -95,5 +99,21 @@
     &[draggable='true'] {
       cursor: grab;
     }
+  }
+
+  .backdrop1,
+  .backdrop2 {
+    position: absolute;
+    rotate: -15deg;
+    z-index: -1;
+    width: 28rem;
+  }
+  .backdrop1 {
+    bottom: -5%;
+    left: -12%;
+  }
+  .backdrop2 {
+    right: -17%;
+    bottom: 15%;
   }
 </style>
