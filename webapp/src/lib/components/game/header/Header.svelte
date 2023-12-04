@@ -13,7 +13,7 @@
     position: relative;
     grid-template-columns: [logo-start] 42rem [logo-end score-start] 22rem [score-end jokers-start] 1fr [jokers-end options-start] auto [options-end];
     align-items: center;
-    background: linear-gradient(to bottom, #2b344800, #2b3448a9);
+    background: var(--color-blue-transp-760);
     padding-inline: 3rem 1rem;
     height: var(--size-header-height);
   }

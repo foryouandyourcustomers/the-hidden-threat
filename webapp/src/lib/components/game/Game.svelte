@@ -30,7 +30,11 @@
 
 <svelte:body on:click={() => !$didWarmup && warmup()} />
 
-<Board {reportMousePosition} paddedContent={$section !== 'Playing'}>
+<Board
+  {reportMousePosition}
+  showBackdrop={$section !== 'Lobby'}
+  paddedContent={$section !== 'Playing'}
+>
   <InGame slot="header" />
 
   {#if $section === 'Lobby'}
