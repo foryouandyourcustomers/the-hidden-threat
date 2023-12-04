@@ -120,7 +120,7 @@
     isolation: isolate;
     overflow: hidden;
     &.padded {
-      padding: 4rem 7rem;
+      padding: 1rem 7rem 0;
     }
   }
 
