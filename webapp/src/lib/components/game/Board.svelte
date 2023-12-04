@@ -3,12 +3,14 @@
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { onMount } from 'svelte'
-  import Header from './header/Header.svelte'
   import { readable } from 'svelte/store'
+  import FooterNav from '../layout/FooterNav.svelte'
+  import Header from './header/Header.svelte'
 
   export let reportMousePosition: ((position: [number, number]) => void) | undefined = undefined
 
   export let showBackdrop = false
+  export let showFooter = false
   export let paddedContent = false
 
   // Because this component is used in the onboarding process, we need to make
@@ -56,6 +58,7 @@
   <div
     class="board {$adminSide ? `side-${$adminSide}` : ''}"
     class:backdrop={showBackdrop}
+    class:with-footer={showFooter}
     on:mousemove={onMouseMove}
     bind:this={gameContainer}
     bind:clientWidth={boardWidth}
@@ -64,6 +67,11 @@
     <Header><slot name="header" /></Header>
     <div class="content" class:padded={paddedContent}><slot /></div>
     <slot name="overlays" />
+    {#if showFooter}
+      <div class="footer">
+        <FooterNav />
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -90,6 +98,10 @@
     height: var(--size-game-height);
     overflow: hidden;
 
+    &.with-footer {
+      grid-template-rows: auto 1fr auto;
+    }
+
     &.side-defense {
       outline: 10px solid var(--color-blue-medium);
     }
@@ -106,8 +118,22 @@
 
   .content {
     isolation: isolate;
+    overflow: hidden;
     &.padded {
       padding: 4rem 7rem;
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: stretch;
+    align-items: center;
+    background-color: var(--color-blue-spielbrett);
+    background: linear-gradient(to top, rgba(43, 52, 72, 0) 40.63%, rgba(43, 52, 72, 0.66) 100%);
+    padding: 0 7rem;
+    height: 3.75rem;
+    > :global(*) {
+      flex: 1;
     }
   }
 </style>

@@ -15,7 +15,7 @@
   const form = superForm(data)
 </script>
 
-<Board paddedContent>
+<Board paddedContent showFooter>
   <Heading separator>
     Username vergeben
 
