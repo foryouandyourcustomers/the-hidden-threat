@@ -2,10 +2,10 @@
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export let group: any | undefined = undefined
 
-  export let checked = false
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export let value: any | undefined = undefined
+  export let value: any
+
+  $: checked = value == group
 
   export let disabled = false
 </script>
