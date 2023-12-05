@@ -2,7 +2,7 @@
 ::backdrop {
   --size-game-width: 90rem;
   --size-game-height: 50rem;
-  --size-header-height: 3rem;
+  --size-header-height: 3.5rem;
 
   --size-default-px: 1rem;
   --size-content-px: max(var(--size-default-px), (100vw - var(--width-content-max)) / 2);
