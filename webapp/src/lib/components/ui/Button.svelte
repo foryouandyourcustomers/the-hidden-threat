@@ -104,7 +104,12 @@
       --_color-text: var(--color-text-disabled);
       cursor: not-allowed;
       /* --_color-border: var(--color-border-disabled); */
-      background: color-mix(in oklab, var(--_color-bg), transparent 40%);
+      background: color-mix(in oklab, var(--_color-bg), transparent 60%);
+      &.inverse {
+        --_color-text: var(--color-text-disabled-inverse);
+        opacity: 0.6;
+        background: var(--color-grey-light);
+      }
       &.primary {
         --_color-text: var(--color-text-disabled-onstrong);
         --_color-bg: var(--color-bg-disabled-strong);

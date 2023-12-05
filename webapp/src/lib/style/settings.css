@@ -28,6 +28,7 @@
 
   --color-border-disabled: var(--color-grey-medium);
   --color-text-disabled: var(--color-grey-dark);
+  --color-text-disabled-inverse: var(--color-grey-mid);
 
   --color-bg-secondary: #29344e;
   --color-shadow-secondary: #1c2526;
