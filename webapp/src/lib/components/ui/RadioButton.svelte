@@ -40,7 +40,7 @@
       background-color: var(--color-bg-strong);
       padding: 0.25rem;
       &.checked {
-        box-shadow: 0 0 10px rgba(38, 45, 46, 0.25);
+        box-shadow: 0 0 0.625rem rgba(38, 45, 46, 0.25);
       }
     }
     &:not(.with-title) {
