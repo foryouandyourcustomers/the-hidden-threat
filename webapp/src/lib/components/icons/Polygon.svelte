@@ -37,3 +37,10 @@
     <path d="M57.42 28L128.489 95.3867L140 38.2708L57.42 28Z" fill="#F03A50" />
   {/if}
 </svg>
+
+<style lang="postcss">
+  svg {
+    display: block;
+    width: 100%;
+  }
+</style>

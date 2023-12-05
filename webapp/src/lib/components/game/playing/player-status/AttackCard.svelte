@@ -38,6 +38,7 @@
       position: absolute;
       z-index: -1;
       inset: 0.75rem 0.25rem auto;
+      width: auto;
     }
 
     span {

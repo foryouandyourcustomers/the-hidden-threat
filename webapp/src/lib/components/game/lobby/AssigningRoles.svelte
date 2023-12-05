@@ -2,6 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import Face from '$lib/components/icons/Face.svelte'
+  import Polygon from '$lib/components/icons/Polygon.svelte'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
@@ -31,6 +32,8 @@
 
   const users = useSelector(machine.service, ({ context }) => context.users)
 </script>
+
+<div class="backdrop"><Polygon color="blue" /></div>
 
 <Heading separator>
   Rollenverteilung
@@ -120,5 +123,14 @@
         height: 6rem;
       }
     }
+  }
+
+  .backdrop {
+    position: absolute;
+    right: -9%;
+    bottom: -17%;
+    rotate: -15deg;
+    z-index: -1;
+    width: 35rem;
   }
 </style>
