@@ -89,7 +89,7 @@
     display: grid;
     position: relative;
     grid-template-rows: auto 1fr;
-    gap: 1rem;
+    gap: 0.75rem;
     transform-origin: center;
     scale: var(--board-scale);
     border-radius: var(--radius-sm);
