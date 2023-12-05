@@ -9,10 +9,19 @@
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { getItem, isItemIdOfSide } from '$lib/game/constants/items'
   import { GameState } from '$lib/game/game-state'
+  import { afterUpdate, onMount } from 'svelte'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
   const { machine } = getGameContext()
+
+  const collectableItems = useSelector(machine.service, ({ context }) => {
+    const gameState = GameState.fromContext(context)
+    const playerPosition = gameState.activePlayerPosition
+    return gameState
+      .getItemsForCoordinate(playerPosition)
+      .filter((item) => isItemIdOfSide(item.item.id, gameState.activeSide))
+  })
 
   const {
     inProgressEvent,
@@ -24,19 +33,12 @@
     buttonDisabled,
     buttonDisabledReason,
   } = createActionHandler('collect', {
-    extractSelectedOption: (event) => event.itemId,
+    extractSelectedOption: (event) =>
+      $collectableItems.length === 1 ? $collectableItems[0].item.id : event?.itemId,
     createEvent: (gameState, itemId) => ({
       itemId,
       position: gameState.activePlayerPosition,
     }),
-  })
-
-  const collectableItems = useSelector(machine.service, ({ context }) => {
-    const gameState = GameState.fromContext(context)
-    const playerPosition = gameState.activePlayerPosition
-    return gameState
-      .getItemsForCoordinate(playerPosition)
-      .filter((item) => isItemIdOfSide(item.item.id, gameState.activeSide))
   })
 </script>
 
@@ -46,7 +48,9 @@
 
 {#if $inProgressEvent}
   <GameDialog title="Gegenstand einsammeln" on:close={cancel}>
-    <p class="intro text-xs">Bitte wähle einen Gegenstand aus</p>
+    {#if $collectableItems.length > 1}<p class="intro text-xs">
+        Bitte wähle einen Gegenstand aus
+      </p>{/if}
 
     <form use:formAction>
       <RadioOptions vertical>
@@ -79,7 +83,7 @@
           disabled={$buttonDisabled}
           disabledReason={$buttonDisabledReason}
         >
-          Auswahl bestätigen
+          {$collectableItems.length > 1 ? 'Auswahl bestätigen' : 'Bestätigen'}
         </Button>
       </Actions>
     </form>
