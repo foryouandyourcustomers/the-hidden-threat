@@ -15,7 +15,7 @@
   {#if $$slots.title}
     <div class="title"><slot name="title" /></div>
   {/if}
-  <div class="content">
+  <div class="content" class:checked>
     <slot />
   </div>
 </label>
@@ -39,6 +39,9 @@
       border-radius: var(--radius-xs);
       background-color: var(--color-bg-strong);
       padding: 0.25rem;
+      &.checked {
+        box-shadow: 0 0 10px rgba(38, 45, 46, 0.25);
+      }
     }
     &:not(.with-title) {
       input {
