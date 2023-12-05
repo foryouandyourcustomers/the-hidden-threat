@@ -34,6 +34,7 @@
   {reportMousePosition}
   showBackdrop={$section !== 'Lobby'}
   paddedContent={$section !== 'Playing'}
+  showFooter={$section === 'Lobby'}
 >
   <InGame slot="header" />
 
