@@ -32,6 +32,7 @@
 
 <Board
   {reportMousePosition}
+  showBackdrop={$section !== 'Lobby'}
   paddedContent={$section !== 'Playing'}
   showFooter={$section === 'Lobby'}
 >
