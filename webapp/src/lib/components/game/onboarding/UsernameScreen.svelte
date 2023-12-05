@@ -49,6 +49,10 @@
       <Button type="submit" primary>Bestätigen und weiter</Button>
     </Actions>
   </form>
+
+  <p class="more-info text-sm">
+    * Weitere Informationen zum Spiel sind auf unserer <a href="/">Website</a> zufinden.
+  </p>
 </Board>
 
 <style lang="postcss">
@@ -60,5 +64,8 @@
     border-radius: var(--radius-md);
     background: var(--color-blue-transp-760);
     padding: 1rem 2rem;
+  }
+  .more-info {
+    margin-top: 3rem;
   }
 </style>
