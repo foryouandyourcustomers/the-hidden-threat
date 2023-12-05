@@ -9,7 +9,6 @@
   import RadioOptions from '$lib/components/ui/RadioOptions.svelte'
   import { getItem, isItemIdOfSide } from '$lib/game/constants/items'
   import { GameState } from '$lib/game/game-state'
-  import { afterUpdate, onMount } from 'svelte'
   import Action from './Action.svelte'
   import { createActionHandler } from './utils'
 
