@@ -16,7 +16,7 @@
   const form = superForm(data)
 </script>
 
-<Board paddedContent>
+<Board paddedContent showFooter>
   <div class="backdrop"><Polygon color="black" /></div>
 
   <Heading separator>
@@ -52,6 +52,10 @@
       <Button type="submit" primary>Bestätigen und weiter</Button>
     </Actions>
   </form>
+
+  <p class="more-info text-sm">
+    * Weitere Informationen zum Spiel sind auf unserer <a href="/">Website</a> zufinden.
+  </p>
 </Board>
 
 <style lang="postcss">
@@ -71,5 +75,8 @@
     rotate: -20deg;
     z-index: -1;
     width: 33rem;
+  }
+  .more-info {
+    margin-top: 3rem;
   }
 </style>

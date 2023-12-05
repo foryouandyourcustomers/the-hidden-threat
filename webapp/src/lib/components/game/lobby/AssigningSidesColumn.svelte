@@ -81,7 +81,7 @@
     on:dragover|preventDefault={(e) => onDragover(e, 'players')}
     on:dragleave|preventDefault={() => (target = undefined)}
   >
-    <Heading centered size="sm" spacing="none">Spieler:innen</Heading>
+    <h3 class="auto">Spieler:innen</h3>
     <div class="user-list">
       {#each $users.filter((user) => !user.isAdmin) as user (user.id)}
         <div
@@ -101,7 +101,7 @@
     on:dragover|preventDefault={(e) => onDragover(e, 'admins')}
     on:dragleave|preventDefault={() => (target = undefined)}
   >
-    <Heading centered size="sm" spacing="none">Spielleitung</Heading>
+    <h3 class="auto">Spielleitung</h3>
     <div class="user-list">
       {#each $users.filter((user) => user.isAdmin) as user (user.id)}
         <div

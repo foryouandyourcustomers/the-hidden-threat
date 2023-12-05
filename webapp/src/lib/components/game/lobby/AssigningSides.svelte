@@ -86,7 +86,6 @@
     gap: 0.5rem;
   }
   .user {
-    word-wrap: nowrap;
     border-radius: var(--radius-xs);
     background: var(--color-white-80);
     padding: 0rem 0.5rem;
@@ -96,6 +95,7 @@
     line-height: 2rem;
     text-align: center;
     text-overflow: ellipsis;
+    white-space: nowrap;
     &[draggable='true'] {
       cursor: grab;
     }
