@@ -40,6 +40,20 @@
         class:active={player.character === character.id}
       >
         {character.name}
+
+        <svg
+          class="icon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" />
+          {#if player.character === character.id}
+            <circle cx="12" cy="12" r="6" fill="currentColor" />
+          {/if}
+        </svg>
       </button>
     {/each}
   </div>
@@ -70,29 +84,33 @@
     gap: 0.25rem;
     .tab {
       display: flex;
+      align-items: center;
       gap: 0.5rem;
       border-radius: var(--radius-md);
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
       background: var(--color-blue-spielbrett);
       padding: 0.38rem 1.5rem;
+      color: #bfc2ca;
       font-size: var(--scale-2);
       line-height: 150%;
       font-family: var(--font-display);
       text-transform: uppercase;
       white-space: nowrap;
-      &::after {
+
+      .icon {
         display: block;
-        background: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12ZM12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z" fill="#1B253A"/></svg>');
-        width: 1.5rem;
-        height: 1.5rem;
-        content: '';
+        aspect-ratio: 1;
+        width: 1.125rem;
       }
       &.active {
         background: var(--color-bg-strong-secondary);
         color: var(--color-text-onstrong-secondary);
         font-size: var(--scale-3);
         line-height: 2.25rem;
+        .icon {
+          width: 1.5rem;
+        }
       }
     }
   }
