@@ -7,6 +7,7 @@ import { GLOBAL_ATTACK_SCENARIOS, type GlobalAttack } from '../constants/global-
 import { STAGES, type StageId } from '../constants/stages'
 import { TARGETED_ATTACKS, type TargetedAttack } from '../constants/targeted-attacks'
 import type { SharedGameContext } from '../types'
+import { produce } from 'immer'
 
 export * from './player'
 export * from './user'
@@ -47,7 +48,12 @@ export const getSharedGameContext = (
 export const getGameSummary = (context: SharedGameContext) => {
   return {
     // Make sure all additional data is stripped from the game context.
-    context: getSharedGameContext(context),
+    context: produce(getSharedGameContext(context), (draft) => {
+      // Remove names from export.
+      draft.users.forEach((user, i) => {
+        user.name = `Player ${i + 1}`
+      })
+    }),
     TARGETED_ATTACKS,
     GLOBAL_ATTACK_SCENARIOS,
     BOARD_ITEMS,
