@@ -1,6 +1,7 @@
 <script lang="ts">
   import { scale } from 'svelte/transition'
   import OpenButton from './OpenButton.svelte'
+  import CloseIcon from '~icons/lucide/x'
   let expanded = false
 </script>
 
@@ -12,6 +13,9 @@
       in:scale={{ duration: 150, start: 0.7 }}
       out:scale={{ duration: 150, start: 0.7 }}
     >
+      <button class="unstyled close-button" on:click={() => (expanded = !expanded)}
+        ><CloseIcon /></button
+      >
       <slot />
     </div>
   {/if}
@@ -31,11 +35,21 @@
       right: 0;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
       border-radius: var(--radius-sm);
       background: white;
       padding-block: 0.5rem;
-      min-width: 16rem;
+      min-width: 11.5rem;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 0.37rem;
+      right: 0.37rem;
+      :global(svg) {
+        display: block;
+        width: 1.25rem;
+        height: 1.25rem;
+      }
     }
   }
 </style>
