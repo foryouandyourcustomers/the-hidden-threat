@@ -21,7 +21,7 @@
     :global(nav.toc) {
       position: fixed;
       inset: 0 auto 0 0;
-      background: #d9d9d9;
+      background: var(--color-white-80);
       padding: 3rem 2rem;
       width: var(--_nav-width);
       overflow-y: auto;
@@ -33,7 +33,9 @@
         display: block;
         margin-bottom: 1rem;
         content: 'Übersicht';
-        font-weight: bold;
+        font-weight: 500;
+        font-size: var(--scale-2);
+        text-transform: uppercase;
       }
     }
     :global(nav.toc ol) {
@@ -41,6 +43,12 @@
       padding: 0;
       list-style: none;
     }
+
+    :global(nav.toc .toc-link-h1) {
+      padding-top: 0.75rem;
+      text-transform: uppercase;
+    }
+
     :global(nav.toc ol a) {
       display: block;
       margin-block: 0.25rem;
@@ -58,6 +66,7 @@
     :global(main h1) {
       margin-block: 3rem 1.5rem;
       font: var(--display-h1);
+      text-transform: uppercase;
     }
     :global(main h2) {
       margin-top: 1.5rem;
