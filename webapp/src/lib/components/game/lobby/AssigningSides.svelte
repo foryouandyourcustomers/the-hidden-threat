@@ -27,8 +27,10 @@
   }
 </script>
 
-<div class="backdrop1"><Polygon color="blue" /></div>
-<div class="backdrop2"><Polygon color="red" /></div>
+<div class="backdrop">
+  <Polygon color="blue" />
+  <Polygon color="red" />
+</div>
 
 <Heading separator>
   Einteilung in Teams
@@ -101,19 +103,26 @@
     }
   }
 
-  .backdrop1,
-  .backdrop2 {
+  .backdrop {
     position: absolute;
-    rotate: -15deg;
     z-index: -1;
-    width: 28rem;
-  }
-  .backdrop1 {
-    bottom: -5%;
-    left: -12%;
-  }
-  .backdrop2 {
-    right: -17%;
-    bottom: 15%;
+    inset: var(--size-header-height) 0 var(--size-game-footer-height) 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    :global(svg) {
+      position: absolute;
+      rotate: -15deg;
+      z-index: -1;
+      width: 28rem;
+    }
+    :global(:first-child) {
+      bottom: -5%;
+      left: -12%;
+    }
+    :global(:last-child) {
+      right: -17%;
+      bottom: 15%;
+    }
   }
 </style>

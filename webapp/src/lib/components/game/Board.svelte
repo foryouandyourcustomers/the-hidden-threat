@@ -118,7 +118,6 @@
 
   .content {
     isolation: isolate;
-    overflow: hidden;
     &.padded {
       padding: 1rem 7rem 0;
     }
@@ -129,9 +128,9 @@
     justify-content: stretch;
     align-items: center;
     background-color: var(--color-blue-spielbrett);
-    background: linear-gradient(to top, rgba(43, 52, 72, 0) 40.63%, rgba(43, 52, 72, 0.66) 100%);
+    background: linear-gradient(to top, #1b253a, #252f43);
     padding: 0 7rem;
-    height: 3.75rem;
+    height: var(--size-game-footer-height);
     > :global(*) {
       flex: 1;
     }

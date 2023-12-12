@@ -68,14 +68,24 @@
     background: var(--color-blue-transp-760);
     padding: 1rem 2rem;
   }
+
   .backdrop {
     position: absolute;
-    right: -5%;
-    bottom: -5%;
-    rotate: -20deg;
     z-index: -1;
-    width: 33rem;
+    inset: var(--size-header-height) 0 var(--size-game-footer-height) 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    :global(svg) {
+      position: absolute;
+      right: -5%;
+      bottom: -12%;
+      rotate: -15deg;
+      z-index: -1;
+      width: 32rem;
+    }
   }
+
   .more-info {
     margin-top: 3rem;
   }
