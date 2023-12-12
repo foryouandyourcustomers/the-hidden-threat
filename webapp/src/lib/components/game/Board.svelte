@@ -128,6 +128,7 @@
     display: flex;
     justify-content: stretch;
     align-items: center;
+    z-index: var(--layer-top);
     background-color: var(--color-blue-spielbrett);
     background: linear-gradient(to top, rgba(43, 52, 72, 0) 40.63%, rgba(43, 52, 72, 0.66) 100%);
     padding: 0 7rem;
