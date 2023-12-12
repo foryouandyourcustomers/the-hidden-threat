@@ -41,6 +41,7 @@
     </OpenButton>
     <Expandable>
       <SettingsIcon slot="icon" />
+      <p class="label">Optionen</p>
       <SwitchSidesButton />
       <RollbackButton />
     </Expandable>
@@ -72,6 +73,16 @@
       height: 2rem;
     }
   }
+
+  .label {
+    align-self: flex-start;
+    padding-top: 0.25rem;
+    padding-bottom: 0.75rem;
+    padding-left: 0.75rem;
+    font-weight: 700;
+    font-size: var(--scale-00);
+  }
+
   .close {
     position: relative;
     grid-area: options;

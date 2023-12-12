@@ -18,11 +18,13 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding-inline: 1rem;
+    padding-inline: 0.75rem;
     width: 100%;
-    height: 1.375rem;
+    height: 1.75rem;
+    font-size: var(--scale-000);
     &:hover {
       background: #d5d9e34d;
+      font-weight: 700;
     }
     .icons {
       flex-shrink: 0;

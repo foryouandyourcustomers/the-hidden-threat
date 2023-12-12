@@ -28,7 +28,6 @@
     background: linear-gradient(to bottom, #2b344800, #2b3448a9);
     padding-inline: 7rem 1rem;
     height: var(--size-header-height);
-    overflow: hidden;
   }
   .title {
     position: relative;
