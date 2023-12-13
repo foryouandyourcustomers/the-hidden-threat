@@ -6,7 +6,9 @@
   /** Whether the tooltip should be shown on click or hover */
   export let click = false
 
-  let visible = false
+  export let showOnCreate = false
+
+  let visible = showOnCreate
 
   let timeout: number | undefined
 

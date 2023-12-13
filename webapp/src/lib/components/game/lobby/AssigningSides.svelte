@@ -5,6 +5,8 @@
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
+  import Tooltip from '$lib/components/ui/Tooltip.svelte'
+  import ShareIcon from '~icons/lucide/share-2'
   import AssigningSidesColumn from './AssigningSidesColumn.svelte'
 
   const { user, machine } = getGameContext()
@@ -25,6 +27,27 @@
       e.dataTransfer.effectAllowed = 'move'
     }
   }
+
+  const share = async () => {
+    const url = window.location.href
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: 'The Hidden Threat',
+          text: 'The Hidden Threat',
+          url: url,
+        })
+      } else {
+        navigator.clipboard.writeText(url)
+        copiedLink = true
+        setTimeout(() => (copiedLink = false), 2000)
+      }
+    } catch (e) {
+      console.warn(e)
+    }
+  }
+
+  let copiedLink = false
 </script>
 
 <div class="backdrop1"><Polygon color="blue" /></div>
@@ -36,10 +59,20 @@
   <svelte:fragment slot="info">Schritt 2 von 3</svelte:fragment>
 </Heading>
 
-<p>
-  Gleich geht’s los. Sobald alle Teilnehmende sich eingeloggt haben, kann die Spielleitung alle in
-  Teams einteilen.
-</p>
+<div class="intro">
+  <p>
+    Gleich geht’s los. Sobald alle Teilnehmende sich eingeloggt haben, kann die Spielleitung alle in
+    Teams einteilen.
+  </p>
+
+  <button class="unstyled share" on:click={share}>
+    <ShareIcon />
+
+    {#if copiedLink}
+      <Tooltip showOnCreate position="left">Link kopiert!</Tooltip>
+    {/if}
+  </button>
+</div>
 
 <div class="columns">
   <AssigningSidesColumn side="defense" />
@@ -115,5 +148,27 @@
   .backdrop2 {
     right: -17%;
     bottom: 15%;
+  }
+  .intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .share {
+      display: grid;
+      position: relative;
+      top: -0.4rem;
+      place-content: center;
+      border: 2px solid white;
+      border-radius: var(--radius-full);
+      width: 2.5rem;
+      height: 2.5rem;
+      > :global(svg) {
+        position: relative;
+        left: -0.08rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
   }
 </style>
