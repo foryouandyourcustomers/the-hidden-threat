@@ -59,7 +59,7 @@
   </div>
   <div class="content">
     <div>
-      <Heading spacing="none" size="sm">Beschreibung</Heading>
+      <h5 class="auto">Beschreibung</h5>
       <Paragraph spacing="none">
         {#if activeCharacter}
           {activeCharacter.description}
@@ -68,7 +68,7 @@
     </div>
     {#if activeCharacter && isDefenseCharacter(activeCharacter)}
       <div>
-        <Heading spacing="none" size="sm">Fähigkeit</Heading>
+        <h5 class="auto">Fähigkeit</h5>
         <Paragraph spacing="none">
           {ABILITIES[activeCharacter.ability]}
         </Paragraph>
@@ -116,7 +116,7 @@
   }
   .content {
     display: flex;
-    gap: 1rem;
+    gap: 3rem;
     border-radius: var(--radius-md);
     border-top-right-radius: 0;
     border-top-left-radius: 0;
