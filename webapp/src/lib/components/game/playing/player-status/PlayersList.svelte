@@ -4,6 +4,7 @@
   import Player from './Player.svelte'
 
   type PlayerDescription = {
+    isSelf: boolean
     faceId: FaceId
     name: string
     character: string
@@ -37,6 +38,7 @@
           characterAbility={player.characterAbility}
           isConnected={player.isConnected}
           isPlaying={player.isPlaying}
+          isSelf={player.isSelf}
           {side}
           showFace={side !== 'admin' || players.length <= 3}
         />

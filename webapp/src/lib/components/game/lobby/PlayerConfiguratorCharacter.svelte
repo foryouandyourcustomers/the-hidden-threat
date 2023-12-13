@@ -1,6 +1,5 @@
 <script lang="ts">
   import { getGameContext } from '$lib/client/game-context'
-  import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import {
     ABILITIES,

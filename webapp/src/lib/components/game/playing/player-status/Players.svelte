@@ -7,6 +7,7 @@
   import { getCharacter } from '$lib/game/utils'
   import isEqual from 'lodash/isEqual'
   import PlayersList from './PlayersList.svelte'
+  import { getCurrentUser } from '$lib/client/game-machine/utils'
 
   const { machine } = getGameContext()
 
@@ -36,7 +37,7 @@
 
   const getUserForPlayer = (player: Defender | Attacker, users: User[]) => {
     const user = users.find((user) => user.id === player.userId)
-    return user ?? { name: 'Unbekannt', isConnected: false }
+    return user ?? { id: 'unknown', name: 'Unbekannt', isConnected: false }
   }
 
   const activePlayerId = useSelector(
@@ -44,11 +45,14 @@
     ({ context }) => GameState.fromContext(context).activePlayer.id,
   )
 
-  const mapPlayer = (player: Player, activePlayerId: PlayerId) => {
+  const ownUserId = useSelector(machine.service, ({ context }) => getCurrentUser(context)?.id)
+
+  const mapPlayer = (player: Player, activePlayerId: PlayerId, ownUserId: string) => {
     const user = getUserForPlayer(player, $users)
     const character = getCharacter(player.character)
 
     return {
+      isSelf: ownUserId === user.id,
       faceId: player.faceId,
       name: user.name,
       character: character.name,
@@ -58,9 +62,14 @@
     }
   }
 
-  $: defensePlayerDescriptions = $defensePlayers.map((player) => mapPlayer(player, $activePlayerId))
-  $: attackPlayerDescriptions = $attackPlayers.map((player) => mapPlayer(player, $activePlayerId))
+  $: defensePlayerDescriptions = $defensePlayers.map((player) =>
+    mapPlayer(player, $activePlayerId, $ownUserId),
+  )
+  $: attackPlayerDescriptions = $attackPlayers.map((player) =>
+    mapPlayer(player, $activePlayerId, $ownUserId),
+  )
   $: adminPlayerDescriptions = [...$defenseAdmins, ...$attackAdmins].map((admin) => ({
+    isSelf: admin.id === $ownUserId,
     faceId: 0 as FaceId,
     name: admin.name,
     character: admin.side === 'attack' ? 'Angriff' : 'Verteidigung',
