@@ -103,19 +103,26 @@
         aspect-ratio: 1;
         width: 1.125rem;
       }
-      &.active {
-        background: var(--color-bg-strong-secondary);
-        color: var(--color-text-onstrong-secondary);
+      &.active,
+      &:hover {
         font-size: var(--scale-3);
         line-height: 2.25rem;
         .icon {
           width: 1.5rem;
         }
       }
+      &:hover {
+        box-shadow: 0px 0px 10px 0px #1c2526;
+      }
+      &.active {
+        background: var(--color-bg-strong-secondary);
+        color: var(--color-text-onstrong-secondary);
+      }
     }
   }
   .content {
     display: flex;
+    position: relative;
     gap: 3rem;
     border-radius: var(--radius-md);
     border-top-right-radius: 0;
