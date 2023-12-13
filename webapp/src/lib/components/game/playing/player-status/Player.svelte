@@ -30,6 +30,9 @@
           <div class="name">{name}</div>
         </div>
       </div>
+      {#if isConnected === false}
+        <div class="disconnected">Spieler:in ist nicht connected.</div>
+      {/if}
 
       {#if side === 'admin'}
         <Heading size="sm" spacing="none">Spielleitung</Heading>
@@ -140,20 +143,21 @@
       }
     }
     .online-status {
-      display: none;
       position: absolute;
-      top: 0.2rem;
-      right: 0.75rem;
+      right: 0.25rem;
+      bottom: 0.25rem;
       z-index: var(--layer-4);
       border-radius: var(--radius-full);
-      background: orange;
+      background: var(--color-orange-dark);
       width: 0.5rem;
       height: 0.5rem;
       &.connected {
-        /* background: #38c60077; */
         display: none;
       }
     }
+  }
+  .disconnected {
+    color: var(--color-orange-dark);
   }
 
   .tooltip-content {
