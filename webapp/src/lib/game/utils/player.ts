@@ -1,4 +1,10 @@
-import { CHARACTERS, type CharacterId } from '../constants/characters'
+import {
+  ABILITIES,
+  CHARACTERS,
+  isDefenseCharacter,
+  type Character,
+  type CharacterId,
+} from '../constants/characters'
 import {
   isDefenderId,
   type Player,
@@ -23,3 +29,11 @@ export const getPlayerSide = (playerId: PlayerId): Side =>
 export const getCharacter = (characterId: CharacterId) =>
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   CHARACTERS.find((character) => character.id === characterId)!
+
+export const getAbility = (character: Character) => {
+  if (isDefenseCharacter(character)) {
+    return ABILITIES[character.ability]
+  } else {
+    return undefined
+  }
+}
