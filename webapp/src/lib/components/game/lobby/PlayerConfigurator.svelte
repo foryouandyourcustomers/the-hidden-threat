@@ -68,6 +68,8 @@
     <Heading size="md" spacing="none">1. Bestimme eine:n Spieler:in</Heading>
     <div class="user-select">
       <Select
+        --height="3.5rem"
+        placeholder="Wähle eine:n Spieler:in aus der Liste"
         items={userItems}
         value={userId}
         on:input={(e) => setUser(e.detail?.value)}

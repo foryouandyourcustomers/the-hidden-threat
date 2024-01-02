@@ -1,6 +1,5 @@
 <script lang="ts">
   import { getGameContext } from '$lib/client/game-context'
-  import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import {
     ABILITIES,
@@ -59,7 +58,7 @@
   </div>
   <div class="content">
     <div>
-      <Heading spacing="none" size="sm">Beschreibung</Heading>
+      <h5 class="auto">Beschreibung</h5>
       <Paragraph spacing="none">
         {#if activeCharacter}
           {activeCharacter.description}
@@ -68,7 +67,7 @@
     </div>
     {#if activeCharacter && isDefenseCharacter(activeCharacter)}
       <div>
-        <Heading spacing="none" size="sm">Fähigkeit</Heading>
+        <h5 class="auto">Fähigkeit</h5>
         <Paragraph spacing="none">
           {ABILITIES[activeCharacter.ability]}
         </Paragraph>
@@ -103,20 +102,27 @@
         aspect-ratio: 1;
         width: 1.125rem;
       }
-      &.active {
-        background: var(--color-bg-strong-secondary);
-        color: var(--color-text-onstrong-secondary);
+      &.active,
+      &:hover {
         font-size: var(--scale-3);
         line-height: 2.25rem;
         .icon {
           width: 1.5rem;
         }
       }
+      &:hover {
+        box-shadow: 0px 0px 10px 0px #1c2526;
+      }
+      &.active {
+        background: var(--color-bg-strong-secondary);
+        color: var(--color-text-onstrong-secondary);
+      }
     }
   }
   .content {
     display: flex;
-    gap: 1rem;
+    position: relative;
+    gap: 3rem;
     border-radius: var(--radius-md);
     border-top-right-radius: 0;
     border-top-left-radius: 0;
