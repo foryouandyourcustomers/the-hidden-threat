@@ -6,15 +6,28 @@
 #   1. Build the project with `pnpm build`
 #   2. Replace webapp-build/ with build/ in the COPY command below
 #   3. Run `docker build -t the-hidden-threat .`
+#   4. Run the docker image with `docker run -p 3030:3000 the-hidden-threat`
 
 FROM node:18-bookworm-slim
 
-WORKDIR /app
+# Set the UID for the user
+ARG UID=1025
 
-# Install pm2 to make sure our node process restarts if it crashes
-RUN npm install pm2 -g
+# Create a new user with the specified UID, and install pm2 to make sure our
+# node process restarts if it crashes
+RUN adduser --uid $UID --disabled-password --gecos "" nonroot && \
+    npm install pm2 -g
 
-COPY webapp-build/ .
+# Set the working directory to the app directory in the home of the user
+WORKDIR /home/nonroot/webapp
+
+# Copy the project, and make sure that the `nonroot` user only has read access
+# to the files.
+COPY --chown=root:root webapp-build/ .
+RUN chmod -R go-w . && chmod -R go+r .
+
+# Switch to the nonroot user
+USER nonroot
 
 EXPOSE 3000
 
