@@ -3,7 +3,6 @@
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import Joker from '$lib/components/icons/Joker.svelte'
-  import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
   import Tooltip from '$lib/components/ui/Tooltip.svelte'
   import { GameState } from '$lib/game/game-state'

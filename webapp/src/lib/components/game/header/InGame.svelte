@@ -17,10 +17,6 @@
   const { machine } = getGameContext()
 
   const playing = useSelector(machine.service, (state) => state.matches('Playing'))
-
-  const close = () => {
-    if (window.confirm('Möchtest du wirklich das Spiel verlassen?')) window.location.href = '/'
-  }
 </script>
 
 {#if $playing}
