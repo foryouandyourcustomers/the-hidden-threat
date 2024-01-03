@@ -18,14 +18,14 @@
 <div class="info-panel">
   <nav>
     <button
-      class="unstyled"
+      class="unstyled attacks"
       class:active={selected === 'attacks'}
       on:click={() => (selected = 'attacks')}
     >
       <AttacksIcon />
     </button>
     <button
-      class="unstyled"
+      class="unstyled inventory"
       class:active={selected === 'inventory'}
       on:click={() => (selected = 'inventory')}
     >
@@ -58,11 +58,12 @@
     align-items: flex-end;
     gap: 0.25rem;
     button {
+      display: grid;
+      place-content: center;
       border-radius: var(--radius-md);
       border-top-right-radius: 0rem;
       border-bottom-right-radius: 0rem;
       background-color: var(--color-blue-transp-12);
-      padding: 0.3125rem;
       width: 2.5rem;
       height: 2.5rem;
 
@@ -73,8 +74,14 @@
 
       :global(svg) {
         display: block;
-        width: 100%;
-        height: 100%;
+        width: 1.75rem;
+        height: 1.75rem;
+      }
+      &.inventory {
+        :global(svg) {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
       }
     }
   }
