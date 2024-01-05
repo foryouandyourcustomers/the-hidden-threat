@@ -23,10 +23,11 @@ import isEqual from 'lodash/isEqual'
 import { BOARD_ITEMS } from './constants/board-items'
 import {
   BOARD_SUPPLY_CHAINS,
+  findStageAt,
   getStageAt,
   type BoardStage,
-  findStageAt,
 } from './constants/board-stages'
+import { TOTAL_ROUNDS } from './constants/general'
 import { GLOBAL_ATTACK_SCENARIOS } from './constants/global-attacks'
 import {
   ITEMS,
@@ -38,7 +39,6 @@ import {
 import { STAGES, type StageId } from './constants/stages'
 import { TARGETED_ATTACKS } from './constants/targeted-attacks'
 import { getPlayerSide } from './utils'
-import { TOTAL_ROUNDS } from './constants/general'
 
 export type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
@@ -455,7 +455,7 @@ export class GameState {
       chainAttackCounts.forEach((count, chainId) => {
         if (count >= 3) {
           const otherStages = BOARD_SUPPLY_CHAINS[chainId]
-            // Exclude already added stages
+            // Exclude already attacked or defended stages
             .filter((stage) => ![...attackedStages, ...defendedStages].includes(stage))
           attackedStages.push(...otherStages)
         }

@@ -2,7 +2,10 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
+  import { getStageAt } from '$lib/game/constants/board-stages'
   import { GameState } from '$lib/game/game-state'
+  import { guardForGameEventAction } from '$lib/game/types'
+  import { getStage } from '$lib/game/utils'
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
 
@@ -26,6 +29,7 @@
 
     const notifications: NotificationSpec[] = []
 
+    // Add notifications for the action of the current player
     if (gameState.activePlayer.userId === user.id) {
       if (gameState.nextEventType === 'move') {
         notifications.push({
@@ -41,6 +45,43 @@
             gameState.activeSide === 'attack'
               ? 'Platziere dich auf einem Feld deiner Wahl.'
               : 'Platziere dich auf einem der markierten Felder.',
+        })
+      }
+    }
+    const lastFinalizedActionEvent = gameState.finalizedActionEvents.at(-1)
+    if (lastFinalizedActionEvent) {
+      // Add notifications for attacked / defended stages
+      if (lastFinalizedActionEvent.action === 'attack') {
+        // Must be set, since this is finalized
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const position = lastFinalizedActionEvent.position!
+        const boardStage = getStageAt(position)
+        const stage = getStage(boardStage.id)
+
+        const totalAttacksOnThisSupplyChain = gameState.finalizedActionEvents
+          .filter(guardForGameEventAction('attack'))
+          .filter(
+            (event) =>
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              getStageAt(event.position!).supplyChainId === boardStage.supplyChainId,
+          ).length
+        const totalDefensesOnThisSupplyChain = gameState.finalizedActionEvents
+          .filter(guardForGameEventAction('defend'))
+          .filter(
+            (event) =>
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              getStageAt(event.position!).supplyChainId === boardStage.supplyChainId,
+          ).length
+
+        notifications.push({
+          id: `attack-${lastFinalizedActionEvent.position}`,
+          message: `Stufe "${stage.name}" von "Supply Chain ${
+            boardStage.supplyChainId + 1
+          }" wurde zerstört!`,
+          description:
+            totalAttacksOnThisSupplyChain >= 3 && totalDefensesOnThisSupplyChain !== 2
+              ? `Das war die dritte Stufe, somit wurde die Supply Chain komplett lahm gelegt.`
+              : undefined,
         })
       }
     }
