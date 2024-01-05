@@ -53,9 +53,9 @@ export type ItemInventory<T extends Side> = {
  * the only source of truth of the current state, so we can rewind any event.
  */
 export class GameState {
-  private playersInOrder: Player[]
   private randomNumbers: number[]
 
+  public playersInOrder: Player[]
   public playerEvents: PlayerGameEvent[]
   public finalizedEvents: PlayerGameEvent[]
   public finalizedPlacementEvents: PlayerGameEvent[]
@@ -64,6 +64,7 @@ export class GameState {
   public finalizedReactionEvents: GameEventOf<'reaction'>[]
   public finalizedPlayerEvents: GameEventOf<'action' | 'move' | 'placement' | 'reaction'>[]
   public finalizedActionEventsRequiringReaction: GameEventOf<'action'>[]
+  public finalizedAndReactedActionEvents: GameEventOf<'action'>[]
   public finalizedMoveOrActionEvents: GameEventOf<'action' | 'move'>[]
 
   public currentRound: number

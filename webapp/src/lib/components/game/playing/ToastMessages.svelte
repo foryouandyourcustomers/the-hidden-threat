@@ -4,7 +4,7 @@
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { getStageAt } from '$lib/game/constants/board-stages'
   import { GameState } from '$lib/game/game-state'
-  import { guardForGameEventAction } from '$lib/game/types'
+  import { guardForGameEventAction, isPlayerIdOfSide } from '$lib/game/types'
   import { getStage } from '$lib/game/utils'
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'
@@ -58,23 +58,15 @@
         const boardStage = getStageAt(position)
         const stage = getStage(boardStage.id)
 
-        const totalAttacksOnThisSupplyChain = gameState.finalizedActionEvents
-          .filter(guardForGameEventAction('attack'))
-          .filter(
-            (event) =>
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              getStageAt(event.position!).supplyChainId === boardStage.supplyChainId,
-          ).length
-        const totalDefensesOnThisSupplyChain = gameState.finalizedActionEvents
-          .filter(guardForGameEventAction('defend'))
-          .filter(
-            (event) =>
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              getStageAt(event.position!).supplyChainId === boardStage.supplyChainId,
-          ).length
+        const totalAttacksOnThisSupplyChain = gameState.attackedStages.filter(
+          (stage) => stage.supplyChainId === boardStage.supplyChainId,
+        ).length
+        const totalDefensesOnThisSupplyChain = gameState.defendedStages.filter(
+          (stage) => stage.supplyChainId === boardStage.supplyChainId,
+        ).length
 
         notifications.push({
-          id: `attack-${lastFinalizedActionEvent.position}`,
+          id: `attacked-${lastFinalizedActionEvent.position}`,
           message: `Stufe "${stage.name}" von Supply Chain ${
             boardStage.supplyChainId + 1
           } wurde zerstört!`,
@@ -93,10 +85,35 @@
         const stage = getStage(boardStage.id)
 
         notifications.push({
-          id: `attack-${lastFinalizedActionEvent.position}`,
+          id: `defended-${lastFinalizedActionEvent.position}`,
           message: `Stufe "${stage.name}" von Supply Chain ${
             boardStage.supplyChainId + 1
           } wurde verteidigt!`,
+        })
+      }
+    }
+
+    if (gameState.currentRound % 3 === 0 && gameState.currentRound !== 0) {
+      // Ok, so we're in the right round to actually display the note that there
+      // are new attacks, but we only want to display it at the _start_ of the
+      // round.
+      // To determine that, we check if the current player has already moved.
+      const side = getCurrentUser(context).side
+      // Get the amount of moves from "our" side.
+      const movesFromThisSideCount = gameState.finalizedMoveEvents.filter((event) =>
+        isPlayerIdOfSide(event.playerId, side),
+      ).length
+      // If the amount of moves is identical to the amount of moves done in a
+      // round we know that we haven't moved yet.
+      const moved = movesFromThisSideCount !== gameState.currentRound * (side === 'attack' ? 2 : 4)
+      if (!moved) {
+        notifications.push({
+          id: `new-attacks`,
+          message: `Runde ${gameState.currentRound + 1} is erreicht!`,
+          description:
+            side === 'attack'
+              ? `Drei neue gezielte Angriffe wurden aufgedeckt.`
+              : `Ein neuer allgemeiner Angriff hat nun gestartet.`,
         })
       }
     }
