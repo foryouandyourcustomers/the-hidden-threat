@@ -50,7 +50,7 @@
     }
     const lastFinalizedActionEvent = gameState.finalizedActionEvents.at(-1)
     if (lastFinalizedActionEvent) {
-      // Add notifications for attacked / defended stages
+      // Add notifications for attacked stages
       if (lastFinalizedActionEvent.action === 'attack') {
         // Must be set, since this is finalized
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -75,13 +75,28 @@
 
         notifications.push({
           id: `attack-${lastFinalizedActionEvent.position}`,
-          message: `Stufe "${stage.name}" von "Supply Chain ${
+          message: `Stufe "${stage.name}" von Supply Chain ${
             boardStage.supplyChainId + 1
-          }" wurde zerstört!`,
+          } wurde zerstört!`,
           description:
             totalAttacksOnThisSupplyChain >= 3 && totalDefensesOnThisSupplyChain !== 2
               ? `Das war die dritte Stufe, somit wurde die Supply Chain komplett lahm gelegt.`
               : undefined,
+        })
+      }
+      // Add notifications for defended stages
+      if (lastFinalizedActionEvent.action === 'defend') {
+        // Must be set, since this is finalized
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const position = lastFinalizedActionEvent.position!
+        const boardStage = getStageAt(position)
+        const stage = getStage(boardStage.id)
+
+        notifications.push({
+          id: `attack-${lastFinalizedActionEvent.position}`,
+          message: `Stufe "${stage.name}" von Supply Chain ${
+            boardStage.supplyChainId + 1
+          } wurde verteidigt!`,
         })
       }
     }
