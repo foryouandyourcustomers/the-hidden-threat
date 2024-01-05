@@ -10,6 +10,7 @@
   import TextInput from '$lib/components/ui/TextInput.svelte'
   import type { SuperValidated } from 'sveltekit-superforms'
   import { superForm } from 'sveltekit-superforms/client'
+  import PreGameDecoration from '../header/PreGameDecoration.svelte'
 
   export let data: SuperValidated<CreateGameSchema | JoinGameSchema>
 
@@ -17,6 +18,8 @@
 </script>
 
 <Board paddedContent showFooter>
+  <PreGameDecoration slot="header" />
+
   <div class="backdrop"><Polygon color="black" /></div>
 
   <Heading separator>

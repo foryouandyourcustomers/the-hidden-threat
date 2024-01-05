@@ -1,3 +1,4 @@
+import { throwIfNotFound } from '$lib/utils'
 import type { DefenseItemId } from './items'
 
 export type StageId = 'supply' | 'production' | 'datacenter' | 'storage' | 'logistics' | 'sales'
@@ -9,6 +10,9 @@ export type Stage = {
   gender: 'm' | 'f' | 'n'
   defenseItems: readonly DefenseItemId[]
 }
+
+export const getStage = (stageId: StageId): Stage =>
+  STAGES.find((stage) => stage.id === stageId) ?? throwIfNotFound()
 
 export const STAGES: readonly Stage[] = [
   {

@@ -138,7 +138,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin: -1rem;
+    margin: -1.5rem -1rem -1rem;
     padding: 1rem;
     width: 100%;
     list-style: none;
@@ -149,12 +149,17 @@
     gap: 2rem;
 
     .stage {
+      margin-bottom: 0.35rem;
       font-size: 0.75rem;
     }
 
     .items {
       display: flex;
       gap: 0.5rem;
+      > :global(svg) {
+        width: 2rem;
+        height: 2rem;
+      }
     }
   }
 </style>
