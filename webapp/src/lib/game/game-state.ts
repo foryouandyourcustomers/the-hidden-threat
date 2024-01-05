@@ -64,7 +64,6 @@ export class GameState {
   public finalizedReactionEvents: GameEventOf<'reaction'>[]
   public finalizedPlayerEvents: GameEventOf<'action' | 'move' | 'placement' | 'reaction'>[]
   public finalizedActionEventsRequiringReaction: GameEventOf<'action'>[]
-  public finalizedAndReactedActionEvents: GameEventOf<'action'>[]
   public finalizedMoveOrActionEvents: GameEventOf<'action' | 'move'>[]
 
   public currentRound: number
