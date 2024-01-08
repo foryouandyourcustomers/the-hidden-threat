@@ -37,13 +37,18 @@
       font: var(--display-h1);
     }
     h2 {
+      margin-block: 2rem 1rem;
       font: var(--display-h2);
     }
     h3 {
+      margin-block: 1.5rem 0.75rem;
       font: var(--display-h3);
     }
     h4 {
       font: var(--display-h4);
+    }
+    p {
+      margin-block: 1rem 0;
     }
   }
 
