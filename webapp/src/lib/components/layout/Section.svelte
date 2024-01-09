@@ -12,14 +12,16 @@
 
 <style lang="postcss">
   section {
-    --_width: var(--width-content-max);
+    --_width: 100%;
     --_bg: transparent;
+    isolation: isolate;
 
     &.bg-light {
       --_bg: var(--color-bg-secondary);
+      margin-inline: var(--size-content-px);
     }
     &.bg-fade {
-      --_bg: linear-gradient(to bottom, transparent, #232c41);
+      --_bg: linear-gradient(to bottom, transparent 50%, #232c41);
     }
 
     &.bg-fill-full {
@@ -36,19 +38,17 @@
       margin-inline: auto;
       border-radius: var(--radius-md);
       isolation: isolate;
-      padding: 5rem 1rem;
-      max-width: var(--_width);
+      padding: 5rem var(--size-content-px);
+      max-width: calc(var(--_width) + 2 * var(--size-content-px));
     }
   }
   .width-sm {
     --_width: var(--width-md);
-    --_padding-x: max(var(--size-default-px), (100vw - var(--width-md)) / 2);
   }
   .width-md {
     --_width: var(--width-lg);
-    --_padding-x: max(var(--size-default-px), (100vw - var(--width-lg)) / 2);
   }
   .width-lg {
-    --_width: var(--width-content-max);
+    --_width: 100%;
   }
 </style>

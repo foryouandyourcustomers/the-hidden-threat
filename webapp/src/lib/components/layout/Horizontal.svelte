@@ -16,6 +16,7 @@
     display: grid;
     grid-template-rows: auto auto;
     grid-template-columns: 1fr;
+    align-items: center;
     gap: 1.5rem;
 
     & .left,

@@ -5,8 +5,7 @@
   --size-header-height: 3.5rem;
   --size-game-footer-height: 3.75rem;
 
-  --size-default-px: 1rem;
-  --size-content-px: max(var(--size-default-px), (100vw - var(--width-content-max)) / 2);
+  --size-content-px: clamp(1rem, -0.875rem + 8.333vw, 7rem);
   --size-content-py: 3.5rem;
 
   /* Fonts */
@@ -22,7 +21,7 @@
   --text-small: var(--weight-regular) var(--scale-00) / 1.5 var(--font-text);
 
   /* Colors */
-  --color-bg: var(--color-blue-spielbrett);
+  --color-bg: var(--color-blue-transp-dark);
   --color-text: white;
   --color-border: white;
   --color-shadow: #fffa;

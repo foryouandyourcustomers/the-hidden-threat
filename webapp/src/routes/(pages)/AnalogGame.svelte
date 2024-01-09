@@ -23,16 +23,18 @@
 
   <div class="cards">
     <AnalogGameCard
-      title="Spielbrett"
+      title="Spielkarten"
       subtitle="Sie benötigen noch weitere Spielkarten?"
       downloadLink=""
+      --background-image="url('/images/analog-cards.jpg')"
     >
       Hier finden Sie das komplette Kartendeck.
     </AnalogGameCard>
     <AnalogGameCard
-      title="Spielkarten"
+      title="Spielbrett"
       subtitle="Sie brauchen ein weiteres Spielbrett für den Angreifer?"
       downloadLink=""
+      --background-image="url('/images/analog-board.jpg')"
     >
       Es liegt für Sie im A4-Format zum Download bereit.
     </AnalogGameCard>
@@ -40,6 +42,7 @@
       title="Spielregeln"
       subtitle="Nicht mehr alle Regeln oder Gegenstände parat?"
       downloadLink=""
+      --background-image="url('/images/analog-rules.jpg')"
     >
       Finden Sie alles in den Spielregeln für das Brettspiel.
     </AnalogGameCard>
@@ -49,18 +52,21 @@
 <style lang="postcss">
   .bg-polygon-blue {
     position: absolute;
-    top: 6rem;
+    top: 15rem;
     left: 1.5rem;
     transform-origin: top left;
     rotate: -20deg;
-    scale: 1.5;
-    z-index: 0;
+    z-index: -1;
+    width: 15rem;
+    height: 15rem;
   }
   .bg-polygon-black {
     position: absolute;
     right: 1.5rem;
     bottom: 1.5rem;
     z-index: -1;
+    width: 10rem;
+    height: 10rem;
   }
   .cards {
     display: grid;

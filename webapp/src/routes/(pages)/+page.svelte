@@ -11,7 +11,8 @@
 </script>
 
 <Section width="sm" bg="fade">
-  <Heading size="xl">Die digitale Variante zum Tabletop</Heading>
+  <h2 class="title auto">Die digitale Variante zum Tabletop</h2>
+  <img src="/images/landing-page-teaser.png" alt="The physical board game" />
 
   <Paragraph size="lg">
     In diesem fesselnden Spiel werden Sie unmittelbar Zeuge von Angriffen auf Lieferketten.
@@ -56,14 +57,19 @@
     </div>
   </Horizontal>
 </Section>
+
 <AnalogGame />
 
 <style lang="postcss">
+  .title {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
   .bg-polygon-orange {
     position: absolute;
-    top: -3rem;
+    top: -4rem;
     right: 0rem;
     rotate: -60deg;
-    scale: 1.2;
+    width: 10rem;
   }
 </style>

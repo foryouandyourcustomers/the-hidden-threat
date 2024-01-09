@@ -10,8 +10,12 @@
 <style lang="postcss">
   nav {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     font-size: var(--scale-00);
+
+    white-space: nowrap;
+
     .copyright {
       flex: 1;
     }
