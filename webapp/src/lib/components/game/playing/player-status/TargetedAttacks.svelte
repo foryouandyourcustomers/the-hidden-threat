@@ -15,9 +15,22 @@
 
   const { machine, highlightedFields } = getGameContext()
 
+  const getPositionForTarget = (target: TargetedAttack['target']) => {
+    return (
+      BOARD_SUPPLY_CHAINS.flat().find(
+        (stage) => stage.id === target.stageId && stage.supplyChainId === target.supplyChainId,
+      ) ?? throwIfNotFound()
+    ).coordinate
+  }
   const activeAttacks = useSelector(
     machine.service,
-    (state) => GameState.fromContext(state.context).activeTargetedAttacks,
+    (state) => {
+      const gameState = GameState.fromContext(state.context)
+      return gameState.activeTargetedAttacks.map((attack) => {
+        const target = getPositionForTarget(attack.target)
+        return { ...attack, isAttacked: gameState.isAttacked(target) }
+      })
+    },
     isEqual,
   )
 
@@ -33,22 +46,12 @@
 
   $: selectedStage = selectedAttack ? getStage(selectedAttack.target.stageId) : undefined
 
-  const getPositionForTarget = (target: TargetedAttack['target']) => {
-    return (
-      BOARD_SUPPLY_CHAINS.flat().find(
-        (stage) => stage.id === target.stageId && stage.supplyChainId === target.supplyChainId,
-      ) ?? throwIfNotFound()
-    ).coordinate
-  }
-
   const highlightAttack = (attackIndex: number | null) => {
     let highlighted: Coordinate[] | undefined = undefined
 
     if (attackIndex !== null) {
       highlighted = [getPositionForTarget($activeAttacks[attackIndex].target)]
     }
-
-    console.log('highlighting', highlighted, attackIndex)
 
     highlightedFields.update((fields) => ({
       ...fields,
@@ -58,7 +61,7 @@
 </script>
 
 <div class="scenarios">
-  <Paragraph spacing="none" size="sm">Gezielter Angriffe</Paragraph>
+  <h6 class="display-xxs">Gezielte Angriffe</h6>
 
   <ul class="attacks">
     {#each new Array($totalAttackCount) as _, index}
@@ -69,6 +72,7 @@
       >
         <AttackCard
           side="attack"
+          completed={$activeAttacks[index]?.isAttacked === true}
           selected={selectedAttackIndex === index}
           {disabled}
           on:click={() => (selectedAttackIndex = index)}
@@ -81,27 +85,27 @@
 
   {#if selectedAttack && selectedStage}
     <div class="description">
-      <Heading size="sm" spacing="none">Angriff {selectedAttackIndex + 1}</Heading>
-      <Paragraph size="sm" spacing="none">
+      <h4 class="auto">Angriff {selectedAttackIndex + 1}</h4>
+      <p class="text-xs">
         {selectedAttack.description}
-      </Paragraph>
+      </p>
     </div>
 
     <div class="key-info">
       <div class="summary">
-        <Heading size="xs" spacing="none">Aufgabe</Heading>
-        <Paragraph size="sm" spacing="none">
+        <h6 class="auto">Aufgabe</h6>
+        <p class="text-xs">
           Legt {selectedStage.gender === 'f' ? 'die' : selectedStage.gender === 'n' ? 'das' : 'den'}
           {selectedStage.name} der Supply Chain {selectedAttack.target.supplyChainId + 1} lahm.
-        </Paragraph>
+        </p>
       </div>
       <div class="items">
-        <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
+        <h6 class="auto">Benötigte Gegenstände</h6>
         <div class="targets">
           <div class="target">
             <div class="items">
               {#each selectedAttack.target.requiredItems as item}
-                <Item highlightOnHover itemId={item} />
+                <Item showIfOwned="attack" highlightOnHover itemId={item} />
               {/each}
             </div>
           </div>
@@ -133,7 +137,7 @@
     align-items: flex-end;
     align-items: center;
     gap: 0.5rem;
-    margin: -1rem;
+    margin: -1.5rem -1rem -1rem;
     padding: 1rem;
     width: 100%;
     overflow-x: scroll;
@@ -152,6 +156,7 @@
   .key-info {
     display: flex;
     gap: 2rem;
+    padding-bottom: 1rem;
     > * {
       flex: 1;
     }

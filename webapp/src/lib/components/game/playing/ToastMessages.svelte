@@ -4,7 +4,7 @@
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import { getStageAt } from '$lib/game/constants/board-stages'
   import { GameState } from '$lib/game/game-state'
-  import { guardForGameEventAction, isPlayerIdOfSide } from '$lib/game/types'
+  import { isPlayerIdOfSide } from '$lib/game/types'
   import { getStage } from '$lib/game/utils'
   import { onMount } from 'svelte'
   import { toast } from 'svelte-sonner'

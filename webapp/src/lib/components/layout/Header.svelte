@@ -42,6 +42,7 @@
 
 <style lang="postcss">
   header {
+    z-index: var(--layer-3);
     isolation: isolate;
     height: 14rem;
 
@@ -55,7 +56,11 @@
       right: 0;
       left: 0;
       padding-inline: var(--size-content-px);
-      padding-block: 1rem;
+      padding-block: 1rem 3rem;
+      overflow: hidden;
+      @media (min-width: 78rem) {
+        overflow: visible;
+      }
     }
   }
   .polygons {

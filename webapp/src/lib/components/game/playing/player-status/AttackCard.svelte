@@ -1,14 +1,23 @@
 <script lang="ts">
   import Polygon from '$lib/components/icons/Polygon.svelte'
+  import CheckmarkIcon from '~icons/lucide/check'
   import type { Side } from '$lib/game/types'
 
   export let selected = false
   export let disabled = false
   export let side: Side
+  export let completed = false
 </script>
 
 <button class:selected {disabled} class="unstyled {side}" on:click>
-  <Polygon color={side === 'attack' ? 'red' : 'orange'} />
+  <div class="polygon">
+    <Polygon color={side === 'attack' ? 'red' : 'orange'} />
+  </div>
+  {#if completed}
+    <div class="completed">
+      <CheckmarkIcon />
+    </div>
+  {/if}
 
   <span>
     <slot />
@@ -34,7 +43,7 @@
     font-size: 0.5rem;
     text-align: center;
 
-    :global(svg) {
+    .polygon :global(svg) {
       position: absolute;
       z-index: -1;
       inset: 0.75rem 0.25rem auto;
@@ -55,6 +64,24 @@
       box-shadow: 0 0.125rem 0.5rem 0px rgba(88, 90, 90, 0.4);
       width: 3.5rem;
       height: 5.25rem;
+    }
+
+    .completed {
+      display: grid;
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      place-content: center;
+      border-radius: var(--radius-full);
+      background-color: white;
+      width: 0.75rem;
+      height: 0.75rem;
+      color: black;
+      :global(svg) {
+        display: block;
+        width: 0.75rem;
+        height: 0.75rem;
+      }
     }
   }
 </style>

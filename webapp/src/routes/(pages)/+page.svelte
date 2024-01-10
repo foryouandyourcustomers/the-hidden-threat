@@ -1,13 +1,14 @@
 <script lang="ts">
+  import Polygon from '$lib/components/icons/Polygon.svelte'
   import Horizontal from '$lib/components/layout/Horizontal.svelte'
   import Section from '$lib/components/layout/Section.svelte'
   import Actions from '$lib/components/ui/Actions.svelte'
   import Button from '$lib/components/ui/Button.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import { DOCS_URL } from '$lib/constants'
   import DownloadIcon from '~icons/lucide/arrow-down-to-line'
   import AnalogGame from './AnalogGame.svelte'
-  import Polygon from '$lib/components/icons/Polygon.svelte'
 </script>
 
 <Section width="sm" bg="fade">
@@ -52,7 +53,9 @@
       </Paragraph>
 
       <Actions align="left">
-        <Button size="small"><DownloadIcon /> Spielanleitung herunterladen</Button>
+        <Button target="_blank" href={DOCS_URL} size="small"
+          ><DownloadIcon /> Spielanleitung herunterladen</Button
+        >
       </Actions>
     </div>
   </Horizontal>

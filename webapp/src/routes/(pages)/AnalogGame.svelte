@@ -3,6 +3,7 @@
   import Section from '$lib/components/layout/Section.svelte'
   import Heading from '$lib/components/ui/Heading.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import { DOCS_URL } from '$lib/constants'
   import AnalogGameCard from './AnalogGameCard.svelte'
 </script>
 
@@ -25,7 +26,7 @@
     <AnalogGameCard
       title="Spielkarten"
       subtitle="Sie benötigen noch weitere Spielkarten?"
-      downloadLink=""
+      downloadLink={DOCS_URL}
       --background-image="url('/images/analog-cards.jpg')"
     >
       Hier finden Sie das komplette Kartendeck.
@@ -33,7 +34,7 @@
     <AnalogGameCard
       title="Spielbrett"
       subtitle="Sie brauchen ein weiteres Spielbrett für den Angreifer?"
-      downloadLink=""
+      downloadLink={DOCS_URL}
       --background-image="url('/images/analog-board.jpg')"
     >
       Es liegt für Sie im A4-Format zum Download bereit.
@@ -41,7 +42,7 @@
     <AnalogGameCard
       title="Spielregeln"
       subtitle="Nicht mehr alle Regeln oder Gegenstände parat?"
-      downloadLink=""
+      downloadLink={DOCS_URL}
       --background-image="url('/images/analog-rules.jpg')"
     >
       Finden Sie alles in den Spielregeln für das Brettspiel.
