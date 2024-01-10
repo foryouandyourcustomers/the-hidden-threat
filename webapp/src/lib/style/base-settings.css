@@ -14,6 +14,7 @@
   --color-blue-transp-10: #1b253a;
   --color-blue-transp-12: #34446a;
   --color-blue-transp-760: #29344e;
+  --color-blue-transp-dark: #161d2e;
 
   --color-white-80: #d5d9e3;
 
@@ -77,12 +78,13 @@
   --line-lg: 1.625;
   --line-xl: 2;
 
-  --width-xs: 480px;
-  --width-sm: 640px;
-  --width-md: 768px;
-  --width-lg: 1024px;
-  --width-xl: 1128px;
-  --width-content-max: var(--width-xl);
+  --width-xs: 30rem;
+  --width-sm: 40rem;
+  --width-md: 48rem;
+  --width-lg: 64rem;
+  --width-xl: 70.5rem;
+  --width-2xl: 90rem;
+  --width-content-max: var(--width-2xl);
 
   --radius-100: 100%;
   --radius-xs: 0.1875rem;

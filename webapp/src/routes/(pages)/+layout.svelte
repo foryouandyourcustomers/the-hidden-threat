@@ -23,8 +23,13 @@
 <style lang="postcss">
   .layout {
     display: flex;
+    position: relative;
     flex-direction: column;
+    margin-inline: auto;
+    background-color: var(--color-blue-spielbrett);
+    max-width: var(--width-2xl);
     min-height: 100%;
+    overflow-x: clip;
   }
   main {
     flex: 1;

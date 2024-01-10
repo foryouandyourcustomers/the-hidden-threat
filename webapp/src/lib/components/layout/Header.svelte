@@ -5,26 +5,26 @@
 
 <header>
   <div>
-    <svg
-      class="polygons"
-      width="860"
-      height="372"
-      viewBox="0 0 860 372"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <g clip-path="url(#clip0_2302_5336)">
-        <path d="M521 372L372 -190L48 -19L521 372Z" fill="#A40224" />
-        <path d="M521 372L860 54L372 -190L521 372Z" fill="#D32746" />
-        <path d="M521 372L48 -19L0 343L521 372Z" fill="#F03A50" />
-      </g>
-      <defs>
-        <clipPath id="clip0_2302_5336">
-          <rect width="860" height="372" fill="white" />
-        </clipPath>
-      </defs>
-    </svg>
     <nav>
+      <svg
+        class="polygons"
+        width="860"
+        height="372"
+        viewBox="0 0 860 372"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_2302_5336)">
+          <path d="M521 372L372 -190L48 -19L521 372Z" fill="#A40224" />
+          <path d="M521 372L860 54L372 -190L521 372Z" fill="#D32746" />
+          <path d="M521 372L48 -19L0 343L521 372Z" fill="#F03A50" />
+        </g>
+        <defs>
+          <clipPath id="clip0_2302_5336">
+            <rect width="860" height="372" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
       <h1 class="name">
         <a href="/">The<br />hidden<br />threat</a>
         <div class="faces">
@@ -34,21 +34,7 @@
           <Face faceId={4} />
         </div>
       </h1>
-      <div class="logo">
-        <svg
-          width="72"
-          height="72"
-          viewBox="0 0 72 72"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="36" cy="36" r="36" fill="#B7B2AF" />
-          <path
-            d="M24.792 24C25.0587 24 25.192 24.1333 25.192 24.4V26.92C25.192 27.1867 25.0587 27.32 24.792 27.32H19.552C19.4454 27.32 19.392 27.3733 19.392 27.48V51.6C19.392 51.8667 19.2587 52 18.992 52H15.952C15.6854 52 15.552 51.8667 15.552 51.6V27.48C15.552 27.3733 15.4987 27.32 15.392 27.32H10.432C10.1654 27.32 10.032 27.1867 10.032 26.92V24.4C10.032 24.1333 10.1654 24 10.432 24H24.792ZM43.4502 44.36C43.4502 46.7867 42.7568 48.6667 41.3702 50C40.0102 51.3333 38.2102 52 35.9702 52H29.2902C29.0235 52 28.8902 51.8667 28.8902 51.6V24.4C28.8902 24.1333 29.0235 24 29.2902 24H35.4102C37.8368 24 39.7302 24.64 41.0902 25.92C42.4768 27.1733 43.1702 29.0133 43.1702 31.44C43.1702 34.32 42.1435 36.3067 40.0902 37.4C39.9568 37.48 39.9435 37.5467 40.0502 37.6C41.1168 38.24 41.9435 39.1333 42.5302 40.28C43.1435 41.4267 43.4502 42.7867 43.4502 44.36ZM32.8902 27.32C32.7835 27.32 32.7302 27.3733 32.7302 27.48V35.96C32.7302 36.0667 32.7835 36.12 32.8902 36.12H35.4502C36.7035 36.12 37.6768 35.7467 38.3702 35C39.0635 34.2267 39.4102 33.16 39.4102 31.8C39.4102 30.3867 39.0635 29.2933 38.3702 28.52C37.6768 27.72 36.7035 27.32 35.4502 27.32H32.8902ZM35.6502 48.64C36.8768 48.64 37.8368 48.2267 38.5302 47.4C39.2502 46.5733 39.6102 45.4 39.6102 43.88C39.6102 42.3333 39.2635 41.1333 38.5702 40.28C37.8768 39.4 36.9168 38.96 35.6902 38.96H32.8902C32.7835 38.96 32.7302 39.0133 32.7302 39.12V48.48C32.7302 48.5867 32.7835 48.64 32.8902 48.64H35.6502ZM47.298 52C47.0313 52 46.898 51.8667 46.898 51.6V24.4C46.898 24.1333 47.0313 24 47.298 24H53.858C56.0713 24 57.8313 24.68 59.138 26.04C60.4446 27.4 61.098 29.24 61.098 31.56V44.44C61.098 46.76 60.4446 48.6 59.138 49.96C57.8313 51.32 56.0713 52 53.858 52H47.298ZM50.738 48.52C50.738 48.6267 50.7913 48.68 50.898 48.68L53.818 48.64C54.8313 48.64 55.6446 48.2533 56.258 47.48C56.8713 46.68 57.1913 45.6 57.218 44.24V31.76C57.218 30.4 56.9113 29.32 56.298 28.52C55.6846 27.72 54.858 27.32 53.818 27.32H50.898C50.7913 27.32 50.738 27.3733 50.738 27.48V48.52Z"
-            fill="white"
-          />
-        </svg>
-      </div>
+
       <Lyons />
     </nav>
   </div>
@@ -56,40 +42,53 @@
 
 <style lang="postcss">
   header {
-    padding-inline: var(--size-content-px);
+    isolation: isolate;
+    height: 14rem;
+
+    @media (min-width: 78rem) {
+      height: 0;
+    }
+
     & > div {
-      position: relative;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      padding-inline: var(--size-content-px);
       padding-block: 1rem;
     }
   }
   .polygons {
     position: absolute;
-    top: 0;
-    left: -21rem;
+    top: -2rem;
+    left: -29rem;
+    rotate: -40deg;
     z-index: -1;
+    max-width: none;
   }
   nav {
     display: flex;
+    position: relative;
     justify-content: space-between;
     gap: 0.5rem;
     margin-bottom: 0;
-    padding-top: 2.5rem;
+    padding-top: 1.5rem;
 
     .name {
       & a {
         font: var(--display-h1);
+        font-size: 2.5rem;
         line-height: 1;
         text-decoration: none;
         text-transform: uppercase;
       }
       .faces {
         display: flex;
-        margin-top: 1.5rem;
+        margin-top: 1.2rem;
+        :global(svg) {
+          width: 2.3rem;
+        }
       }
-    }
-
-    .logo {
-      margin-top: 3.75rem;
     }
   }
 </style>

@@ -5,6 +5,8 @@
   import { GameState } from '$lib/game/game-state'
   import { isEqual } from 'lodash'
 
+  export let final = false
+
   const { machine } = getGameContext()
 
   const score = useSelector(
@@ -14,8 +16,10 @@
   )
 </script>
 
-<div class="score-board">
-  <h2>Spielstand</h2>
+<div class="score-board" class:final>
+  <h2>
+    {#if final}Endstand{:else}Spielstand{/if}
+  </h2>
 
   <div class="score attack">
     <div class="label">
@@ -45,11 +49,17 @@
     grid-area: score;
     align-items: center;
     align-self: start;
+
+    box-shadow: 0px 0px 1.5rem 0px rgba(28, 37, 38, 0.3);
     border-radius: var(--radius-md);
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
     background-color: var(--color-blue-spielbrett);
     padding: 0.25rem 1rem;
+    color: var(--color-text);
+
+    &:not(.final) {
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+    }
 
     h2 {
       grid-area: title;

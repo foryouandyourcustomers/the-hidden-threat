@@ -22,7 +22,7 @@
 
 <style lang="postcss">
   .card {
-    box-shadow: 0 0 25px #1c252677;
+    box-shadow: 0 0 1.75rem #1c252677;
     border-radius: var(--radius-md);
     background: var(--color-bg-secondary);
     overflow: hidden;
@@ -30,7 +30,9 @@
       display: flex;
       justify-content: flex-start;
       align-items: flex-end;
-      background: var(--color-bg);
+      background-color: var(--color-bg);
+      background: var(--background-image) no-repeat center;
+      background-size: cover;
       height: 9rem;
     }
     .content {
