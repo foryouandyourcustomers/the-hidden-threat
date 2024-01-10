@@ -58,7 +58,7 @@
 </script>
 
 <div class="scenarios">
-  <Paragraph spacing="none" size="sm">Gezielter Angriffe</Paragraph>
+  <h6 class="display-xxs">Gezielte Angriffe</h6>
 
   <ul class="attacks">
     {#each new Array($totalAttackCount) as _, index}
@@ -81,22 +81,22 @@
 
   {#if selectedAttack && selectedStage}
     <div class="description">
-      <Heading size="sm" spacing="none">Angriff {selectedAttackIndex + 1}</Heading>
-      <Paragraph size="sm" spacing="none">
+      <h4 class="auto">Angriff {selectedAttackIndex + 1}</h4>
+      <p class="text-xs">
         {selectedAttack.description}
-      </Paragraph>
+      </p>
     </div>
 
     <div class="key-info">
       <div class="summary">
-        <Heading size="xs" spacing="none">Aufgabe</Heading>
-        <Paragraph size="sm" spacing="none">
+        <h6 class="auto">Aufgabe</h6>
+        <p class="text-xs">
           Legt {selectedStage.gender === 'f' ? 'die' : selectedStage.gender === 'n' ? 'das' : 'den'}
           {selectedStage.name} der Supply Chain {selectedAttack.target.supplyChainId + 1} lahm.
-        </Paragraph>
+        </p>
       </div>
       <div class="items">
-        <Heading size="xs" spacing="none">Benötigte Gegenstände</Heading>
+        <h6 class="auto">Benötigte Gegenstände</h6>
         <div class="targets">
           <div class="target">
             <div class="items">
@@ -133,7 +133,7 @@
     align-items: flex-end;
     align-items: center;
     gap: 0.5rem;
-    margin: -1rem;
+    margin: -1.5rem -1rem -1rem;
     padding: 1rem;
     width: 100%;
     overflow-x: scroll;
@@ -152,6 +152,7 @@
   .key-info {
     display: flex;
     gap: 2rem;
+    padding-bottom: 1rem;
     > * {
       flex: 1;
     }
