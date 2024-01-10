@@ -10,7 +10,9 @@
     <img alt="" src="/images/logos/Helmut_Schmidt.svg" />
     <img alt="" src="/images/logos/dtec.bw_gross.svg" />
     <img alt="" src="/images/logos/UnBW.svg" />
-    <img alt="" src="/images/logos/fyayc.svg" />
+    <a target="_blank" href="https://foryouandyourcustomers.com/cells/munich/">
+      <img alt="" src="/images/logos/fyayc.svg" />
+    </a>
   </div>
 </section>
 
