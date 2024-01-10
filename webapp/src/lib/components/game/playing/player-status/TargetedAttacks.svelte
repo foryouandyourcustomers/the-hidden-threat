@@ -105,7 +105,7 @@
           <div class="target">
             <div class="items">
               {#each selectedAttack.target.requiredItems as item}
-                <Item highlightOnHover itemId={item} />
+                <Item showIfOwned="attack" highlightOnHover itemId={item} />
               {/each}
             </div>
           </div>

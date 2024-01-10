@@ -114,7 +114,7 @@
             </div>
             <div class="items">
               {#each stage.defenseItems as item}
-                <Item highlightOnHover itemId={item} />
+                <Item showIfOwned="defense" highlightOnHover itemId={item} />
               {/each}
             </div>
           </div>

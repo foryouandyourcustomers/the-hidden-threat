@@ -1,11 +1,24 @@
 <script lang="ts">
+  import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import type { AttackItemId, DefenseItemId } from '$lib/game/constants/items'
+  import { GameState } from '$lib/game/game-state'
+  import type { Side } from '$lib/game/types'
 
   export let highlightOnHover = false
   export let itemId: AttackItemId | DefenseItemId
+  export let showIfOwned: undefined | Side = undefined
 
-  const { highlightedFields } = getGameContext()
+  const { highlightedFields, machine } = getGameContext()
+
+  const owned = showIfOwned
+    ? useSelector(machine.service, (state) => {
+        const gameState = GameState.fromContext(state.context)
+        const inventory =
+          showIfOwned === 'attack' ? gameState.attackInventory : gameState.defenseInventory
+        return inventory[itemId as keyof typeof inventory]
+      })
+    : undefined
 
   const highlight = (highlight = false) => {
     if (!highlightOnHover) return
@@ -662,6 +675,19 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
+  {/if}
+
+  {#if showIfOwned && owned && $owned}
+    <g transform="translate(20 20) scale(1.6 1.6)">
+      <circle cx="6" cy="6" r="6" fill="#85817E" />
+      <path
+        d="M9.42843 3.42871L4.71415 8.143L2.57129 6.00014"
+        stroke="white"
+        stroke-width="0.857143"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </g>
   {/if}
 </svg>
 
