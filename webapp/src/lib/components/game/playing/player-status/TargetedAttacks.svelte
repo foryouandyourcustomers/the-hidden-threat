@@ -15,9 +15,22 @@
 
   const { machine, highlightedFields } = getGameContext()
 
+  const getPositionForTarget = (target: TargetedAttack['target']) => {
+    return (
+      BOARD_SUPPLY_CHAINS.flat().find(
+        (stage) => stage.id === target.stageId && stage.supplyChainId === target.supplyChainId,
+      ) ?? throwIfNotFound()
+    ).coordinate
+  }
   const activeAttacks = useSelector(
     machine.service,
-    (state) => GameState.fromContext(state.context).activeTargetedAttacks,
+    (state) => {
+      const gameState = GameState.fromContext(state.context)
+      return gameState.activeTargetedAttacks.map((attack) => {
+        const target = getPositionForTarget(attack.target)
+        return { ...attack, isAttacked: gameState.isAttacked(target) }
+      })
+    },
     isEqual,
   )
 
@@ -33,22 +46,12 @@
 
   $: selectedStage = selectedAttack ? getStage(selectedAttack.target.stageId) : undefined
 
-  const getPositionForTarget = (target: TargetedAttack['target']) => {
-    return (
-      BOARD_SUPPLY_CHAINS.flat().find(
-        (stage) => stage.id === target.stageId && stage.supplyChainId === target.supplyChainId,
-      ) ?? throwIfNotFound()
-    ).coordinate
-  }
-
   const highlightAttack = (attackIndex: number | null) => {
     let highlighted: Coordinate[] | undefined = undefined
 
     if (attackIndex !== null) {
       highlighted = [getPositionForTarget($activeAttacks[attackIndex].target)]
     }
-
-    console.log('highlighting', highlighted, attackIndex)
 
     highlightedFields.update((fields) => ({
       ...fields,
@@ -69,6 +72,7 @@
       >
         <AttackCard
           side="attack"
+          completed={$activeAttacks[index]?.isAttacked === true}
           selected={selectedAttackIndex === index}
           {disabled}
           on:click={() => (selectedAttackIndex = index)}
