@@ -1,4 +1,6 @@
 <script lang="ts">
+  import DownloadIcon from '~icons/lucide/arrow-down-circle'
+
   export let title: string
   export let subtitle: string
   export let downloadLink: string
@@ -7,6 +9,7 @@
 <div class="card">
   <header>
     <h2>{title}</h2>
+    <a target="_blank" href={downloadLink} title="Download starten"><DownloadIcon /></a>
   </header>
 
   <div class="content">
@@ -16,7 +19,7 @@
       <slot />
     </p>
 
-    <a href={downloadLink}>Download starten</a>
+    <a target="_blank" href={downloadLink}>Download starten</a>
   </div>
 </div>
 
@@ -28,12 +31,25 @@
     overflow: hidden;
     & header {
       display: flex;
+      position: relative;
       justify-content: flex-start;
       align-items: flex-end;
       background-color: var(--color-bg);
       background: var(--background-image) no-repeat center;
       background-size: cover;
       height: 9rem;
+      a {
+        display: block;
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 1.75rem;
+        height: 1.75rem;
+        :global(svg) {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
     .content {
       padding: 1rem;
