@@ -10,6 +10,6 @@
 </script>
 
 <svelte:head>
-  <title>UniBW - {title ?? 'Serious Game'}</title>
-  <meta name="description" content="This is a serious game" />
+  <title>The Hidden Threat {title ? ` - ${title}` : ''}</title>
+  <meta name="description" content="Die digitale Variante zum Tabletop" />
 </svelte:head>

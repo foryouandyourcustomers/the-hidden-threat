@@ -4,7 +4,6 @@
   <a href="/privacy">Datenschutzerklärung</a>
   <a href="/imprint">Impressum</a>
   <a href="/tos">Nutzungsbedingungen</a>
-  <a href="/contact">Kontakt</a>
 </nav>
 
 <style lang="postcss">
