@@ -10,6 +10,10 @@
       "deno.enable": true
     },
     {
+      "name": "docs",
+      "path": "docs"
+    },
+    {
       "name": ".github",
       "path": ".github"
     }
