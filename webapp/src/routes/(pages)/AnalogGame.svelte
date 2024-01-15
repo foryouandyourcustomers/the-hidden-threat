@@ -25,7 +25,7 @@
   <div class="cards">
     <AnalogGameCard
       title="Spielkarten"
-      subtitle="Sie benötigen noch weitere Spielkarten?"
+      subtitle="Sie brauchen noch weitere Spielkarten?"
       downloadLink="{DOCS_URL}Spielkarten/"
       --background-image="url('/images/analog-cards.jpg')"
     >
@@ -33,11 +33,11 @@
     </AnalogGameCard>
     <AnalogGameCard
       title="Spielbrett"
-      subtitle="Sie brauchen ein weiteres Spielbrett für den Angreifer?"
+      subtitle="Sie benötigen noch ein Spielbrett?"
       downloadLink="{DOCS_URL}Spielbrett/"
       --background-image="url('/images/analog-board.jpg')"
     >
-      Es liegt für Sie im A4-Format zum Download bereit.
+      Es liegen beide Spielbretter zum Download für Sie bereit.
     </AnalogGameCard>
     <AnalogGameCard
       title="Spielregeln"
