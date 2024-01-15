@@ -38,7 +38,7 @@ import {
 } from './constants/items'
 import { STAGES, type StageId } from './constants/stages'
 import { TARGETED_ATTACKS } from './constants/targeted-attacks'
-import { getPlayerSide } from './utils'
+import { getPlayerSide, getStage } from './utils'
 
 export type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
@@ -242,6 +242,15 @@ export class GameState {
         }
       })
 
+    // Now remove all items that have been used for defense.
+    this.finalizedActionEvents.filter(guardForGameEventAction('defend')).forEach((event) => {
+      const boardStage = getStageAt(event.position)
+      const stage = getStage(boardStage.id)
+      stage.defenseItems.forEach((item) => {
+        inventory[item]--
+      })
+    })
+
     return inventory
   }
 
@@ -261,7 +270,7 @@ export class GameState {
 
     this.finalizedActionEvents.filter(guardForGameEventAction('collect')).forEach((event) => {
       if (event.itemId && isAttackItemId(event.itemId)) {
-        inventory[event.itemId] += 1
+        inventory[event.itemId]++
       }
     })
 
@@ -269,9 +278,30 @@ export class GameState {
       .filter(guardForGameEventAction('exchange-joker'))
       .forEach((event) => {
         if (event.itemId) {
-          inventory[event.itemId] += 1
+          inventory[event.itemId]++
         }
       })
+
+    // Now remove all items that have been used for attack.
+    this.finalizedActionEvents.filter(guardForGameEventAction('attack')).forEach((event) => {
+      // These are only finalized events, so position is set.
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const boardStage = getStageAt(event.position!)
+
+      const items =
+        this.context.targetedAttacks
+          .map((attackIndex) => TARGETED_ATTACKS[attackIndex])
+          .find((attack) => {
+            return (
+              attack.target.supplyChainId === boardStage.supplyChainId &&
+              attack.target.stageId === boardStage.id
+            )
+          })?.target.requiredItems ?? []
+
+      items.forEach((item) => {
+        inventory[item]--
+      })
+    })
 
     return inventory
   }
