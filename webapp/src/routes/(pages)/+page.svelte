@@ -38,22 +38,20 @@
   <Horizontal>
     <img slot="left" src="/images/board-game.png" alt="The physical board game" />
     <div slot="right">
-      <Heading size="md">Details zum Spiel</Heading>
+      <Heading size="md">Spielziel</Heading>
       <Paragraph>
         <p>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-          invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-          accusam et justo duo dolores et ea rebum.
+          Das Ziel des Spiels ist es, dass die Verteidigung durch den Schutz der Supply Chain Stufen
+          so viele Resilienzpunkte wie möglich sammelt und verhindert, dass die Angreifer:innen
+          Schadenspunkte erhalten. Gleichzeitig versucht die Verteidigung, die angreifende
+          Spielfigur zu enttarnen, während diese sich bemüht, unerkannt zu bleiben und weitere
+          Angriffe zu planen.
         </p>
-        <p>
-          Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
-          ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-          ut labore et dolore magna aliquyam erat,
-        </p>
+        <p>Am Ende gewinnt das Team, das die höchste Punktzahl erzielt hat.</p>
       </Paragraph>
 
       <Actions align="left">
-        <Button target="_blank" href={DOCS_URL} size="small"
+        <Button target="_blank" href="{DOCS_URL}Spielregeln.pdf" size="small"
           ><DownloadIcon /> Spielanleitung herunterladen</Button
         >
       </Actions>

@@ -25,24 +25,24 @@
   <div class="cards">
     <AnalogGameCard
       title="Spielkarten"
-      subtitle="Sie benötigen noch weitere Spielkarten?"
-      downloadLink={DOCS_URL}
+      subtitle="Sie brauchen noch weitere Spielkarten?"
+      downloadLink="{DOCS_URL}Spielkarten/"
       --background-image="url('/images/analog-cards.jpg')"
     >
       Hier finden Sie das komplette Kartendeck.
     </AnalogGameCard>
     <AnalogGameCard
       title="Spielbrett"
-      subtitle="Sie brauchen ein weiteres Spielbrett für den Angreifer?"
-      downloadLink={DOCS_URL}
+      subtitle="Sie benötigen noch ein Spielbrett?"
+      downloadLink="{DOCS_URL}Spielbrett/"
       --background-image="url('/images/analog-board.jpg')"
     >
-      Es liegt für Sie im A4-Format zum Download bereit.
+      Es liegen beide Spielbretter zum Download für Sie bereit.
     </AnalogGameCard>
     <AnalogGameCard
       title="Spielregeln"
       subtitle="Nicht mehr alle Regeln oder Gegenstände parat?"
-      downloadLink={DOCS_URL}
+      downloadLink="{DOCS_URL}Spielregeln.pdf"
       --background-image="url('/images/analog-rules.jpg')"
     >
       Finden Sie alles in den Spielregeln für das Brettspiel.
