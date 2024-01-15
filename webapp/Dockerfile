@@ -23,7 +23,8 @@ WORKDIR /home/nonroot/webapp
 
 # Copy the project, and make sure that the `nonroot` user only has read access
 # to the files.
-COPY --chown=root:root webapp-build/ .
+# COPY --chown=root:root webapp-build/ .
+COPY --chown=root:root build/ .
 RUN chmod -R go-w . && chmod -R go+r .
 
 # Switch to the nonroot user
@@ -31,6 +32,8 @@ USER nonroot
 
 EXPOSE 3000
 
+ENV PM2_HOME=/home/nonroot/.pm2
+
 # Use pm2-runtime instead of node
 # https://pm2.keymetrics.io/docs/usage/docker-pm2-nodejs/
-CMD [ "pm2-runtime", "prod-server.js" ]
+CMD [ "pm2-runtime", "-l", "/dev/null", "prod-server.js" ]
