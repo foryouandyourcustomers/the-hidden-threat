@@ -23,8 +23,7 @@ WORKDIR /home/nonroot/webapp
 
 # Copy the project, and make sure that the `nonroot` user only has read access
 # to the files.
-# COPY --chown=root:root webapp-build/ .
-COPY --chown=root:root build/ .
+COPY --chown=root:root webapp-build/ .
 RUN chmod -R go-w . && chmod -R go+r .
 
 # Switch to the nonroot user
