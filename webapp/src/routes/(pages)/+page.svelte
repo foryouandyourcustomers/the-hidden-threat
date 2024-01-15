@@ -53,7 +53,7 @@
       </Paragraph>
 
       <Actions align="left">
-        <Button target="_blank" href={DOCS_URL} size="small"
+        <Button target="_blank" href="{DOCS_URL}Spielregeln.pdf" size="small"
           ><DownloadIcon /> Spielanleitung herunterladen</Button
         >
       </Actions>
