@@ -11,14 +11,18 @@
 
   const { highlightedFields, machine } = getGameContext()
 
-  const owned = showIfOwned
-    ? useSelector(machine.service, (state) => {
-        const gameState = GameState.fromContext(state.context)
-        const inventory =
-          showIfOwned === 'attack' ? gameState.attackInventory : gameState.defenseInventory
-        return inventory[itemId as keyof typeof inventory]
-      })
-    : undefined
+  const getOwnedStore = (itemId: AttackItemId | DefenseItemId, showIfOwned: undefined | Side) => {
+    return showIfOwned
+      ? useSelector(machine.service, (state) => {
+          const gameState = GameState.fromContext(state.context)
+          const inventory =
+            showIfOwned === 'attack' ? gameState.attackInventory : gameState.defenseInventory
+          return inventory[itemId as keyof typeof inventory]
+        })
+      : undefined
+  }
+
+  $: owned = getOwnedStore(itemId, showIfOwned)
 
   const highlight = (highlight = false) => {
     if (!highlightOnHover) return
