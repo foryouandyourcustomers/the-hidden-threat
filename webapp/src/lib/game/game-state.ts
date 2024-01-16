@@ -44,6 +44,12 @@ export type ItemInventory<T extends Side> = {
   [key in T extends 'defense' ? DefenseItemId : AttackItemId]: number
 }
 
+export type GlobalAttackStatus = {
+  defended: StageId[]
+  /** Can be undefined if the global attack has not resolved yet */
+  successful: boolean | undefined
+}
+
 /**
  * The current game state that reflects the current state by applying all
  * `GameEvent`s to the initial state.
@@ -409,37 +415,71 @@ export class GameState {
     return this.attackedAndDefendedStages.attacked
   }
 
+  get globalAttackStatuses(): GlobalAttackStatus[] {
+    return this.attackedAndDefendedStages.globalAttackStatuses
+  }
+
   // Returns a random number, but always the same for i
   public getRandomNumber(i: number) {
     return this.randomNumbers[Math.round(i) % this.randomNumbers.length]
   }
 
   private attackedAndDefendedStagesCache:
-    | { attacked: BoardStage[]; defended: BoardStage[] }
+    | { attacked: BoardStage[]; defended: BoardStage[]; globalAttackStatuses: GlobalAttackStatus[] }
     | undefined
 
-  private get attackedAndDefendedStages(): { attacked: BoardStage[]; defended: BoardStage[] } {
+  private get attackedAndDefendedStages(): NonNullable<typeof this.attackedAndDefendedStagesCache> {
     if (this.attackedAndDefendedStagesCache) return this.attackedAndDefendedStagesCache
 
     const attackedStages: BoardStage[] = []
     const defendedStages: BoardStage[] = []
 
-    let defendedStagesInSection: StageId[] = []
+    // Setup the global attack statuses.
+    const globalAttackStatuses: GlobalAttackStatus[] = this.globalAttackScenario.attacks.map(
+      () => ({
+        defended: [],
+        missed: [],
+        successful: undefined,
+      }),
+    )
 
     // Get all stages for which there are explicit attacks
     this.finalizedActionEvents.forEach((event, i) => {
       const round = Math.floor(i / this.playersInOrder.length)
+      const section = Math.floor(round / 3)
+      const currentGlobalAttackStatus = globalAttackStatuses[section]
+      const currentGlobalAttack = this.globalAttackScenario.attacks[section]
 
       if (isActionEventOf(event, 'attack')) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const stage = getStageAt(event.position!)
+
         // We assume that every attack is valid, otherwise it wouldn't be in
         // the list.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        attackedStages.push(getStageAt(event.position!))
+        attackedStages.push(stage)
       } else if (isActionEventOf(event, 'defend')) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        defendedStages.push(getStageAt(event.position!))
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        defendedStagesInSection.push(getStageAt(event.position!).id)
+        const stage = getStageAt(event.position!)
+
+        defendedStages.push(stage)
+
+        // Check if a stage of a global attack was defended.
+        //
+        // Global attacks target generic stage ids, regardless of the supply
+        // chain, so comparing the stage id is enough.
+        const isGlobalAttackStage = !!currentGlobalAttack.targets.find(
+          (target) => target.stageId === stage.id,
+        )
+        if (isGlobalAttackStage) {
+          currentGlobalAttackStatus.defended.push(stage.id)
+
+          if (currentGlobalAttackStatus.defended.length >= currentGlobalAttack.targets.length) {
+            // We can already set the attack to not successful, even before the section ended.
+            currentGlobalAttackStatus.successful = false
+          }
+        }
+        // Whether the global attack has been successful or not is determined
+        // later.
       }
 
       // Every three rounds a section ends.
@@ -448,31 +488,38 @@ export class GameState {
         // We're at the end of a section, so let's see if a global attack
         // succeeded.
 
-        const section = Math.floor(round / 3)
-        const globalAttack = this.globalAttackScenario.attacks[section]
+        // This will set it to true or false, and remove the undefined state.
+        currentGlobalAttackStatus.successful =
+          currentGlobalAttackStatus.defended.length < currentGlobalAttack.targets.length
 
-        globalAttack.targets.forEach((attackedStage) => {
-          if (!defendedStagesInSection.includes(attackedStage.stageId)) {
-            // So the global attack succeeded. Destroy a stage.
-            const allAvailableStages = BOARD_SUPPLY_CHAINS.flat()
-              .filter((stage) => stage.id === attackedStage.stageId)
-              .filter(
-                (stage) =>
-                  ![...defendedStages, ...attackedStages].find((s) =>
-                    isEqual(s.coordinate, stage.coordinate),
-                  ),
-              )
+        if (currentGlobalAttackStatus.successful) {
+          // So the global attack succeeded. Destroy a stage.
 
-            if (allAvailableStages.length > 0) {
-              attackedStages.push(
-                allAvailableStages[Math.floor(allAvailableStages.length * this.getRandomNumber(i))],
-              )
+          // Get all stages that are attacked by this global attack.
+          currentGlobalAttack.targets.forEach((attackedStage) => {
+            // Check if it has been defended in this current global attack.
+            if (!currentGlobalAttackStatus.defended.includes(attackedStage.stageId)) {
+              // If not, get a list of all available stages that are neither
+              // attacked or defended.
+              const allAvailableStages = BOARD_SUPPLY_CHAINS.flat()
+                .filter((stage) => stage.id === attackedStage.stageId)
+                .filter(
+                  (stage) =>
+                    ![...defendedStages, ...attackedStages].find((s) =>
+                      isEqual(s.coordinate, stage.coordinate),
+                    ),
+                )
+
+              if (allAvailableStages.length > 0) {
+                attackedStages.push(
+                  allAvailableStages[
+                    Math.floor(allAvailableStages.length * this.getRandomNumber(i))
+                  ],
+                )
+              }
             }
-          }
-        })
-
-        // Reset the defended stages for global attacks every 3 rounds
-        defendedStagesInSection = []
+          })
+        }
       }
 
       // Destroy supply chains if there are 3 or more attacks on a supply chain
@@ -495,6 +542,7 @@ export class GameState {
     return (this.attackedAndDefendedStagesCache = {
       attacked: attackedStages,
       defended: defendedStages,
+      globalAttackStatuses: globalAttackStatuses,
     })
   }
 
