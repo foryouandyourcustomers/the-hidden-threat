@@ -79,7 +79,7 @@ export const CHARACTERS: readonly Character[] = [
   },
   {
     id: 'disappointed',
-    name: 'Enttäuscht',
+    name: 'Enttäuschung',
     description:
       'Als System-Administratorin hast du Zugriff auf die sensibelsten Daten. Durch einen Blick in die interne Kommunikation der Geschäftsführung erfährt deine Kollegin, dass länger geplant ist, eure Abteilung demnächst zu outsourcen. Zutiefst enttäuscht darüber, dass man euch vor vollendete Tatsachen stellen wird. Jetzt willst du ihnen einen Denkzettel verpassen',
     side: 'attack',
