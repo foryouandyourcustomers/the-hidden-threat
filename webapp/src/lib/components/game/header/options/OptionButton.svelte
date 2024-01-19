@@ -11,6 +11,7 @@
 <style lang="postcss">
   .open-button {
     display: grid;
+    position: relative;
     place-content: center;
     border-radius: var(--radius-full);
     background: white;

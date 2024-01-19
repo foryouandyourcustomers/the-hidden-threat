@@ -2,12 +2,14 @@
   import { onDestroy, onMount } from 'svelte'
   import CloseIcon from '~icons/lucide/x'
 
-  export let position: 'top' | 'right' | 'bottom' | 'left' = 'bottom'
+  export let position: 'top' | 'right' | 'bottom' | 'left' | 'bottom-left' = 'bottom'
 
   /** Whether the tooltip should be shown on click or hover */
   export let click = false
 
   export let showOnCreate = false
+
+  export let noPadding = false
 
   let visible = showOnCreate
 
@@ -86,6 +88,7 @@
   role="dialog"
   class="tooltip {position}"
   class:visible
+  class:no-padding={noPadding}
   bind:this={tooltipElement}
   on:mouseenter={onMouseEnter}
   on:mouseleave={onMouseLeave}
@@ -114,7 +117,7 @@
   .tooltip {
     --_offset: calc(100% + 1rem);
     position: absolute;
-    scale: 0.9;
+    scale: 0.97;
     opacity: 0;
     z-index: var(--layer-top);
     transition: all 0.1s ease-in-out;
@@ -131,6 +134,10 @@
     font-size: var(--scale-00);
     text-transform: none;
     white-space: initial;
+
+    &.no-padding {
+      padding: 0;
+    }
     &.visible {
       scale: 1;
       opacity: 1;
@@ -157,6 +164,10 @@
     }
     &.bottom {
       top: var(--_offset);
+    }
+    &.bottom-left {
+      top: var(--_offset);
+      right: -0.25rem;
     }
   }
 
@@ -193,6 +204,11 @@
     }
     .tooltip.top & {
       bottom: var(--_offset);
+    }
+    .tooltip.bottom-left & {
+      top: var(--_offset);
+      right: 0.5rem;
+      rotate: 0.5turn;
     }
   }
 

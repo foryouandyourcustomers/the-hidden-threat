@@ -2,7 +2,7 @@
   import { useSelector } from '$lib/@xstate/svelte'
   import { getGameContext } from '$lib/client/game-context'
   import Jokers from '$lib/components/game/header/Jokers.svelte'
-  import SwitchSidesButton from '$lib/components/game/header/expandable/SwitchSidesButton.svelte'
+  import Tooltip from '$lib/components/ui/Tooltip.svelte'
   import { enabled } from '$lib/sound'
   import HelpIcon from '~icons/lucide/file-text'
   import SettingsIcon from '~icons/lucide/settings'
@@ -10,9 +10,8 @@
   import AudioOffIcon from '~icons/lucide/volume-x'
   import Score from '../Score.svelte'
   import PreGameDecoration from './PreGameDecoration.svelte'
-  import Expandable from './expandable/Expandable.svelte'
-  import OpenButton from './expandable/OpenButton.svelte'
-  import RollbackButton from './expandable/RollbackButton.svelte'
+  import OptionButton from './options/OptionButton.svelte'
+  import Options from './options/Options.svelte'
 
   const { machine } = getGameContext()
 
@@ -24,22 +23,22 @@
   <Jokers />
 
   <div class="actions">
-    <OpenButton href="/manual" target="_blank">
+    <OptionButton href="/manual" target="_blank">
       <HelpIcon />
-    </OpenButton>
-    <OpenButton on:click={() => ($enabled = !$enabled)}>
+    </OptionButton>
+    <OptionButton on:click={() => ($enabled = !$enabled)}>
       {#if $enabled}
         <AudioIcon />
       {:else}
         <AudioOffIcon />
       {/if}
-    </OpenButton>
-    <Expandable>
-      <SettingsIcon slot="icon" />
-      <p class="label">Optionen</p>
-      <SwitchSidesButton />
-      <RollbackButton />
-    </Expandable>
+    </OptionButton>
+    <OptionButton>
+      <SettingsIcon />
+      <Tooltip noPadding click position="bottom-left">
+        <Options />
+      </Tooltip>
+    </OptionButton>
   </div>
 {:else}
   <PreGameDecoration />
@@ -50,14 +49,5 @@
     display: flex;
     grid-area: options;
     gap: 1rem;
-  }
-
-  .label {
-    align-self: flex-start;
-    padding-top: 0.25rem;
-    padding-bottom: 0.75rem;
-    padding-left: 0.75rem;
-    font-weight: 700;
-    font-size: var(--scale-00);
   }
 </style>

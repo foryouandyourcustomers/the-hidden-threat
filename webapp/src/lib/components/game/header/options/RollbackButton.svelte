@@ -3,7 +3,7 @@
   import { getGameContext } from '$lib/client/game-context'
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import Icon from '~icons/lucide/undo-2'
-  import ExpandableButton from './ExpandableButton.svelte'
+  import ClickableOption from './ClickableOption.svelte'
 
   const { machine } = getGameContext()
 
@@ -16,7 +16,7 @@
 </script>
 
 {#if $isAdmin}
-  <ExpandableButton
+  <ClickableOption
     disabled={!$lastGameEvent || !$isActive}
     on:click={() =>
       $lastGameEvent
@@ -26,5 +26,5 @@
     <Icon slot="icon" />
 
     Aktion zurücksetzen
-  </ExpandableButton>
+  </ClickableOption>
 {/if}
