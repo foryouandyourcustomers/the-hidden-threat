@@ -1,12 +1,15 @@
 <script lang="ts">
   import { onDestroy, onMount } from 'svelte'
+  import CloseIcon from '~icons/lucide/x'
 
-  export let position: 'top' | 'right' | 'bottom' | 'left' = 'bottom'
+  export let position: 'top' | 'right' | 'bottom' | 'left' | 'bottom-left' = 'bottom'
 
   /** Whether the tooltip should be shown on click or hover */
   export let click = false
 
   export let showOnCreate = false
+
+  export let noPadding = false
 
   let visible = showOnCreate
 
@@ -85,10 +88,21 @@
   role="dialog"
   class="tooltip {position}"
   class:visible
+  class:no-padding={noPadding}
   bind:this={tooltipElement}
   on:mouseenter={onMouseEnter}
   on:mouseleave={onMouseLeave}
 >
+  <button
+    class="unstyled close"
+    on:click={(e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      visible = false
+    }}
+  >
+    <CloseIcon />
+  </button>
   <slot />
 
   <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
@@ -103,9 +117,10 @@
   .tooltip {
     --_offset: calc(100% + 1rem);
     position: absolute;
+    scale: 0.97;
     opacity: 0;
     z-index: var(--layer-top);
-    transition: opacity 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
     cursor: initial;
     box-shadow: 0px 0px 10px 0px rgba(38, 45, 46, 0.25);
     border-radius: var(--radius-sm);
@@ -119,7 +134,12 @@
     font-size: var(--scale-00);
     text-transform: none;
     white-space: initial;
+
+    &.no-padding {
+      padding: 0;
+    }
     &.visible {
+      scale: 1;
       opacity: 1;
       pointer-events: unset;
     }
@@ -144,6 +164,10 @@
     }
     &.bottom {
       top: var(--_offset);
+    }
+    &.bottom-left {
+      top: var(--_offset);
+      right: -0.25rem;
     }
   }
 
@@ -180,6 +204,25 @@
     }
     .tooltip.top & {
       bottom: var(--_offset);
+    }
+    .tooltip.bottom-left & {
+      top: var(--_offset);
+      right: 0.5rem;
+      rotate: 0.5turn;
+    }
+  }
+
+  .close {
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    padding: 0rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    :global(svg) {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
   }
 </style>

@@ -74,6 +74,19 @@
   <Heading centered size="lg" spacing="none">
     {#if side === 'defense'}Verteidigung{:else}Angriff{/if}
   </Heading>
+  {#if $users.length <= 1}
+    <div class="explanation">
+      <svg width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M6.1 22.9V20a1.5 1.5 0 0 1 0-.4v-9c0-2.5 2-4.5 4.6-4.5h12.1c2.6 0 4.6 2 4.6 4.6v3c0 .9-.6 1.5-1.5 1.5-.8 0-1.5-.6-1.5-1.5v-3c0-.9-.7-1.6-1.5-1.6H20a1.5 1.5 0 0 1-.4 0h-9c-.8 0-1.5.7-1.5 1.6v12.1c0 .9.7 1.6 1.6 1.6h3a1.5 1.5 0 1 1 0 3h-3C8 27.4 6 25.4 6 23Zm-6.1-3a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0Zm0-6.2a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0Zm0-6a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0Zm0-6.2a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0ZM7.6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm6.1 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm6.1 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm-4.4 17.4L19.9 31a1.5 1.5 0 0 0 2.8.2l2.8-5.7 5.7-2.8a1.5 1.5 0 0 0-.2-2.8l-13.7-4.6h-.5a1.5 1.5 0 0 0-1.5 1.2v1Zm11.1 4.2-7.3-2.4 2.4 7.3 1.4-2.8.7-.7 2.8-1.4Z"
+          fill="#fff"
+        />
+      </svg>
+      <p>Ziehe die entsprechende Anzahl an Spieler:innen in die gewünschten Felder.</p>
+    </div>
+  {/if}
   <div
     class="users players"
     class:target={target === 'players'}
@@ -159,6 +172,20 @@
     text-overflow: ellipsis;
     &[draggable='true'] {
       cursor: grab;
+    }
+  }
+  .explanation {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    svg {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+    }
+    p {
+      font-size: var(--scale-00);
     }
   }
 </style>

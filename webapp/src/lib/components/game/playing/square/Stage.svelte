@@ -11,10 +11,12 @@
   )[0]
 
   $: stageName = stage?.id ? getStage(stage.id).name : ''
+  $: showChainInfo = stage?.id === 'supply'
 </script>
 
 {#if stage}
-  <div class="stage">
+  <div class="stage" class:show-chain-info={showChainInfo}>
+    {#if showChainInfo}<div class="supply-chain">CHAIN {stage.supplyChainId + 1}</div>{/if}
     <div class="icon"><Stage stageId={stage.id} /></div>
     <div class="name">{stageName}</div>
   </div>
@@ -34,12 +36,19 @@
     inset: 0;
     padding: 1rem;
     color: var(--color-black-dark);
+
+    &.show-chain-info {
+      .icon {
+        height: 2rem;
+      }
+    }
   }
   .icon {
     aspect-ratio: 1;
     height: 2.75rem;
   }
-  .name {
+  .name,
+  .supply-chain {
     flex-shrink: 0;
     max-width: 100%;
     overflow-x: hidden;
@@ -48,5 +57,9 @@
     text-align: center;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .supply-chain {
+    font-weight: bold;
+    font-size: var(--scale-000);
   }
 </style>

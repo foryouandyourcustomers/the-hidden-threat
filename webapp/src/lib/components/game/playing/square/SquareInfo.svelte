@@ -13,6 +13,7 @@
   import { getItem, isAttackItemId } from '$lib/game/constants/items'
   import { BOARD_SUPPLY_CHAINS } from '$lib/game/constants/board-stages'
   import { getStage } from '$lib/game/utils'
+  import CloseIcon from '~icons/lucide/x'
 
   export let coordinate: Coordinate
   export let isDefended: boolean
@@ -90,6 +91,9 @@
 </script>
 
 <ul class="tooltip {positionClass}" in:fade={{ duration: 100 }} out:fade={{ duration: 100 }}>
+  <button class="unstyled close" on:click={() => dispatch('close')}>
+    <CloseIcon />
+  </button>
   {#if stage}
     <li>
       <div class="stage">{stage.name}</div>
@@ -151,6 +155,18 @@
     background: white;
     padding: 0.25rem 1rem;
     color: var(--color-black-dark);
+
+    .close {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      width: 1.25rem;
+      height: 1.25rem;
+      :global(svg) {
+        width: 100%;
+        height: 100%;
+      }
+    }
 
     &.top {
       bottom: 105%;

@@ -35,6 +35,13 @@
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   $: selectedAttack = $globalAttackScenario.attacks[selectedAttackIndex]
 
+  const globalAttackStatuses = useSelector(machine.service, (state) => {
+    const gameState = GameState.fromContext(state.context)
+    return gameState.globalAttackStatuses
+  })
+
+  $: globalAttackStatus = $globalAttackStatuses[selectedAttackIndex]
+
   const getPositionsForStage = (stageId: StageId) => {
     return (
       BOARD_SUPPLY_CHAINS.flat().filter((stage) => stage.id === stageId) ?? throwIfNotFound()
@@ -78,6 +85,7 @@
       >
         <AttackCard
           side="defense"
+          completed={$globalAttackStatuses[index].successful === false}
           {disabled}
           selected={selectedAttackIndex === index}
           on:click={() => (selectedAttackIndex = index)}
@@ -111,6 +119,28 @@
           <div class="target">
             <div class="stage">
               {stage.name}
+              <div class="stage-status">
+                {#if globalAttackStatus.defended.includes(target.stageId)}
+                  <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    ><circle cx="10" cy="10" r="10" fill="#B5BF39" /><path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M10.3 2.2h-.6L4 4.3c-.2.1-.4.4-.4.7v5c0 2.5 1.6 4.4 3 5.7a16.2 16.2 0 0 0 3 2l.4-.6-.3.7h.6L10 17l.3.7a8 8 0 0 0 1-.6c.5-.3 1.3-.8 2-1.5 1.5-1.3 3.1-3.2 3.1-5.7V5c0-.3-.2-.6-.4-.7l-5.7-2.1Zm.2 13.8-.5.3a14.1 14.1 0 0 1-2.4-1.7C6.2 13.4 5 11.8 5 10V5.5l5-1.9 5 1.9V10c0 1.8-1.2 3.4-2.6 4.6L10.5 16Zm2.1-7a.7.7 0 0 0-1-1l-2.3 2.4-1-1a.7.7 0 0 0-1 1.1l1.5 1.4a.7.7 0 0 0 1 0l2.8-2.8Z"
+                      fill="#fff"
+                    /></svg
+                  >
+                {:else if globalAttackStatus.successful === true}
+                  <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    ><circle cx="10" cy="10" r="10" fill="#F03A50" /><path
+                      d="M11.7 13.7 4 6V4h2l7.7 7.7m-3 3 4-4m-2 2 2.6 2.6m-.6.7 1.3-1.3m-4.3-8.4L14 4h2v2l-2.3 2.3m-8.4 3L8 14m-1.3-.7-2 2m-.7-.6L5.3 16"
+                      stroke="#fff"
+                      stroke-width="1.4"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    /></svg
+                  >
+                {/if}
+              </div>
             </div>
             <div class="items">
               {#each stage.defenseItems as item}
@@ -149,8 +179,20 @@
     gap: 2rem;
 
     .stage {
+      display: flex;
+      gap: 0.5rem;
       margin-bottom: 0.35rem;
       font-size: 0.75rem;
+
+      .stage-status {
+        display: inline-block;
+        width: 1.25rem;
+        height: 1.25rem;
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
 
     .items {

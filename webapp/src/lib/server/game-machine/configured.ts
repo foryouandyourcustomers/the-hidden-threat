@@ -37,17 +37,28 @@ export const serverGameMachine = machine.provide({
   actions: {
     setAssigningSidesFinished: assign(() => ({ finishedAssigningSides: true })),
     setAdminsForPlayers: assign(({ context }) => {
+      // This action is inaptly named, because it will try to assign non admins
+      // to the players if possible.
+
       const attackAdmin = context.users.find((user) => user.isAdmin && user.side === 'attack')
       const defenseAdmin = context.users.find((user) => user.isAdmin && user.side === 'defense')
+
+      // Make sure we at least have admins to assign.
       if (!attackAdmin || !defenseAdmin) return {}
+
+      const attackUsers = context.users.filter((user) => !user.isAdmin && user.side === 'attack')
+      const defenseUsers = context.users.filter((user) => !user.isAdmin && user.side === 'defense')
+
+      const possibleAttackUsers = attackUsers.length > 0 ? attackUsers : [attackAdmin]
+      const possibleDefenseUsers = defenseUsers.length > 0 ? defenseUsers : [defenseAdmin]
 
       return {
         attack: produce(context.attack, (attack) => {
-          attack.attacker.userId = attackAdmin.id
+          attack.attacker.userId = possibleAttackUsers[0].id
         }),
         defense: produce(context.defense, (defense) => {
-          defense.defenders.forEach((defender) => {
-            defender.userId = defenseAdmin.id
+          defense.defenders.forEach((defender, i) => {
+            defender.userId = possibleDefenseUsers[i % possibleDefenseUsers.length].id
           })
         }),
       }
@@ -285,13 +296,32 @@ export const serverGameMachine = machine.provide({
       }
 
       const activePlayer = gameState.activePlayer
-      if (!userControlsPlayer(event.userId, activePlayer, context)) return false
+      if (!userControlsPlayer(event.userId, activePlayer, context)) {
+        console.warn(
+          'Rejecting event because this user does not control this player. Active player: ',
+          activePlayer.userId,
+          ', This user: ',
+          event.userId,
+        )
+        return false
+      }
 
       // Make sure it's this player's turn
-      if (activePlayer.id !== event.gameEvent.playerId) return false
+      if (activePlayer.id !== event.gameEvent.playerId) {
+        console.warn(
+          `Rejecting event because the playerId of this event ` +
+            `(${event.gameEvent.playerId}) is not for the active player (${activePlayer.id})`,
+        )
+        return false
+      }
 
       // Make sure the event type is the next expected event type
-      if (gameState.nextEventType !== event.gameEvent.type) return false
+      if (gameState.nextEventType !== event.gameEvent.type) {
+        console.warn(
+          `Rejecting event because this event type (${event.gameEvent.type}) is not the next expected event type ${gameState.nextEventType}`,
+        )
+        return false
+      }
 
       const character = getCharacter(gameState.activePlayer.character)
 
@@ -301,17 +331,23 @@ export const serverGameMachine = machine.provide({
           // TODO: implement role specific check
           break
         case 'move':
-          if (!gameState.isValidMove(event.gameEvent.to)) return false
+          if (!gameState.isValidMove(event.gameEvent.to)) {
+            console.warn('Rejecting this event because the move is not valid')
+            return false
+          }
           break
         case 'reaction':
-          if (event.gameEvent.finalized && event.gameEvent.useJoker === undefined) return false
+          if (event.gameEvent.finalized && event.gameEvent.useJoker === undefined) {
+            console.warn('Rejecting this event, because it is finalized but useJoker is undefined')
+            return false
+          }
           // TODO: check that there was an action that needs a reaction
           break
         case 'action':
           switch (event.gameEvent.action) {
             case 'collect':
               if (event.gameEvent.itemId === undefined && event.gameEvent.finalized) {
-                console.error('Finalized collect item must have an itemId')
+                console.warn('Finalized collect item must have an itemId')
                 return false
               }
 
@@ -322,7 +358,7 @@ export const serverGameMachine = machine.provide({
                   .map((item) => item.item.id)
 
                 if (!collectableItemIds.includes(event.gameEvent.itemId)) {
-                  console.error('Tried to collect an item that is not collectable')
+                  console.warn('Tried to collect an item that is not collectable')
                   return false
                 }
               }

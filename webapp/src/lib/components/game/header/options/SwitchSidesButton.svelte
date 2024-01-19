@@ -4,7 +4,7 @@
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import IconRightLeft from '~icons/lucide/arrow-right-left'
   import IconLeftRight from '~icons/lucide/arrow-left-right'
-  import ExpandableButton from './ExpandableButton.svelte'
+  import ClickableOption from './ClickableOption.svelte'
 
   const { machine } = getGameContext()
   const user = useSelector(machine.service, ({ context }) => getCurrentUser(context))
@@ -14,15 +14,17 @@
 </script>
 
 {#if isAdmin}
-  <ExpandableButton
+  <ClickableOption
     disabled={!isAdmin || !$isActive}
     on:click={() => machine.send({ type: 'switch sides' })}
   >
-    {#if side === 'attack'}
-      <IconRightLeft slot="icon" />
-    {:else}
-      <IconLeftRight slot="icon" />
-    {/if}
+    <svelte:fragment slot="icon">
+      {#if side === 'attack'}
+        <IconRightLeft />
+      {:else}
+        <IconLeftRight />
+      {/if}
+    </svelte:fragment>
     Zu {side === 'attack' ? 'Verteidigung' : 'Angriff'} wechseln
-  </ExpandableButton>
+  </ClickableOption>
 {/if}

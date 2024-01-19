@@ -174,8 +174,8 @@
             align-items: center;
             gap: 0.75rem;
             .face {
-              width: 4.375rem;
-              height: 4.375rem;
+              width: 3.375rem;
+              height: 3.375rem;
             }
 
             .user-name {
