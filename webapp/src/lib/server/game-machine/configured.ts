@@ -37,17 +37,28 @@ export const serverGameMachine = machine.provide({
   actions: {
     setAssigningSidesFinished: assign(() => ({ finishedAssigningSides: true })),
     setAdminsForPlayers: assign(({ context }) => {
+      // This action is inaptly named, because it will try to assign non admins
+      // to the players if possible.
+
       const attackAdmin = context.users.find((user) => user.isAdmin && user.side === 'attack')
       const defenseAdmin = context.users.find((user) => user.isAdmin && user.side === 'defense')
+
+      // Make sure we at least have admins to assign.
       if (!attackAdmin || !defenseAdmin) return {}
+
+      const attackUsers = context.users.filter((user) => !user.isAdmin && user.side === 'attack')
+      const defenseUsers = context.users.filter((user) => !user.isAdmin && user.side === 'defense')
+
+      const possibleAttackUsers = attackUsers.length > 0 ? attackUsers : [attackAdmin]
+      const possibleDefenseUsers = defenseUsers.length > 0 ? defenseUsers : [defenseAdmin]
 
       return {
         attack: produce(context.attack, (attack) => {
-          attack.attacker.userId = attackAdmin.id
+          attack.attacker.userId = possibleAttackUsers[0].id
         }),
         defense: produce(context.defense, (defense) => {
-          defense.defenders.forEach((defender) => {
-            defender.userId = defenseAdmin.id
+          defense.defenders.forEach((defender, i) => {
+            defender.userId = possibleDefenseUsers[i % possibleDefenseUsers.length].id
           })
         }),
       }
