@@ -24,8 +24,9 @@
     grid-template-columns: 38rem 22rem 1fr auto;
     grid-template-areas: 'logo score jokers options';
     align-items: center;
-    background-color: var(--color-blue-spielbrett);
-    background: linear-gradient(to bottom, #2b344800, #2b3448a9);
+    background: linear-gradient(to bottom, #2b344800, #2b3448a9),
+      linear-gradient(to bottom, var(--color-blue-spielbrett), var(--color-blue-spielbrett));
+
     padding-inline: 7rem 1rem;
     height: var(--size-header-height);
   }
