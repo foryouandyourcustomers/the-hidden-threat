@@ -90,7 +90,9 @@ export const getClientGameMachine = ({
         return !!gameState.lastEvent && !gameState.lastEvent.finalized
       },
       isValidGameEvent: ({ context }) => {
-        return userIsAdmin(context.userId, context)
+        if (userIsAdmin(context.userId, context)) return true
+        const gameState = GameState.fromContext(context)
+        return gameState.activePlayer.userId === context.userId
       },
       'userControlsPlayer isMoveEvent': and(['userControlsPlayer', 'isMoveEvent']),
       'userControlsPlayer isActionEvent': and(['userControlsPlayer', 'isActionEvent']),
