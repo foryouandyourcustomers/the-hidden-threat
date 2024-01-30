@@ -56,7 +56,7 @@ jobs:
       - name: Store artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: webapp-build
+          name: build
           path: webapp/build
 
   deploy-webapp:
@@ -72,15 +72,15 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: webapp-build
-          path: webapp-build
+          name: build
+          path: build
 
       - name: Push to built repo
         uses: cpina/github-action-push-to-another-repository@v1.7.2
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
         with:
-          source-directory: 'webapp-build'
+          source-directory: 'build'
           destination-github-username: 'foryouandyourcustomers'
           destination-repository-name: 'the-hidden-threat-built'
           user-email: m@tias.me
@@ -116,11 +116,11 @@ jobs:
       # For ease of use, we just copy the Dockerfile to the root of the project
       - name: Copy Dockerfile
         run: cp webapp/Dockerfile .
-      # The actual app is in the artifact and will be copied to webapp-build
+      # The actual app is in the artifact and will be copied to build
       - uses: actions/download-artifact@v2
         with:
-          name: webapp-build
-          path: webapp-build
+          name: build
+          path: build
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
