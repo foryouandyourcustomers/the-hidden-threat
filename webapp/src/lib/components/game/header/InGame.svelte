@@ -3,6 +3,7 @@
   import { getGameContext } from '$lib/client/game-context'
   import Jokers from '$lib/components/game/header/Jokers.svelte'
   import Tooltip from '$lib/components/ui/Tooltip.svelte'
+  import { DOCS_URL } from '$lib/constants'
   import { enabled } from '$lib/sound'
   import HelpIcon from '~icons/lucide/file-text'
   import SettingsIcon from '~icons/lucide/settings'
@@ -23,7 +24,7 @@
   <Jokers />
 
   <div class="actions">
-    <OptionButton href="/manual" target="_blank">
+    <OptionButton href="{DOCS_URL}Spielregeln.pdf" target="_blank">
       <HelpIcon />
     </OptionButton>
     <OptionButton on:click={() => ($enabled = !$enabled)}>

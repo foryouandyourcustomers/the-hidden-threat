@@ -4,6 +4,7 @@
   import { getCurrentUser } from '$lib/client/game-machine/utils'
   import Item from '$lib/components/icons/Item.svelte'
   import Paragraph from '$lib/components/ui/Paragraph.svelte'
+  import { DOCS_URL } from '$lib/constants'
   import { ITEMS } from '$lib/game/constants/items'
   import { GameState, type ItemInventory } from '$lib/game/game-state'
   import isEqual from 'lodash/isEqual'
@@ -32,7 +33,7 @@
     </h6>
     <Paragraph size="sm" spacing="none">
       Die Gegenstandsbeschreibungen sowie die Auflistung aller Gegenstände sind in der
-      <a href="/manual" target="_blank">Spielanleitung</a> zu finden.
+      <a href="{DOCS_URL}Spielregeln.pdf" target="_blank">Spielanleitung</a> zu finden.
     </Paragraph>
   </div>
 
