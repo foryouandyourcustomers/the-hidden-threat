@@ -16,8 +16,7 @@ Verantwortung anzunehmen und sich der Aufgabe zu stellen?
 
 ## Development
 
-For more information on the application, please refer to the
-> [webapp/README.md](webapp/README.md) file.
+For more information on the application, please refer to the [webapp/README.md](webapp/README.md) file.
 
 # Contributing
 
